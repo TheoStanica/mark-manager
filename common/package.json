@@ -1,8 +1,8 @@
 {
   "name": "@tcosmin/common",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./build/index.js",
-  "types": "./build.index.d.ts",
+  "types": "./build/index.d.ts",
   "files": [
     "build/**/**"
   ],
