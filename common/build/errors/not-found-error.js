@@ -24,7 +24,7 @@ var NotFoundError = /** @class */ (function (_super) {
         return _this;
     }
     NotFoundError.prototype.serializeErrors = function () {
-        return [{ message: 'Not Found' }];
+        return [{ message: 'Not found' }];
     };
     return NotFoundError;
 }(custom_error_1.CustomError));
