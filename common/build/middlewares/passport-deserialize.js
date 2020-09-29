@@ -10,7 +10,7 @@ exports.deserializer = function (req, res, next) {
     passport_1.default.deserializeUser(function (userJwt, done) {
         try {
             var payload = jsonwebtoken_1.default.verify(userJwt, process.env.JWT_KEY);
-            done(undefined, payload.userId);
+            done(undefined, payload);
         }
         catch (err) { }
     });

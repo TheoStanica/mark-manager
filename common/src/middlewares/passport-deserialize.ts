@@ -6,13 +6,6 @@ interface UserPayload {
   id: string;
   email: string;
 }
-declare global {
-  namespace Express {
-    interface User {
-      id: string;
-    }
-  }
-}
 interface TokenPayload {
   userId: string;
 }
