@@ -24,7 +24,7 @@ export const deserializer = (
   passport.deserializeUser((userJwt: string, done) => {
     try {
       const payload = jwt.verify(userJwt, process.env.JWT_KEY!) as TokenPayload;
-      done(undefined, payload.userId);
+      done(undefined, payload);
     } catch (err) {}
   });
   next();
