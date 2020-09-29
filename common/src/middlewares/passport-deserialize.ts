@@ -14,8 +14,7 @@ declare global {
   }
 }
 interface TokenPayload {
-  id: string;
-  email: string;
+  userId: string;
 }
 export const deserializer = (
   req: Request,
@@ -25,7 +24,7 @@ export const deserializer = (
   passport.deserializeUser((userJwt: string, done) => {
     try {
       const payload = jwt.verify(userJwt, process.env.JWT_KEY!) as TokenPayload;
-      done(undefined, payload.id);
+      done(undefined, payload.userId);
     } catch (err) {}
   });
   next();
