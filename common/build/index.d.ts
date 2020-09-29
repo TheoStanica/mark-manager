@@ -7,3 +7,4 @@ export * from './errors/request-validation-error';
 export * from './middlewares/error-handler';
 export * from './middlewares/require-auth';
 export * from './middlewares/validate-request';
+export * from './middlewares/passport-deserialize';

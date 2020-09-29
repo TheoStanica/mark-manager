@@ -19,3 +19,4 @@ __exportStar(require("./errors/request-validation-error"), exports);
 __exportStar(require("./middlewares/error-handler"), exports);
 __exportStar(require("./middlewares/require-auth"), exports);
 __exportStar(require("./middlewares/validate-request"), exports);
+__exportStar(require("./middlewares/passport-deserialize"), exports);
