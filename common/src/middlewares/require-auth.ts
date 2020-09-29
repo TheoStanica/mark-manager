@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotAuthorizedError } from '../errors/not-authorized-error';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: string[];
-    }
-  }
-}
+// declare global {
+//   namespace Express {
+//     interface Request {
+//       user?: string[];
+//     }
+//   }
+// }
 
 export const requireAuth = (
   req: Request,
