@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireAuth = void 0;
 var not_authorized_error_1 = require("../errors/not-authorized-error");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var forbidden_error_1 = require("../errors/forbidden-error");
 // declare global {
 //   namespace Express {
 //     interface Request {
@@ -29,7 +30,7 @@ exports.requireAuth = function (req, res, next) {
     }
     catch (e) {
         console.log('invalid token');
-        throw new not_authorized_error_1.NotAuthorizedError(); // change to Forbidden later
+        throw new forbidden_error_1.ForbiddenError();
     }
     // next();
 };

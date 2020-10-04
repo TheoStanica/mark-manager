@@ -24,7 +24,7 @@ export const requireAuth = (
 
   if (!token) {
     console.log('Token not found');
-    throw new NotAuthorizedError();
+    throw new ForbiddenError();
   }
 
   try {
@@ -32,7 +32,7 @@ export const requireAuth = (
     next();
   } catch (e) {
     console.log('invalid token');
-    throw new ForbiddenError();
+    throw new NotAuthorizedError();
   }
 
   // next();
