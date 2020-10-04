@@ -23,6 +23,7 @@ export const requireAuth = (
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
+    console.log('Token not found');
     throw new NotAuthorizedError();
   }
 
@@ -30,6 +31,7 @@ export const requireAuth = (
     jwt.verify(token, process.env.JWT_KEY!);
     next();
   } catch (e) {
+    console.log('invalid token');
     throw new NotAuthorizedError(); // change to Forbidden later
   }
 
