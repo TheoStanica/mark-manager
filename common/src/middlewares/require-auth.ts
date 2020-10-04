@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotAuthorizedError } from '../errors/not-authorized-error';
+import jwt from 'jsonwebtoken';
+import { BadRequestError } from '../errors/bad-request-error';
 
 // declare global {
 //   namespace Express {
@@ -14,9 +16,22 @@ export const requireAuth = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.user) {
+  // if (!req.user) {
+  //   throw new NotAuthorizedError();
+  // }
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
     throw new NotAuthorizedError();
   }
 
-  next();
+  try {
+    jwt.verify(token, process.env.JWT_KEY!);
+    next();
+  } catch (e) {
+    throw new NotAuthorizedError(); // change to Forbidden later
+  }
+
+  // next();
 };
