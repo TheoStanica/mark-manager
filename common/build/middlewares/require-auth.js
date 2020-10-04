@@ -20,6 +20,7 @@ exports.requireAuth = function (req, res, next) {
     var authHeader = req.headers['authorization'];
     var token = authHeader && authHeader.split(' ')[1];
     if (!token) {
+        console.log('Token not found');
         throw new not_authorized_error_1.NotAuthorizedError();
     }
     try {
@@ -27,6 +28,7 @@ exports.requireAuth = function (req, res, next) {
         next();
     }
     catch (e) {
+        console.log('invalid token');
         throw new not_authorized_error_1.NotAuthorizedError(); // change to Forbidden later
     }
     // next();

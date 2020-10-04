@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotAuthorizedError } from '../errors/not-authorized-error';
 import jwt from 'jsonwebtoken';
-import { BadRequestError } from '../errors/bad-request-error';
+import { ForbiddenError } from '../errors/forbidden-error';
 
 // declare global {
 //   namespace Express {
@@ -32,7 +32,7 @@ export const requireAuth = (
     next();
   } catch (e) {
     console.log('invalid token');
-    throw new NotAuthorizedError(); // change to Forbidden later
+    throw new ForbiddenError();
   }
 
   // next();
