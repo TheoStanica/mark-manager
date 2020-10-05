@@ -3,13 +3,18 @@ import { NotAuthorizedError } from '../errors/not-authorized-error';
 import jwt from 'jsonwebtoken';
 import { ForbiddenError } from '../errors/forbidden-error';
 
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user?: string[];
-//     }
-//   }
-// }
+interface UserPayload {
+  id: string;
+  email: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser?: UserPayload;
+    }
+  }
+}
 
 export const requireAuth = (
   req: Request,
@@ -28,7 +33,9 @@ export const requireAuth = (
   }
 
   try {
-    jwt.verify(token, process.env.JWT_KEY!);
+    const payload = jwt.verify(token, process.env.JWT_KEY!) as UserPayload;
+    req.currentUser = payload;
+
     next();
   } catch (e) {
     console.log('invalid token');
