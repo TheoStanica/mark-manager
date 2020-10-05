@@ -22,7 +22,7 @@ exports.requireAuth = function (req, res, next) {
     var token = authHeader && authHeader.split(' ')[1];
     if (!token) {
         console.log('Token not found');
-        throw new not_authorized_error_1.NotAuthorizedError();
+        throw new forbidden_error_1.ForbiddenError();
     }
     try {
         jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
@@ -30,7 +30,7 @@ exports.requireAuth = function (req, res, next) {
     }
     catch (e) {
         console.log('invalid token');
-        throw new forbidden_error_1.ForbiddenError();
+        throw new not_authorized_error_1.NotAuthorizedError();
     }
     // next();
 };
