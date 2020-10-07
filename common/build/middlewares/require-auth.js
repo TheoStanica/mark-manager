@@ -7,13 +7,6 @@ exports.requireAuth = void 0;
 var not_authorized_error_1 = require("../errors/not-authorized-error");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var forbidden_error_1 = require("../errors/forbidden-error");
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user?: string[];
-//     }
-//   }
-// }
 exports.requireAuth = function (req, res, next) {
     // if (!req.user) {
     //   throw new NotAuthorizedError();
@@ -25,7 +18,8 @@ exports.requireAuth = function (req, res, next) {
         throw new forbidden_error_1.ForbiddenError();
     }
     try {
-        jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
+        var payload = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
+        req.currentUser = payload;
         next();
     }
     catch (e) {

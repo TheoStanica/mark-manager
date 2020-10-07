@@ -4,8 +4,13 @@ import jwt from 'jsonwebtoken';
 import { ForbiddenError } from '../errors/forbidden-error';
 
 interface UserPayload {
-  id: string;
+  userId: string;
   email: string;
+  rold: string;
+  ipAddress: string;
+  userAgent: string;
+  iat: number;
+  exp: number;
 }
 
 declare global {
@@ -35,7 +40,6 @@ export const requireAuth = (
   try {
     const payload = jwt.verify(token, process.env.JWT_KEY!) as UserPayload;
     req.currentUser = payload;
-
     next();
   } catch (e) {
     console.log('invalid token');
