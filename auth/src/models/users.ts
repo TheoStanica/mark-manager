@@ -5,6 +5,7 @@ interface UserAttrs {
   email: string;
   password: string;
 }
+
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
@@ -13,6 +14,7 @@ interface UserDoc extends mongoose.Document {
     token: string;
   };
 }
+
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
@@ -41,6 +43,8 @@ const userSchema = new mongoose.Schema(
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
+        delete ret.password;
+        delete ret.__v;
       },
     },
   }

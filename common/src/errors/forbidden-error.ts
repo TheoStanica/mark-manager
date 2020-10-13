@@ -1,7 +1,7 @@
 import { CustomError } from './custom-error';
 
 export class ForbiddenError extends CustomError {
-  statusCode = 401;
+  statusCode = 403;
 
   constructor() {
     super('Forbidden');
