@@ -3,7 +3,7 @@ import { PrimaryExpression } from 'typescript';
 import { promisify } from 'util';
 
 interface WhiteListParams {
-  userId: string;
+  userId: string | undefined;
   refreshToken: string;
   accessToken: string;
 }

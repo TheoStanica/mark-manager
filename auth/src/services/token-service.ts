@@ -1,14 +1,10 @@
 import { BadRequestError, ForbiddenError } from '@tcosmin/common';
 import jwt from 'jsonwebtoken';
 
-// TODO Maybe data as TokenPayload
-interface Token {
-  data: any;
-}
 interface TokenPayload {
-  userId: string;
+  userId: string | undefined;
   role: string;
-  email: string;
+  email: string | undefined;
   // ipAddress: string;
   // userAgent: string;
   // iat: number;
