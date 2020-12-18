@@ -7,6 +7,7 @@ import { body } from 'express-validator';
 import { redisWrapper } from '../redis-wrapper';
 import { RedisService } from '../services/redis-service';
 import { TokenService } from '../services/token-service';
+import { UserController } from '../controllers/userController';
 
 const router = express.Router();
 
@@ -21,14 +22,12 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    const existingUser = await User.findOne({ email });
 
+    const existingUser = await UserController.validateUserCredentials(
+      email,
+      password
+    );
     if (!existingUser) {
-      throw new BadRequestError('Invalid credentials');
-    }
-    const passwordsMatch = Password.compare(existingUser.password, password);
-
-    if (!passwordsMatch) {
       throw new BadRequestError('Invalid Credentials');
     }
 
