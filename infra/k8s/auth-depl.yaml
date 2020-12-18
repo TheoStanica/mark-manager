@@ -29,9 +29,9 @@ spec:
                   name: jwt-refresh-secret
                   key: JWT_REFRESH_KEY
             - name: ACCESS_TOKEN_TTL
-              value: '60'
+              value: '20'
             - name: REFRESH_TOKEN_TTL
-              value: '120'
+              value: '60'
             - name: REDIS_HOST
               value: auth-redis-srv
 
