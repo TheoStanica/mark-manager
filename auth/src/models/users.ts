@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import { Password } from '../services/password';
 
-interface UserAttrs {
+export interface UserAttrs {
   email: string;
   password: string;
 }
 
-interface UserDoc extends mongoose.Document {
+export interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   twitter: {
@@ -15,7 +15,7 @@ interface UserDoc extends mongoose.Document {
   };
 }
 
-interface UserModel extends mongoose.Model<UserDoc> {
+export interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
