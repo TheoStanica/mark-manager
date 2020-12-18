@@ -16,7 +16,7 @@ class RedisWrapper {
       host: redisHost,
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.client.on('connect', () => {
         console.log('Connected to Redis');
         resolve();
