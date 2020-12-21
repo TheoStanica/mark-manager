@@ -7,10 +7,7 @@ export class UserController {
   // -- User.create() instead
   static createUser(userAttrs: UserAttrs): UserDoc {
     const user = User.build(userAttrs);
-    user.confirmationToken = crypto
-      .createHash('md5')
-      .update(user.id!)
-      .digest('hex');
+    user.confirmationToken = crypto.randomBytes(20).toString('hex');
     user.save();
     return user;
   }
