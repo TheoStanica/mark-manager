@@ -39,4 +39,14 @@ export class UserController {
     }
     return existingUser;
   }
+
+  static async findUserWithConfirmationToken(token: string) {
+    return User.findOne({ confirmationToken: token });
+  }
+
+  static async activateUserWithId(id: string) {
+    const user = await User.findById(id);
+    user!.confirmed = true;
+    user!.save();
+  }
 }
