@@ -6,6 +6,7 @@ import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { tokenRouter } from './routes/token';
+import { activationRouter } from './routes/activation';
 
 const app = express();
 app.set('trust proxy', true);
@@ -15,6 +16,7 @@ app.use(signupRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(tokenRouter);
+app.use(activationRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
