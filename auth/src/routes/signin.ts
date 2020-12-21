@@ -31,6 +31,11 @@ router.post(
       throw new BadRequestError('Invalid Credentials');
     }
 
+    if (!existingUser.confirmed) {
+      // TODO unauthorized error? new custom error?
+      throw new BadRequestError('Please confirm your account first');
+    }
+
     const accessToken = TokenService.generateAccessToken({
       userId: existingUser.id,
       email: existingUser.email,
