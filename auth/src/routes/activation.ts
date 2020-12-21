@@ -25,6 +25,13 @@ router.post(
       // TODO error? not an error??? ???????????? ??
       res.send('Account is already confirmed!');
     } else {
+      // check if token expired
+      if (new Date(user.confirmationExpireDate) < new Date()) {
+        throw new BadRequestError(
+          'Activation token expired. Please request a new one!'
+        );
+      }
+
       // else, send back a message saying user is activated, please login(or login automatically?)
       await UserController.activateUserWithId(user.id!);
 
