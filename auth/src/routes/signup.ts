@@ -10,6 +10,7 @@ import { redisWrapper } from '../redis-wrapper';
 import { RedisService } from '../services/redis-service';
 import { TokenService } from '../services/token-service';
 import { UserController } from '../controllers/userController';
+import crypto from 'crypto';
 
 const router = express.Router();
 
@@ -34,31 +35,33 @@ router.post(
 
     const user = UserController.createUser({ email, password });
 
-    const accessToken = TokenService.generateAccessToken({
-      userId: user.id,
-      email: user.email,
-      role: 'free',
-    });
+    // const accessToken = TokenService.generateAccessToken({
+    //   userId: user.id,
+    //   email: user.email,
+    //   role: 'free',
+    // });
 
-    const refreshToken = TokenService.generateRefreshToken({
-      userId: user.id,
-      email: user.email,
-      role: 'free',
-    });
+    // const refreshToken = TokenService.generateRefreshToken({
+    //   userId: user.id,
+    //   email: user.email,
+    //   role: 'free',
+    // });
 
     // whitelist tokens
-    redisService.whitelistRefreshTokens({
-      userId: user.id,
-      accessToken,
-      refreshToken,
-    });
+    // redisService.whitelistRefreshTokens({
+    //   userId: user.id,
+    //   accessToken,
+    //   refreshToken,
+    // });
 
     // save UID_RT : AT in Redis(RTTL)
     // save AT : RT in Redis (RTTL)
 
-    // Send auth:userCreated event
+    // TODO Send auth:userCreated event
 
-    res.status(201).send({ user, accessToken, refreshToken });
+    // TODO change this to send only "User Created, please check your Email to confirm your account" or something similar...
+    // after Mailer microservice is up and running.
+    res.status(201).send({ user });
   }
 );
 
