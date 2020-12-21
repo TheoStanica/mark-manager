@@ -1,12 +1,16 @@
-import { BadRequestError } from '@tcosmin/common';
 import { User, UserAttrs, UserDoc } from '../models/users';
 import { Password } from '../services/password';
+import crypto from 'crypto';
 
 export class UserController {
-  //can i make this async?
+  // TODO can i make this async?
   // -- User.create() instead
   static createUser(userAttrs: UserAttrs): UserDoc {
     const user = User.build(userAttrs);
+    user.confirmationToken = crypto
+      .createHash('md5')
+      .update(user.id!)
+      .digest('hex');
     user.save();
     return user;
   }
