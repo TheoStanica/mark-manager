@@ -13,6 +13,9 @@ export interface UserDoc extends mongoose.Document {
     id: string;
     token: string;
   };
+  confirmed: boolean;
+  confirmationToken: string;
+  confirmationExpireDate: Date;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -28,6 +31,17 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    confirmed: {
+      type: Boolean,
+      default: false,
+    },
+    confirmationToken: {
+      type: String,
+      required: true,
+    },
+    confirmationExpireDate: {
+      type: Date,
     },
     twitter: {
       id: {
