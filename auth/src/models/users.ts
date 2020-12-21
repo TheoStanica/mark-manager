@@ -38,10 +38,10 @@ const userSchema = new mongoose.Schema(
     },
     confirmationToken: {
       type: String,
-      required: true,
     },
     confirmationExpireDate: {
       type: Date,
+      default: new Date(+new Date() + 10 * 60 * 1000),
     },
     twitter: {
       id: {
