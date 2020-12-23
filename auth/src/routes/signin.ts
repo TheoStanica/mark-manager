@@ -1,4 +1,4 @@
-import { BadRequestError } from '@tcosmin/common';
+import { AccountNotActivated, BadRequestError } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import { User } from '../models/users';
 import { Password } from '../services/password';
@@ -32,8 +32,7 @@ router.post(
     }
 
     if (!existingUser.confirmed) {
-      // TODO unauthorized error? new custom error?
-      throw new BadRequestError('Please confirm your account first');
+      throw new AccountNotActivated(existingUser.id!);
     }
 
     const accessToken = TokenService.generateAccessToken({
