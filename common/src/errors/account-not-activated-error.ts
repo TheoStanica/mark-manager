@@ -4,7 +4,7 @@ export class AccountNotActivated extends CustomError {
   statusCode = 403;
 
   constructor(public userID: string) {
-    super('Forbidden');
+    super('Please activate your account first!');
     Object.setPrototypeOf(this, AccountNotActivated.prototype);
   }
 
