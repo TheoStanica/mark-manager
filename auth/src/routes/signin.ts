@@ -1,4 +1,8 @@
-import { AccountNotActivated, BadRequestError } from '@tcosmin/common';
+import {
+  AccountNotActivated,
+  BadRequestError,
+  validateRequest,
+} from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import { User } from '../models/users';
 import { Password } from '../services/password';
@@ -20,6 +24,7 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage('Password must be between 4 and 20 characters'),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
