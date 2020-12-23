@@ -18,7 +18,7 @@ var custom_error_1 = require("./custom-error");
 var AccountNotActivated = /** @class */ (function (_super) {
     __extends(AccountNotActivated, _super);
     function AccountNotActivated(userID) {
-        var _this = _super.call(this, 'Forbidden') || this;
+        var _this = _super.call(this, 'Please activate your account first!') || this;
         _this.userID = userID;
         _this.statusCode = 403;
         Object.setPrototypeOf(_this, AccountNotActivated.prototype);
