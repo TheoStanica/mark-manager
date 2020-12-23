@@ -13,19 +13,20 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ForbiddenError = void 0;
+exports.AccountNotActivated = void 0;
 var custom_error_1 = require("./custom-error");
-var ForbiddenError = /** @class */ (function (_super) {
-    __extends(ForbiddenError, _super);
-    function ForbiddenError() {
+var AccountNotActivated = /** @class */ (function (_super) {
+    __extends(AccountNotActivated, _super);
+    function AccountNotActivated(userID) {
         var _this = _super.call(this, 'Forbidden') || this;
+        _this.userID = userID;
         _this.statusCode = 403;
-        Object.setPrototypeOf(_this, ForbiddenError.prototype);
+        Object.setPrototypeOf(_this, AccountNotActivated.prototype);
         return _this;
     }
-    ForbiddenError.prototype.serializeErrors = function () {
-        return [{ message: 'Forbidden' }];
+    AccountNotActivated.prototype.serializeErrors = function () {
+        return [{ message: this.message, userID: this.userID }];
     };
-    return ForbiddenError;
+    return AccountNotActivated;
 }(custom_error_1.CustomError));
-exports.ForbiddenError = ForbiddenError;
+exports.AccountNotActivated = AccountNotActivated;
