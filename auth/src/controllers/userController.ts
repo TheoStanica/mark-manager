@@ -46,4 +46,22 @@ export class UserController {
     user!.confirmed = true;
     user!.save();
   }
+
+  static async findUserWithId(userId: string) {
+    return await User.findById(userId);
+  }
+
+  static async generateNewActivationDetails(userId: string) {
+    // TODO maybe create a global variable instead of hard coded value (easier management)
+    const expiration = new Date(+new Date() + 10 * 60 * 1000);
+    return await User.findByIdAndUpdate(
+      userId,
+      {
+        confirmationToken: crypto.randomBytes(20).toString('hex'),
+        confirmationExpireDate: expiration,
+      },
+      //send the updated user
+      { new: true }
+    );
+  }
 }
