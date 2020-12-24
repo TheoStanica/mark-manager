@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { natsWrapper } from './nats-wrapper';
 import { redisWrapper } from './redis-wrapper';
 
 const start = async () => {
@@ -22,6 +23,16 @@ const start = async () => {
     throw new Error('REFRESH_TOKEN_TTL must be defined');
   }
 
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error('NATS_CLIENT_ID must be defined');
+  }
+  if (!process.env.NATS_URL) {
+    throw new Error('NATS_URL must be defined');
+  }
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error('NATS_CLUSTER_ID must be defined');
+  }
+
   try {
     await redisWrapper.connect(process.env.REDIS_HOST);
     // redisWrapper.client.on('quit', () => {
@@ -31,10 +42,23 @@ const start = async () => {
     // process.on('SIGINT', () =>  redisWrapper.client.quit())
     // process.on('SIGTERM', () =>  redisWrapper.client.quit())
 
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
+    natsWrapper.client.on('close', () => {
+      console.log('NATS connection closed');
+      process.exit();
+    });
+    process.on('SIGINT', () => natsWrapper.client.close());
+    process.on('SIGTERM', () => natsWrapper.client.close());
+
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     });
     console.log('Connected to MongoDB');
   } catch (err) {
