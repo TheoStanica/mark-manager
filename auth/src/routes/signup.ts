@@ -57,7 +57,7 @@ router.post(
     // save UID_RT : AT in Redis(RTTL)
     // save AT : RT in Redis (RTTL)
 
-    // TODO Send auth:userCreated event
+    // TODO Send auth:userCreated event (userProfile and Mailer will be listening for this)
 
     // TODO change this to send only "User Created, please check your Email to confirm your account" or something similar...
     // after Mailer microservice is up and running.
