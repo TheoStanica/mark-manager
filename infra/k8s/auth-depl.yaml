@@ -34,6 +34,14 @@ spec:
               value: '60'
             - name: REDIS_HOST
               value: auth-redis-srv
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: mark
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 
 ---
 apiVersion: v1
