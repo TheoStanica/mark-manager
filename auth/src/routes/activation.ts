@@ -1,4 +1,4 @@
-import { BadRequestError } from '@tcosmin/common';
+import { AccountAlreadyActivatedError, BadRequestError } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import { UserController } from '../controllers/userController';
 
@@ -22,8 +22,7 @@ router.post(
 
     // if user is already active, ?
     if (user.confirmed === true) {
-      // TODO error? not an error??? ???????????? ??
-      res.send('Account is already confirmed!');
+      throw new AccountAlreadyActivatedError();
     } else {
       // check if token expired
       if (new Date(user.confirmationExpireDate) < new Date()) {
