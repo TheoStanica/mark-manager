@@ -16,3 +16,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: theocosmin/mailer
+      context: mailer
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
