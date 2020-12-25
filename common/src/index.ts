@@ -11,6 +11,7 @@ export * from './errors/account-already-activated-error';
 export * from './middlewares/error-handler';
 export * from './middlewares/require-auth';
 export * from './middlewares/validate-request';
+
 export * from './middlewares/passport-deserialize';
 
 export * from './events/base-listener';
