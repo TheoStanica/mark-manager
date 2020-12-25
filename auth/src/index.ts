@@ -35,12 +35,12 @@ const start = async () => {
 
   try {
     await redisWrapper.connect(process.env.REDIS_HOST);
-    // redisWrapper.client.on('quit', () => {
-    //   console.log('Redis Connection closed!');
-    //   process.exit();
-    // })
-    // process.on('SIGINT', () =>  redisWrapper.client.quit())
-    // process.on('SIGTERM', () =>  redisWrapper.client.quit())
+    redisWrapper.client.on('end', () => {
+      console.log('Redis Connection closed!');
+      process.exit();
+    });
+    process.on('SIGINT', () => redisWrapper.client.quit());
+    process.on('SIGTERM', () => redisWrapper.client.quit());
 
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
