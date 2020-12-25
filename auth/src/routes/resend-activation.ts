@@ -6,6 +6,8 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { UserController } from '../controllers/userController';
+import { SendActivationEmailPublisher } from '../events/publishers/send-activation-email-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -38,8 +40,11 @@ router.post(
       user.id!
     );
 
-    //TODO send event broker for Mailer service
-    // request new Activation event
+    await new SendActivationEmailPublisher(natsWrapper.client).publish({
+      email: user.email,
+      activationToken: user.confirmationToken,
+    });
+
     // TODO change status to 204 and remove updatedUser
 
     res.status(200).send(updatedUser);
