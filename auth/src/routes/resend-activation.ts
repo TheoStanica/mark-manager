@@ -1,4 +1,8 @@
-import { BadRequestError, validateRequest } from '@tcosmin/common';
+import {
+  AccountAlreadyActivatedError,
+  BadRequestError,
+  validateRequest,
+} from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { UserController } from '../controllers/userController';
@@ -26,7 +30,7 @@ router.post(
       throw new BadRequestError('UserId is not valid');
     }
     if (user.confirmed) {
-      throw new BadRequestError('Account has already been activated');
+      throw new AccountAlreadyActivatedError();
     }
 
     // else, generate a new activation Token, update expiration time, and send event to message broker
@@ -35,6 +39,7 @@ router.post(
     );
 
     //TODO send event broker for Mailer service
+    // request new Activation event
     // TODO change status to 204 and remove updatedUser
 
     res.status(200).send(updatedUser);
