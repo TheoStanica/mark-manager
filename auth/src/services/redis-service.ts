@@ -93,16 +93,15 @@ export class RedisService {
 
   async blacklistUser(userID: string): Promise<string[]> {
     const results = await this.findKeysWith(userID);
-    console.log('The tokens associated to this user are', results);
     const toban: string[] = [];
-
-    results.forEach(async (result) => {
-      const AT = await this.getKeyValue(result);
-      toban.push(AT!);
-      await this.deleteKey(AT!);
-      await this.deleteKey(result);
-    });
-
+    for (let i = 0; i < results.length; i++) {
+      const AT = await this.getKeyValue(results[i]);
+      if (AT) {
+        toban.push(AT);
+        await this.deleteKey(AT!);
+        await this.deleteKey(results[i]);
+      }
+    }
     return toban;
   }
 }
