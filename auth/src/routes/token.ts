@@ -5,6 +5,8 @@ import {
 } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { AccessTokenRevokedPublisher } from '../events/publishers/access-token-revoked-publisher';
+import { natsWrapper } from '../nats-wrapper';
 import { redisWrapper } from '../redis-wrapper';
 import { RedisService } from '../services/redis-service';
 import { TokenService } from '../services/token-service';
@@ -26,15 +28,15 @@ router.post('/api/users/token', async (req: Request, res: Response) => {
   if (!refreshToken) {
     throw new BadRequestError('No token provided');
   }
-  console.log('refresh token was sent');
+  // console.log('refresh token was sent');
 
   const payload = (await TokenService.verifyRefreshToken(
     refreshToken
   )) as TokenPayload;
 
-  console.log('payload is', payload);
-  const theuser = payload.userId;
-  console.log('theuser', theuser);
+  // console.log('payload is', payload);
+  // const theuser = payload.userId;
+  // console.log('theuser', theuser);
 
   const redisService = new RedisService(redisWrapper.client);
 
@@ -44,10 +46,10 @@ router.post('/api/users/token', async (req: Request, res: Response) => {
 
     const ATstoBan = await redisService.blacklistUser(payload.userId);
 
-    // TODO publish event to ban ATs
-
     ATstoBan.forEach(async (accessToken) => {
-      console.log(accessToken, 'will be revoked in Redis and event published');
+      await new AccessTokenRevokedPublisher(natsWrapper.client).publish({
+        token: accessToken,
+      });
     });
 
     throw new BadRequestError('');
@@ -55,6 +57,7 @@ router.post('/api/users/token', async (req: Request, res: Response) => {
 
   await redisService.blacklistRefreshToken(refreshToken, payload.userId);
 
+  // TODO remove / do something about the role field
   const newAccessToken = TokenService.generateAccessToken({
     userId: payload.userId,
     email: payload.email,
