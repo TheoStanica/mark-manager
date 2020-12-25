@@ -1,11 +1,11 @@
 import { CustomError } from './custom-error';
 
-export class AccountNotActivated extends CustomError {
+export class AccountNotActivatedError extends CustomError {
   statusCode = 403;
 
   constructor(public userID: string) {
     super('Please activate your account first!');
-    Object.setPrototypeOf(this, AccountNotActivated.prototype);
+    Object.setPrototypeOf(this, AccountNotActivatedError.prototype);
   }
 
   serializeErrors() {
