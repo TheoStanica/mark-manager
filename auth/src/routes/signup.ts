@@ -13,6 +13,7 @@ import { UserController } from '../controllers/userController';
 import crypto from 'crypto';
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
+import { SendActivationEmailPublisher } from '../events/publishers/send-activation-email-publisher';
 
 const router = express.Router();
 
@@ -62,6 +63,11 @@ router.post(
     await new UserCreatedPublisher(natsWrapper.client).publish({
       id: user.id!,
       email: user.email,
+    });
+
+    await new SendActivationEmailPublisher(natsWrapper.client).publish({
+      email: user.email,
+      activationToken: user.confirmationToken,
     });
 
     // TODO change this to send only "User Created, please check your Email to confirm your account" or something similar...
