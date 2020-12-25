@@ -1,5 +1,5 @@
 import {
-  AccountNotActivated,
+  AccountNotActivatedError,
   BadRequestError,
   validateRequest,
 } from '@tcosmin/common';
@@ -37,7 +37,7 @@ router.post(
     }
 
     if (!existingUser.confirmed) {
-      throw new AccountNotActivated(existingUser.id!);
+      throw new AccountNotActivatedError(existingUser.id!);
     }
 
     const accessToken = TokenService.generateAccessToken({
