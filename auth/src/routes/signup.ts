@@ -11,6 +11,8 @@ import { RedisService } from '../services/redis-service';
 import { TokenService } from '../services/token-service';
 import { UserController } from '../controllers/userController';
 import crypto from 'crypto';
+import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -57,7 +59,10 @@ router.post(
     // save UID_RT : AT in Redis(RTTL)
     // save AT : RT in Redis (RTTL)
 
-    // TODO Send auth:userCreated event (userProfile and Mailer will be listening for this)
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      id: user.id!,
+      email: user.email,
+    });
 
     // TODO change this to send only "User Created, please check your Email to confirm your account" or something similar...
     // after Mailer microservice is up and running.
