@@ -8,6 +8,8 @@ import 'express-async-errors';
 import { redisWrapper } from '../redis-wrapper';
 import jwt from 'jsonwebtoken';
 import { RedisService } from '../services/redis-service';
+import { AccessTokenRevokedPublisher } from '../events/publishers/access-token-revoked-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -31,7 +33,9 @@ router.post(
 
     await redisService.logoutUser(token);
 
-    // TODO Publish auth:accessToken_revoked Event
+    await new AccessTokenRevokedPublisher(natsWrapper.client).publish({
+      token: token,
+    });
 
     res.send({});
   }
