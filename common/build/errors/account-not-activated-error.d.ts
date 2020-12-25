@@ -1,5 +1,5 @@
 import { CustomError } from './custom-error';
-export declare class AccountNotActivated extends CustomError {
+export declare class AccountNotActivatedError extends CustomError {
     userID: string;
     statusCode: number;
     constructor(userID: string);

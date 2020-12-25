@@ -13,20 +13,19 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountNotActivatedError = void 0;
+exports.AccountAlreadyActivatedError = void 0;
 var custom_error_1 = require("./custom-error");
-var AccountNotActivatedError = /** @class */ (function (_super) {
-    __extends(AccountNotActivatedError, _super);
-    function AccountNotActivatedError(userID) {
-        var _this = _super.call(this, 'Please activate your account first!') || this;
-        _this.userID = userID;
-        _this.statusCode = 403;
-        Object.setPrototypeOf(_this, AccountNotActivatedError.prototype);
+var AccountAlreadyActivatedError = /** @class */ (function (_super) {
+    __extends(AccountAlreadyActivatedError, _super);
+    function AccountAlreadyActivatedError() {
+        var _this = _super.call(this, 'Account already activated.') || this;
+        _this.statusCode = 410;
+        Object.setPrototypeOf(_this, AccountAlreadyActivatedError.prototype);
         return _this;
     }
-    AccountNotActivatedError.prototype.serializeErrors = function () {
-        return [{ message: this.message, userID: this.userID }];
+    AccountAlreadyActivatedError.prototype.serializeErrors = function () {
+        return [{ message: this.message }];
     };
-    return AccountNotActivatedError;
+    return AccountAlreadyActivatedError;
 }(custom_error_1.CustomError));
-exports.AccountNotActivatedError = AccountNotActivatedError;
+exports.AccountAlreadyActivatedError = AccountAlreadyActivatedError;

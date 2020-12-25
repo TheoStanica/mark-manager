@@ -6,6 +6,7 @@ export * from './errors/not-authorized-error';
 export * from './errors/request-validation-error';
 export * from './errors/forbidden-error';
 export * from './errors/account-not-activated-error';
+export * from './errors/account-already-activated-error';
 export * from './middlewares/error-handler';
 export * from './middlewares/require-auth';
 export * from './middlewares/validate-request';
