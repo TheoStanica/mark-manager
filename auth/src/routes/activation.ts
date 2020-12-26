@@ -4,7 +4,7 @@ import { UserController } from '../controllers/userController';
 
 const router = express.Router();
 
-router.post(
+router.get(
   '/api/users/activation/:activationToken',
   async (req: Request, res: Response) => {
     // get the token from request params
@@ -34,6 +34,7 @@ router.post(
       // else, send back a message saying user is activated, please login(or login automatically?)
       await UserController.activateUserWithId(user.id!);
 
+      // TODO Redirect to Login Page? or automatically login?
       res.send('Account successfully confirmed!');
     }
   }
