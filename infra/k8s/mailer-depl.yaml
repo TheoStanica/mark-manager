@@ -24,7 +24,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-
+            - name: GMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mark-password-secret
+                  key: GMAIL_PASSWORD
 ---
 apiVersion: v1
 kind: Service
