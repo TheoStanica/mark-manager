@@ -1,4 +1,5 @@
 import { app } from './app';
+import { SendActivationEmailListener } from './events/listeners/send-activation-email-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
@@ -13,6 +14,10 @@ const start = async () => {
   }
 
   try {
+    if (!process.env.GMAIL_PASSWORD) {
+      throw new Error('GMAIL_PASSWORD must be defined');
+    }
+
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
       process.env.NATS_CLIENT_ID,
@@ -24,6 +29,8 @@ const start = async () => {
     });
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
+
+    new SendActivationEmailListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
   }
