@@ -14,7 +14,7 @@ import { natsWrapper } from '../nats-wrapper';
 const router = express.Router();
 
 router.post(
-  '/api/users/signout',
+  '/api/auth/signout',
   requireAuth,
   async (req: Request, res: Response) => {
     const authHeader = req.headers['authorization'];

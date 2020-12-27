@@ -10,7 +10,7 @@ spec:
     - host: mark.dev
       http:
         paths:
-          - path: /api/users/?(.*)
+          - path: /api/auth/?(.*)
             backend:
               serviceName: auth-srv
               servicePort: 3000
