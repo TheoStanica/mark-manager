@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { UserCreatedListener } from './events/listeners/user-created-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
@@ -37,6 +38,8 @@ const start = async () => {
       useFindAndModify: false,
     });
     console.log('Connected to MongoDB');
+
+    new UserCreatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
   }
