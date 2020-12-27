@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userprofile-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userprofile
+  template:
+    metadata:
+      labels:
+        app: userprofile
+    spec:
+      containers:
+        - name: userprofile
+          image: theocosmin/userprofile
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://userprofile-mongo-srv:27017/userprofile'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: mark
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userprofile-srv
+spec:
+  selector:
+    app: userprofile
+  ports:
+    - name: userprofile
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
