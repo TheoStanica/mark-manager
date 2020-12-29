@@ -7,9 +7,9 @@ export interface UserAttrs {
 
 export interface UserDoc extends mongoose.Document {
   email: string;
-  fullName: string;
-  profilePicture: string;
-  userTier: string;
+  fullName?: string | undefined;
+  profilePicture?: string | undefined;
+  userTier?: string;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -23,11 +23,17 @@ const userProfileSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    fullName: {
+      type: String,
+      default: undefined,
+    },
     profilePicture: {
       type: String,
+      default: undefined,
     },
     userTier: {
       type: String,
+      default: 'free',
     },
   },
   {
