@@ -64,4 +64,14 @@ export class UserController {
       { new: true }
     );
   }
+
+  static async updateUserEmail(userId: string, email: string) {
+    return await User.findByIdAndUpdate(
+      userId,
+      {
+        email,
+      },
+      { new: true }
+    );
+  }
 }
