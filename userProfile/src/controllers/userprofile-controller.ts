@@ -17,4 +17,10 @@ export class UserProfileController {
       new: true,
     });
   }
+
+  static async emailExists(email: string) {
+    const user = await UserProfile.findOne({ email });
+    if (user) return true;
+    return false;
+  }
 }
