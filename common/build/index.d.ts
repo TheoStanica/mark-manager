@@ -17,3 +17,4 @@ export * from './events/subjects';
 export * from './events/user-created-event';
 export * from './events/access-token-revoked-event';
 export * from './events/send-activation-email-event';
+export * from './events/email-changed-event';

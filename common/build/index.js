@@ -29,3 +29,4 @@ __exportStar(require("./events/subjects"), exports);
 __exportStar(require("./events/user-created-event"), exports);
 __exportStar(require("./events/access-token-revoked-event"), exports);
 __exportStar(require("./events/send-activation-email-event"), exports);
+__exportStar(require("./events/email-changed-event"), exports);
