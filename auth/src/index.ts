@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { EmailChangedListener } from './events/listeners/email-changed-listener';
 import { natsWrapper } from './nats-wrapper';
 import { redisWrapper } from './redis-wrapper';
 
@@ -61,6 +62,8 @@ const start = async () => {
       useFindAndModify: false,
     });
     console.log('Connected to MongoDB');
+
+    new EmailChangedListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
   }
