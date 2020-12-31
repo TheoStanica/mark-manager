@@ -15,6 +15,12 @@ import { UserController } from '../controllers/userController';
 
 const router = express.Router();
 
+<<<<<<< HEAD
+router.post('/api/users/signin', (req: Request, res: Response) => {
+  console.log(req.body);
+  res.send('Signin Route...');
+});
+=======
 router.post(
   '/api/auth/signin',
   [
@@ -67,5 +73,6 @@ router.post(
     res.status(200).send({ existingUser, accessToken, refreshToken });
   }
 );
+>>>>>>> 8095ed49e923218c4e211405c4411d0b83ec6b43
 
 export { router as signinRouter };
