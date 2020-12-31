@@ -1,0 +1,19 @@
+name: deploy-manifests
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'infra/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
+      - run: okteto kubernetes cluster kubeconfig save theostanica
+      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
