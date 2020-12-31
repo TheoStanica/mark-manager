@@ -20,4 +20,8 @@ jobs:
 
       - uses: okteto/apply@master
         with:
-          manifests: infra/k8s infra/k8s-prod
+          manifests: infra/k8s
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s-prod
