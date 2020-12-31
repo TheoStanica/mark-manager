@@ -24,6 +24,6 @@ jobs:
 
       - uses: okteto/namespace@master
 
-      - uses: okteto/deploy-stack@master
+      - uses: okteto/apply@master
         with:
-          build: 'true'
+          manifest: auth-depl.yaml
