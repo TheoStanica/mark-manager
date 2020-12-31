@@ -26,5 +26,4 @@ jobs:
 
       - uses: okteto/push@master
         with:
-          name: auth-depl.yaml
-          working-directory: infra/k8s
+          deploy: auth-depl
