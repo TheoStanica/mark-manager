@@ -26,4 +26,4 @@ jobs:
 
       - uses: okteto/push@master
         with:
-          name: auth-depl
+          name: auth-depl.yaml
