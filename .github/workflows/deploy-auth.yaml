@@ -23,4 +23,4 @@ jobs:
           token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
 
       - uses: okteto/namespace@master
-      - run: kubectl rolldout restart deployment auth-depl
+      - run: kubectl rollout restart deployment auth-depl
