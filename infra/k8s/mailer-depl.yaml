@@ -29,6 +29,7 @@ spec:
                 secretKeyRef:
                   name: mark-password-secret
                   key: GMAIL_PASSWORD
+
 ---
 apiVersion: v1
 kind: Service
