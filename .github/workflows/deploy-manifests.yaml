@@ -16,6 +16,8 @@ jobs:
         with:
           token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
 
+      - uses: okteto/namespace@master
+
       - uses: okteto/apply@master
         with:
           manifests: infra/k8s infra/k8s-prod

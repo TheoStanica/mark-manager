@@ -1,0 +1,29 @@
+name: deploy-userprofile
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'userprofile/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd userprofile && docker build -t theocosmin/userprofile .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push theocosmin/userprofile
+      - uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
+
+      - uses: okteto/namespace@master
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s/userprofile-depl.yaml

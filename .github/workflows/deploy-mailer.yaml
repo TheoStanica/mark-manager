@@ -1,0 +1,29 @@
+name: deploy-mailer
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'mailer/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd mailer && docker build -t theocosmin/mailer .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push theocosmin/mailer
+      - uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
+
+      - uses: okteto/namespace@master
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s/mailer-depl.yaml
