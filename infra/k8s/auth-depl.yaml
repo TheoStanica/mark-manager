@@ -18,6 +18,31 @@ spec:
           env:
             - name: MONGO_URI
               value: 'mongodb://auth-mongo-srv:27017/auth'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: JWT_REFRESH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refresh-secret
+                  key: JWT_REFRESH_KEY
+            - name: ACCESS_TOKEN_TTL
+              value: '600'
+            - name: REFRESH_TOKEN_TTL
+              value: '86400'
+            - name: REDIS_HOST
+              value: auth-redis-srv
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: mark
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
 ---
 apiVersion: v1
 kind: Service

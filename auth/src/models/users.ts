@@ -1,19 +1,24 @@
 import mongoose from 'mongoose';
 import { Password } from '../services/password';
 
-interface UserAttrs {
+export interface UserAttrs {
   email: string;
   password: string;
 }
-interface UserDoc extends mongoose.Document {
+
+export interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   twitter: {
     id: string;
     token: string;
   };
+  confirmed: boolean;
+  confirmationToken: string;
+  confirmationExpireDate: Date;
 }
-interface UserModel extends mongoose.Model<UserDoc> {
+
+export interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
@@ -26,6 +31,17 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    confirmed: {
+      type: Boolean,
+      default: false,
+    },
+    confirmationToken: {
+      type: String,
+    },
+    confirmationExpireDate: {
+      type: Date,
+      default: new Date(+new Date() + 10 * 60 * 1000),
     },
     twitter: {
       id: {
@@ -41,6 +57,8 @@ const userSchema = new mongoose.Schema(
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
+        delete ret.password;
+        delete ret.__v;
       },
     },
   }

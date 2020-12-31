@@ -1,0 +1,25 @@
+name: deploy-auth
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'auth/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd auth && docker build -t theocosmin/auth .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push theocosmin/auth
+      - uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
+      - run: okteto kubernetes cluster kubeconfig save theostanica
+      - run: kubectl rollout restart deployment auth-depl

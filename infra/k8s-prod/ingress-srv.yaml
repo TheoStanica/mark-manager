@@ -7,10 +7,14 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
-    - host: mark.dev
+    - host: theostanica.cloud.okteto.net
       http:
         paths:
-          - path: /api/users/?(.*)
+          - path: /api/auth/?(.*)
             backend:
               serviceName: auth-srv
+              servicePort: 3000
+          - path: /api/user/?(.*)
+            backend:
+              serviceName: userprofile-srv
               servicePort: 3000

@@ -5,6 +5,9 @@ import { errorHandler, NotFoundError } from '@tcosmin/common';
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
+import { tokenRouter } from './routes/token';
+import { activationRouter } from './routes/activation';
+import { resendActivationRouter } from './routes/resend-activation';
 
 const app = express();
 app.set('trust proxy', true);
@@ -13,6 +16,9 @@ app.use(json());
 app.use(signupRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
+app.use(tokenRouter);
+app.use(resendActivationRouter);
+app.use(activationRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
