@@ -1,5 +1,5 @@
 deploy:
-  - okteto build -t theocosmin/auth
-  - okteto build -t theocosmin/mailer
-  - okteto build -t theocosmin/userprofile
+  - okteto build -t theocosmin/auth${OKTETO_GIT_COMMIT} auth
+  - okteto build -t theocosmin/mailer${OKTETO_GIT_COMMIT} mailer
+  - okteto build -t theocosmin/userprofile${OKTETO_GIT_COMMIT} userprofile
   - kubectl apply -f infra/k8s
