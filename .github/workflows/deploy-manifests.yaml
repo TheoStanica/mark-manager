@@ -15,5 +15,4 @@ jobs:
       - uses: okteto/login@master
         with:
           token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
-      - run: kubernetes cluster kubeconfig save theostanica
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
