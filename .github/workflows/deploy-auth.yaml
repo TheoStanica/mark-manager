@@ -27,8 +27,3 @@ jobs:
       - uses: okteto/apply@master
         with:
           manifest: infra/k8s/auth-depl.yaml
-
-      - uses: okteto/push@master
-        with:
-          name: auth-depl
-          deploy: auth-depl
