@@ -21,5 +21,5 @@ jobs:
       - uses: okteto/login@master
         with:
           token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
-      - run: okteto kubernetes cluster kubeconfig save theostanica
+      - run: kubernetes cluster kubeconfig save theostanica
       - run: kubectl rollout restart deployment auth-depl
