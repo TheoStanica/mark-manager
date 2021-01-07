@@ -30,7 +30,7 @@ export class TokenService {
         resolve(payload);
       } catch (e) {
         reject(new BadRequestError('Invalid Token'));
-        // TODO maybe a different Error?
+        // TODO maybe a different Error (Unauthorized)??
       }
     });
   }
