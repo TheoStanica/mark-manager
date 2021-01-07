@@ -37,6 +37,7 @@ router.put(
       }
     );
 
+    // TODO send this only if email was changed
     await new EmailChangedPublisher(natsWrapper.client).publish({
       userId: user!.id,
       email: email,
