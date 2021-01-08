@@ -41,8 +41,8 @@ router.post(
     );
 
     await new SendActivationEmailPublisher(natsWrapper.client).publish({
-      email: user.email,
-      activationToken: user.confirmationToken,
+      email: updatedUser!.email,
+      activationToken: updatedUser!.confirmationToken,
     });
 
     // TODO change status to 204 and remove updatedUser
