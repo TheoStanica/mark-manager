@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
     },
     confirmationExpireDate: {
       type: Date,
-      default: new Date(+new Date() + 10 * 60 * 1000),
+      default: () => new Date(+new Date() + 10 * 60 * 1000),
     },
     twitter: {
       id: {
