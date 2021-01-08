@@ -49,3 +49,7 @@ jobs:
       - uses: okteto/apply@master
         with:
           manifest: infra/k8s-prod/ingress-srv.yaml
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s/client-depl.yaml
