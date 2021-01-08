@@ -1,25 +1,73 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Dashboard from './components/Dashboard';
+import Header from './components/Header';
+import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
+import axiosInstance from './api/buildClient';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-function App() {
+const App = () => {
+  const [userData, setUserData] = useState(null);
+
+  const getUser = async () => {
+    try {
+      const response = await axiosInstance.get('/api/user/currentuser', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      if (response) {
+        setUserData(response.data.user);
+      }
+    } catch (err) {
+      setUserData(null);
+    }
+  };
+
+  const onUserChange = () => {
+    getUser();
+  };
+  const onUserNotLoggedIn = () => {
+    setUserData(null);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="ui container">
+        <Header
+          user={userData}
+          onUserNotLoggedIn={onUserNotLoggedIn}
+          onUserCheckLoggedIn={onUserChange}
+        />
+        <Switch>
+          <Route path="/" exact component={Home} />
+
+          <Route
+            path="/login"
+            component={() => <Login onUserChange={onUserChange} />}
+          />
+
+          <Route path="/register" component={Register} />
+
+          <Route
+            path="/dashboard"
+            component={() => (
+              <Dashboard
+                user={userData}
+                onUserNotLoggedIn={onUserNotLoggedIn}
+              />
+            )}
+          />
+        </Switch>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
