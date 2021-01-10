@@ -16,8 +16,13 @@ spec:
         - name: userprofile
           image: theocosmin/userprofile
           env:
+            # - name: MONGO_URI
+            #   value: 'mongodb://userprofile-mongo-srv:27017/userprofile'
             - name: MONGO_URI
-              value: 'mongodb://userprofile-mongo-srv:27017/userprofile'
+              valueFrom:
+                secretKeyRef:
+                  name: userprofile-mongo-secret
+                  key: MONGO_URI
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
