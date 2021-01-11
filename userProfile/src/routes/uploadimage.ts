@@ -1,15 +1,21 @@
 import express, { Request, Response } from 'express';
-import aws, { S3 } from 'aws-sdk';
-import fs from 'fs';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
 import { BadRequestError } from '@tcosmin/common';
 import { AWSImageUploader } from '../services/aws-image-upload';
 
 const router = express.Router();
 
-router.post('/api/user/uploadimage', async (req: Request, res: Response) => {
-  AWSImageUploader.uploadSingleFile(req, res);
-});
+router.post(
+  '/api/user/uploadimage',
+  AWSImageUploader.upload.single('image'),
+  async (req: Request, res: Response) => {
+    if (!req.file) {
+      throw new BadRequestError('No file provided');
+    }
+
+    // TODO figure out this
+    //@ts-ignore
+    res.send({ imageUrl: req.file.location });
+  }
+);
 
 export { router as uploadImageRouter };

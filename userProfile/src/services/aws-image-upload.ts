@@ -6,7 +6,7 @@ import multerS3 from 'multer-s3';
 
 class AWSImageUpload {
   private s3: aws.S3;
-  private upload;
+  public upload;
 
   constructor() {
     aws.config.update({
@@ -40,21 +40,6 @@ class AWSImageUpload {
           cb(null, Date.now().toString());
         },
       }),
-    });
-  }
-
-  uploadSingleFile(req: any, res: any) {
-    const singleUpload = this.upload.single('image');
-
-    singleUpload(req, res, function (err: any) {
-      if (err) {
-        throw Error('Something didnt go as planned... Please try again later');
-      }
-      if (!req.file) {
-        throw new BadRequestError('Please provide a file');
-      }
-
-      return res.json({ imageUrl: req.file.location });
     });
   }
 }
