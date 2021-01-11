@@ -7,42 +7,45 @@ const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
     onUserNotLoggedIn(null);
   };
 
-  let buttons;
-  if (!user) {
-    buttons = (
-      <div className="ui container ">
-        <Link to="/" className="item" onClick={onUserCheckLoggedIn}>
-          Mark
-        </Link>
-        <div className="right menu">
-          <Link to="/login" className="float right item">
-            Login
-          </Link>
-          <Link to="/register" className="float right item">
-            Register
-          </Link>
-        </div>
-      </div>
+  const renderNavButton = (route, text, className, onClick) => {
+    return (
+      <Link to={route} className={className} onClick={onClick}>
+        {text}
+      </Link>
     );
-  } else {
-    buttons = (
-      <div className="ui container ">
-        <Link to="/" className="item" onClick={onUserCheckLoggedIn}>
-          Mark
-        </Link>
-        <div className="right menu">
-          <Link to="/dashboard" className="item" onClick={onUserCheckLoggedIn}>
-            Dashboard
-          </Link>
-          <Link to="/" className="item" onClick={handleLogout}>
-            Logout
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  };
 
-  return <div className="ui  menu">{buttons}</div>;
+  const renderHeader = () => {
+    if (!user) {
+      return (
+        <div className="right menu">
+          {renderNavButton('/login', 'Login', 'float right item')}
+          {renderNavButton('/register', 'Register', 'float right item')}
+        </div>
+      );
+    } else {
+      return (
+        <div className="right menu">
+          {renderNavButton(
+            '/dashboard',
+            'Dashboard',
+            'float right item',
+            onUserCheckLoggedIn
+          )}
+          {renderNavButton('/', 'Logout', 'float right item', handleLogout)}
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="ui  menu">
+      <div className="ui container">
+        {renderNavButton('/', 'Mark', 'item', onUserCheckLoggedIn)}
+        {renderHeader()}
+      </div>
+    </div>
+  );
 };
 
 export default Header;
