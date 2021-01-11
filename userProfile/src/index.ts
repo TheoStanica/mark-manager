@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import { UserCreatedListener } from './events/listeners/user-created-listener';
 import { natsWrapper } from './nats-wrapper';
+import AWS from 'aws-sdk';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
@@ -21,6 +22,12 @@ const start = async () => {
   }
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID must be defined');
+  }
+  if (!process.env.AWS_ACCESS_KEY) {
+    throw new Error('AWS_ACCESS_KEY must be defined');
+  }
+  if (!process.env.AWS_SECRET_KEY) {
+    throw new Error('AWS_SECRET_KEY must be defined');
   }
 
   try {

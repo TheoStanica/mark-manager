@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import { errorHandler, NotFoundError } from '@tcosmin/common';
 import { showCurrentUserRouter } from './routes/show';
 import { updateCurrentUserRouter } from './routes/update';
+import { uploadImageRouter } from './routes/uploadimage';
 
 const app = express();
 app.set('trust proxy', true);
@@ -11,6 +12,7 @@ app.use(json());
 
 app.use(showCurrentUserRouter);
 app.use(updateCurrentUserRouter);
+app.use(uploadImageRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
