@@ -16,8 +16,13 @@ spec:
         - name: auth
           image: theocosmin/auth
           env:
+            # - name: MONGO_URI
+            #   value: 'mongodb://auth-mongo-srv:27017/auth'
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              valueFrom:
+                secretKeyRef:
+                  name: auth-mongo-secret
+                  key: MONGO_URI
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
