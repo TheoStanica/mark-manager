@@ -44,12 +44,12 @@ const App = () => {
 
   return (
     <Router>
-      <div className="ui container">
-        <Header
-          user={userData}
-          onUserNotLoggedIn={onUserNotLoggedIn}
-          onUserCheckLoggedIn={onUserChange}
-        />
+      <Header
+        user={userData}
+        onUserNotLoggedIn={onUserNotLoggedIn}
+        onUserCheckLoggedIn={onUserChange}
+      />
+      <div className="container">
         <Switch>
           <Route path="/" exact component={() => <Home user={userData} />} />
 
@@ -60,7 +60,10 @@ const App = () => {
             )}
           />
 
-          <Route path="/register" user={userData} component={Register} />
+          <Route
+            path="/register"
+            component={() => <Register user={userData} />}
+          />
 
           <Route
             path="/dashboard"
