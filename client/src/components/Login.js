@@ -21,10 +21,8 @@ const Login = ({ user, onUserChange }) => {
         onUserChange();
       }
     } catch (err) {
-      console.log('LOGIN ERRROR', err);
       setErrors(
-        <div>
-          <h4>Ooops....</h4>
+        <div className="alert alert-danger">
           <ul>
             {err.response.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
@@ -40,33 +38,42 @@ const Login = ({ user, onUserChange }) => {
   }
 
   return (
-    <div className="ui middle aligned  grid ">
-      <div className="ui column">
-        <div className="ui header">Login</div>
-        <form className="ui large form  " onSubmit={submitLogin}>
-          <div className="ui stacked segment">
-            <div className="  field ">
-              <label>Email</label>
-              <input
-                className="input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="  field">
-              <label>Password</label>
-              <input
-                className="input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button className="ui fluid large primary submit button">
-              Login
-            </button>
-            {errors}
+    <div className="mt-5">
+      <h1 className="text-center">Login</h1>
+      <div className="flex-center row">
+        <form
+          className="col-xxl-4 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto"
+          onSubmit={submitLogin}
+        >
+          <div className="form-outline mb-4">
+            <input
+              type="email"
+              id="form1Example1"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label className="form-label" htmlFor="form1Example1">
+              Email address
+            </label>
           </div>
+
+          <div className="form-outline mb-4">
+            <input
+              type="password"
+              id="form1Example2"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label className="form-label" htmlFor="form1Example2">
+              Password
+            </label>
+          </div>
+          <button type="submit" className="btn btn-primary btn-block mb-3">
+            Sign in
+          </button>
+          {errors}
         </form>
       </div>
     </div>

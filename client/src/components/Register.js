@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import axiosInstance from '../api/buildClient';
 
-const Register = (user) => {
+const Register = ({ user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
@@ -20,8 +20,7 @@ const Register = (user) => {
       }
     } catch (err) {
       setErrors(
-        <div>
-          <h4>Ooops....</h4>
+        <div className="alert alert-danger">
           <ul>
             {err.response.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
@@ -37,33 +36,42 @@ const Register = (user) => {
   }
 
   return (
-    <div className="ui middle aligned  grid ">
-      <div className=" column">
-        <div className="ui header">Register</div>
-        <form className="ui large form  " onSubmit={submitRegister}>
-          <div className="ui stacked segment">
-            <div className="  field ">
-              <label>Email</label>
-              <input
-                className="input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="  field">
-              <label>Password</label>
-              <input
-                className="input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button className="ui fluid large primary submit button">
-              Register
-            </button>
-            {errors}
+    <div className="mt-5">
+      <h1 className="text-center">Register</h1>
+      <div className="flex-center row">
+        <form
+          className="col-xxl-4 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto"
+          onSubmit={submitRegister}
+        >
+          <div className="form-outline mb-4">
+            <input
+              type="email"
+              id="form1Example1"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label className="form-label" htmlFor="form1Example1">
+              Email address
+            </label>
           </div>
+
+          <div className="form-outline mb-4">
+            <input
+              type="password"
+              id="form1Example2"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label className="form-label" htmlFor="form1Example2">
+              Password
+            </label>
+          </div>
+          <button type="submit" className="btn btn-primary btn-block mb-3">
+            Register
+          </button>
+          {errors}
         </form>
       </div>
     </div>

@@ -18,33 +18,55 @@ const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
   const renderHeader = () => {
     if (!user) {
       return (
-        <div className="right menu">
-          {renderNavButton('/login', 'Login', 'float right item')}
-          {renderNavButton('/register', 'Register', 'float right item')}
-        </div>
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            {renderNavButton('/login', 'Login', 'nav-link')}
+          </li>
+          <li className="nav-item">
+            {renderNavButton('/register', 'Register', 'nav-link')}
+          </li>
+        </ul>
       );
     } else {
       return (
-        <div className="right menu">
-          {renderNavButton(
-            '/dashboard',
-            'Dashboard',
-            'float right item',
-            onUserCheckLoggedIn
-          )}
-          {renderNavButton('/', 'Logout', 'float right item', handleLogout)}
-        </div>
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            {renderNavButton(
+              '/dashboard',
+              'Dashboard',
+              'nav-link',
+              onUserCheckLoggedIn
+            )}
+          </li>
+          <li className="nav-item">
+            {renderNavButton('/', 'Logout', 'nav-link', handleLogout)}
+          </li>
+        </ul>
       );
     }
   };
 
   return (
-    <div className="ui  menu">
-      <div className="ui container">
-        {renderNavButton('/', 'Mark', 'item', onUserCheckLoggedIn)}
-        {renderHeader()}
+    <nav className="navbar navbar-dark bg-dark navbar-expand-sm">
+      <div className="container">
+        {renderNavButton('/', 'Mark', 'navbar-brand')}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          {renderHeader()}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
