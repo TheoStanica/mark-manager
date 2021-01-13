@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 const Dashboard = ({ user }) => {
   if (!user) {
-    return (
-      <div>You are not logged in... please log in to access this page</div>
-    );
+    return <Redirect to="/login" />;
   }
 
-  // return <div>{JSON.stringify(userData)}</div>;
   return (
     <div>
       <p>Email: {user.email}</p>
