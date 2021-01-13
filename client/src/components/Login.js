@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import axiosInstance from '../api/buildClient';
 
-const Login = ({ onUserChange }) => {
+const Login = ({ user, onUserChange }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
-  const history = useHistory();
 
   const submitLogin = async (e) => {
     e.preventDefault();
@@ -20,7 +19,6 @@ const Login = ({ onUserChange }) => {
         localStorage.setItem('accessToken', response.data.accessToken);
         localStorage.setItem('refreshToken', response.data.refreshToken);
         onUserChange();
-        history.push('/dashboard');
       }
     } catch (err) {
       console.log('LOGIN ERRROR', err);
@@ -36,6 +34,10 @@ const Login = ({ onUserChange }) => {
       );
     }
   };
+
+  if (user) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="ui middle aligned  grid ">
