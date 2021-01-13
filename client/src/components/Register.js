@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import axiosInstance from '../api/buildClient';
 
-const Register = () => {
+const Register = (user) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
@@ -30,6 +31,10 @@ const Register = () => {
       );
     }
   };
+
+  if (user) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="ui middle aligned  grid ">
