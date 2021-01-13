@@ -34,7 +34,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    getUser();
+    if (
+      localStorage.getItem('accessToken') &&
+      localStorage.getItem('refreshToken')
+    ) {
+      getUser();
+    }
   }, []);
 
   return (
@@ -46,14 +51,16 @@ const App = () => {
           onUserCheckLoggedIn={onUserChange}
         />
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route path="/" exact component={() => <Home user={userData} />} />
 
           <Route
             path="/login"
-            component={() => <Login onUserChange={onUserChange} />}
+            component={() => (
+              <Login user={userData} onUserChange={onUserChange} />
+            )}
           />
 
-          <Route path="/register" component={Register} />
+          <Route path="/register" user={userData} component={Register} />
 
           <Route
             path="/dashboard"
