@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 const Dashboard = ({ user }) => {
   if (!user) {
@@ -11,6 +11,7 @@ const Dashboard = ({ user }) => {
       <p>Email: {user.email}</p>
       <p>ID: {user.id}</p>
       <p>Tier: {user.userTier}</p>
+      <Link to="/settings">Settings</Link>
     </div>
   );
 };
