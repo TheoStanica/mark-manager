@@ -6,6 +6,7 @@ import Register from './components/Register';
 import Home from './components/Home';
 import axiosInstance from './api/buildClient';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import SettingsPage from './components/SettingsPage';
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -73,6 +74,10 @@ const App = () => {
                 onUserNotLoggedIn={onUserNotLoggedIn}
               />
             )}
+          />
+          <Route
+            path="/settings"
+            component={() => <SettingsPage user={userData} />}
           />
         </Switch>
       </div>
