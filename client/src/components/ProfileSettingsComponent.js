@@ -4,7 +4,11 @@ import axiosInstance from '../api/buildClient';
 const ProfileSettingsComponent = ({ user }) => {
   const [fullName, setFullName] = useState(user.fullName);
   const [email, setEmail] = useState(user.email);
-  const [avatar, setAvatar] = useState(user.profilePicture);
+  const [avatar, setAvatar] = useState(
+    user.profilePicture
+      ? user.profilePicture
+      : 'https://projectmarkbucket.s3.eu-west-3.amazonaws.com/default_profile.jpg'
+  );
   const [selectedFile, setSelectedFile] = useState(null);
   const [errors, setErrors] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -14,7 +18,11 @@ const ProfileSettingsComponent = ({ user }) => {
     const requestBody = {
       fullName,
       email: email !== user.email ? email : undefined,
-      profilePicture: avatar,
+      profilePicture:
+        avatar ===
+        'https://projectmarkbucket.s3.eu-west-3.amazonaws.com/default_profile.jpg'
+          ? undefined
+          : avatar,
     };
     try {
       const response = await axiosInstance.put(
