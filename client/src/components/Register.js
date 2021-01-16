@@ -6,6 +6,7 @@ const Register = ({ user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
+  const [message, setMessage] = useState('');
 
   const submitRegister = async (e) => {
     e.preventDefault();
@@ -16,7 +17,11 @@ const Register = ({ user }) => {
         password,
       });
       if (response && response.status === 201) {
-        console.log(response.data);
+        setMessage(
+          <div className="alert alert-primary">
+            Account created! Please check your email to confirm your account!
+          </div>
+        );
       }
     } catch (err) {
       setErrors(
@@ -72,6 +77,7 @@ const Register = ({ user }) => {
             Register
           </button>
           {errors}
+          {message}
         </form>
       </div>
     </div>
