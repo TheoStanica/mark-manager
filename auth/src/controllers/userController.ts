@@ -37,6 +37,26 @@ export class UserController {
     return existingUser;
   }
 
+  static async updateUserPassword(
+    userId: string,
+    oldPassword: string,
+    newPasword: string
+  ) {
+    const existingUser = await User.findById(userId);
+
+    if (!(await Password.compare(existingUser!.password, oldPassword))) {
+      return null;
+    }
+    const password = await Password.toHash(newPasword);
+    return await User.findByIdAndUpdate(
+      userId,
+      {
+        password,
+      },
+      { new: true }
+    );
+  }
+
   static async findUserWithConfirmationToken(token: string) {
     return User.findOne({ confirmationToken: token });
   }
