@@ -18,7 +18,7 @@ const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
   const renderHeader = () => {
     if (!user) {
       return (
-        <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ms-auto">
           <li className="nav-item">
             {renderNavButton('/login', 'Login', 'nav-link')}
           </li>
@@ -29,7 +29,7 @@ const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
       );
     } else {
       return (
-        <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ms-auto">
           <li className="nav-item">
             {renderNavButton(
               '/dashboard',
