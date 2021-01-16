@@ -7,6 +7,7 @@ import Home from './components/Home';
 import axiosInstance from './api/buildClient';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SettingsPage from './components/SettingsPage';
+import ActivateAccount from './components/ActivateAccount';
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -78,6 +79,11 @@ const App = () => {
           <Route
             path="/settings"
             component={() => <SettingsPage user={userData} />}
+          />
+
+          <Route
+            path="/activate/:id"
+            component={() => <ActivateAccount user={userData} />}
           />
         </Switch>
       </div>
