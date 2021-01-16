@@ -6,19 +6,20 @@ const Login = ({ user, onUserChange }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState('');
+  const [message, setMessage] = useState('');
 
-  const submitLogin = async (e) => {
-    e.preventDefault();
-
+  const requestNewActivation = async (userId) => {
+    console.log('request new activation', userId);
     try {
-      const response = await axiosInstance.post('/api/auth/signin', {
-        email,
-        password,
+      const response = await axiosInstance.post('/api/auth/activation/resend', {
+        userId,
       });
-      if (response && response.status === 200) {
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
-        onUserChange();
+      if (response) {
+        setMessage(
+          <div className="alert alert-primary">
+            <ul>New activation email sent! Please check your email!</ul>
+          </div>
+        );
       }
     } catch (err) {
       setErrors(
@@ -30,6 +31,51 @@ const Login = ({ user, onUserChange }) => {
           </ul>
         </div>
       );
+    }
+  };
+
+  const submitLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post('/api/auth/signin', {
+        email,
+        password,
+      });
+      if (response && response.status === 200) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+        onUserChange();
+      }
+    } catch (err) {
+      if (err.response.status === 403) {
+        setErrors(
+          <div className="alert alert-danger">
+            <ul>
+              {err.response.data.errors.map((err) => (
+                <li key={err.message}>{err.message}</li>
+              ))}
+            </ul>
+            <div
+              className="btn btn-primary"
+              onClick={() =>
+                requestNewActivation(err.response.data.errors[0].userID)
+              }
+            >
+              Request new Activation Email
+            </div>
+          </div>
+        );
+      } else {
+        setErrors(
+          <div className="alert alert-danger">
+            <ul>
+              {err.response.data.errors.map((err) => (
+                <li key={err.message}>{err.message}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
     }
   };
 
@@ -74,6 +120,7 @@ const Login = ({ user, onUserChange }) => {
             Sign in
           </button>
           {errors}
+          {message}
         </form>
       </div>
     </div>
