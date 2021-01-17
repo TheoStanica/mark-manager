@@ -6,7 +6,6 @@ const useRequest = ({ url, method, body, onSuccess }) => {
 
   const doRequest = async (props = {}) => {
     try {
-      console.log('will send these props,', props);
       setErrors(null);
       const response = await axiosInstance[method](url, { ...body, ...props });
 
