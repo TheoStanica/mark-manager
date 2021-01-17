@@ -1,39 +1,34 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import axiosInstance from '../api/buildClient';
+import useErrorMessages from '../hooks/useErrorMessages';
+import useRequest from '../hooks/useRequest';
 
 const Register = ({ user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState('');
   const [message, setMessage] = useState('');
+  const [doRegisterRequest, errors] = useRequest({
+    url: '/api/auth/signup',
+    method: 'post',
+    body: {
+      email,
+      password,
+    },
+    onSuccess: () => handleRegisterSuccess(),
+  });
+  const errorMessages = useErrorMessages({ errors });
+
+  const handleRegisterSuccess = () => {
+    setMessage(
+      <div className="alert alert-primary">
+        Account created! Please check your email to confirm your account!
+      </div>
+    );
+  };
 
   const submitRegister = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axiosInstance.post('/api/auth/signup', {
-        email,
-        password,
-      });
-      if (response && response.status === 201) {
-        setMessage(
-          <div className="alert alert-primary">
-            Account created! Please check your email to confirm your account!
-          </div>
-        );
-      }
-    } catch (err) {
-      setErrors(
-        <div className="alert alert-danger">
-          <ul>
-            {err.response.data.errors.map((err) => (
-              <li key={err.message}>{err.message}</li>
-            ))}
-          </ul>
-        </div>
-      );
-    }
+    await doRegisterRequest();
   };
 
   if (user) {
@@ -76,7 +71,7 @@ const Register = ({ user }) => {
           <button type="submit" className="btn btn-primary btn-block mb-3">
             Register
           </button>
-          {errors}
+          {errorMessages}
           {message}
         </form>
       </div>
