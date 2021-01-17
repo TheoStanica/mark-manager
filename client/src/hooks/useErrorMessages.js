@@ -14,6 +14,8 @@ const useErrorMessages = ({ errors }) => {
           </ul>
         </div>
       );
+    } else {
+      setErrorMessages(null);
     }
   }, [errors]);
 
