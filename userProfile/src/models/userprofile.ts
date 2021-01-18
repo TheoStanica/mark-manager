@@ -25,11 +25,12 @@ const userProfileSchema = new mongoose.Schema(
     },
     fullName: {
       type: String,
-      default: undefined,
+      default: null,
     },
     profilePicture: {
       type: String,
-      default: undefined,
+      default:
+        'https://projectmarkbucket.s3.eu-west-3.amazonaws.com/default_profile.jpg',
     },
     userTier: {
       type: String,
