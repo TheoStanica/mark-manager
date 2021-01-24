@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ProfileSettingsComponent from './ProfileSettingsComponent';
 import PasswordSettingsComponent from './PasswordSettingsComponent';
 import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfo } from '../redux/actions/userActions';
 
-const SettingsPage = ({ user }) => {
+const SettingsPage = () => {
+  const user = useSelector((state) => state.userReducer);
+  const dispatch = useDispatch();
   const [option, setOption] = useState('profile');
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!user.accessToken && !user.refreshToken) {
+      return <Redirect to="/login" />;
+    }
+  }, [user]);
 
   const renderSection = () => {
     switch (option) {
@@ -17,10 +31,6 @@ const SettingsPage = ({ user }) => {
         return <ProfileSettingsComponent user={user} />;
     }
   };
-
-  if (!user) {
-    return <Redirect to="/login" />;
-  }
 
   return (
     <div className="content">
