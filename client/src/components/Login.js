@@ -1,54 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import useRequest from '../hooks/useRequest';
 import useErrorMessages from '../hooks/useErrorMessages';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, resendActivationEmail } from '../redux/actions/userActions';
+import { resetErrors } from '../redux/actions/errorsActions';
 
-const Login = ({ user, onUserChange }) => {
+const Login = () => {
+  const user = useSelector((state) => state.userReducer);
+  const errors = useSelector((state) => state.errorsReducer);
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [doLoginRequest, errors] = useRequest({
-    url: '/api/auth/signin',
-    method: 'post',
-    body: { email, password },
-    onSuccess: (response) => handleLoginSuccess(response),
-  });
-  const [errorMessages, setErrorMessages] = useErrorMessages({ errors });
-  const [doRequestNewActivationEmail, errors2] = useRequest({
-    url: '/api/auth/activation/resend',
-    method: 'post',
-    onSuccess: () => handleRequestNewActivationEmailSuccess(),
-  });
-
-  const handleLoginSuccess = (response) => {
-    localStorage.setItem('accessToken', response.data.accessToken);
-    localStorage.setItem('refreshToken', response.data.refreshToken);
-    onUserChange();
-  };
-
-  const handleRequestNewActivationEmailSuccess = () => {
-    setErrorMessages(null);
-    setMessage(
-      <div className="alert alert-primary">
-        <ul>New activation email sent! Please check your email!</ul>
-      </div>
-    );
-  };
+  const [errorMessages, setErrorMessages] = useErrorMessages(errors);
 
   useEffect(() => {
-    if (errors && errors.response.status === 403) {
+    dispatch(resetErrors());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (errors.errors && errors.errors.status === 403) {
       setErrorMessages(
         <div className="alert alert-danger">
           <ul>
-            {errors.response.data.errors.map((err) => (
+            {errors.errors.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
             ))}
           </ul>
           <div
             className="btn btn-primary"
             onClick={async () =>
-              await doRequestNewActivationEmail(
-                errors.response.data.errors[0].userId
+              dispatch(
+                resendActivationEmail(errors.errors.data.errors[0].userID)
               )
             }
           >
@@ -57,14 +40,14 @@ const Login = ({ user, onUserChange }) => {
         </div>
       );
     }
-  }, [errors]);
+  }, [errors, dispatch, setErrorMessages]);
 
   const submitLogin = async (e) => {
     e.preventDefault();
-    await doLoginRequest();
+    dispatch(loginUser({ email, password }));
   };
 
-  if (user) {
+  if (user.accessToken && user.refreshToken) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -105,7 +88,6 @@ const Login = ({ user, onUserChange }) => {
             Sign in
           </button>
           {errorMessages}
-          {message}
         </form>
       </div>
     </div>
