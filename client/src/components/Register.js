@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import useErrorMessages from '../hooks/useErrorMessages';
-import useRequest from '../hooks/useRequest';
+import { resetErrors } from '../redux/actions/errorsActions';
+import { registerUser } from '../redux/actions/userActions';
 
-const Register = ({ user }) => {
+const Register = () => {
+  const user = useSelector((state) => state.userReducer);
+  const errors = useSelector((state) => state.errorsReducer);
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [doRegisterRequest, errors] = useRequest({
-    url: '/api/auth/signup',
-    method: 'post',
-    body: {
-      email,
-      password,
-    },
-    onSuccess: () => handleRegisterSuccess(),
-  });
-  const errorMessages = useErrorMessages({ errors });
+  const [errorMessages] = useErrorMessages(errors);
 
-  const handleRegisterSuccess = () => {
-    setMessage(
-      <div className="alert alert-primary">
-        Account created! Please check your email to confirm your account!
-      </div>
-    );
-  };
+  useEffect(() => {
+    dispatch(resetErrors());
+  }, [dispatch]);
 
   const submitRegister = async (e) => {
     e.preventDefault();
-    await doRegisterRequest();
+
+    dispatch(registerUser({ email, password }));
+    // ????????????????
+    // return <Redirect to="/login" />;
+    // history.push('/login');
   };
 
-  if (user) {
+  if (user.accessToken && user.refreshToken) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -72,7 +68,6 @@ const Register = ({ user }) => {
             Register
           </button>
           {errorMessages}
-          {message}
         </form>
       </div>
     </div>
