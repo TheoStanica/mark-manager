@@ -1,10 +1,15 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logoutUser } from '../redux/actions/userActions';
 
-const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
+const Header = () => {
+  const user = useSelector((state) => state.userReducer);
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
     localStorage.clear();
-    onUserNotLoggedIn(null);
+    dispatch(logoutUser());
   };
 
   const renderNavButton = (route, text, className, onClick) => {
@@ -16,7 +21,7 @@ const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
   };
 
   const renderHeader = () => {
-    if (!user) {
+    if (!user.accessToken) {
       return (
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
@@ -31,12 +36,7 @@ const Header = ({ user, onUserNotLoggedIn, onUserCheckLoggedIn }) => {
       return (
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
-            {renderNavButton(
-              '/dashboard',
-              'Dashboard',
-              'nav-link',
-              onUserCheckLoggedIn
-            )}
+            {renderNavButton('/dashboard', 'Dashboard', 'nav-link')}
           </li>
           <li className="nav-item">
             {renderNavButton('/', 'Logout', 'nav-link', handleLogout)}
