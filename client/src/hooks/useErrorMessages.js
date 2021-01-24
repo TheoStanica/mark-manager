@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
 const useErrorMessages = ({ errors }) => {
-  const [errorMessages, setErrorMessages] = useState(errors);
+  const [errorMessages, setErrorMessages] = useState(null);
 
   useEffect(() => {
     if (errors) {
       return setErrorMessages(
         <div className="alert alert-danger">
           <ul className="my-0">
-            {errors.response.data.errors.map((err) => (
+            {errors.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
             ))}
           </ul>
