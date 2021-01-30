@@ -9,6 +9,12 @@ export class AccountNotActivatedError extends CustomError {
   }
 
   serializeErrors() {
-    return [{ message: this.message, userID: this.userID }];
+    return [
+      {
+        message: this.message,
+        userID: this.userID,
+        errorType: 'accountNotActivated',
+      },
+    ];
   }
 }
