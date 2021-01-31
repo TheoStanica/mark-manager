@@ -97,11 +97,7 @@ export const resendActivationEmail = (userId) => async (dispatch) => {
 
 export const getUserInfo = () => async (dispatch) => {
   try {
-    const response = await axiosInstance.get('/api/user/currentuser', {
-      headers: {
-        Authorization: `Bearer ${store.getState().userReducer.accessToken}`,
-      },
-    });
+    const response = await axiosInstance.get('/api/user/currentuser');
     if (response) {
       dispatch({
         type: USER_GET_INFO,
