@@ -52,7 +52,7 @@ export const registerUser = ({ email, password }) => async (dispatch) => {
     dispatch({
       type: SET_ERRORS,
       payload: {
-        errors: err.response,
+        errors: err.response.data.errors,
       },
     });
   }
@@ -85,7 +85,7 @@ export const resendActivationEmail = (userId) => async (dispatch) => {
     dispatch({
       type: SET_ERRORS,
       payload: {
-        errors: err.response,
+        errors: err.response.data.errors,
       },
     });
   }
@@ -114,7 +114,7 @@ export const getUserInfo = () => async (dispatch) => {
     dispatch({
       type: SET_ERRORS,
       payload: {
-        errors: err.response,
+        errors: err.response.data.errors,
       },
     });
   }
