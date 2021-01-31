@@ -5,6 +5,10 @@ import {
   USER_REGISTER,
   USER_GET_INFO,
   USER_SET_TOKENS,
+  USER_UPLOAD_PHOTO,
+  USER_UPDATE,
+  USER_RESET_MESSAGES,
+  USER_SET_MESSAGES,
 } from '../types';
 
 const initialState = {
@@ -13,9 +17,7 @@ const initialState = {
   userTier: '',
   email: '',
   id: '',
-  accessToken: null,
-  refreshToken: null,
-  errors: null,
+  message: '',
 };
 
 const userReducer = (state = initialState, action) => {
@@ -23,8 +25,8 @@ const userReducer = (state = initialState, action) => {
     case USER_LOGIN:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
+        // accessToken: action.payload.accessToken,
+        // refreshToken: action.payload.refreshToken,
       };
     case USER_LOGOUT:
       return {
@@ -44,11 +46,6 @@ const userReducer = (state = initialState, action) => {
     case USER_RESEND_ACTIVATION:
       return {
         ...state,
-        fullName: action.payload.fullName,
-        profilePicture: action.payload.profilePicture,
-        userTier: action.payload.userTier,
-        email: action.payload.email,
-        id: action.payload.id,
       };
     case USER_GET_INFO:
       return {
@@ -67,6 +64,38 @@ const userReducer = (state = initialState, action) => {
         refreshToken: action.payload.refreshToken,
       };
     }
+
+    case USER_UPLOAD_PHOTO: {
+      return {
+        ...state,
+        profilePicture: action.payload.profilePicture,
+      };
+    }
+
+    case USER_UPDATE: {
+      return {
+        ...state,
+        email: action.payload.email,
+        fullName: action.payload.fullName,
+        profilePicture: action.payload.profilePicture,
+        message: action.payload.message,
+      };
+    }
+
+    case USER_SET_MESSAGES: {
+      return {
+        ...state,
+        message: action.payload.message,
+      };
+    }
+
+    case USER_RESET_MESSAGES: {
+      return {
+        ...state,
+        message: action.payload.message,
+      };
+    }
+
     default:
       return state;
   }
