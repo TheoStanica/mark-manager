@@ -1,41 +1,45 @@
-import React, { useState } from 'react';
-import axiosInstance from '../api/buildClient';
+import React, { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { setErrors } from '../redux/actions/errorsActions';
+import { changePassword } from '../redux/actions/userActions';
+import DisplayUserMessages from './DisplayUserMessages';
+import ErrorDisplay from './DisplayErrors';
 
-const PasswordSettingsComponent = ({ user }) => {
+const PasswordSettingsComponent = () => {
+  const dispatch = useDispatch();
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [repeatNewPassword, setRepeatNewPassword] = useState('');
-  const [errors, setErrors] = useState('');
-  const [message, setMessage] = useState('');
+
+  const currentPasswordRef = useRef(null);
+  const newPasswordRef = useRef(null);
+  const repeatPasswordRef = useRef(null);
+
+  const dispatchErrors = (message) => {
+    dispatch(
+      setErrors({
+        errors: [{ message: message }],
+      })
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('submit form');
-    if (newPassword !== repeatNewPassword) {
-      setErrors(
-        <div className="alert alert-danger">Passwords do not match</div>
-      );
+    if (currentPasswordRef.current.value === '') {
+      dispatchErrors('Please enter your current password');
+    } else if (
+      newPasswordRef.current.value !== repeatPasswordRef.current.value ||
+      newPasswordRef.current.value === ''
+    ) {
+      dispatchErrors('New Password does not match');
     } else {
-      try {
-        await axiosInstance.put('/api/auth/changepassword', {
-          currentPassword: oldPassword,
-          newPassword: newPassword,
-        });
-        setMessage(
-          <div className="alert alert-success">Password Changed!</div>
-        );
-        setErrors('');
-      } catch (err) {
-        setErrors(
-          <div className="alert alert-danger">
-            <ul>
-              {err.response.data.errors.map((err) => (
-                <li key={err.message}>{err.message}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      }
+      dispatch(
+        changePassword({
+          newPassword: newPasswordRef.current.value,
+          currentPassword: currentPasswordRef.current.value,
+        })
+      );
     }
   };
 
@@ -47,11 +51,13 @@ const PasswordSettingsComponent = ({ user }) => {
           <div className="row">
             <div className="col mb-2">
               <div className="form-group">
-                <label htmlFor="inputFullname">Old Password</label>
+                <label htmlFor="inputFullname">Current Password</label>
                 <input
+                  ref={currentPasswordRef}
                   className="form-control"
                   id="inputOldPassword"
                   type="password"
+                  minLength="4"
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
                 ></input>
@@ -59,9 +65,11 @@ const PasswordSettingsComponent = ({ user }) => {
               <div className="form-group">
                 <label htmlFor="inputNewPassword">New Password</label>
                 <input
+                  ref={newPasswordRef}
                   className="form-control"
                   id="inputNewPassword"
                   type="password"
+                  minLength="4"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 ></input>
@@ -71,9 +79,11 @@ const PasswordSettingsComponent = ({ user }) => {
                   Repeat New Password
                 </label>
                 <input
+                  ref={repeatPasswordRef}
                   className="form-control"
                   id="inputRepeatNewPassword"
                   type="password"
+                  minLength="4"
                   value={repeatNewPassword}
                   onChange={(e) => setRepeatNewPassword(e.target.value)}
                 ></input>
@@ -84,8 +94,8 @@ const PasswordSettingsComponent = ({ user }) => {
             Save Changes
           </button>
         </form>
-        {errors}
-        {message}
+        <ErrorDisplay />
+        <DisplayUserMessages />
       </div>
     </div>
   );
