@@ -10,9 +10,6 @@ const useRequest = ({ url, method, body, onSuccess }) => {
       const response = await axiosInstance[method](url, {
         ...body,
         ...props,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
       });
 
       if (onSuccess) {
