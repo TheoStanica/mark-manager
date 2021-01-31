@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import useErrorMessages from '../hooks/useErrorMessages';
-import { resetErrors } from '../redux/actions/errorsActions';
+import ErrorDisplay from '../components/DisplayErrors';
 import { registerUser } from '../redux/actions/userActions';
 
 const Register = () => {
-  const user = useSelector((state) => state.userReducer);
-  const errors = useSelector((state) => state.errorsReducer);
-  const dispatch = useDispatch();
-
+  useSelector((state) => state.userReducer.present);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessages] = useErrorMessages(errors);
-
-  useEffect(() => {
-    dispatch(resetErrors());
-  }, [dispatch]);
+  const dispatch = useDispatch();
 
   const submitRegister = async (e) => {
     e.preventDefault();
-
     dispatch(registerUser({ email, password }));
-    // ????????????????
-    // return <Redirect to="/login" />;
-    // history.push('/login');
+    // TODO message to check email
   };
-
-  if (user.accessToken && user.refreshToken) {
-    return <Redirect to="/dashboard" />;
-  }
 
   return (
     <div className="mt-5">
@@ -67,7 +51,7 @@ const Register = () => {
           <button type="submit" className="btn btn-primary btn-block mb-3">
             Register
           </button>
-          {errorMessages}
+          <ErrorDisplay />
         </form>
       </div>
     </div>
