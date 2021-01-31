@@ -16,7 +16,7 @@ const ActivateAccount = ({ user }) => {
       }
     };
     activateRequest();
-  }, []);
+  }, [id]);
 
   if (user) {
     return <Redirect to="/dashboard" />;
