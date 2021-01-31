@@ -1,73 +1,84 @@
-import React, { useState } from 'react';
-import axiosInstance from '../api/buildClient';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser, uploadPhoto } from '../redux/actions/userActions';
+import { store } from '../redux/store';
+import { ActionCreators } from 'redux-undo';
+import ErrorDisplay from './DisplayErrors';
+import DisplayUserMessages from './DisplayUserMessages';
 
-const ProfileSettingsComponent = ({ user }) => {
+const ProfileSettingsComponent = () => {
+  const user = useSelector((state) => state.userReducer.present);
+  const dispatch = useDispatch();
+
+  const [editForm, setEditForm] = useState(false);
   const [fullName, setFullName] = useState(user.fullName);
   const [email, setEmail] = useState(user.email);
-  const [avatar, setAvatar] = useState(user.profilePicture);
+  const [profilePicture, setProfilePicture] = useState(user.profilePicture);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [errors, setErrors] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const reduxUserStore = () => store.getState().userReducer.present;
+
+  useEffect(() => {
+    return store.subscribe(() => {
+      setEmail(reduxUserStore().email);
+      setFullName(reduxUserStore().fullName);
+      setProfilePicture(reduxUserStore().profilePicture);
+    });
+  }, []);
 
   const submitChanges = async (e) => {
     e.preventDefault();
-    const requestBody = {
-      fullName,
-      email: email !== user.email ? email : undefined,
-      profilePicture: avatar !== user.profilePicture ? avatar : undefined,
-    };
-    try {
-      const response = await axiosInstance.put(
-        'api/user/currentuser',
-        requestBody
-      );
-
-      if (response.status === 200) {
-        // TODO update user state
-        setSuccessMessage(
-          <div className="alert alert-success ">
-            Account saved successfully!
-          </div>
-        );
-      }
-    } catch (err) {
-      setErrors(
-        <div className="alert alert-danger">
-          <ul>
-            {err.response.data.errors.map((err) => (
-              <li key={err.message}>{err.message}</li>
-            ))}
-          </ul>
-        </div>
-      );
-    }
+    dispatch(updateUser({ email, fullName, profilePicture }));
+    setEditForm(!editForm);
   };
 
   const fileOnChangeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const handleUpload = async (e) => {
+  const handleUpload = () => {
     const data = new FormData();
     data.append('image', selectedFile);
+    dispatch(uploadPhoto(data));
+  };
 
-    try {
-      const response = await axiosInstance.post('/api/user/uploadimage', data);
+  const cancelEdits = () => {
+    setEditForm(!editForm);
+    setEmail(user.email);
+    setFullName(user.fullName);
+    setProfilePicture(user.profilePicture);
+    dispatch(ActionCreators.undo());
+  };
 
-      if (response.status === 200) {
-        setAvatar(response.data.imageUrl);
-      }
-    } catch (err) {
-      setErrors(
-        <div className="alert alert-danger">
-          <ul>
-            {err.response.data.errors.map((err) => (
-              <li key={err.message}>{err.message}</li>
-            ))}
-          </ul>
-        </div>
-      );
+  const renderButton = ({ text, className, type, onClick }) => {
+    return (
+      <button className={className} type={type} onClick={onClick}>
+        {text}
+      </button>
+    );
+  };
+
+  const renderButtons = () => {
+    if (!editForm) {
+      return renderButton({
+        text: 'Edit',
+        className: 'btn btn-primary mb-2',
+        onClick: () => setEditForm(!editForm),
+      });
     }
+    return (
+      <div>
+        {renderButton({
+          text: 'Save Changes',
+          className: 'btn btn-success mb-2 me-2',
+          type: 'submit',
+        })}
+        {renderButton({
+          text: 'Cancel',
+          className: 'btn btn-danger mb-2',
+          onClick: () => cancelEdits(),
+        })}
+      </div>
+    );
   };
 
   return (
@@ -84,6 +95,8 @@ const ProfileSettingsComponent = ({ user }) => {
                   id="inputFullname"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
+                  minLength="4"
+                  disabled={!editForm}
                 ></input>
               </div>
               <div className="form-group">
@@ -93,6 +106,7 @@ const ProfileSettingsComponent = ({ user }) => {
                   id="inputEmail"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={!editForm}
                 ></input>
               </div>
             </div>
@@ -102,17 +116,18 @@ const ProfileSettingsComponent = ({ user }) => {
                   style={{ width: 128, height: 128 }}
                   alt={fullName}
                   className="rounded-circle img-responsive my-2"
-                  src={avatar}
+                  src={profilePicture}
                 />
-
                 <input
                   type="file"
-                  className="form-control-file mb-2"
+                  className={`form-control-file mb-2 ${
+                    editForm ? '' : 'd-none'
+                  }`}
                   onChange={fileOnChangeHandler}
                 />
                 <button
                   type="button"
-                  className="btn btn-primary mb-2"
+                  className={`btn btn-primary mb-2 ${editForm ? '' : 'd-none'}`}
                   onClick={handleUpload}
                 >
                   Upload
@@ -120,12 +135,11 @@ const ProfileSettingsComponent = ({ user }) => {
               </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary mb-2">
-            Save Changes
-          </button>
+          {renderButtons()}
         </form>
-        {errors}
-        {successMessage}
+        <ErrorDisplay />
+        {/* {user.message} */}
+        <DisplayUserMessages />
       </div>
     </div>
   );
