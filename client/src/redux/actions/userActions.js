@@ -5,33 +5,37 @@ import {
   USER_LOGOUT,
   USER_REGISTER,
   USER_RESEND_ACTIVATION,
+  USER_RESET_MESSAGES,
+  USER_SET_MESSAGES,
   USER_SET_TOKENS,
+  USER_UPDATE,
+  USER_UPLOAD_PHOTO,
 } from '../types';
 import axiosInstance from '../../api/buildClient';
-import { store } from '../store';
 
-export const loginUser = ({ email, password }) => async (dispatch) => {
+export const loginUser = ({ email, password, history }) => async (dispatch) => {
   try {
     const response = await axiosInstance.post('/api/auth/signin', {
       email,
       password,
     });
     if (response) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
       dispatch({
         type: USER_LOGIN,
-        payload: {
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-        },
+        payload: {},
       });
+      history.push('/dashboard');
     }
   } catch (err) {
     dispatch({
       type: SET_ERRORS,
       payload: {
-        errors: err.response,
+        errors: err.response.data.errors,
       },
     });
+    return null;
   }
 };
 
