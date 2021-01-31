@@ -22,7 +22,8 @@ router.put(
     const { fullName, profilePicture, email } = req.body as UserDoc;
 
     if (email && (await UserProfileController.emailExists(email))) {
-      throw new BadRequestError('An user already has this email');
+      if (email !== req.currentUser!.email)
+        throw new BadRequestError('An user already has this email');
     }
 
     const user = await UserProfileController.findUserWithId(
@@ -37,7 +38,7 @@ router.put(
       }
     );
 
-    if (email) {
+    if (email && email !== req.currentUser!.email) {
       await new EmailChangedPublisher(natsWrapper.client).publish({
         userId: user!.id,
         email: email,
