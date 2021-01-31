@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/actions/userActions';
+import { isLoggedin } from '../services/isLoggedIn';
 
 const Header = () => {
-  const user = useSelector((state) => state.userReducer);
+  useSelector((state) => state.userReducer.present);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -21,7 +22,7 @@ const Header = () => {
   };
 
   const renderHeader = () => {
-    if (!user.accessToken) {
+    if (!isLoggedin()) {
       return (
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
