@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from 'react';
-
-import ProfileSettingsComponent from './ProfileSettingsComponent';
-import PasswordSettingsComponent from './PasswordSettingsComponent';
-import { Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo } from '../redux/actions/userActions';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import ProfileSettingsComponent from '../components/ProfileSettingsComponent';
+import PasswordSettingsComponent from '../components/PasswordSettingsComponent';
 
 const SettingsPage = () => {
-  const user = useSelector((state) => state.userReducer);
-  const dispatch = useDispatch();
+  useSelector((state) => state.userReducer.present);
   const [option, setOption] = useState('profile');
-
-  useEffect(() => {
-    dispatch(getUserInfo());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!user.accessToken && !user.refreshToken) {
-      return <Redirect to="/login" />;
-    }
-  }, [user]);
 
   const renderSection = () => {
     switch (option) {
       case 'profile':
-        return <ProfileSettingsComponent user={user} />;
+        return <ProfileSettingsComponent />;
       case 'password':
-        return <PasswordSettingsComponent user={user} />;
+        return <PasswordSettingsComponent />;
       default:
-        return <ProfileSettingsComponent user={user} />;
+        return <ProfileSettingsComponent />;
     }
   };
 
