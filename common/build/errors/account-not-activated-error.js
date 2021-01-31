@@ -25,7 +25,13 @@ var AccountNotActivatedError = /** @class */ (function (_super) {
         return _this;
     }
     AccountNotActivatedError.prototype.serializeErrors = function () {
-        return [{ message: this.message, userID: this.userID }];
+        return [
+            {
+                message: this.message,
+                userID: this.userID,
+                errorType: 'accountNotActivated',
+            },
+        ];
     };
     return AccountNotActivatedError;
 }(custom_error_1.CustomError));

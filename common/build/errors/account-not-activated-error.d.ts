@@ -6,5 +6,6 @@ export declare class AccountNotActivatedError extends CustomError {
     serializeErrors(): {
         message: string;
         userID: string;
+        errorType: string;
     }[];
 }
