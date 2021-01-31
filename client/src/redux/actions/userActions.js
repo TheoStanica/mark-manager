@@ -131,3 +131,90 @@ export const setUserTokens = ({ accessToken, refreshToken }) => async (
     },
   });
 };
+
+export const uploadPhoto = (data) => async (dispatch) => {
+  try {
+    const response = await axiosInstance.post('/api/user/uploadimage', data);
+    dispatch({
+      type: USER_UPLOAD_PHOTO,
+      payload: {
+        profilePicture: response.data.imageUrl,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: err.response.data.errors,
+      },
+    });
+  }
+};
+
+export const updateUser = ({ email, fullName, profilePicture }) => async (
+  dispatch
+) => {
+  try {
+    const data = {
+      email,
+      fullName,
+      profilePicture,
+    };
+    const response = await axiosInstance.put('/api/user/currentuser', data);
+    if (response) {
+      dispatch({
+        type: USER_UPDATE,
+        payload: {
+          email: response.data.updatedUser.email,
+          fullName: response.data.updatedUser.fullName,
+          profilePicture: response.data.updatedUser.profilePicture,
+          message: 'Account updated!',
+        },
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: err.response.data.errors,
+      },
+    });
+  }
+};
+
+export const resetUserMessages = () => async (dispatch) => {
+  dispatch({
+    type: USER_RESET_MESSAGES,
+    payload: {
+      message: null,
+    },
+  });
+};
+
+export const changePassword = ({ currentPassword, newPassword }) => async (
+  dispatch
+) => {
+  try {
+    const response = await axiosInstance.put(
+      'https://mark.dev/api/auth/changepassword',
+      {
+        currentPassword,
+        newPassword,
+      }
+    );
+    if (response)
+      dispatch({
+        type: USER_SET_MESSAGES,
+        payload: {
+          message: 'Account updated!',
+        },
+      });
+  } catch (err) {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: err.response.data.errors,
+      },
+    });
+  }
+};
