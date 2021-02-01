@@ -13,20 +13,20 @@ import {
 } from '../types';
 import axiosInstance from '../../api/buildClient';
 
-export const loginUser = ({ email, password, history }) => async (dispatch) => {
+export const loginUser = ({ email, password }) => async (dispatch) => {
   try {
     const response = await axiosInstance.post('/api/auth/signin', {
       email,
       password,
     });
     if (response) {
-      localStorage.setItem('accessToken', response.data.accessToken);
-      localStorage.setItem('refreshToken', response.data.refreshToken);
       dispatch({
         type: USER_LOGIN,
-        payload: {},
+        payload: {
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+        },
       });
-      history.push('/dashboard');
     }
   } catch (err) {
     dispatch({
@@ -35,7 +35,6 @@ export const loginUser = ({ email, password, history }) => async (dispatch) => {
         errors: err.response.data.errors,
       },
     });
-    return null;
   }
 };
 

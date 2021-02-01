@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 import ErrorDisplay from '../components/DisplayErrors';
@@ -8,11 +7,10 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const submitLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password, history }));
+    dispatch(loginUser({ email, password }));
   };
 
   return (
