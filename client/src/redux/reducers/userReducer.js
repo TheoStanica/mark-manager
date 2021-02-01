@@ -12,12 +12,14 @@ import {
 } from '../types';
 
 const initialState = {
-  fullName: '',
-  profilePicture: '',
-  userTier: '',
-  email: '',
-  id: '',
-  message: '',
+  fullName: null,
+  profilePicture: null,
+  userTier: null,
+  email: null,
+  id: null,
+  message: null,
+  accessToken: null,
+  refreshToken: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -25,8 +27,8 @@ const userReducer = (state = initialState, action) => {
     case USER_LOGIN:
       return {
         ...state,
-        // accessToken: action.payload.accessToken,
-        // refreshToken: action.payload.refreshToken,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
       };
     case USER_LOGOUT:
       return {

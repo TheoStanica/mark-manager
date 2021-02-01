@@ -1,17 +1,10 @@
 import axios from 'axios';
-import { logoutUser } from '../redux/actions/userActions';
+import { logoutUser, setUserTokens } from '../redux/actions/userActions';
 import { store } from '../redux/store';
 import { isLoggedin } from '../services/isLoggedIn';
 
 const setAuthHeaderValue = () => {
-  return `Bearer ${localStorage.getItem('accessToken')}`;
-};
-const setToken = (tokenName, value) => {
-  return localStorage.setItem(tokenName, value);
-};
-const clearTokens = () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
+  return `Bearer ${store.getState().userReducer.present.accessToken}`;
 };
 
 const axiosInstance = axios.create({
@@ -37,17 +30,20 @@ axiosInstance.interceptors.response.use(
         let response;
         if (isLoggedin()) {
           response = await axiosInstance.post('api/auth/token', {
-            refreshToken: localStorage.getItem('refreshToken'),
+            refreshToken: store.getState().userReducer.present.refreshToken,
           });
         }
         if (response && response.status === 200) {
-          setToken('accessToken', response.data.accessToken);
-          setToken('refreshToken', response.data.refreshToken);
+          await store.dispatch(
+            setUserTokens({
+              accessToken: response.data.accessToken,
+              refreshToken: response.data.refreshToken,
+            })
+          );
           error.config.headers.Authorization = setAuthHeaderValue();
           return axios.request(error.config);
         }
       } catch (err) {
-        clearTokens();
         await store.dispatch(logoutUser());
         return Promise.reject(err);
       }
