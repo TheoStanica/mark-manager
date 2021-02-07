@@ -217,3 +217,12 @@ export const changePassword = ({ currentPassword, newPassword }) => async (
     });
   }
 };
+
+export const setUserMessages = ({ message }) => async (dispatch) => {
+  dispatch({
+    type: USER_SET_MESSAGES,
+    payload: {
+      message,
+    },
+  });
+};
