@@ -10,8 +10,8 @@ export interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   twitter: {
-    id: string;
-    token: string;
+    oauthAccessToken: string;
+    oauthAccessTokenSecret: string;
   };
   confirmed: boolean;
   confirmationToken: string;
@@ -44,10 +44,10 @@ const userSchema = new mongoose.Schema(
       default: () => new Date(+new Date() + 10 * 60 * 1000),
     },
     twitter: {
-      id: {
+      oauthAccessToken: {
         type: String,
       },
-      token: {
+      oauthAccessTokenSecret: {
         type: String,
       },
     },
