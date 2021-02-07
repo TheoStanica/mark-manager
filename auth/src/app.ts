@@ -9,10 +9,19 @@ import { tokenRouter } from './routes/token';
 import { activationRouter } from './routes/activation';
 import { resendActivationRouter } from './routes/resend-activation';
 import { ChangePasswordRouter } from './routes/change-password';
+import { TwitterConnectRouter } from './routes/twitter';
+import session from 'express-session';
 
 const app = express();
 app.set('trust proxy', true);
 app.use(json());
+app.use(
+  session({
+    secret: 'somethingVerySecret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(signupRouter);
 app.use(signinRouter);
@@ -21,6 +30,7 @@ app.use(tokenRouter);
 app.use(resendActivationRouter);
 app.use(activationRouter);
 app.use(ChangePasswordRouter);
+app.use(TwitterConnectRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
