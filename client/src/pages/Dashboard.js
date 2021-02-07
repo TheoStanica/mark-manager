@@ -13,7 +13,10 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Link to="/settings">Settings</Link>
+      <Link to="/settings" className="me-3">
+        Settings
+      </Link>
+      <Link to="/twitter/connect">Connect To Twitter</Link>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import SettingsPage from './pages/SettingsPage';
 import ActivateAccount from './pages/ActivateAccount';
 import PrivateRoute from './components/PrivateRoute';
+import TwitterConnect from './pages/TwitterConnect';
 
 const App = () => {
   return (
@@ -37,6 +38,9 @@ const App = () => {
               </PrivateRoute>
               <PrivateRoute path="/settings">
                 <SettingsPage />
+              </PrivateRoute>
+              <PrivateRoute path="/twitter/connect">
+                <TwitterConnect />
               </PrivateRoute>
             </Switch>
           </div>
