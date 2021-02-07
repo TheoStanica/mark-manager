@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ErrorDisplay from '../components/DisplayErrors';
+import DisplayErrors from '../components/DisplayErrors';
+import DisplayUserMessages from '../components/DisplayUserMessages';
 import { registerUser } from '../redux/actions/userActions';
 
 const Register = () => {
@@ -12,7 +13,6 @@ const Register = () => {
   const submitRegister = async (e) => {
     e.preventDefault();
     dispatch(registerUser({ email, password }));
-    // TODO message to check email
   };
 
   return (
@@ -51,7 +51,8 @@ const Register = () => {
           <button type="submit" className="btn btn-primary btn-block mb-3">
             Register
           </button>
-          <ErrorDisplay />
+          <DisplayErrors />
+          <DisplayUserMessages />
         </form>
       </div>
     </div>
