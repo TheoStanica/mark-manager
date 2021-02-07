@@ -33,6 +33,12 @@ const start = async () => {
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID must be defined');
   }
+  if (!process.env.TWITTER_CONSUMER_KEY) {
+    throw new Error('TWITTER_CONSUMER_KEY must be defined');
+  }
+  if (!process.env.TWITTER_CONSUMER_SECRET) {
+    throw new Error('TWITTER_CONSUMER_SECRET must be defined');
+  }
 
   try {
     await redisWrapper.connect(process.env.REDIS_HOST);
