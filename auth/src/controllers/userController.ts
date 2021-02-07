@@ -94,4 +94,23 @@ export class UserController {
       { new: true }
     );
   }
+
+  static async addTwitterTokens(
+    userId: string,
+    oauthAccessToken: string,
+    oauthAccessTokenSecret: string
+  ) {
+    return await User.findByIdAndUpdate(
+      userId,
+      {
+        twitter: {
+          oauthAccessToken: oauthAccessToken,
+          oauthAccessTokenSecret: oauthAccessTokenSecret,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+  }
 }
