@@ -1,9 +1,9 @@
 import {
+  RESET_ERRORS,
   SET_ERRORS,
   USER_GET_INFO,
   USER_LOGIN,
   USER_LOGOUT,
-  USER_REGISTER,
   USER_RESEND_ACTIVATION,
   USER_RESET_MESSAGES,
   USER_SET_MESSAGES,
@@ -40,12 +40,19 @@ export const loginUser = ({ email, password }) => async (dispatch) => {
 
 export const registerUser = ({ email, password }) => async (dispatch) => {
   try {
+    dispatch({
+      type: RESET_ERRORS,
+    });
     await axiosInstance.post('/api/auth/signup', {
       email,
       password,
     });
     dispatch({
-      type: USER_REGISTER,
+      type: USER_SET_MESSAGES,
+      payload: {
+        message:
+          'Account created! Please check your email for an activation email!',
+      },
     });
   } catch (err) {
     dispatch({
