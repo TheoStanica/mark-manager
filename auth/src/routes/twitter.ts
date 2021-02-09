@@ -73,7 +73,6 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
           oauthAccessToken,
           oauthAccessTokenSecret
         );
-
         res.redirect('/dashboard');
       }
     }
