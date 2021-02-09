@@ -56,6 +56,7 @@ router.get(
   }
 );
 
+console.log('something');
 router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
   consumer.getOAuthAccessToken(
     String(req.session.oauthRequestToken),
@@ -72,6 +73,7 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
           oauthAccessToken,
           oauthAccessTokenSecret
         );
+
         res.redirect('/dashboard');
       }
     }
