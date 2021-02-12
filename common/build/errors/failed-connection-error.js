@@ -13,27 +13,25 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountNotActivatedError = void 0;
+exports.FailedConnectionError = void 0;
 var custom_error_1 = require("./custom-error");
 var errorTypes_1 = require("./errorTypes");
-var AccountNotActivatedError = /** @class */ (function (_super) {
-    __extends(AccountNotActivatedError, _super);
-    function AccountNotActivatedError(userID) {
-        var _this = _super.call(this, 'Please activate your account first!') || this;
-        _this.userID = userID;
-        _this.statusCode = 403;
-        Object.setPrototypeOf(_this, AccountNotActivatedError.prototype);
+var FailedConnectionError = /** @class */ (function (_super) {
+    __extends(FailedConnectionError, _super);
+    function FailedConnectionError() {
+        var _this = _super.call(this, 'Failed to connect') || this;
+        _this.statusCode = 503;
+        Object.setPrototypeOf(_this, FailedConnectionError.prototype);
         return _this;
     }
-    AccountNotActivatedError.prototype.serializeErrors = function () {
+    FailedConnectionError.prototype.serializeErrors = function () {
         return [
             {
                 message: this.message,
-                userID: this.userID,
-                errorType: errorTypes_1.errorTypes.AccountNotActivated,
+                errorType: errorTypes_1.errorTypes.FailedConnectionError,
             },
         ];
     };
-    return AccountNotActivatedError;
+    return FailedConnectionError;
 }(custom_error_1.CustomError));
-exports.AccountNotActivatedError = AccountNotActivatedError;
+exports.FailedConnectionError = FailedConnectionError;
