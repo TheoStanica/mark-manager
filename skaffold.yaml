@@ -33,6 +33,14 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: theocosmin/social
+      context: social
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: theocosmin/client
       context: client
       docker:
