@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: social-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: social
+  template:
+    metadata:
+      labels:
+        app: social
+    spec:
+      containers:
+        - name: social
+          image: theocosmin/social
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: social-mongo-secret
+                  key: MONGO_URI
+            - name: TWITTER_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-twitter-consumer-key
+                  key: TWITTER_CONSUMER_KEY
+            - name: TWITTER_CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-twitter-consumer-secret
+                  key: TWITTER_CONSUMER_SECRET
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: JWT_REFRESH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refresh-secret
+                  key: JWT_REFRESH_KEY
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: mark
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: social-srv
+spec:
+  selector:
+    app: social
+  ports:
+    - name: social
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

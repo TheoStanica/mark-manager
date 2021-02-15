@@ -1,12 +1,10 @@
 import { CustomError } from './custom-error';
 import { errorTypes } from './errorTypes';
-export declare class AccountNotActivatedError extends CustomError {
-    userID: string;
+export declare class FailedConnectionError extends CustomError {
     statusCode: number;
-    constructor(userID: string);
+    constructor();
     serializeErrors(): {
         message: string;
-        userID: string;
         errorType: errorTypes;
     }[];
 }
