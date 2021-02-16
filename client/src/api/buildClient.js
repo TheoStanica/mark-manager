@@ -19,7 +19,8 @@ const axiosInstance = axios.create(
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    config.headers.Authorization = setAuthHeaderValue();
+    if (store.getState().userReducer.present.accessToken)
+      config.headers.Authorization = setAuthHeaderValue();
     return config;
   },
   (error) => Promise.reject(error)
