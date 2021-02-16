@@ -4,6 +4,7 @@ export interface ResetPasswordEvent {
   subject: Subjects.ResetPassword;
 
   data: {
+    email: string;
     resetToken: string;
   };
 }
