@@ -23,6 +23,15 @@ class Transporter {
       html: EmailTemplates.activationTemplate(activationToken),
     });
   }
+
+  async sendResetPasswordEmail(emailTo: string, resetToken: string) {
+    await this.transporter.sendMail({
+      from: 'Project Mark',
+      to: emailTo,
+      subject: 'Password Reset',
+      html: EmailTemplates.resetPasswordTemplate(resetToken),
+    });
+  }
 }
 
 export const transporter = new Transporter();
