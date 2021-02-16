@@ -16,6 +16,8 @@ export interface UserDoc extends mongoose.Document {
   confirmed: boolean;
   confirmationToken: string;
   confirmationExpireDate: Date;
+  passwordResetToken: string;
+  passwordResetExpireDate: Date;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -42,6 +44,12 @@ const userSchema = new mongoose.Schema(
     confirmationExpireDate: {
       type: Date,
       default: () => new Date(+new Date() + 10 * 60 * 1000),
+    },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpireDate: {
+      type: Date,
     },
     twitter: {
       oauthAccessToken: {
