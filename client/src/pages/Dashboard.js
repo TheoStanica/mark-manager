@@ -15,17 +15,16 @@ const Dashboard = () => {
     dispatch(getUserInfo());
   }, [dispatch]);
 
-  const getTwitterInfo = () => {
-    dispatch(getTwitterProfileInfoData());
-  };
-
   return (
     <div>
       <Link to="/settings" className="me-3">
         Settings
       </Link>
       <Link to="/twitter/connect">Connect To Twitter</Link>
-      <div className="btn btn-primary" onClick={getTwitterInfo}>
+      <div
+        className="btn btn-primary"
+        onClick={() => dispatch(getTwitterProfileInfoData())}
+      >
         GET USER TWITTER DETAILS
       </div>
       {!isConnected && <ConnectTwitterButton />}
