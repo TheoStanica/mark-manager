@@ -66,7 +66,7 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
     async (err, oauthAccessToken, oauthAccessTokenSecret, results) => {
       if (err) {
         res.clearCookie('connect.sid');
-        res.redirect('/dashboard');
+        res.redirect('/twitter/connect?success=false');
       } else {
         await UserController.addTwitterTokens(
           String(req.session.userId),
@@ -80,7 +80,7 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
           oauthAccessTokenSecret: oauthAccessTokenSecret,
         });
         res.clearCookie('connect.sid');
-        res.redirect('/dashboard');
+        res.redirect('/twitter/connect?success=true');
       }
     }
   );

@@ -4,8 +4,17 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import {
+  createStateSyncMiddleware,
+  initMessageListener,
+  initStateWithPrevTab,
+} from 'redux-state-sync';
 
-const middleware = [thunk];
+const config = {
+  blacklist: ['persist/PERSIST'],
+};
+
+const middleware = [thunk, createStateSyncMiddleware(config)];
 
 const persistConfig = {
   key: 'root',
@@ -19,5 +28,7 @@ let store = createStore(
   composeWithDevTools(applyMiddleware(...middleware))
 );
 let persistor = persistStore(store);
+initMessageListener(persistor);
+initStateWithPrevTab(persistor);
 
 export { store, persistor };
