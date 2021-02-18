@@ -5,11 +5,10 @@ import { getUserInfo } from '../redux/actions/userActions';
 import { getTwitterProfileInfoData } from '../redux/actions/twitterActions';
 import DisplayUserMessages from '../components/DisplayUserMessages';
 import ConnectTwitterButton from '../components/ConnectTwitterButton';
-import { isTwitterConnected } from '../services/isTwitterConnected';
 
 const Dashboard = () => {
   useSelector((state) => state.userReducer.present);
-  useSelector((state) => state.twitterReducer.isConnected);
+  const isConnected = useSelector((state) => state.twitterReducer.isConnected);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const Dashboard = () => {
       <div className="btn btn-primary" onClick={getTwitterInfo}>
         GET USER TWITTER DETAILS
       </div>
-      {!isTwitterConnected() && <ConnectTwitterButton />}
+      {!isConnected && <ConnectTwitterButton />}
       <DisplayUserMessages />
     </div>
   );
