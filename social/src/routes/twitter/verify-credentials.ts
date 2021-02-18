@@ -19,7 +19,7 @@ router.get(
     const tokens = await UserController.getUserTwitterTokens(
       req.currentUser!.userId
     );
-    if (tokens) {
+    if (tokens && tokens.oauthAccessToken && tokens.oauthAccessTokenSecret) {
       const { oauthAccessToken, oauthAccessTokenSecret } = tokens;
 
       const T = new twit({
