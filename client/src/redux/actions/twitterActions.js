@@ -1,6 +1,8 @@
 import axiosInstance from '../../api/buildClient';
 import {
+  SET_ERRORS,
   TWITTER_RESET_PROFILE_INFO,
+  TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
   USER_SET_MESSAGES,
 } from '../types';
@@ -57,5 +59,30 @@ export const connectToTwitter = () => async (dispatch) => {
     }
   } catch (err) {
     console.log('Something didnt go right while connecting..', err);
+  }
+};
+
+export const getTwitterHomeTimeline = () => async (dispatch) => {
+  try {
+    const response = await axiosInstance.get(
+      '/api/social/twitter/statuses/home_timeline'
+    );
+    if (response) {
+      dispatch({
+        type: TWITTER_SET_HOME_TIMELINE_TWEETS,
+        payload: {
+          tweets: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    }
   }
 };
