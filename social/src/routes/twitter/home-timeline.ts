@@ -33,6 +33,8 @@ router.get(
         const timeline = await T.get('statuses/home_timeline');
         if (timeline) {
           res.send(timeline.data);
+        } else {
+          res.send([]);
         }
       } catch (err) {
         // Tokens are invalid or revoked (Twitter side)
