@@ -15,38 +15,40 @@ import TwitterConnect from './pages/TwitterConnect';
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Router>
-          <Header />
-          <div className="container">
-            <Switch>
-              <Route path="/" exact component={() => <Home />} />
-              <Route
-                path="/activate/:id"
-                component={() => <ActivateAccount />}
-              />
-              <PrivateRoute path="/register" redirectIfLoggedIn={true}>
-                <Register />
-              </PrivateRoute>
-              <PrivateRoute path="/login" redirectIfLoggedIn={true}>
-                <Login />
-              </PrivateRoute>
+    <div className="min-vh-100 d-flex flex-column">
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Router>
+            <Header />
+            <div className="container flex-grow-1">
+              <Switch>
+                <Route path="/" exact component={() => <Home />} />
+                <Route
+                  path="/activate/:id"
+                  component={() => <ActivateAccount />}
+                />
+                <PrivateRoute path="/register" redirectIfLoggedIn={true}>
+                  <Register />
+                </PrivateRoute>
+                <PrivateRoute path="/login" redirectIfLoggedIn={true}>
+                  <Login />
+                </PrivateRoute>
 
-              <PrivateRoute path="/dashboard">
-                <Dashboard />
-              </PrivateRoute>
-              <PrivateRoute path="/settings">
-                <SettingsPage />
-              </PrivateRoute>
-              <PrivateRoute path="/twitter/connect">
-                <TwitterConnect />
-              </PrivateRoute>
-            </Switch>
-          </div>
-        </Router>
-      </PersistGate>
-    </Provider>
+                <PrivateRoute path="/dashboard">
+                  <Dashboard />
+                </PrivateRoute>
+                <PrivateRoute path="/settings">
+                  <SettingsPage />
+                </PrivateRoute>
+                <PrivateRoute path="/twitter/connect">
+                  <TwitterConnect />
+                </PrivateRoute>
+              </Switch>
+            </div>
+          </Router>
+        </PersistGate>
+      </Provider>
+    </div>
   );
 };
 
