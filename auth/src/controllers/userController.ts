@@ -113,4 +113,49 @@ export class UserController {
       }
     );
   }
+
+  static async createResetTokens(email: string) {
+    const user = await User.findOneAndUpdate(
+      {
+        email: email,
+      },
+      {
+        passwordResetToken: crypto.randomBytes(20).toString('hex'),
+        passwordResetExpireDate: new Date(+new Date() + 10 * 60 * 1000),
+      },
+      { new: true }
+    );
+    if (user) {
+      return user.passwordResetToken;
+    } else {
+      return null;
+    }
+  }
+
+  static async resetUserPassword(resetToken: string, newPassword: string) {
+    const user = await User.findOne({ passwordResetToken: resetToken });
+
+    if (user) {
+      const hashedPassword = await Password.toHash(newPassword);
+
+      if (new Date(user.passwordResetExpireDate) < new Date()) {
+        return null;
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(
+        user.id,
+        {
+          password: hashedPassword,
+          $unset: {
+            passwordResetToken: 1,
+            passwordResetExpireDate: 1,
+          },
+        },
+        { new: true }
+      );
+      return updatedUser;
+    } else {
+      return null;
+    }
+  }
 }

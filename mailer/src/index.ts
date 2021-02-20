@@ -1,4 +1,5 @@
 import { app } from './app';
+import { PasswordResetListener } from './events/listeners/reset-password-listener';
 import { SendActivationEmailListener } from './events/listeners/send-activation-email-listener';
 import { natsWrapper } from './nats-wrapper';
 
@@ -31,6 +32,7 @@ const start = async () => {
     process.on('SIGTERM', () => natsWrapper.client.close());
 
     new SendActivationEmailListener(natsWrapper.client).listen();
+    new PasswordResetListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
   }
