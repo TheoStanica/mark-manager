@@ -1,5 +1,6 @@
 import axiosInstance from '../../api/buildClient';
 import {
+  SET_ERRORS,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_PROFILE_INFO,
   USER_SET_MESSAGES,
@@ -19,22 +20,11 @@ export const getTwitterProfileInfoData = () => async (dispatch) => {
       });
     }
   } catch (err) {
-    // reset twitterReducer state
-    // send alert message
-    if (
-      err.response.data.errors &&
-      err.response.data.errors[0].errorType &&
-      err.response.data.errors[0].errorType === 'failedConnectionError'
-    ) {
+    if (err.response.data) {
       dispatch({
-        type: TWITTER_RESET_PROFILE_INFO,
-      });
-      //temporary -- Alerts
-      dispatch({
-        type: USER_SET_MESSAGES,
+        type: SET_ERRORS,
         payload: {
-          message:
-            'Could not get Twitter User Data, please connect your Twitter account and try again!',
+          errors: err.response.data.errors,
         },
       });
     }
@@ -57,5 +47,28 @@ export const connectToTwitter = () => async (dispatch) => {
     }
   } catch (err) {
     console.log('Something didnt go right while connecting..', err);
+  }
+};
+
+export const tweetNewMessage = ({ message }) => async (dispatch) => {
+  try {
+    await axiosInstance.post('/api/social/twitter/statuses/update', {
+      status: message,
+    });
+    dispatch({
+      type: USER_SET_MESSAGES,
+      payload: {
+        message: 'Tweet was posted!',
+      },
+    });
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    }
   }
 };

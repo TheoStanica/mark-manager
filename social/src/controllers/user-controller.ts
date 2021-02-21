@@ -46,4 +46,18 @@ export class UserController {
       return null;
     }
   }
+
+  static async deleteUserTwitterTokens(userID: string) {
+    const user = await User.findByIdAndUpdate(
+      userID,
+      {
+        twitter: {
+          oauthAccessToken: null,
+          oauthAccessTokenSecret: null,
+        },
+      },
+      { new: true }
+    );
+    return user;
+  }
 }
