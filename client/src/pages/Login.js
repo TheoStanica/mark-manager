@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 import ErrorDisplay from '../components/DisplayErrors';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -45,6 +46,11 @@ const Login = () => {
             <label className="form-label" htmlFor="form1Example2">
               Password
             </label>
+          </div>
+          <div className="form-outline mb-4">
+            <Link to="/password/reset" className="me-3">
+              Forgot password?
+            </Link>
           </div>
           <button type="submit" className="btn btn-primary btn-block mb-3">
             Sign in
