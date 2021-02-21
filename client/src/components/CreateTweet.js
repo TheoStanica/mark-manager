@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { tweetNewMessage } from '../redux/actions/twitterActions';
 import ModalButton from './ModalButton';
-import PostModal from './ModalBody';
+import ModalBody from './ModalBody';
 
 const CreateTweet = () => {
   const [message, setMessage] = useState('');
@@ -17,7 +17,7 @@ const CreateTweet = () => {
           setMessage('');
         }}
       />
-      <PostModal
+      <ModalBody
         id="createTweet"
         submitText="Tweet"
         modalTitle="Create New Teet"
@@ -33,7 +33,7 @@ const CreateTweet = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
-      </PostModal>
+      </ModalBody>
     </>
   );
 };
