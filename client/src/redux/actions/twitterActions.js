@@ -55,7 +55,6 @@ export const tweetNewMessage = ({ message }) => async (dispatch) => {
     await axiosInstance.post('/api/social/twitter/statuses/update', {
       status: message,
     });
-    // temporary - will use "Alerts" messages
     dispatch({
       type: USER_SET_MESSAGES,
       payload: {
