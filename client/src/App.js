@@ -12,6 +12,7 @@ import SettingsPage from './pages/SettingsPage';
 import ActivateAccount from './pages/ActivateAccount';
 import PrivateRoute from './components/PrivateRoute';
 import TwitterConnect from './pages/TwitterConnect';
+import ResetPassword from './pages/ResetPassword';
 
 const App = () => {
   return (
@@ -26,6 +27,10 @@ const App = () => {
                 path="/activate/:id"
                 component={() => <ActivateAccount />}
               />
+
+              <PrivateRoute path="/password/reset" redirectIfLoggedIn={true}>
+                <ResetPassword />
+              </PrivateRoute>
               <PrivateRoute path="/register" redirectIfLoggedIn={true}>
                 <Register />
               </PrivateRoute>

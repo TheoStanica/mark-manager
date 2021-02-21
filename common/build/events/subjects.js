@@ -8,4 +8,5 @@ var Subjects;
     Subjects["AccessTokenRevoked"] = "auth:accessToken_revoked";
     Subjects["TwitterConnected"] = "auth:Twitter_Connected";
     Subjects["EmailChanged"] = "userprofile:email_changed";
+    Subjects["ResetPassword"] = "auth:reset_password";
 })(Subjects = exports.Subjects || (exports.Subjects = {}));

@@ -7,4 +7,6 @@ export enum Subjects {
   TwitterConnected = 'auth:Twitter_Connected',
 
   EmailChanged = 'userprofile:email_changed',
+
+  ResetPassword = 'auth:reset_password',
 }

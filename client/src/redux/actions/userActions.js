@@ -233,3 +233,49 @@ export const setUserMessages = ({ message }) => async (dispatch) => {
     },
   });
 };
+
+export const requestPasswordReset = ({ email }) => async (dispatch) => {
+  try {
+    await axiosInstance.post('/api/auth/resetpassword', {
+      email: email,
+    });
+    dispatch({
+      type: USER_SET_MESSAGES,
+      payload: {
+        message: 'Please check your email to reset your password',
+      },
+    });
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    }
+  }
+};
+
+export const userResetPassword = ({ token, password }) => async (dispatch) => {
+  try {
+    await axiosInstance.post(`/api/auth/resetpassword/${token}`, {
+      password: password,
+    });
+    dispatch({
+      type: USER_SET_MESSAGES,
+      payload: {
+        message: 'Account Updated! You can now log in!',
+      },
+    });
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    }
+  }
+};
