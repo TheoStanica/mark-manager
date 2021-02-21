@@ -17,7 +17,7 @@ const TweetMessage = ({ tweet }) => {
     // replace string "links" with an actual link or image
     // does not seem like the best way to do this
     let finalMessage;
-    if (links) {
+    if (links && links.length > 0) {
       links.map((link, idx) => {
         if (tweet.entities.media) {
           finalMessage = reactStringReplace(tweet.text, link, () => {
