@@ -6,6 +6,7 @@ import { getTwitterProfileInfoData } from '../redux/actions/twitterActions';
 import DisplayUserMessages from '../components/DisplayUserMessages';
 import ConnectTwitterButton from '../components/ConnectTwitterButton';
 import TwitterTimeline from '../components/TwitterTimeline';
+import CreateTweet from '../components/CreateTweet';
 
 const Dashboard = () => {
   useSelector((state) => state.userReducer.present);
@@ -28,6 +29,7 @@ const Dashboard = () => {
         GET USER TWITTER DETAILS
       </div>
       {!isConnected && <ConnectTwitterButton />}
+      {isConnected && <CreateTweet />}
       {isConnected && <TwitterTimeline />}
       <DisplayUserMessages />
     </React.Fragment>

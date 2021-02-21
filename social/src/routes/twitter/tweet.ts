@@ -1,27 +1,31 @@
-import express, { Request, Response } from 'express';
 import {
-  BadRequestError,
   FailedConnectionError,
   ForbiddenError,
   requireAuth,
+  validateRequest,
 } from '@tcosmin/common';
-import twit from 'twit';
+import express, { Request, Response } from 'express';
 import { UserController } from '../../controllers/user-controller';
+import twit from 'twit';
+import { body } from 'express-validator';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
-router.get(
-  '/api/social/twitter/user',
+router.post(
+  '/api/social/twitter/statuses/update',
   requireAuth,
+  [body('status').not().isEmpty().withMessage('Please provide a status')],
+  validateRequest,
   async (req: Request, res: Response) => {
+    const { status } = req.body;
     const tokens = await UserController.getUserTwitterTokens(
       req.currentUser!.userId
     );
+
     if (tokens && tokens.oauthAccessToken && tokens.oauthAccessTokenSecret) {
       const { oauthAccessToken, oauthAccessTokenSecret } = tokens;
-
       const T = new twit({
         consumer_key: consumerKey,
         consumer_secret: consumerSecret,
@@ -30,19 +34,17 @@ router.get(
       });
 
       try {
-        const userInfo = await T.get('account/verify_credentials');
-        if (userInfo) {
-          res.send(userInfo.data);
-        }
+        await T.post('statuses/update', { status: status });
+        res.sendStatus(204);
       } catch (err) {
-        // Tokens are invalid or revoked (Twitter side)
+        await UserController.deleteUserTwitterTokens(req.currentUser!.userId);
         throw new FailedConnectionError();
       }
     } else {
-      // user didnt yet connect a twitter account
+      // no account connected;
       throw new ForbiddenError();
     }
   }
 );
 
-export { router as twitterCredentialsRouter };
+export { router as twitterTweetRouter };

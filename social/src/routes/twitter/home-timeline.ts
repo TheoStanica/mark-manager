@@ -13,7 +13,7 @@ const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.get(
-  '/api/social/twitter/user',
+  '/api/social/twitter/statuses/home_timeline',
   requireAuth,
   async (req: Request, res: Response) => {
     const tokens = await UserController.getUserTwitterTokens(
@@ -30,9 +30,11 @@ router.get(
       });
 
       try {
-        const userInfo = await T.get('account/verify_credentials');
-        if (userInfo) {
-          res.send(userInfo.data);
+        const timeline = await T.get('statuses/home_timeline');
+        if (timeline) {
+          res.send(timeline.data);
+        } else {
+          res.send([]);
         }
       } catch (err) {
         // Tokens are invalid or revoked (Twitter side)
@@ -45,4 +47,4 @@ router.get(
   }
 );
 
-export { router as twitterCredentialsRouter };
+export { router as twitterTimelineRouter };

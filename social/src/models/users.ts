@@ -6,8 +6,8 @@ export interface UserAttrs {
 
 export interface UserDoc extends mongoose.Document {
   twitter: {
-    oauthAccessToken: string;
-    oauthAccessTokenSecret: string;
+    oauthAccessToken: string | null;
+    oauthAccessTokenSecret: string | null;
   };
 }
 
