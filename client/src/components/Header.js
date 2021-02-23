@@ -39,6 +39,7 @@ const Header = () => {
           <li className="nav-item">
             {renderNavButton('/dashboard', 'Dashboard', 'nav-link')}
           </li>
+          <li>{renderNavButton('/settings', 'Settings', 'nav-link')}</li>
           <li className="nav-item">
             {renderNavButton('/', 'Logout', 'nav-link', handleLogout)}
           </li>
