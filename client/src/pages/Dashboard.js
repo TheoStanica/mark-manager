@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserInfo } from '../redux/actions/userActions';
-import { getTwitterProfileInfoData } from '../redux/actions/twitterActions';
 import DisplayUserMessages from '../components/DisplayUserMessages';
 import ConnectTwitterButton from '../components/ConnectTwitterButton';
 import TwitterTimeline from '../components/TwitterTimeline';
 import CreateTweet from '../components/CreateTweet';
+import DisplayErrors from '../components/DisplayErrors';
 
 const Dashboard = () => {
   useSelector((state) => state.userReducer.present);
@@ -19,15 +18,7 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <Link to="/settings" className="me-3">
-        Settings
-      </Link>
-      <div
-        className="btn btn-primary"
-        onClick={() => dispatch(getTwitterProfileInfoData())}
-      >
-        GET USER TWITTER DETAILS
-      </div>
+      <DisplayErrors />
       {!isConnected && <ConnectTwitterButton />}
       {isConnected && <CreateTweet />}
       {isConnected && <TwitterTimeline />}
