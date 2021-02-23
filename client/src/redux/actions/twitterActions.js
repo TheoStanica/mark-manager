@@ -72,6 +72,9 @@ export const getTwitterHomeTimeline = () => async (dispatch) => {
           errors: err.response.data.errors,
         },
       });
+      dispatch({
+        type: TWITTER_RESET_PROFILE_INFO,
+      });
     }
   }
 };
@@ -93,6 +96,9 @@ export const tweetNewMessage = ({ message }) => async (dispatch) => {
         payload: {
           errors: err.response.data.errors,
         },
+      });
+      dispatch({
+        type: TWITTER_RESET_PROFILE_INFO,
       });
     }
   }
