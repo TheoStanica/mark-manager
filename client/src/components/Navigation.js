@@ -15,13 +15,15 @@ const Navigation = () => {
     <>
       <Route path="/" exact component={() => <Home />} />
       <Route path="/activate/:id" component={() => <ActivateAccount />} />
-      <PrivateRoute path="/register" redirectIfLoggedIn={true}>
+      {/* <PrivateRoute path="/register">
         <Register />
       </PrivateRoute>
-      <PrivateRoute path="/login" redirectIfLoggedIn={true}>
+      <PrivateRoute path="/login">
         <Login />
-      </PrivateRoute>
-      <PrivateRoute path="/password/reset" redirectIfLoggedIn={true}>
+      </PrivateRoute> */}
+      <Route path="/login" component={() => <Login />} />
+      <Route path="/register" component={() => <Register />} />
+      <PrivateRoute path="/password/reset">
         <ResetPassword />
       </PrivateRoute>
       <PrivateRoute path="/dashboard">

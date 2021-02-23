@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import DisplayErrors from '../components/DisplayErrors';
 import DisplayUserMessages from '../components/DisplayUserMessages';
 import { registerUser } from '../redux/actions/userActions';
+import { isLoggedin } from '../services/isLoggedIn';
 
 const Register = () => {
   useSelector((state) => state.userReducer.present);
@@ -15,7 +17,9 @@ const Register = () => {
     dispatch(registerUser({ email, password }));
   };
 
-  return (
+  return isLoggedin() ? (
+    <Redirect to="/dashboard" />
+  ) : (
     <div className="mt-5">
       <h1 className="text-center">Register</h1>
       <div className="flex-center row">
