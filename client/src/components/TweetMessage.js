@@ -1,59 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import reactStringReplace from 'react-string-replace';
+import React from 'react';
+import twitter from 'twitter-text';
 
 const TweetMessage = ({ tweet }) => {
-  const [links, setLinks] = useState([]);
+  let { text, entities } = tweet;
 
-  useEffect(() => {
-    // find all links inside tweet.text string
-    setLinks(
-      tweet.text.match(
-        /(https?:\/\/(?:www\.|(?!www))[^\s]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/gi
-      )
-    );
-  }, [tweet.text]);
+  // replace links
+  text = twitter.autoLinkWithJSON(text, entities);
 
-  const renderTextMessage = () => {
-    // replace string "links" with an actual link or image
-    // does not seem like the best way to do this
-    let finalMessage;
-    if (links && links.length > 0) {
-      links.map((link, idx) => {
-        if (tweet.entities.media) {
-          finalMessage = reactStringReplace(tweet.text, link, () => {
-            return (
-              <img
-                className="w-100 mt-2"
-                src={tweet.entities.media[idx].media_url}
-                key={tweet.id}
-                alt={`Tweet ${tweet.id}`}
-              />
-            );
-          });
-        }
-        if (tweet.entities.urls.length > 0) {
-          finalMessage = reactStringReplace(tweet.text, link, (match, i) => {
-            return (
-              <a
-                key={(tweet.id, i)}
-                href={match}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {tweet.entities.urls[idx].display_url}
-              </a>
-            );
-          });
-        }
-        return finalMessage;
-      });
-      return finalMessage;
-    } else {
-      return tweet.text;
-    }
-  };
+  // remove Image Link
+  if (entities && entities.media) {
+    entities.media.forEach((element) => {
+      text = text.replace(element.display_url, '');
+    });
+  }
 
-  return <div className="mt-2">{renderTextMessage()}</div>;
+  return (
+    <p
+      dangerouslySetInnerHTML={{
+        __html: text,
+      }}
+    ></p>
+  );
 };
 
 export default TweetMessage;
