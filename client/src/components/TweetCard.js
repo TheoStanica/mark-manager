@@ -1,8 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import TweetMessage from './TweetMessage';
+import TweetMedia from './TweetMedia';
 
 const TwitterCard = ({ tweet }) => {
+  let MediaComponent = null;
+
+  if (tweet.entities && tweet.entities.media) {
+    MediaComponent = <TweetMedia entities={tweet.entities} />;
+  }
+
   return (
     <div className="card my-1">
       <div className="card-body">
@@ -23,6 +30,7 @@ const TwitterCard = ({ tweet }) => {
           </div>
         </div>
         <TweetMessage tweet={tweet} />
+        {MediaComponent}
       </div>
     </div>
   );
