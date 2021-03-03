@@ -157,16 +157,28 @@ export const uploadPhoto = (data) => async (dispatch) => {
   }
 };
 
-export const updateUser = ({ email, fullName, profilePicture }) => async (
+export const updateUser = ({ email, fullName, imgData }) => async (
   dispatch
 ) => {
   try {
-    const data = {
-      email,
-      fullName,
-      profilePicture,
-    };
-    const response = await axiosInstance.put('/api/user/currentuser', data);
+    let dataToSend;
+    if (imgData) {
+      const res = await axiosInstance.post('/api/user/uploadimage', imgData);
+      dataToSend = {
+        email,
+        fullName,
+        profilePicture: res.data.imageUrl,
+      };
+    } else {
+      dataToSend = {
+        email,
+        fullName,
+      };
+    }
+    const response = await axiosInstance.put(
+      '/api/user/currentuser',
+      dataToSend
+    );
     if (response) {
       dispatch({
         type: USER_UPDATE,
@@ -179,12 +191,21 @@ export const updateUser = ({ email, fullName, profilePicture }) => async (
       });
     }
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    if (err.response && err.response.data && err.response.data.errors) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    } else {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: [{ message: 'Something went wrong. Please try again later' }],
+        },
+      });
+    }
   }
 };
 
