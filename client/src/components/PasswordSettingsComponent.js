@@ -4,6 +4,11 @@ import { setErrors } from '../redux/actions/errorsActions';
 import { changePassword } from '../redux/actions/userActions';
 import DisplayUserMessages from './DisplayUserMessages';
 import ErrorDisplay from './DisplayErrors';
+import Card from './Card/Card';
+import CardHeader from './Card/Card.Header';
+import CardBody from './Card/Card.Body';
+import InputField from './InputField/InputField';
+import Button from './Button/Button';
 
 const PasswordSettingsComponent = () => {
   const dispatch = useDispatch();
@@ -44,60 +49,43 @@ const PasswordSettingsComponent = () => {
   };
 
   return (
-    <div className="card">
-      <div className="card-header">Change Password</div>
-      <div className="card-body">
+    <Card className="w-100">
+      <CardHeader className="no-border">Change Password</CardHeader>
+      <CardBody>
         <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col mb-2">
-              <div className="form-group">
-                <label htmlFor="inputFullname">Current Password</label>
-                <input
-                  ref={currentPasswordRef}
-                  className="form-control"
-                  id="inputOldPassword"
-                  type="password"
-                  minLength="4"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                ></input>
-              </div>
-              <div className="form-group">
-                <label htmlFor="inputNewPassword">New Password</label>
-                <input
-                  ref={newPasswordRef}
-                  className="form-control"
-                  id="inputNewPassword"
-                  type="password"
-                  minLength="4"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                ></input>
-              </div>
-              <div className="form-group">
-                <label htmlFor="inputRepeatNewPassword">
-                  Repeat New Password
-                </label>
-                <input
-                  ref={repeatPasswordRef}
-                  className="form-control"
-                  id="inputRepeatNewPassword"
-                  type="password"
-                  minLength="4"
-                  value={repeatNewPassword}
-                  onChange={(e) => setRepeatNewPassword(e.target.value)}
-                ></input>
-              </div>
-            </div>
-          </div>
-          <button type="submit" className="btn btn-primary mb-2">
-            Save Changes
-          </button>
+          <InputField
+            ref={currentPasswordRef}
+            type="password"
+            id="inputOldPassword"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            label="Current Password"
+            minLength="6"
+          />
+          <InputField
+            ref={newPasswordRef}
+            type="password"
+            id="inputNewPassword"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            label="New Password"
+            minLength="6"
+          />
+          <InputField
+            ref={repeatPasswordRef}
+            type="password"
+            id="inputRepeatNewPassword"
+            value={repeatNewPassword}
+            onChange={(e) => setRepeatNewPassword(e.target.value)}
+            label="Repeat New Password"
+            minLength="6"
+          />
+          <Button type="submit"> Save Changes</Button>
         </form>
         <ErrorDisplay />
         <DisplayUserMessages />
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 
