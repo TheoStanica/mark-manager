@@ -1,0 +1,50 @@
+.authsplash {
+  padding: 0 3.9rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.authsplash .bg {
+  position: absolute;
+  right: 0;
+  left: 40%;
+  height: 100%;
+  overflow: hidden;
+}
+.bg-text {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  color: white;
+  font-size: 5.5rem;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 40%;
+}
+
+@media only screen and (max-width: 1200px) {
+  .authsplash {
+    padding: 0 3rem;
+  }
+  .authsplash .bg {
+    left: 50%;
+  }
+  .bg-text {
+    left: 53%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .authsplash {
+    padding: 0 2rem;
+  }
+  .authsplash .bg {
+    display: none;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .authsplash {
+    padding: 0 1rem;
+  }
+}
