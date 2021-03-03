@@ -2,6 +2,7 @@ import axiosInstance from '../../api/buildClient';
 import {
   SET_ERRORS,
   TWITTER_RESET_PROFILE_INFO,
+  TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
   USER_SET_MESSAGES,
 } from '../types';
@@ -50,6 +51,33 @@ export const connectToTwitter = () => async (dispatch) => {
   }
 };
 
+export const getTwitterHomeTimeline = () => async (dispatch) => {
+  try {
+    const response = await axiosInstance.get(
+      '/api/social/twitter/statuses/home_timeline'
+    );
+    if (response) {
+      dispatch({
+        type: TWITTER_SET_HOME_TIMELINE_TWEETS,
+        payload: {
+          tweets: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+      dispatch({
+        type: TWITTER_RESET_PROFILE_INFO,
+      });
+    }
+  }
+};
 export const tweetNewMessage = ({ message }) => async (dispatch) => {
   try {
     await axiosInstance.post('/api/social/twitter/statuses/update', {
@@ -68,6 +96,9 @@ export const tweetNewMessage = ({ message }) => async (dispatch) => {
         payload: {
           errors: err.response.data.errors,
         },
+      });
+      dispatch({
+        type: TWITTER_RESET_PROFILE_INFO,
       });
     }
   }
