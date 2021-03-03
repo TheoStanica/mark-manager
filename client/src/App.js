@@ -3,24 +3,24 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
-import Dashboard from './pages/Dashboard';
-import Header from './components/Header';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
 import Home from './pages/Home';
-import SettingsPage from './pages/SettingsPage';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
 import ActivateAccount from './pages/ActivateAccount';
 import PrivateRoute from './components/PrivateRoute';
 import TwitterConnect from './pages/TwitterConnect';
 import ResetPassword from './pages/ResetPassword';
+import './App.css';
+import AuthSplash from './components/AuthSplash/AuthSplash';
 
 const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router>
-          <Header />
-          <div className="container">
+          <div className="full-page">
             <Switch>
               <Route path="/" exact component={() => <Home />} />
               <Route
@@ -32,10 +32,14 @@ const App = () => {
                 <ResetPassword />
               </PrivateRoute>
               <PrivateRoute path="/register" redirectIfLoggedIn={true}>
-                <Register />
+                <AuthSplash>
+                  <Register />
+                </AuthSplash>
               </PrivateRoute>
               <PrivateRoute path="/login" redirectIfLoggedIn={true}>
-                <Login />
+                <AuthSplash>
+                  <Login />
+                </AuthSplash>
               </PrivateRoute>
 
               <PrivateRoute path="/dashboard">
