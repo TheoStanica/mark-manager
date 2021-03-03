@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 import ErrorDisplay from '../components/DisplayErrors';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { isLoggedin } from '../services/isLoggedIn';
 
 const Login = () => {
+  useSelector((state) => state.userReducer.present.accessToken);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -14,7 +16,9 @@ const Login = () => {
     dispatch(loginUser({ email, password }));
   };
 
-  return (
+  return isLoggedin() ? (
+    <Redirect to="/dashboard" />
+  ) : (
     <div className="mt-5">
       <h1 className="text-center">Login</h1>
       <div className="flex-center row">
