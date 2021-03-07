@@ -15,9 +15,9 @@ const Header = ({ className }) => {
   };
 
   return (
-    <nav className={`navbar ${className}`}>
+    <nav className={`navbar ${className ? className : ''}`}>
       <Link to="/">
-        <img src="./MarkLogo.svg" alt="Project Mark Logo" />
+        <img src="/MarkLogo.svg" alt="Project Mark Logo" />
       </Link>
       <ul className="navbar-items">
         {renderNavButton({ route: '/login', text: 'Login' })}
