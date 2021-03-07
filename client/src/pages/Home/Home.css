@@ -1,0 +1,14 @@
+.home-wrapper {
+  height: 100%;
+  text-align: center;
+}
+.home h1 {
+  font-size: 3rem;
+  padding: 0 1rem;
+}
+.home button {
+  align-self: center;
+}
+.home .soon {
+  font-size: 0.7rem;
+}
