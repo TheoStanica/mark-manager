@@ -12,6 +12,7 @@ const InputField = (
     label,
     disabled,
     text,
+    className,
     ...rest
   },
   ref
@@ -27,7 +28,7 @@ const InputField = (
     );
   }
   return (
-    <div className="input-field">
+    <div className={`input-field ${className ? className : ''}`}>
       <input
         ref={ref}
         type={type}
