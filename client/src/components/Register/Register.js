@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import DisplayErrors from '../../components/DisplayErrors';
 import DisplayUserMessages from '../../components/DisplayUserMessages';
@@ -8,7 +9,6 @@ import { registerUser } from '../../redux/actions/userActions';
 import './Register.css';
 
 const Register = () => {
-  useSelector((state) => state.userReducer.present);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -34,8 +34,17 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           label="Password"
           minLength={6}
+          className="mb-3"
         />
-        <Button type="submit">Register</Button>
+        <Button type="submit" className="mb-1">
+          Register
+        </Button>
+        <div className="d-flex small-text mb-1">
+          Already have an account?
+          <Link to="/login" className="ml-05">
+            Sign In
+          </Link>
+        </div>
         <div className="messages">
           <DisplayErrors />
           <DisplayUserMessages />
