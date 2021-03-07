@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Loading from '../components/Loading';
+import Loading from '../components/Loading/Loading';
 import { useQuery } from '../hooks/useQuery';
 import {
   connectToTwitter,
-  getTwitterProfileInfoData,
+  getTwitterDefaultData,
 } from '../redux/actions/twitterActions';
 import { setUserMessages } from '../redux/actions/userActions';
 
@@ -19,7 +19,7 @@ const TwitterConnect = () => {
       window.close();
     } else if (query.get('success') === 'true') {
       // if user tokens were successfully saved, get data about user too
-      dispatch(getTwitterProfileInfoData());
+      dispatch(getTwitterDefaultData());
     } else if (query.get('success') === 'false') {
       // user did not authorize the app
       // Alert message - will do user message for now.
