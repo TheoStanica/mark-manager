@@ -300,3 +300,12 @@ export const userResetPassword = ({ token, password }) => async (dispatch) => {
     }
   }
 };
+
+export const activateAccount = ({ id }) => async (dispatch) => {
+  try {
+    await axiosInstance.get(`/api/auth/activation/${id}`);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
