@@ -38,6 +38,11 @@
 @media only screen and (max-width: 900px) {
   .authsplash {
     padding: 0 2rem;
+    background: linear-gradient(
+      180deg,
+      rgba(44, 0, 100, 0.5) 0%,
+      rgba(255, 255, 255, 1) 30%
+    );
   }
   .authsplash .bg {
     display: none;
