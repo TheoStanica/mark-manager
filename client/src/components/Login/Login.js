@@ -34,12 +34,20 @@ const Login = () => {
           label="Password"
           minLength={6}
         />
-        <div className="mb-4">
+        <div className="small-text mb-2">
           <Link to="/password/reset" className="me-3">
             Forgot password?
           </Link>
         </div>
-        <Button type="submit">Sign In</Button>
+        <Button type="submit" className="mb-1">
+          Sign In
+        </Button>
+        <div className="d-flex small-text mb-1">
+          Don't have an account?
+          <Link to="/register" className="ml-05">
+            Sign Up
+          </Link>
+        </div>
         <div className="errors">
           <ErrorDisplay />
         </div>
