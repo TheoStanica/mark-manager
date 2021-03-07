@@ -13,6 +13,9 @@ const start = async () => {
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID must be defined');
   }
+  if (!process.env.HOST_URL) {
+    throw new Error('HOST_URL must be defined');
+  }
 
   try {
     if (!process.env.GMAIL_PASSWORD) {
