@@ -1,9 +1,12 @@
 import React from 'react';
 import './ClearButton.css';
 
-const ClearButton = ({ children, onClick }) => {
+const ClearButton = ({ children, onClick, className }) => {
   return (
-    <button onClick={onClick} className="clear-button">
+    <button
+      onClick={onClick}
+      className={`clear-button ${className ? className : ''}`}
+    >
       {children}
     </button>
   );
