@@ -15,6 +15,15 @@
   transform: translateY(100%);
 }
 
+.small-text,
+.small-text a {
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.small-text a {
+  color: #fa00ff;
+}
+
 @media only screen and (max-width: 1200px) {
   .login {
     width: 40vw;
