@@ -6,6 +6,19 @@
   font-size: 1rem;
 }
 
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .full-page {
   min-height: 100vh;
   display: flex;
@@ -146,4 +159,57 @@
 
 .w-100 {
   width: 100%;
+}
+
+.p-05 {
+  padding: 0.5rem;
+}
+
+.m-05 {
+  margin: 0.5rem;
+}
+
+.pt-05 {
+  padding-top: 0.5rem;
+}
+
+.pb-05 {
+  padding-bottom: 0.5rem;
+}
+.pl-05 {
+  padding-left: 0.5rem;
+}
+.pr-05 {
+  padding-right: 0.5rem;
+}
+
+.mb-05 {
+  margin-bottom: 0.5rem;
+}
+.mt-05 {
+  margin-top: 0.5rem;
+}
+.ml-05 {
+  margin-left: 0.5rem;
+}
+.mr-05 {
+  margin-right: 0.5rem;
+}
+
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  flex-direction: column;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.align-items-center {
+  align-items: center;
+}
+
+.divider {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
 }
