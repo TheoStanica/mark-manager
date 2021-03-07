@@ -13,7 +13,6 @@
 .custom-file-upload {
   border: 1px solid #ccc;
   display: inline-block;
-  /* padding: 6px 12px; */
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 5px;
@@ -77,12 +76,3 @@
 .input-field input:not(:placeholder-shown) + .label-name::after {
   width: 100%;
 }
-
-/* .input-field input:focus:placeholder-shown + .label-name::after {
-  border-bottom: 5px solid red;
-  transform: translateX(0%);
-}
-.input-field input:focus:placeholder-shown + .label-name .content-name {
-  transform: translateY(-90%);
-  font-size: 14px;
-} */
