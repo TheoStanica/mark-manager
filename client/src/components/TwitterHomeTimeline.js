@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTwitterHomeTimeline } from '../redux/actions/twitterActions';
 import Timeline from './Timeline/Timeline';
-import TimelineBody from './Timeline/Timeline.Body';
-import TimelineHeader from './Timeline/Timeline.Header';
+import TimelineBody from './Timeline/TimelineBody';
+import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 
 const TwitterHomeTimeline = ({ id }) => {
