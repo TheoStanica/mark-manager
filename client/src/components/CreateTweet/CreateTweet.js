@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { tweetNewMessage } from '../../redux/actions/twitterActions';
 import Modal from '../Modal/Modal';
-import ModalBody from '../Modal/Modal.Body';
-import ModalHeader from '../Modal/Modal.Header';
+import ModalBody from '../Modal/ModalBody';
+import ModalHeader from '../Modal/ModalHeader';
 import './CreateTweet.css';
 
 const CreateTweet = ({ visible, onClose }) => {
