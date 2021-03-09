@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Assets } from '../../assets';
 
 import './Header.css';
 
@@ -17,7 +18,7 @@ const Header = ({ className }) => {
   return (
     <nav className={`navbar ${className ? className : ''}`}>
       <Link to="/">
-        <img src="/MarkLogo.svg" alt="Project Mark Logo" />
+        <img src={Assets.Pictures.MarkLogo} alt="Project Mark Logo" />
       </Link>
       <ul className="navbar-items">
         {renderNavButton({ route: '/login', text: 'Login' })}

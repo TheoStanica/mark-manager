@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '../Icon/Icon';
+import { Assets } from '../../assets';
 import './Timeline.css';
 
 const TimelineHeader = ({ className, type, account, onRefresh }) => {
@@ -11,7 +12,7 @@ const TimelineHeader = ({ className, type, account, onRefresh }) => {
       </div>
       <div>
         <Icon
-          icon="/Refresh.svg"
+          icon={Assets.Pictures.RefreshIcon}
           size={24}
           tooltip="Refresh"
           onClick={onRefresh}

@@ -8,6 +8,7 @@ import CreateTweet from '../CreateTweet/CreateTweet';
 import Popover from '../Popover/Popover';
 import './VerticalMenu.css';
 import VerticalMenuItem from './VerticalMenu.Item';
+import { Assets } from '../../assets';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
@@ -24,7 +25,11 @@ const VerticalMenu = () => {
       <div className="top">
         <div className="menu-icon">
           <Link to="/dashboard">
-            <img className="logo" src="./MarkLogo.svg" alt="Mark Logo" />
+            <img
+              className="logo"
+              src={Assets.Pictures.MarkLogo}
+              alt="Mark Logo"
+            />
           </Link>
         </div>
         <div className="menu-separator"></div>
@@ -33,7 +38,7 @@ const VerticalMenu = () => {
           offset={30}
           onClick={() => setIsModalOpen(true)}
         >
-          <img src="./CreateIcon.svg" alt="New Post" />
+          <img src={Assets.Pictures.CreateIcon} alt="New Post" />
         </VerticalMenuItem>
 
         <CreateTweet
@@ -43,7 +48,7 @@ const VerticalMenu = () => {
 
         <VerticalMenuItem text="Streams" offset={30}>
           <Link to="/dashboard">
-            <img src="./StreamsIcon.svg" alt="Streams" />
+            <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
           </Link>
         </VerticalMenuItem>
       </div>
