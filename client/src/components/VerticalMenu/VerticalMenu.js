@@ -7,7 +7,7 @@ import CardBody from '../Card/CardBody';
 import CreateTweet from '../CreateTweet/CreateTweet';
 import Popover from '../Popover/Popover';
 import './VerticalMenu.css';
-import VerticalMenuItem from './VerticalMenu.Item';
+import VerticalMenuItem from './VerticalMenuItem';
 import { Assets } from '../../assets';
 
 const VerticalMenu = () => {
