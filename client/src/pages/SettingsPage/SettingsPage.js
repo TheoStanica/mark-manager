@@ -6,7 +6,7 @@ import VerticalMenu from '../../components/VerticalMenu/VerticalMenu';
 import ListMenu from '../../components/ListMenu/ListMenu';
 import ListItem from '../../components/ListItem/ListItem';
 import './SettingsPage.css';
-import ListMenuHeader from '../../components/ListMenu/ListMenu.Header';
+import ListMenuHeader from '../../components/ListMenu/ListMenuHeader';
 import { getUserInfo } from '../../redux/actions/userActions';
 
 const SettingsPage = () => {
