@@ -5,8 +5,8 @@ import { changePassword } from '../redux/actions/userActions';
 import DisplayUserMessages from './DisplayUserMessages';
 import ErrorDisplay from './DisplayErrors';
 import Card from './Card/Card';
-import CardHeader from './Card/Card.Header';
-import CardBody from './Card/Card.Body';
+import CardHeader from './Card/CardHeader';
+import CardBody from './Card/CardBody';
 import InputField from './InputField/InputField';
 import Button from './Button/Button';
 

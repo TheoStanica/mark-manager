@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutUser } from '../../redux/actions/userActions';
 import Card from '../Card/Card';
-import CardBody from '../Card/Card.Body';
+import CardBody from '../Card/CardBody';
 import CreateTweet from '../CreateTweet/CreateTweet';
 import Popover from '../Popover/Popover';
 import './VerticalMenu.css';

@@ -3,8 +3,8 @@ import moment from 'moment';
 import TweetMessage from './TweetMessage';
 import TweetMedia from './TweetMedia';
 import Card from '../Card/Card';
-import CardBody from '../Card/Card.Body';
-import CardHeader from '../Card/Card.Header';
+import CardBody from '../Card/CardBody';
+import CardHeader from '../Card/CardHeader';
 import './Tweet.css';
 
 const TwitterCard = ({ tweet }) => {

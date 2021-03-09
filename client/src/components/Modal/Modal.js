@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
-import CardFooter from '../Card/Card.Footer';
+import CardFooter from '../Card/CardFooter';
 import './Modal.css';
 
 const Modal = ({ children, visible, onClose, onSubmit }) => {

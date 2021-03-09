@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
-import CardBody from '../Card/Card.Body';
+import CardBody from '../Card/CardBody';
 import ClearButton from '../ClearButton/ClearButton';
 import ConnectTwitterButton from '../ConnectTwitterButton';
 import Popover from '../Popover/Popover';
