@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
-    - host: theostanica.cloud.okteto.net
+    - host: www.projectmark.live
       http:
         paths:
           - path: /api/auth/?(.*)

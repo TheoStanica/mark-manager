@@ -17,7 +17,7 @@ spec:
           image: theocosmin/mailer
           env:
             - name: HOST_URL
-              value: theostanica.cloud.okteto.net
+              value: www.projectmark.live
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
