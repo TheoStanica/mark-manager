@@ -16,9 +16,12 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUserInfo());
-    dispatch(getTwitterProfileInfoData());
-    if (isConnected) dispatch(getTwitterHomeTimeline());
+    const request = async () => {
+      await dispatch(getUserInfo());
+      await dispatch(getTwitterProfileInfoData());
+      if (isConnected) dispatch(getTwitterHomeTimeline());
+    };
+    request();
   }, [dispatch, isConnected]);
 
   return (
