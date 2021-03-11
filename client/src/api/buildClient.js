@@ -7,15 +7,12 @@ const setAuthHeaderValue = () => {
   return `Bearer ${store.getState().userReducer.present.accessToken}`;
 };
 
-const axiosInstance = axios.create(
-  { baseURL: 'https://mark.dev' },
-  {
-    headers: {
-      'Content-Type': 'Application/json',
-      Authorization: setAuthHeaderValue(),
-    },
-  }
-);
+const axiosInstance = axios.create({
+  headers: {
+    'Content-Type': 'Application/json',
+    Authorization: setAuthHeaderValue(),
+  },
+});
 
 axiosInstance.interceptors.request.use(
   (config) => {

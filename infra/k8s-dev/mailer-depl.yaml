@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailer-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailer
+  template:
+    metadata:
+      labels:
+        app: mailer
+    spec:
+      containers:
+        - name: mailer
+          image: theocosmin/mailer
+          env:
+            - name: HOST_URL
+              value: mark.dev
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: mark
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: GMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mark-password-secret
+                  key: GMAIL_PASSWORD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailer-srv
+spec:
+  selector:
+    app: mailer
+  ports:
+    - name: mailer
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

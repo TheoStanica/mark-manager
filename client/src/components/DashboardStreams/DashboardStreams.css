@@ -1,0 +1,10 @@
+.dashboardStreams {
+  height: calc(100vh - 60px);
+  width: calc(100vw - 80px);
+  white-space: nowrap;
+}
+
+.streamswrapper {
+  overflow-x: scroll;
+  height: 100%;
+}

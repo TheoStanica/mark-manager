@@ -2,6 +2,7 @@ import {
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
+  USER_LOGOUT,
 } from '../types';
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
   profileImage: '',
   isConnected: false,
   home_timeline_tweets: [],
+  streams: [],
 };
 
 const twitterReducer = (state = initialState, action) => {
@@ -21,6 +23,7 @@ const twitterReducer = (state = initialState, action) => {
         screenName: action.payload.screenName,
         profileImage: action.payload.profileImage,
         isConnected: true,
+        streams: action.payload.streams,
       };
     case TWITTER_RESET_PROFILE_INFO:
       return {
@@ -30,7 +33,19 @@ const twitterReducer = (state = initialState, action) => {
         profileImage: '',
         isConnected: false,
         home_timeline_tweets: [],
+        streams: [],
       };
+    case USER_LOGOUT: {
+      return {
+        ...state,
+        name: '',
+        screenName: '',
+        profileImage: '',
+        isConnected: false,
+        home_timeline_tweets: [],
+        streams: [],
+      };
+    }
     case TWITTER_SET_HOME_TIMELINE_TWEETS:
       return {
         ...state,

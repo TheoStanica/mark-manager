@@ -1,31 +1,30 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import ActivateAccount from '../pages/ActivateAccount';
-import Dashboard from '../pages/Dashboard';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
+import { Route, Switch } from 'react-router-dom';
+import Activate from '../pages/Activate/Activate';
+import Dashboard from '../pages/Dashboard/Dashboard';
+import Home from '../pages/Home/Home';
 import ResetPassword from '../pages/ResetPassword';
-import SettingsPage from '../pages/SettingsPage';
+import SettingsPage from '../pages/SettingsPage/SettingsPage';
 import TwitterConnect from '../pages/TwitterConnect';
 import PrivateRoute from './PrivateRoute';
+import '../App.css';
+import LoginPage from '../pages/LoginPage/LoginPage';
+import RegisterPage from '../pages/RegisterPage/RegisterPage';
 
 const Navigation = () => {
   return (
-    <>
+    <Switch>
       <Route path="/" exact component={() => <Home />} />
-      <Route path="/activate/:id" component={() => <ActivateAccount />} />
-      {/* <PrivateRoute path="/register">
-        <Register />
-      </PrivateRoute>
-      <PrivateRoute path="/login">
-        <Login />
-      </PrivateRoute> */}
-      <Route path="/login" component={() => <Login />} />
-      <Route path="/register" component={() => <Register />} />
-      <PrivateRoute path="/password/reset">
+      <Route path="/activate/:id" component={() => <Activate />} />
+      <Route path="/login" exact>
+        <LoginPage />
+      </Route>
+      <Route path="/register" exact>
+        <RegisterPage />
+      </Route>
+      <Route path="/password/reset">
         <ResetPassword />
-      </PrivateRoute>
+      </Route>
       <PrivateRoute path="/dashboard">
         <Dashboard />
       </PrivateRoute>
@@ -35,7 +34,7 @@ const Navigation = () => {
       <PrivateRoute path="/twitter/connect">
         <TwitterConnect />
       </PrivateRoute>
-    </>
+    </Switch>
   );
 };
 
