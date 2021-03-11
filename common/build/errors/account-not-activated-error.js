@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountNotActivatedError = void 0;
 var custom_error_1 = require("./custom-error");
+var errorTypes_1 = require("./errorTypes");
 var AccountNotActivatedError = /** @class */ (function (_super) {
     __extends(AccountNotActivatedError, _super);
     function AccountNotActivatedError(userID) {
@@ -29,7 +30,7 @@ var AccountNotActivatedError = /** @class */ (function (_super) {
             {
                 message: this.message,
                 userID: this.userID,
-                errorType: 'accountNotActivated',
+                errorType: errorTypes_1.errorTypes.AccountNotActivated,
             },
         ];
     };

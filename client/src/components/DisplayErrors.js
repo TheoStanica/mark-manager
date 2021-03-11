@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetErrors } from '../redux/actions/errorsActions';
 import { resendActivationEmail } from '../redux/actions/userActions';
+import Button from './Button/Button';
+import Message from './Message/Message';
 
 const DisplayErrors = () => {
   const { errors } = useSelector((state) => state.errorsReducer);
@@ -13,18 +15,15 @@ const DisplayErrors = () => {
   useEffect(() => {
     const renderAccountNotActivated = ({ message, userID }) => {
       setErrorMessages(
-        <div className="alert alert-danger">
+        <Message type="error">
           <ul>
             <li key={message}>{message}</li>
           </ul>
-          <p>Haven't received an email?</p>
-          <div
-            className="btn btn-primary"
-            onClick={async () => dispatch(resendActivationEmail(userID))}
-          >
-            Request new Activation Email
-          </div>
-        </div>
+          <p className="mb-05">Haven't received an email?</p>
+          <Button onClick={() => dispatch(resendActivationEmail(userID))}>
+            Send New Activation Email
+          </Button>
+        </Message>
       );
     };
 
@@ -36,13 +35,13 @@ const DisplayErrors = () => {
         renderAccountNotActivated(errors[0]);
       } else if (errors) {
         setErrorMessages(
-          <div className="alert alert-danger">
-            <ul className="my-0">
+          <Message type="error">
+            <ul>
               {errors.map((err) => (
                 <li key={err.message}>{err.message}</li>
               ))}
             </ul>
-          </div>
+          </Message>
         );
         clearTmeout.current = setTimeout(() => {
           dispatch(resetErrors());

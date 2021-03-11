@@ -64,7 +64,7 @@ router.post(
       accessToken,
     });
 
-    res.status(200).send({ existingUser, accessToken, refreshToken });
+    res.status(200).send({ accessToken, refreshToken });
   }
 );
 

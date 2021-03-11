@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import oauth from 'oauth';
 import { requireAuth } from '@tcosmin/common';
 import { UserController } from '../controllers/userController';
+import { TwitterConnectedPublisher } from '../events/publishers/twitter-connected-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -63,16 +65,22 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
     String(req.query.oauth_verifier),
     async (err, oauthAccessToken, oauthAccessTokenSecret, results) => {
       if (err) {
-        // TODO do something with this? delete session?
-        console.log('ERROR IN CALLBACK', err);
-        res.redirect('/dashboard');
+        res.clearCookie('connect.sid');
+        res.redirect('/twitter/connect?success=false');
       } else {
         await UserController.addTwitterTokens(
           String(req.session.userId),
           oauthAccessToken,
           oauthAccessTokenSecret
         );
-        res.redirect('/dashboard');
+
+        await new TwitterConnectedPublisher(natsWrapper.client).publish({
+          id: String(req.session.userId),
+          oauthAccessToken: oauthAccessToken,
+          oauthAccessTokenSecret: oauthAccessTokenSecret,
+        });
+        res.clearCookie('connect.sid');
+        res.redirect('/twitter/connect?success=true');
       }
     }
   );

@@ -24,6 +24,10 @@ spec:
             backend:
               serviceName: userprofile-srv
               servicePort: 3000
+          - path: /api/social/?(.*)
+            backend:
+              serviceName: social-srv
+              servicePort: 3000
           - path: /?(.*)
             backend:
               serviceName: client-srv

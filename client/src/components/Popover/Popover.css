@@ -1,0 +1,26 @@
+.popover {
+  position: relative;
+}
+.popover:hover .popup-wrapper {
+  display: block;
+}
+.popup-wrapper {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+}
+.popup-wrapper {
+  padding-bottom: 10px;
+}
+.popup {
+  border-radius: 5px;
+  border-bottom-left-radius: 0px;
+  background: white;
+  box-shadow: 0 0 0.875rem 0 rgb(33 37 41 / 5%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: black;
+}
+.popup a {
+  text-decoration: none;
+}

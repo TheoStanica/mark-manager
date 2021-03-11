@@ -1,4 +1,5 @@
 import { CustomError } from './custom-error';
+import { errorTypes } from './errorTypes';
 
 export class AccountNotActivatedError extends CustomError {
   statusCode = 403;
@@ -13,7 +14,7 @@ export class AccountNotActivatedError extends CustomError {
       {
         message: this.message,
         userID: this.userID,
-        errorType: 'accountNotActivated',
+        errorType: errorTypes.AccountNotActivated,
       },
     ];
   }

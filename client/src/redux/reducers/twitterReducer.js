@@ -1,0 +1,59 @@
+import {
+  TWITTER_RESET_PROFILE_INFO,
+  TWITTER_SET_HOME_TIMELINE_TWEETS,
+  TWITTER_SET_PROFILE_INFO,
+  USER_LOGOUT,
+} from '../types';
+
+const initialState = {
+  name: '',
+  screenName: '',
+  profileImage: '',
+  isConnected: false,
+  home_timeline_tweets: [],
+  streams: [],
+};
+
+const twitterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case TWITTER_SET_PROFILE_INFO:
+      return {
+        ...state,
+        name: action.payload.name,
+        screenName: action.payload.screenName,
+        profileImage: action.payload.profileImage,
+        isConnected: true,
+        streams: action.payload.streams,
+      };
+    case TWITTER_RESET_PROFILE_INFO:
+      return {
+        ...state,
+        name: '',
+        screenName: '',
+        profileImage: '',
+        isConnected: false,
+        home_timeline_tweets: [],
+        streams: [],
+      };
+    case USER_LOGOUT: {
+      return {
+        ...state,
+        name: '',
+        screenName: '',
+        profileImage: '',
+        isConnected: false,
+        home_timeline_tweets: [],
+        streams: [],
+      };
+    }
+    case TWITTER_SET_HOME_TIMELINE_TWEETS:
+      return {
+        ...state,
+        home_timeline_tweets: action.payload.tweets,
+      };
+    default:
+      return state;
+  }
+};
+
+export default twitterReducer;

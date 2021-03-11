@@ -157,16 +157,28 @@ export const uploadPhoto = (data) => async (dispatch) => {
   }
 };
 
-export const updateUser = ({ email, fullName, profilePicture }) => async (
+export const updateUser = ({ email, fullName, imgData }) => async (
   dispatch
 ) => {
   try {
-    const data = {
-      email,
-      fullName,
-      profilePicture,
-    };
-    const response = await axiosInstance.put('/api/user/currentuser', data);
+    let dataToSend;
+    if (imgData) {
+      const res = await axiosInstance.post('/api/user/uploadimage', imgData);
+      dataToSend = {
+        email,
+        fullName,
+        profilePicture: res.data.imageUrl,
+      };
+    } else {
+      dataToSend = {
+        email,
+        fullName,
+      };
+    }
+    const response = await axiosInstance.put(
+      '/api/user/currentuser',
+      dataToSend
+    );
     if (response) {
       dispatch({
         type: USER_UPDATE,
@@ -179,12 +191,21 @@ export const updateUser = ({ email, fullName, profilePicture }) => async (
       });
     }
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    if (err.response && err.response.data && err.response.data.errors) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    } else {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: [{ message: 'Something went wrong. Please try again later' }],
+        },
+      });
+    }
   }
 };
 
@@ -232,4 +253,59 @@ export const setUserMessages = ({ message }) => async (dispatch) => {
       message,
     },
   });
+};
+
+export const requestPasswordReset = ({ email }) => async (dispatch) => {
+  try {
+    await axiosInstance.post('/api/auth/resetpassword', {
+      email: email,
+    });
+    dispatch({
+      type: USER_SET_MESSAGES,
+      payload: {
+        message: 'Please check your email to reset your password',
+      },
+    });
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    }
+  }
+};
+
+export const userResetPassword = ({ token, password }) => async (dispatch) => {
+  try {
+    await axiosInstance.post(`/api/auth/resetpassword/${token}`, {
+      password: password,
+    });
+    dispatch({
+      type: USER_SET_MESSAGES,
+      payload: {
+        message: 'Account Updated! You can now log in!',
+      },
+    });
+  } catch (err) {
+    if (err.response.data) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: {
+          errors: err.response.data.errors,
+        },
+      });
+    }
+  }
+};
+
+export const activateAccount = ({ id }) => async (dispatch) => {
+  try {
+    await axiosInstance.get(`/api/auth/activation/${id}`);
+    return true;
+  } catch (err) {
+    return false;
+  }
 };

@@ -1,4 +1,5 @@
 import { CustomError } from './custom-error';
+import { errorTypes } from './errorTypes';
 export declare class AccountNotActivatedError extends CustomError {
     userID: string;
     statusCode: number;
@@ -6,6 +7,6 @@ export declare class AccountNotActivatedError extends CustomError {
     serializeErrors(): {
         message: string;
         userID: string;
-        errorType: string;
+        errorType: errorTypes;
     }[];
 }
