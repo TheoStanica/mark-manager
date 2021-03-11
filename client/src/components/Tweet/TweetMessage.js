@@ -16,6 +16,7 @@ const TweetMessage = ({ tweet }) => {
 
   return (
     <p
+      className="tweet-message"
       dangerouslySetInnerHTML={{
         __html: text,
       }}
