@@ -28,6 +28,18 @@ router.post(
       );
     }
 
+router.get(
+  '/api/user/streampreferences',
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const user = await UserProfileController.findUserWithId(
+      req.currentUser!.userId
+    );
+    if (!user) {
+      throw new BadRequestError(
+        'Something went wrong. Please try again later!'
+      );
+    }
     res.send({ streams: user.stream_preferences });
   }
 );
