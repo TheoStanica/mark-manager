@@ -30,7 +30,9 @@ router.get(
       });
 
       try {
-        const timeline = await T.get('statuses/home_timeline');
+        const timeline = await T.get('statuses/home_timeline', {
+          tweet_mode: 'extended',
+        });
         if (timeline) {
           res.send(timeline.data);
         } else {
