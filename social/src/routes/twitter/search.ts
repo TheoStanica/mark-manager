@@ -17,7 +17,6 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const { search } = req.query;
-    console.log(req.query);
     if (!search) {
       throw new BadRequestError('Please provide a search parameter');
     }
