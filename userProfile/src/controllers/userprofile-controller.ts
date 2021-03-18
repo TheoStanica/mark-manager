@@ -1,5 +1,10 @@
 import { BadRequestError } from '@tcosmin/common';
-import { UserProfile, UserAttrs, UserDoc } from '../models/userprofile';
+import {
+  UserProfile,
+  UserAttrs,
+  UserDoc,
+  StreamPreference,
+} from '../models/userprofile';
 
 export class UserProfileController {
   static createUser(userAttrs: UserAttrs): UserDoc {
@@ -22,5 +27,19 @@ export class UserProfileController {
     const user = await UserProfile.findOne({ email });
     if (user) return true;
     return false;
+  }
+
+  static async updateStreamPreferences(
+    id: string,
+    streams: StreamPreference[]
+  ) {
+    const user = await UserProfile.findByIdAndUpdate(
+      id,
+      {
+        stream_preferences: streams,
+      },
+      { new: true }
+    );
+    return user;
   }
 }
