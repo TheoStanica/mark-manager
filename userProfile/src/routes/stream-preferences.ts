@@ -27,6 +27,9 @@ router.post(
         'Something went wrong. Please try again later!'
       );
     }
+    res.sendStatus(204);
+  }
+);
 
 router.get(
   '/api/user/streampreferences',
