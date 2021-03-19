@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
+import CardHeader from '../Card/CardHeader';
 import ClearButton from '../ClearButton/ClearButton';
 import ConnectTwitterButton from '../ConnectTwitterButton';
 import Popover from '../Popover/Popover';
@@ -13,7 +14,8 @@ const ConnectedAccounts = () => {
 
   const renderAccounts = () => {
     return isConnected ? (
-      <div className="d-flex">
+      <div className="d-flex flex-column">
+        <CardHeader>Your accounts</CardHeader>
         <Card>
           <CardBody className="d-flex align-items-start">
             <div className="d-flex align-items-center">
@@ -41,16 +43,23 @@ const ConnectedAccounts = () => {
       </div>
     );
   };
+  const renderAddAccounts = () => {
+    return isConnected ? null : (
+      <>
+        <div className="divider mb-05 "></div>
+        <div className="d-flex justify-content-center mb-05">
+          <ConnectTwitterButton />
+        </div>
+      </>
+    );
+  };
 
   return (
     <Popover
       content={
         <>
           {renderAccounts()}
-          <div className="divider mb-05 "></div>
-          <div className="d-flex justify-content-center mb-05">
-            <ConnectTwitterButton />
-          </div>
+          {renderAddAccounts()}
         </>
       }
     >
