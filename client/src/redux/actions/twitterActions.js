@@ -248,6 +248,29 @@ export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const loadUserStreams = ({ streams }) => async (dispatch) => {
+  try {
+    // create copy of current streams stored in redux
+    // remove isLoading and tweets from streams parameter
+    // compare redux stored streams with streams stored in backend
+    // if they dont match, add add the new stream to redux
+    // this way, only at first load (before streams was set up in redux) we will load all Stream components
+
+    const streamsArray = [...store.getState().twitterReducer.streams].map(
+      (stream) => ({
+        id: stream.id,
+        type: stream.type,
+        search: stream.search ? stream.search : undefined,
+        isLoading: undefined,
+        tweets: undefined,
+      })
+    );
+    if (JSON.stringify(streamsArray) !== JSON.stringify(streams)) {
+      await dispatch(updateStreams({ streams: [] }));
+      dispatch(reorderStreams({ streams }));
     }
+  } catch (err) {
+    dispatch(handleError({ error: err }));
   }
 };
