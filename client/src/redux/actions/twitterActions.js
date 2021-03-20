@@ -1,11 +1,39 @@
 import axiosInstance from '../../api/buildClient';
 import {
   SET_ERRORS,
+  TWITTER_ADD_STREAM,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
+  TWITTER_SET_STREAM_LOADING_STATUS,
+  TWITTER_SET_STREAM_TWEETS,
+  TWITTER_UPDATE_STREAMS,
   USER_SET_MESSAGES,
 } from '../types';
+import { store } from '../store';
+
+const handleError = ({ error }) => async (dispatch) => {
+  if (
+    error &&
+    error.resposne &&
+    error.response.data &&
+    error.response.data.errors
+  ) {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: error.response.data.errors,
+      },
+    });
+  } else {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: [{ message: 'Something went wrong' }],
+      },
+    });
+  }
+};
 
 export const getTwitterProfileInfoData = () => async (dispatch) => {
   try {

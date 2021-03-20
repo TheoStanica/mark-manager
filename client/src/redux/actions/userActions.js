@@ -12,6 +12,30 @@ import {
   USER_UPLOAD_PHOTO,
 } from '../types';
 import axiosInstance from '../../api/buildClient';
+import { loadUserStreams } from './twitterActions';
+
+const handleError = ({ error }) => async (dispatch) => {
+  if (
+    error &&
+    error.response &&
+    error.response.data &&
+    error.response.data.errors
+  ) {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: error.response.data.errors,
+      },
+    });
+  } else {
+    dispatch({
+      type: SET_ERRORS,
+      payload: {
+        errors: [{ message: 'Something went wrong' }],
+      },
+    });
+  }
+};
 
 export const loginUser = ({ email, password }) => async (dispatch) => {
   try {
