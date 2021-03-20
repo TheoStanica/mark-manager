@@ -133,16 +133,9 @@ export const tweetNewMessage = ({ message }) => async (dispatch) => {
       },
     });
   } catch (err) {
-    if (err.response.data) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-      dispatch({
-        type: TWITTER_RESET_PROFILE_INFO,
-      });
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
