@@ -1,3 +1,3 @@
 # Project Mark
 
-[Live demo](http://theostanica.cloud.okteto.net/)
+[Live demo](https://www.projectmark.live/)
