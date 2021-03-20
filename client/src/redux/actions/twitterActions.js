@@ -136,6 +136,15 @@ export const tweetNewMessage = ({ message }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const updateStreams = ({ streams }) => async (dispatch) => {
+  await dispatch({
+    type: TWITTER_UPDATE_STREAMS,
+    payload: {
+      streams: streams,
+    },
+  });
+};
     }
   }
 };
