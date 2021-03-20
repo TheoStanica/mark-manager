@@ -211,6 +211,25 @@ export const setStreamLoading = ({ id, isLoading }) => (dispatch) => {
     },
   });
 };
+
+export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
+  try {
+    await dispatch(setStreamLoading({ id, isLoading: true }));
+    const response = await axiosInstance.get(
+      `/api/social/twitter/search/tweets?search=${search}`
+    );
+    await dispatch({
+      type: TWITTER_SET_STREAM_TWEETS,
+      payload: {
+        id: id,
+        tweets: response.data.statuses,
+      },
+    });
+    await dispatch(setStreamLoading({ id, isLoading: false }));
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
