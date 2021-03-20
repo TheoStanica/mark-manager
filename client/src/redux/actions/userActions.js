@@ -124,6 +124,9 @@ export const getUserInfo = () => async (dispatch) => {
           id: response.data.user.id,
         },
       });
+      dispatch(
+        loadUserStreams({ streams: response.data.user.stream_preferences })
+      );
     }
   } catch (err) {
     dispatch(handleError({ error: err }));
