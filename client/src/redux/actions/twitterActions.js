@@ -145,6 +145,23 @@ export const updateStreams = ({ streams }) => async (dispatch) => {
     },
   });
 };
+
+export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
+  try {
+    const updatedstreams = [...streams].map((stream) => ({
+      id: stream.id,
+      type: stream.type,
+      search: stream.search ? stream.search : undefined,
+      isLoading: undefined,
+      tweets: undefined,
+    }));
+    await axiosInstance.post('/api/user/streampreferences', {
+      stream_preferences: updatedstreams,
+    });
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
