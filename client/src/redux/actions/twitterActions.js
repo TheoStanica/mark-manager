@@ -201,6 +201,16 @@ export const reorderStreams = ({ streams }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const setStreamLoading = ({ id, isLoading }) => (dispatch) => {
+  dispatch({
+    type: TWITTER_SET_STREAM_LOADING_STATUS,
+    payload: {
+      id: id,
+      isLoading: isLoading,
+    },
+  });
+};
     }
   }
 };
