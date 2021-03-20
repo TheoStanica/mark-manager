@@ -53,12 +53,7 @@ export const loginUser = ({ email, password }) => async (dispatch) => {
       });
     }
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -79,12 +74,7 @@ export const registerUser = ({ email, password }) => async (dispatch) => {
       },
     });
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -112,12 +102,7 @@ export const resendActivationEmail = (userId) => async (dispatch) => {
       userId: userId,
     });
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    dispatch(handleError({ error: err }));
   }
 
   dispatch({
@@ -141,12 +126,7 @@ export const getUserInfo = () => async (dispatch) => {
       });
     }
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -172,12 +152,7 @@ export const uploadPhoto = (data) => async (dispatch) => {
       },
     });
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -215,21 +190,7 @@ export const updateUser = ({ email, fullName, imgData }) => async (
       });
     }
   } catch (err) {
-    if (err.response && err.response.data && err.response.data.errors) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-    } else {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: [{ message: 'Something went wrong. Please try again later' }],
-        },
-      });
-    }
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -261,12 +222,7 @@ export const changePassword = ({ currentPassword, newPassword }) => async (
         },
       });
   } catch (err) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: {
-        errors: err.response.data.errors,
-      },
-    });
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -291,14 +247,7 @@ export const requestPasswordReset = ({ email }) => async (dispatch) => {
       },
     });
   } catch (err) {
-    if (err.response.data) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-    }
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -314,14 +263,7 @@ export const userResetPassword = ({ token, password }) => async (dispatch) => {
       },
     });
   } catch (err) {
-    if (err.response.data) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-    }
+    dispatch(handleError({ error: err }));
   }
 };
 
