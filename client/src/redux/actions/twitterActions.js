@@ -192,6 +192,15 @@ export const removeStream = ({ id }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const reorderStreams = ({ streams }) => async (dispatch) => {
+  try {
+    await dispatch(updateStreams({ streams }));
+    await dispatch(updateUserStreamsBackend({ streams: streams }));
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
