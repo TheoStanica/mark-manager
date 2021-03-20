@@ -12,6 +12,7 @@ import { Assets } from '../../assets';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
+  const { isConnected } = useSelector((state) => state.twitterReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -33,14 +34,16 @@ const VerticalMenu = () => {
           </Link>
         </div>
         <div className="menu-separator"></div>
-        <VerticalMenuItem
-          text="Create"
-          offset={30}
-          onClick={() => setIsModalOpen(true)}
-        >
-          <img src={Assets.Pictures.CreateIcon} alt="New Post" />
-        </VerticalMenuItem>
 
+        {isConnected ? (
+          <VerticalMenuItem
+            text="Create"
+            offset={30}
+            onClick={() => setIsModalOpen(true)}
+          >
+            <img src={Assets.Pictures.CreateIcon} alt="New Post" />
+          </VerticalMenuItem>
+        ) : null}
         <CreateTweet
           visible={isModalOpen}
           onClose={() => setIsModalOpen(false)}
