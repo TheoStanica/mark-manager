@@ -181,6 +181,17 @@ export const addStream = ({ type, search }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const removeStream = ({ id }) => async (dispatch) => {
+  try {
+    const { streams } = store.getState().twitterReducer;
+    const newStreams = streams.filter((s) => s.id !== id);
+    await dispatch(updateUserStreamsBackend({ streams: newStreams }));
+    await dispatch(updateStreams({ streams: newStreams }));
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
