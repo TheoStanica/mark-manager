@@ -1,7 +1,11 @@
 import {
+  TWITTER_ADD_STREAM,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
+  TWITTER_SET_STREAM_LOADING_STATUS,
+  TWITTER_SET_STREAM_TWEETS,
+  TWITTER_UPDATE_STREAMS,
   USER_LOGOUT,
 } from '../types';
 
@@ -10,7 +14,6 @@ const initialState = {
   screenName: '',
   profileImage: '',
   isConnected: false,
-  home_timeline_tweets: [],
   streams: [],
 };
 
@@ -23,7 +26,6 @@ const twitterReducer = (state = initialState, action) => {
         screenName: action.payload.screenName,
         profileImage: action.payload.profileImage,
         isConnected: true,
-        streams: action.payload.streams,
       };
     case TWITTER_RESET_PROFILE_INFO:
       return {
@@ -32,7 +34,6 @@ const twitterReducer = (state = initialState, action) => {
         screenName: '',
         profileImage: '',
         isConnected: false,
-        home_timeline_tweets: [],
         streams: [],
       };
     case USER_LOGOUT: {
@@ -42,7 +43,6 @@ const twitterReducer = (state = initialState, action) => {
         screenName: '',
         profileImage: '',
         isConnected: false,
-        home_timeline_tweets: [],
         streams: [],
       };
     }
@@ -51,6 +51,44 @@ const twitterReducer = (state = initialState, action) => {
         ...state,
         home_timeline_tweets: action.payload.tweets,
       };
+    case TWITTER_ADD_STREAM:
+      return {
+        ...state,
+        streams: [...state.streams, action.payload],
+      };
+    case TWITTER_UPDATE_STREAMS:
+      return {
+        ...state,
+        streams: action.payload.streams,
+      };
+    case TWITTER_SET_STREAM_TWEETS: {
+      const streamIdx = state.streams.findIndex(
+        (stream) => stream.id === action.payload.id
+      );
+      const streams = [...state.streams];
+      streams[streamIdx] = {
+        ...streams[streamIdx],
+        tweets: action.payload.tweets,
+      };
+      return {
+        ...state,
+        streams,
+      };
+    }
+    case TWITTER_SET_STREAM_LOADING_STATUS: {
+      const streamIdx = state.streams.findIndex(
+        (stream) => stream.id === action.payload.id
+      );
+      const streams = [...state.streams];
+      streams[streamIdx] = {
+        ...streams[streamIdx],
+        isLoading: action.payload.isLoading,
+      };
+      return {
+        ...state,
+        streams,
+      };
+    }
     default:
       return state;
   }
