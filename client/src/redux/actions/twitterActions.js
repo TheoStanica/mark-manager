@@ -230,6 +230,24 @@ export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
+  try {
+    await dispatch(setStreamLoading({ id, isLoading: true }));
+    const response = await axiosInstance.get(
+      '/api/social/twitter/statuses/home_timeline'
+    );
+    await dispatch({
+      type: TWITTER_SET_STREAM_TWEETS,
+      payload: {
+        id: id,
+        tweets: response.data,
+      },
+    });
+    await dispatch(setStreamLoading({ id, isLoading: false }));
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
