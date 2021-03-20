@@ -162,6 +162,25 @@ export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const addStream = ({ type, search }) => async (dispatch) => {
+  try {
+    await dispatch({
+      type: TWITTER_ADD_STREAM,
+      payload: {
+        id: getRandomID(),
+        type: type,
+        search: search ? search : undefined,
+        isLoading: true,
+        tweets: [],
+      },
+    });
+    const { streams } = store.getState().twitterReducer;
+    await dispatch(updateUserStreamsBackend({ streams }));
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
     }
   }
 };
