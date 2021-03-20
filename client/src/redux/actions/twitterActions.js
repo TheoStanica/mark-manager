@@ -53,14 +53,7 @@ export const getTwitterProfileInfoData = () => async (dispatch) => {
       });
     }
   } catch (err) {
-    if (err.response.data) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-    }
+    dispatch(handleError({ error: err }));
   }
 };
 export const getTwitterDefaultData = () => async (dispatch) => {
@@ -88,14 +81,7 @@ export const getTwitterDefaultData = () => async (dispatch) => {
       }
     }
   } catch (err) {
-    if (err.response.data) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-    }
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -114,7 +100,7 @@ export const connectToTwitter = () => async (dispatch) => {
       );
     }
   } catch (err) {
-    console.log('Something didnt go right while connecting..', err);
+    dispatch(handleError({ error: err }));
   }
 };
 
@@ -132,17 +118,7 @@ export const getTwitterHomeTimeline = () => async (dispatch) => {
       });
     }
   } catch (err) {
-    if (err.response.data) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: {
-          errors: err.response.data.errors,
-        },
-      });
-      dispatch({
-        type: TWITTER_RESET_PROFILE_INFO,
-      });
-    }
+    dispatch(handleError({ error: err }));
   }
 };
 export const tweetNewMessage = ({ message }) => async (dispatch) => {
