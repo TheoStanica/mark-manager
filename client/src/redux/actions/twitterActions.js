@@ -49,7 +49,6 @@ export const getTwitterProfileInfoData = () => async (dispatch) => {
           name: user.data.name,
           screenName: user.data.screen_name,
           profileImage: user.data.profile_image_url,
-          streams: ['home'],
         },
       });
     }
@@ -77,7 +76,6 @@ export const getTwitterDefaultData = () => async (dispatch) => {
           name: user.data.name,
           screenName: user.data.screen_name,
           profileImage: user.data.profile_image_url,
-          streams: ['home'],
         },
       });
       if (response) {
