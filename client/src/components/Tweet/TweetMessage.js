@@ -2,15 +2,15 @@ import React from 'react';
 import twitter from 'twitter-text';
 
 const TweetMessage = ({ tweet }) => {
-  let { text, entities } = tweet;
+  let { full_text, entities } = tweet;
 
   // replace links
-  text = twitter.autoLinkWithJSON(text, entities);
+  full_text = twitter.autoLinkWithJSON(full_text, entities);
 
   // remove Image Link
   if (entities && entities.media) {
     entities.media.forEach((element) => {
-      text = text.replace(element.display_url, '');
+      full_text = full_text.replace(element.display_url, '');
     });
   }
 
@@ -18,7 +18,7 @@ const TweetMessage = ({ tweet }) => {
     <p
       className="tweet-message"
       dangerouslySetInnerHTML={{
-        __html: text,
+        __html: full_text,
       }}
     ></p>
   );
