@@ -1,30 +1,53 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTwitterHomeTimeline } from '../redux/actions/twitterActions';
+import {
+  loadHomeTimelineStream,
+  removeStream,
+} from '../redux/actions/twitterActions';
+import Loading from './Loading/Loading';
 import Timeline from './Timeline/Timeline';
 import TimelineBody from './Timeline/TimelineBody';
 import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 
-const TwitterHomeTimeline = ({ id }) => {
-  const { home_timeline_tweets: tweets, screenName } = useSelector(
-    (state) => state.twitterReducer
-  );
+const TwitterHomeTimeline = ({ stream, provided }) => {
+  const { screenName } = useSelector((state) => state.twitterReducer);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(loadHomeTimelineStream({ id: stream.id }));
+  }, [dispatch, stream.id]);
+
   return (
-    <Timeline key={id}>
+    <Timeline>
       <TimelineHeader
         type="Home"
         account={screenName}
         className="pb-05"
-        onRefresh={() => dispatch(getTwitterHomeTimeline())}
+        onRefresh={() => dispatch(loadHomeTimelineStream({ id: stream.id }))}
+        onRemove={() => {
+          dispatch(removeStream({ id: stream.id }));
+        }}
+        {...provided.dragHandleProps}
       ></TimelineHeader>
       <TimelineBody>
-        {tweets &&
-          tweets.map((tweet, idx) => {
+        {stream.isLoading ? (
+          <div
+            style={{
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Loading />
+          </div>
+        ) : (
+          stream.tweets &&
+          stream.tweets.map((tweet, idx) => {
             return <TweetCard tweet={tweet} key={idx} />;
-          })}
+          })
+        )}
       </TimelineBody>
     </Timeline>
   );
