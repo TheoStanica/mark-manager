@@ -3,16 +3,12 @@
   height: 100%;
   display: inline-flex;
   flex-direction: column;
-  border-radius: 10px;
+  border-radius: 5px;
   background: linear-gradient(
     180deg,
     rgba(44, 0, 100, 0.5) 0%,
     rgba(227, 181, 164, 0.5) 100%
   );
-}
-
-.timeline:last-child {
-  margin-right: 0.5rem;
 }
 
 .timeline-header {
@@ -30,9 +26,5 @@
 .timeline-body {
   padding: 0.5rem;
   flex-grow: 1;
-  overflow-y: scroll;
-}
-
-.big-box {
-  background-color: pink;
+  overflow: overlay;
 }
