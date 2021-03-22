@@ -13,28 +13,31 @@ const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.get(
-  '/api/social/twitter/statuses/home_timeline',
+  '/api/social/twitter/search/tweets',
   requireAuth,
   async (req: Request, res: Response) => {
+    const { search } = req.query;
+    if (!search) {
+      throw new BadRequestError('Please provide a search parameter');
+    }
     const tokens = await UserController.getUserTwitterTokens(
       req.currentUser!.userId
     );
     if (tokens && tokens.oauthAccessToken && tokens.oauthAccessTokenSecret) {
       const { oauthAccessToken, oauthAccessTokenSecret } = tokens;
-
       const T = new twit({
         consumer_key: consumerKey,
         consumer_secret: consumerSecret,
         access_token: oauthAccessToken,
         access_token_secret: oauthAccessTokenSecret,
       });
-
       try {
-        const timeline = await T.get('statuses/home_timeline', {
+        const tweets = await T.get('search/tweets', {
+          q: String(search),
           tweet_mode: 'extended',
         });
-        if (timeline) {
-          res.send(timeline.data);
+        if (tweets) {
+          res.send(tweets.data);
         } else {
           res.send([]);
         }
@@ -49,4 +52,4 @@ router.get(
   }
 );
 
-export { router as twitterTimelineRouter };
+export { router as twitterSearchRouter };
