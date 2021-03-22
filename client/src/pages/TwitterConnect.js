@@ -4,7 +4,7 @@ import Loading from '../components/Loading/Loading';
 import { useQuery } from '../hooks/useQuery';
 import {
   connectToTwitter,
-  getTwitterDefaultData,
+  getTwitterProfileInfoData,
 } from '../redux/actions/twitterActions';
 import { setUserMessages } from '../redux/actions/userActions';
 
@@ -19,7 +19,7 @@ const TwitterConnect = () => {
       window.close();
     } else if (query.get('success') === 'true') {
       // if user tokens were successfully saved, get data about user too
-      dispatch(getTwitterDefaultData());
+      dispatch(getTwitterProfileInfoData());
     } else if (query.get('success') === 'false') {
       // user did not authorize the app
       // Alert message - will do user message for now.

@@ -17,6 +17,7 @@
 
 .mktooltip:hover .tooltiptext {
   visibility: visible;
+  pointer-events: none;
 }
 .mktooltip .tooltiptext {
   transform: translateY(-50%);

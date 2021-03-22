@@ -8,3 +8,7 @@
   overflow-x: scroll;
   height: 100%;
 }
+
+li.stream[data-rbd-drag-handle-context-id="0"] {
+  cursor: initial;
+}

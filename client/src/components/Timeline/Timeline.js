@@ -3,7 +3,7 @@ import './Timeline.css';
 
 const Timeline = ({ children, id }) => {
   return (
-    <div className="timeline ml-05" key={id}>
+    <div className="timeline" key={id}>
       {children}
     </div>
   );

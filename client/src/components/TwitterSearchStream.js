@@ -1,30 +1,35 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  loadHomeTimelineStream,
+  loadTweetSearchStream,
   removeStream,
 } from '../redux/actions/twitterActions';
-import Loading from './Loading/Loading';
 import Timeline from './Timeline/Timeline';
 import TimelineBody from './Timeline/TimelineBody';
 import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
+import Loading from './Loading/Loading';
 
-const TwitterHomeTimeline = ({ stream, provided }) => {
+const TwitterSearchStream = ({ stream, provided }) => {
   const { screenName } = useSelector((state) => state.twitterReducer);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadHomeTimelineStream({ id: stream.id }));
-  }, [dispatch, stream.id]);
+    dispatch(loadTweetSearchStream({ id: stream.id, search: stream.search }));
+  }, [dispatch, stream.id, stream.search]);
 
   return (
     <Timeline>
       <TimelineHeader
-        type="Home"
+        type={`Search ${stream.search}`}
         account={screenName}
         className="pb-05"
-        onRefresh={() => dispatch(loadHomeTimelineStream({ id: stream.id }))}
+        onRefresh={() =>
+          dispatch(
+            loadTweetSearchStream({ id: stream.id, search: stream.search })
+          )
+        }
         onRemove={() => {
           dispatch(removeStream({ id: stream.id }));
         }}
@@ -53,4 +58,4 @@ const TwitterHomeTimeline = ({ stream, provided }) => {
   );
 };
 
-export default TwitterHomeTimeline;
+export default TwitterSearchStream;

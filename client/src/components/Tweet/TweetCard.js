@@ -18,19 +18,17 @@ const TwitterCard = ({ tweet }) => {
     <Card className="mb-05">
       <CardHeader className="pb-05">
         <div className="d-flex align-items-start">
-          <div className="d-flex">
-            <img
-              className="rounded-circle mr-1"
-              src={tweet.user.profile_image_url}
-              alt={`${tweet.user.name}'s profile`}
-            />
-            <div className="d-flex flex-column">
-              <div>
-                <strong className="mr-05"> {tweet.user.name}</strong>@
-                {tweet.user.screen_name}
-              </div>
-              {moment(new Date(tweet.created_at)).fromNow()}
+          <img
+            className="rounded-circle "
+            src={tweet.user.profile_image_url}
+            alt={`${tweet.user.name}'s profile`}
+          />
+          <div className="d-flex flex-column ml-05">
+            <div className="">
+              <strong className="mr-05"> {tweet.user.name}</strong>@
+              {tweet.user.screen_name}
             </div>
+            {moment(new Date(tweet.created_at)).fromNow()}
           </div>
         </div>
       </CardHeader>
