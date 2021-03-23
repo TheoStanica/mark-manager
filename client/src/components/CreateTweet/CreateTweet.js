@@ -4,7 +4,7 @@ import { tweetNewMessage } from '../../redux/actions/twitterActions';
 import Modal from '../Modal/Modal';
 import ModalBody from '../Modal/ModalBody';
 import ModalHeader from '../Modal/ModalHeader';
-import './CreateTweet.css';
+import { StyledTextarea } from './styles';
 
 const CreateTweet = ({ visible, onClose }) => {
   const [message, setMessage] = useState('');
@@ -24,7 +24,7 @@ const CreateTweet = ({ visible, onClose }) => {
     >
       <ModalHeader>Create New Tweet</ModalHeader>
       <ModalBody>
-        <textarea
+        <StyledTextarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
