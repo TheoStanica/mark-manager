@@ -1,19 +1,19 @@
 import React from 'react';
 import { Assets } from '../../assets';
 import Header from '../Header/Header';
-import './AuthSplash.css';
+import { SplashDiv, Background, BackgroundText } from './styles';
 
 const AuthSplash = ({ children }) => {
   return (
     <>
       <Header />
-      <div className="authsplash">
+      <SplashDiv>
         {children}
-        <div className="bg">
+        <Background>
           <img src={Assets.Pictures.AuthSplash} alt="background splash" />
-          <div className="bg-text">Project Mark</div>
-        </div>
-      </div>
+          <BackgroundText>Project Mark</BackgroundText>
+        </Background>
+      </SplashDiv>
     </>
   );
 };
