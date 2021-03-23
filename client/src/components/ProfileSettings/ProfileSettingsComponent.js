@@ -40,8 +40,8 @@ const ProfileSettingsComponent = () => {
   };
 
   return (
-    <Card className="w-100">
-      <CardHeader className="no-border">Account info</CardHeader>
+    <Card style={{ width: '100%' }}>
+      <CardHeader>Account info</CardHeader>
       <CardBody>
         <form onSubmit={submitChanges}>
           <div className="edit">

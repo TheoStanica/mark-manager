@@ -15,8 +15,8 @@ const TwitterCard = ({ tweet }) => {
   }
 
   return (
-    <Card className="mb-05">
-      <CardHeader className="pb-05">
+    <Card style={{ marginBottom: '.5rem' }}>
+      <CardHeader style={{ paddingBottom: '.5rem' }}>
         <div className="d-flex align-items-start">
           <img
             className="rounded-circle "
@@ -32,7 +32,7 @@ const TwitterCard = ({ tweet }) => {
           </div>
         </div>
       </CardHeader>
-      <CardBody className="pt-05">
+      <CardBody style={{ paddingTop: '.5rem' }}>
         <TweetMessage tweet={tweet} />
         {MediaComponent}
       </CardBody>

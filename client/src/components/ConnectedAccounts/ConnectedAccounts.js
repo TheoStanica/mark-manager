@@ -17,7 +17,7 @@ const ConnectedAccounts = () => {
       <div className="d-flex flex-column">
         <CardHeader>Your accounts</CardHeader>
         <Card>
-          <CardBody className="d-flex align-items-start">
+          <CardBody>
             <div className="d-flex align-items-center">
               <img
                 className="rounded-circle mr-1"

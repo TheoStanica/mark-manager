@@ -49,8 +49,8 @@ const PasswordSettingsComponent = () => {
   };
 
   return (
-    <Card className="w-100">
-      <CardHeader className="no-border">Change Password</CardHeader>
+    <Card style={{ width: '100%' }}>
+      <CardHeader>Change Password</CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit}>
           <InputField
