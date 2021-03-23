@@ -39,7 +39,7 @@ const Login = () => {
             Forgot password?
           </Link>
         </div>
-        <Button type="submit" className="mb-1">
+        <Button type="submit" style={{ marginBottom: '1rem' }}>
           Sign In
         </Button>
         <div className="d-flex small-text mb-1">

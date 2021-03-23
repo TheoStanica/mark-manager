@@ -65,7 +65,7 @@ const ResetPasswordUpdate = () => {
           label="Repeat New Password"
           className="mb-3"
         />
-        <Button type="submit" className="mb-1">
+        <Button type="submit" style={{ marginBottom: '1rem' }}>
           Save Changes
         </Button>
         <div className="messages">

@@ -30,7 +30,7 @@ const ResetpasswordRequest = () => {
             label="Email"
             className="mb-3"
           />
-          <Button type="submit" className="mb-1">
+          <Button type="submit" style={{ marginBottom: '1rem' }}>
             Reset Password
           </Button>
           <div className="messages">

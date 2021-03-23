@@ -11,7 +11,7 @@ const Modal = ({ children, visible, onClose, onSubmit }) => {
         <Card>
           {children}
           <CardFooter>
-            <Button className="mr-1" onClick={onClose}>
+            <Button style={{ marginRight: '1rem' }} onClick={onClose}>
               Close
             </Button>
             <Button onClick={onSubmit}>Submit</Button>

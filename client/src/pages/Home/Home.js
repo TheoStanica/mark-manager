@@ -13,7 +13,7 @@ const Home = () => {
       <Header className="normal" />
       <div className=" home-wrapper d-flex flex-column justify-content-center align-items-center">
         <h1>Welcome to Project Mark!</h1>
-        <Button className="mb-1 mt-1">
+        <Button style={{ marginBottom: '1rem', marginTop: '1rem' }}>
           <Link to="/login">Login</Link>
         </Button>
         <div className="soon">More coming soon...</div>
