@@ -6,7 +6,13 @@ import DisplayErrors from '../../components/DisplayErrors';
 import DisplayUserMessages from '../../components/DisplayUserMessages';
 import InputField from '../../components/InputField/InputField';
 import { registerUser } from '../../redux/actions/userActions';
-import './Register.css';
+// import './Register.css';
+import {
+  StyledRegisterDiv,
+  StyledHeader,
+  StyledSmallText,
+  StyledMessages,
+} from './styles';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -19,8 +25,8 @@ const Register = () => {
   };
 
   return (
-    <div className="register">
-      <h1 className="header">Register</h1>
+    <StyledRegisterDiv>
+      <StyledHeader>Register</StyledHeader>
       <form onSubmit={submitRegister}>
         <InputField
           type="email"
@@ -39,18 +45,18 @@ const Register = () => {
         <Button type="submit" style={{ marginBottom: '1rem' }}>
           Register
         </Button>
-        <div className="d-flex small-text mb-1">
+        <StyledSmallText className="d-flex small-text mb-1">
           Already have an account?
           <Link to="/login" className="ml-05">
             Sign In
           </Link>
-        </div>
-        <div className="messages">
+        </StyledSmallText>
+        <StyledMessages>
           <DisplayErrors />
           <DisplayUserMessages />
-        </div>
+        </StyledMessages>
       </form>
-    </div>
+    </StyledRegisterDiv>
   );
 };
 
