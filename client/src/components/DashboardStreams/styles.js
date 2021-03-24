@@ -20,4 +20,5 @@ export const StyledStreamContainer = styled.li`
 export const StyledStreamsList = styled.ul`
   height: 100%;
   display: flex;
+  list-style: none;
 `;
