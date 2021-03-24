@@ -1,30 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Assets } from '../../assets';
+import { StyledNavbar, StyledList, StyledItem } from './styles';
 
-import './Header.css';
-
-const Header = ({ className }) => {
+const Header = ({ normal }) => {
   const renderNavButton = ({ route, text, className, onClick }) => {
     return (
-      <li className="item">
+      <StyledItem>
         <Link to={route} className={className} onClick={onClick}>
           {text}
         </Link>
-      </li>
+      </StyledItem>
     );
   };
 
   return (
-    <nav className={`navbar ${className ? className : ''}`}>
+    <StyledNavbar normal={normal ? true : false}>
       <Link to="/">
         <img src={Assets.Pictures.MarkLogo} alt="Project Mark Logo" />
       </Link>
-      <ul className="navbar-items">
+      <StyledList>
         {renderNavButton({ route: '/login', text: 'Login' })}
         {renderNavButton({ route: '/register', text: 'Register' })}
-      </ul>
-    </nav>
+      </StyledList>
+    </StyledNavbar>
   );
 };
 
