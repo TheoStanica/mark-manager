@@ -6,6 +6,14 @@ import CardHeader from '../Card/CardHeader';
 import ClearButton from '../ClearButton/ClearButton';
 import ConnectTwitterButton from '../ConnectTwitterButton';
 import Popover from '../Popover/Popover';
+import {
+  StyledProfileInfoWrapper,
+  StyledRoundedImage,
+  StyledAccountDetailsInfo,
+  StyledNotConnected,
+  StyledDivider,
+  StyledConnect,
+} from './styles';
 
 const ConnectedAccounts = () => {
   const { isConnected, name, screenName, profileImage } = useSelector(
@@ -14,42 +22,34 @@ const ConnectedAccounts = () => {
 
   const renderAccounts = () => {
     return isConnected ? (
-      <div className="d-flex flex-column">
+      <>
         <CardHeader>Your accounts</CardHeader>
-        <Card>
+        <Card style={{ boxShadow: 'none' }}>
           <CardBody>
-            <div className="d-flex align-items-center">
-              <img
-                className="rounded-circle mr-1"
-                src={profileImage}
-                alt={profileImage}
-              />
-              <div className="d-flex flex-column">
+            <StyledProfileInfoWrapper>
+              <StyledRoundedImage src={profileImage} alt={profileImage} />
+              <StyledAccountDetailsInfo>
                 Twitter
                 <div>
-                  <strong className="mr-05"> {name}</strong>@{screenName}
+                  <strong style={{ marginRight: '.5rem' }}>{name}</strong>@
+                  {screenName}
                 </div>
-              </div>
-            </div>
+              </StyledAccountDetailsInfo>
+            </StyledProfileInfoWrapper>
           </CardBody>
         </Card>
-      </div>
+      </>
     ) : (
-      <div
-        className="d-flex justify-content-center mb-05 mt-05"
-        style={{ minWidth: 300 }}
-      >
-        No accounts connected
-      </div>
+      <StyledNotConnected>No accounts connected</StyledNotConnected>
     );
   };
   const renderAddAccounts = () => {
     return isConnected ? null : (
       <>
-        <div className="divider mb-05 "></div>
-        <div className="d-flex justify-content-center mb-05">
+        <StyledDivider></StyledDivider>
+        <StyledConnect>
           <ConnectTwitterButton />
-        </div>
+        </StyledConnect>
       </>
     );
   };
