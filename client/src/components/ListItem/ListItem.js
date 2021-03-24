@@ -1,15 +1,11 @@
 import React, { forwardRef } from 'react';
-import './ListItem.css';
+import { StyledListItemButton } from './styles';
 
 const ListItem = ({ onClick, text, active }, ref) => {
   return (
-    <button
-      ref={ref}
-      onClick={onClick}
-      className={`list-item ${active ? 'active' : ''}`}
-    >
+    <StyledListItemButton ref={ref} onClick={onClick} active={active}>
       {text ? text : 'List Button'}
-    </button>
+    </StyledListItemButton>
   );
 };
 
