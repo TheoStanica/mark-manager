@@ -1,5 +1,6 @@
 import React from 'react';
 import twitter from 'twitter-text';
+import { StyledMessage } from './styles';
 
 const TweetMessage = ({ tweet }) => {
   let { full_text, entities } = tweet;
@@ -15,12 +16,11 @@ const TweetMessage = ({ tweet }) => {
   }
 
   return (
-    <p
-      className="tweet-message"
+    <StyledMessage
       dangerouslySetInnerHTML={{
         __html: full_text,
       }}
-    ></p>
+    ></StyledMessage>
   );
 };
 
