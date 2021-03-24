@@ -3,9 +3,14 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/actions/userActions';
 import ErrorDisplay from '../DisplayErrors';
 import { Link } from 'react-router-dom';
-import './Login.css';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
+import {
+  StyledLoginDiv,
+  StyledHeader,
+  StyledSmallText,
+  StyledErrors,
+} from './styles';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,8 +23,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
-      <h1 className="header">Login</h1>
+    <StyledLoginDiv>
+      <StyledHeader>Login</StyledHeader>
       <form className="" onSubmit={submitLogin}>
         <InputField
           type="email"
@@ -34,25 +39,25 @@ const Login = () => {
           label="Password"
           minLength={6}
         />
-        <div className="small-text mb-2">
+        <StyledSmallText style={{ marginBottom: '2rem' }}>
           <Link to="/password/reset" className="me-3">
             Forgot password?
           </Link>
-        </div>
+        </StyledSmallText>
         <Button type="submit" style={{ marginBottom: '1rem' }}>
           Sign In
         </Button>
-        <div className="d-flex small-text mb-1">
+        <StyledSmallText style={{ marginBottom: '1rem' }}>
           Don't have an account?
           <Link to="/register" className="ml-05">
             Sign Up
           </Link>
-        </div>
-        <div className="errors">
+        </StyledSmallText>
+        <StyledErrors>
           <ErrorDisplay />
-        </div>
+        </StyledErrors>
       </form>
-    </div>
+    </StyledLoginDiv>
   );
 };
 
