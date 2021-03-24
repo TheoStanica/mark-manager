@@ -25,8 +25,9 @@ const Login = () => {
   return (
     <StyledLoginDiv>
       <StyledHeader>Login</StyledHeader>
-      <form className="" onSubmit={submitLogin}>
+      <form onSubmit={submitLogin}>
         <InputField
+          id={'email'}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -34,22 +35,21 @@ const Login = () => {
         />
         <InputField
           type="password"
+          id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           label="Password"
           minLength={6}
         />
         <StyledSmallText style={{ marginBottom: '2rem' }}>
-          <Link to="/password/reset" className="me-3">
-            Forgot password?
-          </Link>
+          <Link to="/password/reset">Forgot password?</Link>
         </StyledSmallText>
         <Button type="submit" style={{ marginBottom: '1rem' }}>
           Sign In
         </Button>
         <StyledSmallText style={{ marginBottom: '1rem' }}>
           Don't have an account?
-          <Link to="/register" className="ml-05">
+          <Link to="/register" style={{ marginLeft: '.5rem' }}>
             Sign Up
           </Link>
         </StyledSmallText>
