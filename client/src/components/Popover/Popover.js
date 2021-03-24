@@ -1,5 +1,4 @@
 import React from 'react';
-// import './Popover.css';
 import { StyledPopover, StyledPopup, StyledPopupWrapper } from './styles';
 
 const Popover = ({ children, content }) => {
