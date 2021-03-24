@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserInfo } from '../../redux/actions/userActions';
 import VerticalMenu from '../../components/VerticalMenu/VerticalMenu';
-import './Dashboard.css';
 import DashboardMenu from '../../components/DashboardMenu/DashboardMenu';
 import DashboardStreams from '../../components/DashboardStreams/DashboardStreams';
 import { getTwitterProfileInfoData } from '../../redux/actions/twitterActions';
+import { StyledDashboard } from './styles';
 
 const Dashboard = () => {
   useSelector((state) => state.userReducer.present);
@@ -19,10 +19,10 @@ const Dashboard = () => {
   return (
     <>
       <VerticalMenu />
-      <div className="dashboard">
+      <StyledDashboard>
         <DashboardStreams />
         <DashboardMenu />
-      </div>
+      </StyledDashboard>
     </>
   );
 };
