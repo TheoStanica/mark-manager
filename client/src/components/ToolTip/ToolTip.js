@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-// import './ToolTip.css';
 import { StyledMkToolTip, StyledMkToolTipSpan } from './styles';
 
 const ToolTip = ({ children, text, offset }) => {
@@ -10,9 +9,9 @@ const ToolTip = ({ children, text, offset }) => {
   }, [offset]);
 
   return (
-    <StyledMkToolTip className="mktooltip">
+    <StyledMkToolTip>
       {children}
-      <StyledMkToolTipSpan className="tooltiptext" ref={tooltip}>
+      <StyledMkToolTipSpan ref={tooltip}>
         {text ? text : 'Tooltip'}
       </StyledMkToolTipSpan>
     </StyledMkToolTip>
