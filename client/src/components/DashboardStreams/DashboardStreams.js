@@ -1,10 +1,15 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TwitterHomeTimeline from '../TwitterHomeTimeline';
-import './DashboardStreams.css';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { reorderStreams } from '../../redux/actions/twitterActions';
 import TwitterSearchStream from '../TwitterSearchStream';
+import {
+  StyledDashboardStreams,
+  StyledStreamsWrapper,
+  StyledStreamContainer,
+  StyledStreamsList,
+} from './styles';
 
 const DashboardStreams = () => {
   const { streams } = useSelector((state) => state.twitterReducer);
@@ -30,16 +35,14 @@ const DashboardStreams = () => {
   };
 
   return (
-    <div className="dashboardStreams ">
-      <div className="streamswrapper pt-05 pb-05">
+    <StyledDashboardStreams>
+      <StyledStreamsWrapper>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId={'streams'} direction="horizontal">
             {(provided) => (
-              <ul
-                className="streams"
+              <StyledStreamsList
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={{ height: '100%', display: 'flex' }}
               >
                 {streams.map((stream, index) => {
                   return (
@@ -50,24 +53,23 @@ const DashboardStreams = () => {
                       index={index}
                     >
                       {(provided) => (
-                        <li
-                          className="ml-05 stream"
+                        <StyledStreamContainer
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >
                           {renderStream(stream, provided)}
-                        </li>
+                        </StyledStreamContainer>
                       )}
                     </Draggable>
                   );
                 })}
                 {provided.placeholder}
-              </ul>
+              </StyledStreamsList>
             )}
           </Droppable>
         </DragDropContext>
-      </div>
-    </div>
+      </StyledStreamsWrapper>
+    </StyledDashboardStreams>
   );
 };
 
