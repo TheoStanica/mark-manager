@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import './ToolTip.css';
+// import './ToolTip.css';
+import { StyledMkToolTip, StyledMkToolTipSpan } from './styles';
 
 const ToolTip = ({ children, text, offset }) => {
   const tooltip = useRef(null);
@@ -9,12 +10,12 @@ const ToolTip = ({ children, text, offset }) => {
   }, [offset]);
 
   return (
-    <div className="mktooltip">
+    <StyledMkToolTip className="mktooltip">
       {children}
-      <span className="tooltiptext" ref={tooltip}>
+      <StyledMkToolTipSpan className="tooltiptext" ref={tooltip}>
         {text ? text : 'Tooltip'}
-      </span>
-    </div>
+      </StyledMkToolTipSpan>
+    </StyledMkToolTip>
   );
 };
 
