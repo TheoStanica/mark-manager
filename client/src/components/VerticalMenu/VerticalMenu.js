@@ -6,9 +6,17 @@ import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CreateTweet from '../CreateTweet/CreateTweet';
 import Popover from '../Popover/Popover';
-import './VerticalMenu.css';
 import VerticalMenuItem from './VerticalMenuItem';
 import { Assets } from '../../assets';
+import {
+  StyledVerticalMenu,
+  StyledMenuIcon,
+  StyledTop,
+  StyledSeparator,
+  StyledBottom,
+  StyledRoundedImg,
+  StyledDivider,
+} from './styles';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
@@ -22,9 +30,9 @@ const VerticalMenu = () => {
   };
 
   return (
-    <div className="vertical-menu">
-      <div className="top">
-        <div className="menu-icon">
+    <StyledVerticalMenu className="vertical-menu">
+      <StyledTop className="top">
+        <StyledMenuIcon>
           <Link to="/dashboard">
             <img
               className="logo"
@@ -32,8 +40,8 @@ const VerticalMenu = () => {
               alt="Mark Logo"
             />
           </Link>
-        </div>
-        <div className="menu-separator"></div>
+        </StyledMenuIcon>
+        <StyledSeparator />
 
         {isConnected ? (
           <VerticalMenuItem
@@ -54,14 +62,14 @@ const VerticalMenu = () => {
             <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
           </Link>
         </VerticalMenuItem>
-      </div>
-      <div className="bottom">
+      </StyledTop>
+      <StyledBottom>
         <Popover
           content={
             <Card>
               <CardBody>
                 <Link to="/settings">Settings</Link>
-                <div className="divider mt-05 mb-05"></div>
+                <StyledDivider />
                 <Link to="/" onClick={handleLogout}>
                   Logout
                 </Link>
@@ -69,16 +77,12 @@ const VerticalMenu = () => {
             </Card>
           }
         >
-          <div className="menu-icon">
-            <img
-              className="profile-icon"
-              src={profilePicture}
-              alt="Mark Logo"
-            />
-          </div>
+          <StyledMenuIcon>
+            <StyledRoundedImg src={profilePicture} alt="Mark Logo" />
+          </StyledMenuIcon>
         </Popover>
-      </div>
-    </div>
+      </StyledBottom>
+    </StyledVerticalMenu>
   );
 };
 
