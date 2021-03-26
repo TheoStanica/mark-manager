@@ -46,7 +46,7 @@ const VerticalMenu = () => {
         {isConnected ? (
           <VerticalMenuItem
             text="Create"
-            offset={30}
+            offset={20}
             onClick={() => setIsModalOpen(true)}
           >
             <img src={Assets.Pictures.CreateIcon} alt="New Post" />
@@ -57,7 +57,7 @@ const VerticalMenu = () => {
           onClose={() => setIsModalOpen(false)}
         />
 
-        <VerticalMenuItem text="Streams" offset={30}>
+        <VerticalMenuItem text="Streams" offset={20}>
           <Link to="/dashboard">
             <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
           </Link>
