@@ -21,3 +21,19 @@ export const StyledTweetMetadata = styled.div`
   flex-direction: column;
   margin-left: 0.5rem;
 `;
+
+export const StyledTweetFooterContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const StyledQuotedTweet = styled.div`
+  margin-top: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+`;
+
+export const StyledRetweetHeader = styled.div`
+  padding-bottom: 0.5rem;
+  display: flex;
+`;
