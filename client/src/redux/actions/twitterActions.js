@@ -143,7 +143,7 @@ export const updateStreams = ({ streams }) => async (dispatch) => {
 
 export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
   try {
-    const updatedstreams = [...streams].map((stream) => ({
+    const updatedstreams = streams.map((stream) => ({
       id: stream.id,
       type: stream.type,
       search: stream.search ? stream.search : undefined,
@@ -252,15 +252,15 @@ export const loadUserStreams = ({ streams }) => async (dispatch) => {
     // if they dont match, add add the new stream to redux
     // this way, only at first load (before streams was set up in redux) we will load all Stream components
 
-    const streamsArray = [...store.getState().twitterReducer.streams].map(
-      (stream) => ({
+    const streamsArray = store
+      .getState()
+      .twitterReducer.streams.map((stream) => ({
         id: stream.id,
         type: stream.type,
         search: stream.search ? stream.search : undefined,
         isLoading: undefined,
         tweets: undefined,
-      })
-    );
+      }));
     if (JSON.stringify(streamsArray) !== JSON.stringify(streams)) {
       await dispatch(updateStreams({ streams: [] }));
       dispatch(reorderStreams({ streams }));
