@@ -1,11 +1,11 @@
 import React, { forwardRef } from 'react';
-import './Card.css';
+import { StyledCard } from './styles';
 
-const Card = ({ children, className }, ref) => {
+const Card = ({ children, style }, ref) => {
   return (
-    <div ref={ref} className={`card ${className ? className : ''}`}>
+    <StyledCard ref={ref} style={style}>
       {children}
-    </div>
+    </StyledCard>
   );
 };
 

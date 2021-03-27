@@ -1,10 +1,8 @@
 import React from 'react';
-import './Message.css';
+import { StyledMessage } from './styles';
 
 const Message = ({ type, children }) => {
-  return (
-    <div className={`message-field mt-1 ${type ? type : ''}`}>{children}</div>
-  );
+  return <StyledMessage type={type}>{children}</StyledMessage>;
 };
 
 export default Message;

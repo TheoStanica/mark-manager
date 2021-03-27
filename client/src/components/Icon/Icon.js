@@ -1,17 +1,16 @@
 import React from 'react';
 import ToolTip from '../ToolTip/ToolTip';
-import './Icon.css';
+import { StyledIcon } from './styles';
 
-const Icon = ({ size, className, icon, tooltip, onClick }) => {
+const Icon = ({ size, style, icon, tooltip, onClick }) => {
   return (
     <ToolTip text={tooltip}>
-      <div
-        className={`icon ${className ? className : ''}`}
-        style={{ height: size + 'px', width: size + 'px' }}
+      <StyledIcon
+        style={{ height: size + 'px', width: size + 'px', ...style }}
         onClick={onClick}
       >
         <img src={icon} alt={icon} />
-      </div>
+      </StyledIcon>
     </ToolTip>
   );
 };

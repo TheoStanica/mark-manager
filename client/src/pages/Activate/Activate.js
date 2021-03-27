@@ -5,7 +5,8 @@ import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';
 import { activateAccount } from '../../redux/actions/userActions';
 import { isLoggedin } from '../../services/isLoggedIn';
-import './Activate.css';
+// import './Activate.css';
+import { StyledActivate } from './styles';
 
 const ActivateAccount = () => {
   const [status, setStatus] = useState('loading');
@@ -24,9 +25,9 @@ const ActivateAccount = () => {
 
   const renderMessage = () => {
     if (status === true) {
-      return <div className="message">Account activated</div>;
+      return <p>Account activated</p>;
     } else if (status === false) {
-      return <div className="message">Couldn't activate your account..</div>;
+      return <p>Couldn't activate your account..</p>;
     }
   };
 
@@ -35,9 +36,9 @@ const ActivateAccount = () => {
   ) : (
     <>
       <Header />
-      <div className="activate d-flex justify-content-center align-items-center">
+      <StyledActivate>
         {isLoading ? <Loading /> : renderMessage()}
-      </div>
+      </StyledActivate>
     </>
   );
 };

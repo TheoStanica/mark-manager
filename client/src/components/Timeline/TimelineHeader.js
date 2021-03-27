@@ -1,14 +1,13 @@
 import React from 'react';
 import Icon from '../Icon/Icon';
 import { Assets } from '../../assets';
-import './Timeline.css';
+import { StyledTimelineHeader, StyledSpan } from './styles';
 
-const TimelineHeader = ({ className, type, account, onRefresh }) => {
+const TimelineHeader = ({ type, account, onRefresh, onRemove, ...rest }) => {
   return (
-    <div className={`timeline-header ${className ? className : ''}`}>
-      <div className="info">
-        <span className="type">{type}</span>
-        {account}
+    <StyledTimelineHeader {...rest}>
+      <div>
+        <StyledSpan>{type}</StyledSpan>@{account}
       </div>
       <div>
         <Icon
@@ -17,8 +16,15 @@ const TimelineHeader = ({ className, type, account, onRefresh }) => {
           tooltip="Refresh"
           onClick={onRefresh}
         ></Icon>
+        <Icon
+          icon={Assets.Pictures.TrashCan}
+          style={{ marginLeft: '.5rem' }}
+          size={24}
+          tooltip="Remove"
+          onClick={onRemove}
+        ></Icon>
       </div>
-    </div>
+    </StyledTimelineHeader>
   );
 };
 

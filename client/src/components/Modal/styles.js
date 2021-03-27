@@ -1,4 +1,6 @@
-.modal-wrapper {
+import styled from 'styled-components';
+
+export const StyledModalWrapper = styled.div`
   padding: 1rem;
   background: rgba(0, 0, 0, 0.5);
   position: absolute;
@@ -10,12 +12,9 @@
   justify-content: center;
   align-items: center;
   z-index: 200;
-}
-.modal.closed {
-  display: none;
-}
+  color: black;
+`;
 
-.modal-button {
-  width: 100%;
-  height: 100%;
-}
+export const StyledModal = styled.div`
+  display: ${(props) => (props.visible ? 'box' : 'none')};
+`;

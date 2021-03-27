@@ -1,4 +1,6 @@
-.clear-button {
+import styled from 'styled-components';
+
+export const StyledClearButton = styled.button`
   background: none;
   outline: none;
   border: 2px solid #2c0064;
@@ -7,7 +9,7 @@
   margin: 0 0.2rem 0 0;
   font-size: 1rem;
   cursor: pointer;
-}
-.clear-button:focus {
-  outline: none;
-}
+  &:focus {
+    outline: none;
+  }
+`;

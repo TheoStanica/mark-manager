@@ -1,12 +1,8 @@
 import React from 'react';
-import './Timeline.css';
+import { StyledTimeline } from './styles';
 
 const Timeline = ({ children, id }) => {
-  return (
-    <div className="timeline ml-05" key={id}>
-      {children}
-    </div>
-  );
+  return <StyledTimeline key={id}>{children}</StyledTimeline>;
 };
 
 export default Timeline;

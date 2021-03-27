@@ -1,12 +1,14 @@
 import React from 'react';
-import './DashboardMenu.css';
 import ConnectedAccounts from '../ConnectedAccounts/ConnectedAccounts';
+import AddStream from '../AddStream';
+import { StyledDashboardMenu } from './styles';
 
 const DashboardMenu = () => {
   return (
-    <div className="dashboard-menu">
+    <StyledDashboardMenu>
       <ConnectedAccounts />
-    </div>
+      <AddStream />
+    </StyledDashboardMenu>
   );
 };
 

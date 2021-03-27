@@ -5,7 +5,11 @@ import TweetMedia from './TweetMedia';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CardHeader from '../Card/CardHeader';
-import './Tweet.css';
+import {
+  StyledCircleImage,
+  StyledHeaderWrapper,
+  StyledTweetMetadata,
+} from './styles';
 
 const TwitterCard = ({ tweet }) => {
   let MediaComponent = null;
@@ -15,26 +19,25 @@ const TwitterCard = ({ tweet }) => {
   }
 
   return (
-    <Card className="mb-05">
-      <CardHeader className="pb-05">
-        <div className="d-flex align-items-start">
-          <div className="d-flex">
-            <img
-              className="rounded-circle mr-1"
-              src={tweet.user.profile_image_url}
-              alt={`${tweet.user.name}'s profile`}
-            />
-            <div className="d-flex flex-column">
-              <div>
-                <strong className="mr-05"> {tweet.user.name}</strong>@
-                {tweet.user.screen_name}
-              </div>
-              {moment(new Date(tweet.created_at)).fromNow()}
+    <Card style={{ marginBottom: '.5rem' }}>
+      <CardHeader style={{ padding: '.7rem .7rem .5rem .7rem' }}>
+        <StyledHeaderWrapper>
+          <StyledCircleImage
+            src={tweet.user.profile_image_url}
+            alt={`${tweet.user.name}'s profile`}
+          />
+          <StyledTweetMetadata>
+            <div>
+              <strong style={{ marginRight: '.5rem' }}>
+                {tweet.user.name}
+              </strong>
+              @{tweet.user.screen_name}
             </div>
-          </div>
-        </div>
+            {moment(new Date(tweet.created_at)).fromNow()}
+          </StyledTweetMetadata>
+        </StyledHeaderWrapper>
       </CardHeader>
-      <CardBody className="pt-05">
+      <CardBody style={{ paddingTop: '.5rem', padding: '.5rem' }}>
         <TweetMessage tweet={tweet} />
         {MediaComponent}
       </CardBody>

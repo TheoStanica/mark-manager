@@ -1,12 +1,13 @@
 import React from 'react';
-import './Loading.css';
+import { Assets } from '../../assets';
+import { StyledLoading } from './styles';
 
 const Loading = () => {
   return (
-    <div className="loading d-flex flex-column justify-content-center align-items-center">
-      <img src="/Loading.svg" alt="Loading spinner" />
+    <StyledLoading>
+      <img src={Assets.Pictures.Loading} alt="Loading spinner" />
       Loading...
-    </div>
+    </StyledLoading>
   );
 };
 

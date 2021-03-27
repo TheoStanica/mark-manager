@@ -1,12 +1,11 @@
 import React from 'react';
 import ToolTip from '../ToolTip/ToolTip';
+import { StyledMenuItem } from './styles';
 
 const VerticalMenuItem = ({ text, offset, onClick, children }) => {
   return (
     <ToolTip text={text} offset={offset}>
-      <div className="menu-icon item" onClick={onClick}>
-        {children}
-      </div>
+      <StyledMenuItem onClick={onClick}>{children}</StyledMenuItem>
     </ToolTip>
   );
 };
