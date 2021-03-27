@@ -5,6 +5,8 @@ import MarkLogo from './MarkLogo.svg';
 import RefreshIcon from './Refresh.svg';
 import StreamsIcon from './StreamsIcon.svg';
 import TrashCan from './Trashcan.svg';
+import Likes from './Likes.svg';
+import Retweet from './Retweet.svg';
 
 export const Pictures = {
   AuthSplash,
@@ -14,4 +16,6 @@ export const Pictures = {
   RefreshIcon,
   StreamsIcon,
   TrashCan,
+  Likes,
+  Retweet,
 };

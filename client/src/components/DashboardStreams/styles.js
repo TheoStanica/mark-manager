@@ -7,7 +7,7 @@ export const StyledDashboardStreams = styled.div`
 `;
 
 export const StyledStreamsWrapper = styled.div`
-  overflow-x: scroll;
+  overflow: overlay;
   height: 100%;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;

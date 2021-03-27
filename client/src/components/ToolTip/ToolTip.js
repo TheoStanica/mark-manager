@@ -1,17 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyledMkToolTip, StyledMkToolTipSpan } from './styles';
 
-const ToolTip = ({ children, text, offset }) => {
+const ToolTip = ({ children, text, offset, position }) => {
   const tooltip = useRef(null);
+  const wrapper = useRef(null);
+  const [spanWidth, setSpanWidth] = useState(0);
 
   useEffect(() => {
-    tooltip.current.style.left = `calc(100% + ${offset}px)`;
+    setSpanWidth(wrapper.current.clientWidth);
   }, [offset]);
 
   return (
-    <StyledMkToolTip>
+    <StyledMkToolTip ref={wrapper}>
       {children}
-      <StyledMkToolTipSpan ref={tooltip}>
+      <StyledMkToolTipSpan
+        ref={tooltip}
+        position={position ? position : 'right'}
+        spanWidth={spanWidth}
+        offset={offset}
+      >
         {text ? text : 'Tooltip'}
       </StyledMkToolTipSpan>
     </StyledMkToolTip>

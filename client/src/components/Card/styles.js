@@ -18,5 +18,4 @@ export const StyledCardHeader = styled.div`
 `;
 export const StyledCardFooter = styled.div`
   padding: 0.7rem 1rem;
-  margin-left: auto;
 `;
