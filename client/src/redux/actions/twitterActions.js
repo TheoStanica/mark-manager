@@ -13,12 +13,7 @@ import {
 import { store } from '../store';
 
 const handleError = ({ error }) => async (dispatch) => {
-  if (
-    error &&
-    error.resposne &&
-    error.response.data &&
-    error.response.data.errors
-  ) {
+  if (error?.response?.data?.errors) {
     dispatch({
       type: SET_ERRORS,
       payload: {
