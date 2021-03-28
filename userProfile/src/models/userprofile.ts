@@ -47,7 +47,7 @@ const userProfileSchema = new mongoose.Schema(
       {
         _id: false,
         id: {
-          type: Number,
+          type: String,
           required: true,
         },
         type: {
