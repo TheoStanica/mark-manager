@@ -11,6 +11,7 @@ import {
   USER_SET_MESSAGES,
 } from '../types';
 import { store } from '../store';
+import { v4 as uuidv4 } from 'uuid';
 
 const handleError = ({ error }) => async (dispatch) => {
   if (error?.response?.data?.errors) {
@@ -28,10 +29,6 @@ const handleError = ({ error }) => async (dispatch) => {
       },
     });
   }
-};
-
-const getRandomID = () => {
-  return Math.floor(Math.random() * 1000000000);
 };
 
 export const getTwitterProfileInfoData = () => async (dispatch) => {
@@ -163,7 +160,7 @@ export const addStream = ({ type, search }) => async (dispatch) => {
     await dispatch({
       type: TWITTER_ADD_STREAM,
       payload: {
-        id: getRandomID(),
+        id: uuidv4(),
         type: type,
         search: search ? search : undefined,
         isLoading: true,
