@@ -1,8 +1,8 @@
 import React from 'react';
-import './Timeline.css';
+import { StyledTimelineBody } from './styles';
 
 const TimelineBody = ({ children }) => {
-  return <div className="timeline-body">{children}</div>;
+  return <StyledTimelineBody>{children}</StyledTimelineBody>;
 };
 
 export default TimelineBody;

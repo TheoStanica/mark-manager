@@ -2,23 +2,23 @@ import React from 'react';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
 import CardFooter from '../Card/CardFooter';
-import './Modal.css';
+import { StyledModalWrapper, StyledModal } from './styles';
 
 const Modal = ({ children, visible, onClose, onSubmit }) => {
   return (
-    <div className={`modal ${visible ? '' : 'closed'}`}>
-      <div className="modal-wrapper ">
+    <StyledModal visible={visible}>
+      <StyledModalWrapper className="modal-wrapper ">
         <Card>
           {children}
           <CardFooter>
-            <Button className="mr-1" onClick={onClose}>
+            <Button style={{ marginRight: '1rem' }} onClick={onClose}>
               Close
             </Button>
             <Button onClick={onSubmit}>Submit</Button>
           </CardFooter>
         </Card>
-      </div>
-    </div>
+      </StyledModalWrapper>
+    </StyledModal>
   );
 };
 

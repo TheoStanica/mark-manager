@@ -23,7 +23,6 @@ const TwitterHomeTimeline = ({ stream, provided }) => {
       <TimelineHeader
         type="Home"
         account={screenName}
-        className="pb-05"
         onRefresh={() => dispatch(loadHomeTimelineStream({ id: stream.id }))}
         onRemove={() => {
           dispatch(removeStream({ id: stream.id }));

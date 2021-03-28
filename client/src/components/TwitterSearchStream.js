@@ -24,7 +24,6 @@ const TwitterSearchStream = ({ stream, provided }) => {
       <TimelineHeader
         type={`Search ${stream.search}`}
         account={screenName}
-        className="pb-05"
         onRefresh={() =>
           dispatch(
             loadTweetSearchStream({ id: stream.id, search: stream.search })

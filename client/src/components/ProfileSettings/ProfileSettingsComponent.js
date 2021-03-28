@@ -6,9 +6,9 @@ import DisplayUserMessages from '../DisplayUserMessages';
 import Card from '../Card/Card';
 import CardHeader from '../Card/CardHeader';
 import CardBody from '../Card/CardBody';
-import './ProfileSettings.css';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
+import { StyledAvatar, StyledEdit, StyledInfo } from './styles';
 
 const ProfileSettingsComponent = () => {
   const user = useSelector((state) => state.userReducer.present);
@@ -40,12 +40,12 @@ const ProfileSettingsComponent = () => {
   };
 
   return (
-    <Card className="w-100">
-      <CardHeader className="no-border">Account info</CardHeader>
+    <Card style={{ width: '100%' }}>
+      <CardHeader>Account info</CardHeader>
       <CardBody>
         <form onSubmit={submitChanges}>
-          <div className="edit">
-            <div className="p-info mr-1">
+          <StyledEdit>
+            <StyledInfo>
               <InputField
                 id="inputFullname"
                 value={fullName}
@@ -58,17 +58,17 @@ const ProfileSettingsComponent = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 label="Email"
               />
-            </div>
-            <div className="p-avatar mb-1">
-              <img alt={fullName} className="mb-1" src={profilePicture} />
+            </StyledInfo>
+            <StyledAvatar>
+              <img alt={fullName} src={profilePicture} />
               <InputField
                 type="file"
                 id="upload-avatar"
                 text="Upload"
                 onChange={fileOnChangeHandler}
               />
-            </div>
-          </div>
+            </StyledAvatar>
+          </StyledEdit>
           <Button type="submit">Save Changes</Button>
         </form>
         <ErrorDisplay />

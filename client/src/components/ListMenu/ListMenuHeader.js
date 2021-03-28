@@ -1,7 +1,8 @@
 import React from 'react';
+import { StyledListMenuHeader } from './styles';
 
 const ListMenuHeader = ({ children }) => {
-  return <h2 className="header2">{children}</h2>;
+  return <StyledListMenuHeader>{children}</StyledListMenuHeader>;
 };
 
 export default ListMenuHeader;

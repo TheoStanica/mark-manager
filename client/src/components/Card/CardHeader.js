@@ -1,11 +1,8 @@
 import React from 'react';
+import { StyledCardHeader } from './styles';
 
-const CardHeader = ({ children, className }) => {
-  return (
-    <div className={`card-header ${className ? className : ''}`}>
-      {children}
-    </div>
-  );
+const CardHeader = ({ children, style }) => {
+  return <StyledCardHeader style={style}>{children}</StyledCardHeader>;
 };
 
 export default CardHeader;

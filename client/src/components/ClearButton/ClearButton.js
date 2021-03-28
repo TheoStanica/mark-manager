@@ -1,14 +1,11 @@
 import React from 'react';
-import './ClearButton.css';
+import { StyledClearButton } from './styles';
 
-const ClearButton = ({ children, onClick, className }) => {
+const ClearButton = ({ children, onClick, style }) => {
   return (
-    <button
-      onClick={onClick}
-      className={`clear-button ${className ? className : ''}`}
-    >
+    <StyledClearButton onClick={onClick} style={style}>
       {children}
-    </button>
+    </StyledClearButton>
   );
 };
 

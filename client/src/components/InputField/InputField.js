@@ -1,5 +1,11 @@
 import React, { forwardRef } from 'react';
-import './InputField.css';
+import {
+  InputFieldDiv,
+  InputFileLabel,
+  ContentName,
+  InputFileDiv,
+  LabelName,
+} from './styles.js';
 
 const InputField = (
   {
@@ -12,23 +18,24 @@ const InputField = (
     label,
     disabled,
     text,
-    className,
+    style,
     ...rest
   },
   ref
 ) => {
   if (type && type === 'file') {
     return (
-      <div className="input-file">
-        <label htmlFor={id} className="custom-file-upload">
+      <InputFileDiv style={style}>
+        <InputFileLabel htmlFor={id}>
           {text ? text : 'Choose file..'}
-        </label>
+        </InputFileLabel>
         <input type={type} id={id} onChange={onChange} />
-      </div>
+      </InputFileDiv>
     );
   }
+
   return (
-    <div className={`input-field ${className ? className : ''}`}>
+    <InputFieldDiv style={style}>
       <input
         ref={ref}
         type={type}
@@ -40,12 +47,10 @@ const InputField = (
         disabled={disabled}
         {...rest}
       ></input>
-
-      <label htmlFor={id} className="label-name">
-        <span className="content-name">{label}</span>
-      </label>
-    </div>
+      <LabelName htmlFor={id}>
+        <ContentName>{label}</ContentName>
+      </LabelName>
+    </InputFieldDiv>
   );
 };
-
 export default forwardRef(InputField);
