@@ -1,16 +1,11 @@
 import React from 'react';
-import './Button.css';
+import { StyledButton } from './styles';
 
-const Button = ({ onClick, type, className, children, ...rest }) => {
+const Button = ({ onClick, type, style, children, ...rest }) => {
   return (
-    <button
-      className={`button ${className ? className : ''}`}
-      onClick={onClick}
-      type={type}
-      {...rest}
-    >
+    <StyledButton onClick={onClick} type={type} style={style} {...rest}>
       {children}
-    </button>
+    </StyledButton>
   );
 };
 

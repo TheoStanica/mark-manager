@@ -1,8 +1,8 @@
 import React from 'react';
-import './ListMenu.css';
+import { StyledListMenu } from './styles';
 
-const ListMenu = ({ children, className }) => {
-  return <div className={`list-menu ${className}`}>{children}</div>;
+const ListMenu = ({ children, style }) => {
+  return <StyledListMenu style={style}>{children}</StyledListMenu>;
 };
 
 export default ListMenu;

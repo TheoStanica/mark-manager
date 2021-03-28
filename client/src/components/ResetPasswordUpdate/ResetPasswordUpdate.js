@@ -7,7 +7,7 @@ import Button from '../Button/Button';
 import DisplayErrors from '../DisplayErrors';
 import DisplayUserMessages from '../DisplayUserMessages';
 import InputField from '../InputField/InputField';
-import './ResetPasswordUpdate.css';
+import { StyledPasswordUpdate, StyledHeader, StyledMessages } from './styles';
 
 const ResetPasswordUpdate = () => {
   const dispatch = useDispatch();
@@ -42,8 +42,8 @@ const ResetPasswordUpdate = () => {
   };
 
   return (
-    <div className="password-reset-update">
-      <h1 className="header mb-1">Set New Password</h1>
+    <StyledPasswordUpdate>
+      <StyledHeader>Set New Password</StyledHeader>
       <form onSubmit={handleSubmit}>
         <InputField
           ref={newPasswordRef}
@@ -63,17 +63,17 @@ const ResetPasswordUpdate = () => {
           value={repeatNewPassword}
           onChange={(e) => setRepeatNewPassword(e.target.value)}
           label="Repeat New Password"
-          className="mb-3"
+          style={{ marginBottom: '3rem' }}
         />
-        <Button type="submit" className="mb-1">
+        <Button type="submit" style={{ marginBottom: '1rem' }}>
           Save Changes
         </Button>
-        <div className="messages">
+        <StyledMessages>
           <DisplayErrors />
           <DisplayUserMessages />
-        </div>
+        </StyledMessages>
       </form>
-    </div>
+    </StyledPasswordUpdate>
   );
 };
 

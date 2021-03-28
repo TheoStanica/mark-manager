@@ -16,10 +16,10 @@ const DisplayErrors = () => {
     const renderAccountNotActivated = ({ message, userID }) => {
       setErrorMessages(
         <Message type="error">
-          <ul>
+          <ul style={{ listStyle: 'none' }}>
             <li key={message}>{message}</li>
           </ul>
-          <p className="mb-05">Haven't received an email?</p>
+          <p style={{ marginBottom: '0.5rem' }}>Haven't received an email?</p>
           <Button onClick={() => dispatch(resendActivationEmail(userID))}>
             Send New Activation Email
           </Button>
@@ -36,7 +36,7 @@ const DisplayErrors = () => {
       } else if (errors) {
         setErrorMessages(
           <Message type="error">
-            <ul>
+            <ul style={{ listStyle: 'none' }}>
               {errors.map((err) => (
                 <li key={err.message}>{err.message}</li>
               ))}

@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+export interface StreamPreference {
+  id: number;
+  type: string;
+  search?: string;
+}
+
 export interface UserAttrs {
   _id: string;
   email: string;
@@ -10,6 +16,7 @@ export interface UserDoc extends mongoose.Document {
   fullName?: string | undefined;
   profilePicture?: string | undefined;
   userTier?: string;
+  stream_preferences: StreamPreference[];
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -36,6 +43,22 @@ const userProfileSchema = new mongoose.Schema(
       type: String,
       default: 'free',
     },
+    stream_preferences: [
+      {
+        _id: false,
+        id: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          required: true,
+        },
+        search: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     toJSON: {

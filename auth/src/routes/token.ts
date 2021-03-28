@@ -52,7 +52,7 @@ router.post('/api/auth/token', async (req: Request, res: Response) => {
       });
     });
 
-    throw new BadRequestError('');
+    throw new BadRequestError('You need to be logged in to access this page');
   }
 
   await redisService.blacklistRefreshToken(refreshToken, payload.userId);
