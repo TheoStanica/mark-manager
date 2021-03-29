@@ -1,5 +1,6 @@
 import {
   TWITTER_ADD_STREAM,
+  TWITTER_ADD_MORE_TWEETS,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
@@ -69,6 +70,7 @@ const twitterReducer = (state = initialState, action) => {
       streams[streamIdx] = {
         ...streams[streamIdx],
         tweets: action.payload.tweets,
+        metadata: action.payload.metadata,
       };
       return {
         ...state,
@@ -83,6 +85,21 @@ const twitterReducer = (state = initialState, action) => {
       streams[streamIdx] = {
         ...streams[streamIdx],
         isLoading: action.payload.isLoading,
+      };
+      return {
+        ...state,
+        streams,
+      };
+    }
+    case TWITTER_ADD_MORE_TWEETS: {
+      const streamIdx = state.streams.findIndex(
+        (stream) => stream.id === action.payload.id
+      );
+      const streams = [...state.streams];
+      streams[streamIdx] = {
+        ...streams[streamIdx],
+        tweets: streams[streamIdx].tweets.concat(action.payload.tweets),
+        metadata: action.payload.metadata,
       };
       return {
         ...state,
