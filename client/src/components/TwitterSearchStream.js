@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  loadMoreTweetSearchStream,
   loadTweetSearchStream,
   removeStream,
 } from '../redux/actions/twitterActions';
@@ -9,8 +10,9 @@ import TimelineBody from './Timeline/TimelineBody';
 import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 import Loading from './Loading/Loading';
+import InfiniteScroll from 'react-infinite-scroller';
 
-const TwitterSearchStream = ({ stream, provided }) => {
+const TwitterSearchStream = React.memo(({ stream, provided }) => {
   const { screenName } = useSelector((state) => state.twitterReducer);
 
   const dispatch = useDispatch();
@@ -18,6 +20,30 @@ const TwitterSearchStream = ({ stream, provided }) => {
   useEffect(() => {
     dispatch(loadTweetSearchStream({ id: stream.id, search: stream.search }));
   }, [dispatch, stream.id, stream.search]);
+
+  const renderTweets = () => {
+    return (
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={() =>
+          dispatch(
+            loadMoreTweetSearchStream({
+              id: stream.id,
+              search: stream.search,
+              maxId: stream.metadata.max_id,
+            })
+          )
+        }
+        hasMore={true}
+        useWindow={false}
+        threshold={500}
+      >
+        {stream.tweets.map((tweet, idx) => {
+          return <TweetCard tweet={tweet} key={idx} />;
+        })}
+      </InfiniteScroll>
+    );
+  };
 
   return (
     <Timeline>
@@ -46,15 +72,12 @@ const TwitterSearchStream = ({ stream, provided }) => {
           >
             <Loading />
           </div>
-        ) : (
-          stream.tweets &&
-          stream.tweets.map((tweet, idx) => {
-            return <TweetCard tweet={tweet} key={idx} />;
-          })
-        )}
+        ) : stream.tweets ? (
+          renderTweets()
+        ) : null}
       </TimelineBody>
     </Timeline>
   );
-};
+});
 
 export default TwitterSearchStream;
