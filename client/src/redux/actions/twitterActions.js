@@ -1,6 +1,7 @@
 import axiosInstance from '../../api/buildClient';
 import {
   SET_ERRORS,
+  TWITTER_ADD_MORE_TWEETS,
   TWITTER_ADD_STREAM,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
@@ -215,6 +216,7 @@ export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
       payload: {
         id: id,
         tweets: response.data.statuses,
+        metadata: response.data.search_metadata,
       },
     });
     await dispatch(setStreamLoading({ id, isLoading: false }));
@@ -222,6 +224,27 @@ export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const loadMoreTweetSearchStream = ({ id, search, maxId }) => async (
+  dispatch
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/social/twitter/search/tweets?search=${search}&maxId=${maxId}`
+    );
+    await dispatch({
+      type: TWITTER_ADD_MORE_TWEETS,
+      payload: {
+        id: id,
+        tweets: [...response.data.statuses],
+        metadata: response.data.search_metadata,
+      },
+    });
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
+
 export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
   try {
     await dispatch(setStreamLoading({ id, isLoading: true }));
@@ -233,9 +256,35 @@ export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
       payload: {
         id: id,
         tweets: response.data,
+        metadata: {
+          max_id: response.data[response.data.length - 1].id,
+        },
       },
     });
     await dispatch(setStreamLoading({ id, isLoading: false }));
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
+
+export const loadMoreHomeTimelineStream = ({ id, maxId }) => async (
+  dispatch
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/social/twitter/statuses/home_timeline?maxId=${maxId}`
+    );
+    await dispatch({
+      type: TWITTER_ADD_MORE_TWEETS,
+      payload: {
+        id: id,
+        //remove first tweet as it is the same as the last one in our tweets array in redux
+        tweets: response.data.slice(1),
+        metadata: {
+          max_id: response.data[response.data.length - 1].id,
+        },
+      },
+    });
   } catch (err) {
     dispatch(handleError({ error: err }));
   }
@@ -257,6 +306,7 @@ export const loadUserStreams = ({ streams }) => async (dispatch) => {
         search: stream.search ? stream.search : undefined,
         isLoading: undefined,
         tweets: undefined,
+        metadata: undefined,
       }));
     if (JSON.stringify(streamsArray) !== JSON.stringify(streams)) {
       await dispatch(updateStreams({ streams: [] }));
