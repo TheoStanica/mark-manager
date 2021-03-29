@@ -16,6 +16,7 @@ router.get(
   '/api/social/twitter/statuses/home_timeline',
   requireAuth,
   async (req: Request, res: Response) => {
+    const { maxId } = req.query;
     const tokens = await UserController.getUserTwitterTokens(
       req.currentUser!.userId
     );
@@ -32,6 +33,8 @@ router.get(
       try {
         const timeline = await T.get('statuses/home_timeline', {
           tweet_mode: 'extended',
+          max_id: maxId ? String(maxId) : undefined,
+          count: 50,
         });
         if (timeline) {
           res.send(timeline.data);
