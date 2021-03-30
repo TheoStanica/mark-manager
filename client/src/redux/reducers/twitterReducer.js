@@ -56,6 +56,11 @@ const twitterReducer = (state = initialState, action) => {
       return {
         ...state,
         streams: [...state.streams, action.payload],
+        streamsById: {
+          ...state.streamsById,
+          [action.payload.id]: action.payload,
+        },
+      };
     case TWITTER_REMOVE_STREAMBYID:
       return {
         ...state,
