@@ -2,6 +2,7 @@ import axiosInstance from '../../api/buildClient';
 import {
   SET_ERRORS,
   TWITTER_ADD_STREAM,
+  TWITTER_REMOVE_STREAMBYID,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
@@ -146,12 +147,22 @@ export const addStream = ({ type, search }) => async (dispatch) => {
   }
 };
 
+const removeStreamById = ({ id }) => async (dispatch) => {
+  dispatch({
+    type: TWITTER_REMOVE_STREAMBYID,
+    payload: {
+      id: id,
+    },
+  });
+};
+
 export const removeStream = ({ id }) => async (dispatch) => {
   try {
     const { streams } = store.getState().twitterReducer;
     const newStreams = streams.filter((s) => s.id !== id);
     await dispatch(updateUserStreamsBackend({ streams: newStreams }));
     await dispatch(updateStreams({ streams: newStreams }));
+    await dispatch(removeStreamById({ id }));
   } catch (err) {
     dispatch(handleError({ error: err }));
   }
