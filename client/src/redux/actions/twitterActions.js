@@ -136,8 +136,6 @@ export const addStream = ({ type, search }) => async (dispatch) => {
         id: uuidv4(),
         type: type,
         search: search ? search : undefined,
-        isLoading: true,
-        tweets: [],
       },
     });
     const { streams } = store.getState().twitterReducer;
@@ -238,12 +236,17 @@ export const loadUserStreams = ({ streams }) => async (dispatch) => {
         id: stream.id,
         type: stream.type,
         search: stream.search ? stream.search : undefined,
-        isLoading: undefined,
-        tweets: undefined,
       }));
     if (JSON.stringify(streamsArray) !== JSON.stringify(streams)) {
       await dispatch(updateStreams({ streams: [] }));
-      dispatch(reorderStreams({ streams }));
+      streams.map((stream) => {
+        return dispatch(
+          addStream({
+            type: stream.type,
+            search: stream.search ? stream.search : undefined,
+          })
+        );
+      });
     }
   } catch (err) {
     dispatch(handleError({ error: err }));
