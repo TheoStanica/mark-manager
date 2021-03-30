@@ -10,9 +10,9 @@ import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 import Loading from './Loading/Loading';
 
-const TwitterSearchStream = ({ stream, provided }) => {
+const TwitterSearchStream = React.memo(({ id, provided }) => {
   const { screenName } = useSelector((state) => state.twitterReducer);
-
+  const stream = useSelector((state) => state.twitterReducer.streamsById[id]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,7 +26,10 @@ const TwitterSearchStream = ({ stream, provided }) => {
         account={screenName}
         onRefresh={() =>
           dispatch(
-            loadTweetSearchStream({ id: stream.id, search: stream.search })
+            loadTweetSearchStream({
+              id: stream.id,
+              search: stream.search,
+            })
           )
         }
         onRemove={() => {
@@ -55,6 +58,6 @@ const TwitterSearchStream = ({ stream, provided }) => {
       </TimelineBody>
     </Timeline>
   );
-};
+});
 
 export default TwitterSearchStream;

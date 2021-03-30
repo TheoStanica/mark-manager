@@ -10,8 +10,9 @@ import TimelineBody from './Timeline/TimelineBody';
 import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 
-const TwitterHomeTimeline = ({ stream, provided }) => {
+const TwitterHomeTimeline = React.memo(({ id, provided }) => {
   const { screenName } = useSelector((state) => state.twitterReducer);
+  const stream = useSelector((state) => state.twitterReducer.streamsById[id]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,6 +51,6 @@ const TwitterHomeTimeline = ({ stream, provided }) => {
       </TimelineBody>
     </Timeline>
   );
-};
+});
 
 export default TwitterHomeTimeline;
