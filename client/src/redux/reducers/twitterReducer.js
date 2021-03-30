@@ -1,5 +1,6 @@
 import {
   TWITTER_ADD_STREAM,
+  TWITTER_REMOVE_STREAMBYID,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
@@ -55,6 +56,13 @@ const twitterReducer = (state = initialState, action) => {
       return {
         ...state,
         streams: [...state.streams, action.payload],
+    case TWITTER_REMOVE_STREAMBYID:
+      return {
+        ...state,
+        streamsById: {
+          ...state.streamsById,
+          [action.payload.id]: undefined,
+        },
       };
     case TWITTER_UPDATE_STREAMS:
       return {
