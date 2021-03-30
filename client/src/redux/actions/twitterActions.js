@@ -48,34 +48,6 @@ export const getTwitterProfileInfoData = () => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
-export const getTwitterDefaultData = () => async (dispatch) => {
-  try {
-    const user = await axiosInstance.get('/api/social/twitter/user');
-    if (user) {
-      const response = await axiosInstance.get(
-        '/api/social/twitter/statuses/home_timeline'
-      );
-      dispatch({
-        type: TWITTER_SET_PROFILE_INFO,
-        payload: {
-          name: user.data.name,
-          screenName: user.data.screen_name,
-          profileImage: user.data.profile_image_url,
-        },
-      });
-      if (response) {
-        dispatch({
-          type: TWITTER_SET_HOME_TIMELINE_TWEETS,
-          payload: {
-            tweets: response.data,
-          },
-        });
-      }
-    }
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
 
 export const clearTwitterProfileInfoData = () => async (dispatch) => {
   dispatch({
