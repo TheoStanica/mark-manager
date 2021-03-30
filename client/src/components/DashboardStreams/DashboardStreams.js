@@ -26,9 +26,9 @@ const DashboardStreams = () => {
   const renderStream = (stream, provided) => {
     switch (stream.type) {
       case 'home_timeline':
-        return <TwitterHomeTimeline stream={stream} provided={provided} />;
+        return <TwitterHomeTimeline id={stream.id} provided={provided} />;
       case 'search':
-        return <TwitterSearchStream stream={stream} provided={provided} />;
+        return <TwitterSearchStream id={stream.id} provided={provided} />;
       default:
         return null;
     }
