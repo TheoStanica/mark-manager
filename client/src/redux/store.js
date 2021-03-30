@@ -18,6 +18,7 @@ const middleware = [thunk, createStateSyncMiddleware(config)];
 
 const persistConfig = {
   key: 'root',
+  blacklist: ['twitterReducer', 'errorsReducer'],
   storage,
 };
 
