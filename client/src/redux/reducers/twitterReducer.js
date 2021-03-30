@@ -62,31 +62,27 @@ const twitterReducer = (state = initialState, action) => {
         streams: action.payload.streams,
       };
     case TWITTER_SET_STREAM_TWEETS: {
-      const streamIdx = state.streams.findIndex(
-        (stream) => stream.id === action.payload.id
-      );
-      const streams = [...state.streams];
-      streams[streamIdx] = {
-        ...streams[streamIdx],
-        tweets: action.payload.tweets,
-      };
       return {
         ...state,
-        streams,
+        streamsById: {
+          ...state.streamsById,
+          [action.payload.id]: {
+            ...state.streamsById[action.payload.id],
+            tweets: action.payload.tweets,
+          },
+        },
       };
     }
     case TWITTER_SET_STREAM_LOADING_STATUS: {
-      const streamIdx = state.streams.findIndex(
-        (stream) => stream.id === action.payload.id
-      );
-      const streams = [...state.streams];
-      streams[streamIdx] = {
-        ...streams[streamIdx],
-        isLoading: action.payload.isLoading,
-      };
       return {
         ...state,
-        streams,
+        streamsById: {
+          ...state.streamsById,
+          [action.payload.id]: {
+            ...state.streamsById[action.payload.id],
+            isLoading: action.payload.isLoading,
+          },
+        },
       };
     }
     default:
