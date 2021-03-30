@@ -16,6 +16,7 @@ const initialState = {
   profileImage: '',
   isConnected: false,
   streams: [],
+  streamsById: {},
 };
 
 const twitterReducer = (state = initialState, action) => {
@@ -36,6 +37,7 @@ const twitterReducer = (state = initialState, action) => {
         profileImage: '',
         isConnected: false,
         streams: [],
+        streamsById: {},
       };
     case USER_LOGOUT: {
       return {
@@ -45,6 +47,7 @@ const twitterReducer = (state = initialState, action) => {
         profileImage: '',
         isConnected: false,
         streams: [],
+        streamsById: {},
       };
     }
     case TWITTER_SET_HOME_TIMELINE_TWEETS:
