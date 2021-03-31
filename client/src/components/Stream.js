@@ -31,6 +31,16 @@ const Stream = React.memo(({ id, provided }) => {
     }
   }, [dispatch, stream.type, stream.id, stream.search]);
 
+  const renderStreamType = () => {
+    switch (stream.type) {
+      case 'home_timeline':
+        return 'Home';
+      case 'search':
+        return `Search ${stream.search}`;
+      default:
+        return '';
+    }
+  };
   useEffect(() => {
     refreshStream();
   }, [refreshStream]);
@@ -38,7 +48,7 @@ const Stream = React.memo(({ id, provided }) => {
   return (
     <Timeline>
       <TimelineHeader
-        type="Home"
+        type={renderStreamType()}
         account={screenName}
         onRefresh={refreshStream}
         onRemove={() => {
