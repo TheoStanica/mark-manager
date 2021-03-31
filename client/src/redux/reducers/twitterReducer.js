@@ -2,6 +2,7 @@ import {
   TWITTER_ADD_STREAM,
   TWITTER_CLEAR_STREAMSBYID,
   TWITTER_REMOVE_STREAMBYID,
+  TWITTER_ADD_MORE_TWEETS,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
@@ -86,6 +87,7 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.id]: {
             ...state.streamsById[action.payload.id],
             tweets: action.payload.tweets,
+            metadata: action.payload.metadata,
           },
         },
       };
@@ -106,6 +108,21 @@ const twitterReducer = (state = initialState, action) => {
       return {
         ...state,
         streamsById: {},
+      };
+    }
+    case TWITTER_ADD_MORE_TWEETS: {
+      return {
+        ...state,
+        streamsById: {
+          ...state.streamsById,
+          [action.payload.id]: {
+            ...state.streamsById[action.payload.id],
+            tweets: state.streamsById[action.payload.id].tweets.concat(
+              action.payload.tweets
+            ),
+            metadata: action.payload.metadata,
+          },
+        },
       };
     }
     default:
