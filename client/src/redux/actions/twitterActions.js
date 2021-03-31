@@ -200,7 +200,9 @@ export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
       payload: {
         id: id,
         tweets: response.data.statuses,
-        metadata: response.data.search_metadata,
+        metadata: {
+          max_id: response.data.statuses[response.data.statuses.length - 1].id,
+        },
       },
     });
     await dispatch(setStreamLoading({ id, isLoading: false }));
@@ -220,8 +222,10 @@ export const loadMoreTweetSearchStream = ({ id, search, maxId }) => async (
       type: TWITTER_ADD_MORE_TWEETS,
       payload: {
         id: id,
-        tweets: [...response.data.statuses],
-        metadata: response.data.search_metadata,
+        tweets: response.data.statuses.slice(1),
+        metadata: {
+          max_id: response.data.statuses[response.data.statuses.length - 1].id,
+        },
       },
     });
   } catch (err) {
