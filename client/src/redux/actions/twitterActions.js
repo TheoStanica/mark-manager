@@ -2,6 +2,7 @@ import axiosInstance from '../../api/buildClient';
 import {
   SET_ERRORS,
   TWITTER_ADD_STREAM,
+  TWITTER_CLEAR_STREAMSBYID,
   TWITTER_REMOVE_STREAMBYID,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
@@ -230,21 +231,17 @@ export const clearStreamsById = () => (dispatch) => {
 
 export const loadUserStreams = ({ streams }) => async (dispatch) => {
   try {
-    // create copy of current streams stored in redux
-    // remove isLoading and tweets from streams parameter
-    // compare redux stored streams with streams stored in backend
-    // if they dont match, add add the new stream to redux
-    // this way, only at first load (before streams was set up in redux) we will load all Stream components
-
-    const streamsArray = store
-      .getState()
-      .twitterReducer.streams.map((stream) => ({
-        id: stream.id,
-        type: stream.type,
-        search: stream.search ? stream.search : undefined,
-      }));
-    if (JSON.stringify(streamsArray) !== JSON.stringify(streams)) {
+    const streamsArray = store.getState().twitterReducer.streams;
+    let synced = true;
+    streams.map(async (stream, idx) => {
+      if (stream.id !== streamsArray[idx]) {
+        synced = false;
+      }
+    });
+    if (!synced) {
+      console.log('not synced... syncing');
       await dispatch(updateStreams({ streams: [] }));
+      await dispatch(clearStreamsById());
       streams.map((stream) => {
         return dispatch(
           addStream({
