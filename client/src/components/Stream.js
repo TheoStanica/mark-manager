@@ -7,6 +7,14 @@ import TimelineBody from './Timeline/TimelineBody';
 import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 import InfiniteScroll from 'react-infinite-scroller';
+import styled from 'styled-components';
+
+const StyledContainer = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
   const { screenName } = useSelector((state) => state.twitterReducer);
@@ -18,7 +26,7 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
   }, [onLoad]);
 
   const renderTweets = () => {
-    return (
+    return stream?.tweets?.length > 0 ? (
       <InfiniteScroll
         pageStart={0}
         loadMore={onLoadMore}
@@ -30,6 +38,8 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
           return <TweetCard tweet={tweet} key={idx} />;
         })}
       </InfiniteScroll>
+    ) : (
+      <StyledContainer>No tweets</StyledContainer>
     );
   };
 
@@ -46,19 +56,12 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
       ></TimelineHeader>
       <TimelineBody>
         {stream.isLoading ? (
-          <div
-            style={{
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <StyledContainer>
             <Loading />
-          </div>
-        ) : stream.tweets ? (
+          </StyledContainer>
+        ) : (
           renderTweets()
-        ) : null}
+        )}
       </TimelineBody>
     </Timeline>
   );
