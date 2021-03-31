@@ -1,5 +1,6 @@
 import {
   TWITTER_ADD_STREAM,
+  TWITTER_CLEAR_STREAMSBYID,
   TWITTER_REMOVE_STREAMBYID,
   TWITTER_RESET_PROFILE_INFO,
   TWITTER_SET_HOME_TIMELINE_TWEETS,
@@ -99,6 +100,12 @@ const twitterReducer = (state = initialState, action) => {
             isLoading: action.payload.isLoading,
           },
         },
+      };
+    }
+    case TWITTER_CLEAR_STREAMSBYID: {
+      return {
+        ...state,
+        streamsById: {},
       };
     }
     default:
