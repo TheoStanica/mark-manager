@@ -16,7 +16,7 @@ router.get(
   '/api/social/twitter/search/tweets',
   requireAuth,
   async (req: Request, res: Response) => {
-    const { search } = req.query;
+    const { search, maxId } = req.query;
     if (!search) {
       throw new BadRequestError('Please provide a search parameter');
     }
@@ -35,6 +35,7 @@ router.get(
         const tweets = await T.get('search/tweets', {
           q: String(search),
           tweet_mode: 'extended',
+          max_id: maxId ? String(maxId) : undefined,
         });
         if (tweets) {
           res.send(tweets.data);
