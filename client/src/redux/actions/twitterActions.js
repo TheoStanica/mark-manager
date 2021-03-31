@@ -241,7 +241,6 @@ export const loadUserStreams = ({ streams }) => async (dispatch) => {
       }
     });
     if (!synced) {
-      console.log('not synced... syncing');
       await dispatch(updateStreams({ streams: [] }));
       await dispatch(clearStreamsById());
       streams.map((stream) => {
