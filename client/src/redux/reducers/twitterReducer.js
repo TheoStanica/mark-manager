@@ -33,23 +33,11 @@ const twitterReducer = (state = initialState, action) => {
       };
     case TWITTER_RESET_PROFILE_INFO:
       return {
-        ...state,
-        name: '',
-        screenName: '',
-        profileImage: '',
-        isConnected: false,
-        streams: [],
-        streamsById: {},
+        ...initialState,
       };
     case USER_LOGOUT: {
       return {
-        ...state,
-        name: '',
-        screenName: '',
-        profileImage: '',
-        isConnected: false,
-        streams: [],
-        streamsById: {},
+        ...initialState,
       };
     }
     case TWITTER_SET_HOME_TIMELINE_TWEETS:
