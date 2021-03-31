@@ -8,15 +8,16 @@ import Stream from './Stream';
 
 const TwitterHomeTimeline = React.memo(({ stream, provided }) => {
   const dispatch = useDispatch();
+  const loadTweets = useCallback(() => {
+    dispatch(loadHomeTimelineStream({ id: stream.id }));
+  }, [dispatch, stream.id]);
 
   return (
     <Stream
       id={stream.id}
       provided={provided}
       type="Home"
-      onLoad={useCallback(() => {
-        dispatch(loadHomeTimelineStream({ id: stream.id }));
-      }, [dispatch, stream.id])}
+      onLoad={loadTweets}
       onLoadMore={() =>
         dispatch(
           loadMoreHomeTimelineStream({
