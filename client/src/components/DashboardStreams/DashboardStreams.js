@@ -1,15 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TwitterHomeTimeline from '../TwitterHomeTimeline';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { reorderStreams } from '../../redux/actions/twitterActions';
-import TwitterSearchStream from '../TwitterSearchStream';
 import {
   StyledDashboardStreams,
   StyledStreamsWrapper,
   StyledStreamContainer,
   StyledStreamsList,
 } from './styles';
+import Stream from '../Stream';
 
 const DashboardStreams = () => {
   const { streams } = useSelector((state) => state.twitterReducer);
@@ -22,17 +21,6 @@ const DashboardStreams = () => {
     items.splice(result.destination.index, 0, reorderedItem);
     dispatch(reorderStreams({ streams: items }));
   }
-
-  const renderStream = (stream, provided) => {
-    switch (stream.type) {
-      case 'home_timeline':
-        return <TwitterHomeTimeline id={stream.id} provided={provided} />;
-      case 'search':
-        return <TwitterSearchStream id={stream.id} provided={provided} />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <StyledDashboardStreams>
@@ -48,8 +36,8 @@ const DashboardStreams = () => {
                   return (
                     <Draggable
                       disableInteractiveElementBlocking="true"
-                      key={stream.id}
-                      draggableId={String(stream.id)}
+                      key={stream}
+                      draggableId={String(stream)}
                       index={index}
                     >
                       {(provided) => (
@@ -57,7 +45,7 @@ const DashboardStreams = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >
-                          {renderStream(stream, provided)}
+                          <Stream id={stream} provided={provided} />
                         </StyledStreamContainer>
                       )}
                     </Draggable>
