@@ -1,56 +1,44 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  loadHomeTimelineStream,
-  loadTweetSearchStream,
-  removeStream,
-} from '../redux/actions/twitterActions';
+import { removeStream } from '../redux/actions/twitterActions';
 import Loading from './Loading/Loading';
 import Timeline from './Timeline/Timeline';
 import TimelineBody from './Timeline/TimelineBody';
 import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
+import InfiniteScroll from 'react-infinite-scroller';
 
-const Stream = React.memo(({ id, provided }) => {
+const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
   const { screenName } = useSelector((state) => state.twitterReducer);
   const stream = useSelector((state) => state.twitterReducer.streamsById[id]);
   const dispatch = useDispatch();
 
-  const refreshStream = useCallback(() => {
-    switch (stream.type) {
-      case 'home_timeline':
-        dispatch(loadHomeTimelineStream({ id: stream.id }));
-        break;
-      case 'search':
-        dispatch(
-          loadTweetSearchStream({ id: stream.id, search: stream.search })
-        );
-        break;
-      default:
-        break;
-    }
-  }, [dispatch, stream.type, stream.id, stream.search]);
-
-  const renderStreamType = () => {
-    switch (stream.type) {
-      case 'home_timeline':
-        return 'Home';
-      case 'search':
-        return `Search ${stream.search}`;
-      default:
-        return '';
-    }
-  };
   useEffect(() => {
-    refreshStream();
-  }, [refreshStream]);
+    onLoad();
+  }, [onLoad]);
+
+  const renderTweets = () => {
+    return (
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={onLoadMore}
+        hasMore={true}
+        useWindow={false}
+        threshold={500}
+      >
+        {stream.tweets.map((tweet, idx) => {
+          return <TweetCard tweet={tweet} key={idx} />;
+        })}
+      </InfiniteScroll>
+    );
+  };
 
   return (
     <Timeline>
       <TimelineHeader
-        type={renderStreamType()}
+        type={type}
         account={screenName}
-        onRefresh={refreshStream}
+        onRefresh={() => onLoad()}
         onRemove={() => {
           dispatch(removeStream({ id: stream.id }));
         }}
@@ -68,12 +56,9 @@ const Stream = React.memo(({ id, provided }) => {
           >
             <Loading />
           </div>
-        ) : (
-          stream.tweets &&
-          stream.tweets.map((tweet, idx) => {
-            return <TweetCard tweet={tweet} key={idx} />;
-          })
-        )}
+        ) : stream.tweets ? (
+          renderTweets()
+        ) : null}
       </TimelineBody>
     </Timeline>
   );
