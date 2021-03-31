@@ -222,6 +222,12 @@ export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
   }
 };
 
+export const clearStreamsById = () => (dispatch) => {
+  dispatch({
+    type: TWITTER_CLEAR_STREAMSBYID,
+  });
+};
+
 export const loadUserStreams = ({ streams }) => async (dispatch) => {
   try {
     // create copy of current streams stored in redux
