@@ -9,6 +9,7 @@ export const StyledCircleImage = styled.img`
 export const StyledMessage = styled.p`
   width: 100%;
   white-space: break-spaces;
+  word-break: break-word;
 `;
 
 export const StyledHeaderWrapper = styled.div`
