@@ -38,7 +38,7 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
       <TimelineHeader
         type={type}
         account={screenName}
-        onRefresh={() => onLoad()}
+        onRefresh={onLoad}
         onRemove={() => {
           dispatch(removeStream({ id: stream.id }));
         }}
