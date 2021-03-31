@@ -59,7 +59,7 @@ const twitterReducer = (state = initialState, action) => {
     case TWITTER_ADD_STREAM:
       return {
         ...state,
-        streams: [...state.streams, action.payload],
+        streams: [...state.streams, action.payload.id],
         streamsById: {
           ...state.streamsById,
           [action.payload.id]: action.payload,
