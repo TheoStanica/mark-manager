@@ -114,13 +114,15 @@ export const updateStreams = ({ streams }) => async (dispatch) => {
 
 export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
   try {
-    const updatedstreams = streams.map((stream) => ({
-      id: stream.id,
-      type: stream.type,
-      search: stream.search ? stream.search : undefined,
-      isLoading: undefined,
-      tweets: undefined,
-    }));
+    const streamsById = store.getState().twitterReducer.streamsById;
+    const updatedstreams = streams.map((stream) => {
+      const s = streamsById[stream];
+      return {
+        id: s.id,
+        type: s.type,
+        search: s.search ? s.search : undefined,
+      };
+    });
     await axiosInstance.post('/api/user/streampreferences', {
       stream_preferences: updatedstreams,
     });
