@@ -8,10 +8,12 @@ import {
   StyledStreamContainer,
   StyledStreamsList,
 } from './styles';
-import Stream from '../Stream';
+import TwitterHomeTimeline from '../TwitterHomeTimeline';
+import TwitterSearchStream from '../TwitterSearchStream';
 
 const DashboardStreams = () => {
   const { streams } = useSelector((state) => state.twitterReducer);
+  const streamsById = useSelector((state) => state.twitterReducer.streamsById);
   const dispatch = useDispatch();
 
   function handleOnDragEnd(result) {
@@ -21,6 +23,21 @@ const DashboardStreams = () => {
     items.splice(result.destination.index, 0, reorderedItem);
     dispatch(reorderStreams({ streams: items }));
   }
+
+  const renderStream = (id, provided) => {
+    switch (streamsById[id].type) {
+      case 'home_timeline':
+        return (
+          <TwitterHomeTimeline stream={streamsById[id]} provided={provided} />
+        );
+      case 'search':
+        return (
+          <TwitterSearchStream stream={streamsById[id]} provided={provided} />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <StyledDashboardStreams>
@@ -45,7 +62,7 @@ const DashboardStreams = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >
-                          <Stream id={stream} provided={provided} />
+                          {renderStream(stream, provided)}
                         </StyledStreamContainer>
                       )}
                     </Draggable>
