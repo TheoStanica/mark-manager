@@ -40,11 +40,6 @@ const twitterReducer = (state = initialState, action) => {
         ...initialState,
       };
     }
-    case TWITTER_SET_HOME_TIMELINE_TWEETS:
-      return {
-        ...state,
-        home_timeline_tweets: action.payload.tweets,
-      };
     case TWITTER_ADD_STREAM:
       return {
         ...state,
