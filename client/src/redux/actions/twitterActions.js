@@ -264,23 +264,27 @@ export const loadMoreHomeTimelineStream = ({ id, maxId }) => async (
 
 export const loadUserStreams = ({ streams }) => async (dispatch) => {
   try {
-    const streamsArray = store.getState().twitterReducer.streams;
+    const storedStreamsArray = store.getState().twitterReducer.streams;
     let synced = true;
-    streams.map(async (stream, idx) => {
-      if (stream.id !== streamsArray[idx]) {
+
+    const streamsArray = streams.map((stream, idx) => {
+      if (stream.id !== storedStreamsArray[idx]) {
         synced = false;
       }
+      return stream.id;
     });
     if (!synced) {
-      await dispatch(updateStreams({ streams: [] }));
-      await dispatch(clearStreamsById());
-      streams.map((stream) => {
-        return dispatch(
-          addStream({
-            type: stream.type,
-            search: stream.search ? stream.search : undefined,
-          })
-        );
+      await dispatch(clearAllStreams());
+      const updatedStreamsById = streams.reduce(
+        (obj, stream) => ({ ...obj, [stream.id]: { ...stream } }),
+        {}
+      );
+      await dispatch({
+        type: TWITTER_ADD_MULTIPLE_STREAMS,
+        payload: {
+          streams: streamsArray,
+          streamsById: updatedStreamsById,
+        },
       });
     }
   } catch (err) {
