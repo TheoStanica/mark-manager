@@ -93,12 +93,6 @@ const twitterReducer = (state = initialState, action) => {
         },
       };
     }
-    case TWITTER_CLEAR_STREAMSBYID: {
-      return {
-        ...state,
-        streamsById: {},
-      };
-    }
     case TWITTER_ADD_MORE_TWEETS: {
       return {
         ...state,
