@@ -143,8 +143,12 @@ export const removeStream = ({ id }) => async (dispatch) => {
     const { streams } = store.getState().twitterReducer;
     const newStreams = streams.filter((s) => s !== id);
     await dispatch(updateUserStreamsBackend({ streams: newStreams }));
-    await dispatch(updateStreams({ streams: newStreams }));
-    await dispatch(removeStreamById({ id }));
+    dispatch({
+      type: TWITTER_REMOVE_STREAM,
+      payload: {
+        id: id,
+      },
+    });
   } catch (err) {
     dispatch(handleError({ error: err }));
   }
