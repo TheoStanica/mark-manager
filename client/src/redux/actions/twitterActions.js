@@ -132,12 +132,9 @@ export const addStream = ({ type, search }) => async (dispatch) => {
   }
 };
 
-const removeStreamById = ({ id }) => async (dispatch) => {
+export const clearAllStreams = () => async (dispatch) => {
   dispatch({
-    type: TWITTER_REMOVE_STREAMBYID,
-    payload: {
-      id: id,
-    },
+    type: TWITTER_CLEAR_ALL_STREAMS,
   });
 };
 
