@@ -57,6 +57,12 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.id]: undefined,
         },
       };
+    case TWITTER_CLEAR_ALL_STREAMS:
+      return {
+        ...state,
+        streams: [],
+        streamsById: {},
+      };
     case TWITTER_UPDATE_STREAMS:
       return {
         ...state,
