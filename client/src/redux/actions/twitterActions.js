@@ -71,23 +71,6 @@ export const connectToTwitter = () => async (dispatch) => {
   }
 };
 
-export const getTwitterHomeTimeline = () => async (dispatch) => {
-  try {
-    const response = await axiosInstance.get(
-      '/api/social/twitter/statuses/home_timeline'
-    );
-    if (response) {
-      dispatch({
-        type: TWITTER_SET_HOME_TIMELINE_TWEETS,
-        payload: {
-          tweets: response.data,
-        },
-      });
-    }
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
 export const tweetNewMessage = ({ message }) => async (dispatch) => {
   try {
     await axiosInstance.post('/api/social/twitter/statuses/update', {
