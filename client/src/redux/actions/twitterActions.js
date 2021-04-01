@@ -238,12 +238,6 @@ export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
   }
 };
 
-export const clearStreamsById = () => (dispatch) => {
-  dispatch({
-    type: TWITTER_CLEAR_STREAMSBYID,
-  });
-};
-
 export const loadMoreHomeTimelineStream = ({ id, maxId }) => async (
   dispatch
 ) => {
