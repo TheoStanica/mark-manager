@@ -49,9 +49,19 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.id]: action.payload,
         },
       };
-    case TWITTER_REMOVE_STREAMBYID:
+    case TWITTER_ADD_MULTIPLE_STREAMS:
       return {
         ...state,
+        streams: [...state.streams, ...action.payload.streams],
+        streamsById: {
+          ...state.streamsById,
+          ...action.payload.streamsById,
+        },
+      };
+    case TWITTER_REMOVE_STREAM:
+      return {
+        ...state,
+        streams: state.streams.filter((stream) => stream !== action.payload.id),
         streamsById: {
           ...state.streamsById,
           [action.payload.id]: undefined,
@@ -81,18 +91,6 @@ const twitterReducer = (state = initialState, action) => {
         },
       };
     }
-    case TWITTER_SET_STREAM_LOADING_STATUS: {
-      return {
-        ...state,
-        streamsById: {
-          ...state.streamsById,
-          [action.payload.id]: {
-            ...state.streamsById[action.payload.id],
-            isLoading: action.payload.isLoading,
-          },
-        },
-      };
-    }
     case TWITTER_ADD_MORE_TWEETS: {
       return {
         ...state,
@@ -104,6 +102,18 @@ const twitterReducer = (state = initialState, action) => {
               action.payload.tweets
             ),
             metadata: action.payload.metadata,
+          },
+        },
+      };
+    }
+    case TWITTER_SET_STREAM_LOADING_STATUS: {
+      return {
+        ...state,
+        streamsById: {
+          ...state.streamsById,
+          [action.payload.id]: {
+            ...state.streamsById[action.payload.id],
+            isLoading: action.payload.isLoading,
           },
         },
       };
