@@ -38,7 +38,7 @@ const TwitterCard = ({ tweet }) => {
         {isRT ? <RetweetHeader tweet={tweet} /> : null}
         <StyledHeaderWrapper>
           <StyledCircleImage
-            src={data.user.profile_image_url}
+            src={data.user.profile_image_url_https}
             alt={`${data.user.name}'s profile`}
           />
           <StyledTweetMetadata>

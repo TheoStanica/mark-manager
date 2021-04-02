@@ -3,13 +3,15 @@ import {
   SET_ERRORS,
   TWITTER_ADD_MORE_TWEETS,
   TWITTER_ADD_STREAM,
+  TWITTER_CLEAR_ALL_STREAMS,
   TWITTER_RESET_PROFILE_INFO,
-  TWITTER_SET_HOME_TIMELINE_TWEETS,
   TWITTER_SET_PROFILE_INFO,
   TWITTER_SET_STREAM_LOADING_STATUS,
   TWITTER_SET_STREAM_TWEETS,
   TWITTER_UPDATE_STREAMS,
   USER_SET_MESSAGES,
+  TWITTER_ADD_MULTIPLE_STREAMS,
+  TWITTER_REMOVE_STREAM,
 } from '../types';
 import { store } from '../store';
 import { v4 as uuidv4 } from 'uuid';
@@ -49,34 +51,6 @@ export const getTwitterProfileInfoData = () => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
-export const getTwitterDefaultData = () => async (dispatch) => {
-  try {
-    const user = await axiosInstance.get('/api/social/twitter/user');
-    if (user) {
-      const response = await axiosInstance.get(
-        '/api/social/twitter/statuses/home_timeline'
-      );
-      dispatch({
-        type: TWITTER_SET_PROFILE_INFO,
-        payload: {
-          name: user.data.name,
-          screenName: user.data.screen_name,
-          profileImage: user.data.profile_image_url,
-        },
-      });
-      if (response) {
-        dispatch({
-          type: TWITTER_SET_HOME_TIMELINE_TWEETS,
-          payload: {
-            tweets: response.data,
-          },
-        });
-      }
-    }
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
 
 export const clearTwitterProfileInfoData = () => async (dispatch) => {
   dispatch({
@@ -97,23 +71,6 @@ export const connectToTwitter = () => async (dispatch) => {
   }
 };
 
-export const getTwitterHomeTimeline = () => async (dispatch) => {
-  try {
-    const response = await axiosInstance.get(
-      '/api/social/twitter/statuses/home_timeline'
-    );
-    if (response) {
-      dispatch({
-        type: TWITTER_SET_HOME_TIMELINE_TWEETS,
-        payload: {
-          tweets: response.data,
-        },
-      });
-    }
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
 export const tweetNewMessage = ({ message }) => async (dispatch) => {
   try {
     await axiosInstance.post('/api/social/twitter/statuses/update', {
@@ -141,13 +98,15 @@ export const updateStreams = ({ streams }) => async (dispatch) => {
 
 export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
   try {
-    const updatedstreams = streams.map((stream) => ({
-      id: stream.id,
-      type: stream.type,
-      search: stream.search ? stream.search : undefined,
-      isLoading: undefined,
-      tweets: undefined,
-    }));
+    const streamsById = store.getState().twitterReducer.streamsById;
+    const updatedstreams = streams.map((stream) => {
+      const s = streamsById[stream];
+      return {
+        id: s.id,
+        type: s.type,
+        search: s.search ? s.search : undefined,
+      };
+    });
     await axiosInstance.post('/api/user/streampreferences', {
       stream_preferences: updatedstreams,
     });
@@ -164,8 +123,6 @@ export const addStream = ({ type, search }) => async (dispatch) => {
         id: uuidv4(),
         type: type,
         search: search ? search : undefined,
-        isLoading: true,
-        tweets: [],
       },
     });
     const { streams } = store.getState().twitterReducer;
@@ -175,12 +132,23 @@ export const addStream = ({ type, search }) => async (dispatch) => {
   }
 };
 
+export const clearAllStreams = () => async (dispatch) => {
+  dispatch({
+    type: TWITTER_CLEAR_ALL_STREAMS,
+  });
+};
+
 export const removeStream = ({ id }) => async (dispatch) => {
   try {
     const { streams } = store.getState().twitterReducer;
-    const newStreams = streams.filter((s) => s.id !== id);
+    const newStreams = streams.filter((s) => s !== id);
     await dispatch(updateUserStreamsBackend({ streams: newStreams }));
-    await dispatch(updateStreams({ streams: newStreams }));
+    dispatch({
+      type: TWITTER_REMOVE_STREAM,
+      payload: {
+        id: id,
+      },
+    });
   } catch (err) {
     dispatch(handleError({ error: err }));
   }
@@ -216,7 +184,9 @@ export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
       payload: {
         id: id,
         tweets: response.data.statuses,
-        metadata: response.data.search_metadata,
+        metadata: {
+          max_id: response.data.statuses[response.data.statuses.length - 1].id,
+        },
       },
     });
     await dispatch(setStreamLoading({ id, isLoading: false }));
@@ -236,8 +206,10 @@ export const loadMoreTweetSearchStream = ({ id, search, maxId }) => async (
       type: TWITTER_ADD_MORE_TWEETS,
       payload: {
         id: id,
-        tweets: [...response.data.statuses],
-        metadata: response.data.search_metadata,
+        tweets: response.data.statuses.slice(1),
+        metadata: {
+          max_id: response.data.statuses[response.data.statuses.length - 1].id,
+        },
       },
     });
   } catch (err) {
@@ -292,25 +264,28 @@ export const loadMoreHomeTimelineStream = ({ id, maxId }) => async (
 
 export const loadUserStreams = ({ streams }) => async (dispatch) => {
   try {
-    // create copy of current streams stored in redux
-    // remove isLoading and tweets from streams parameter
-    // compare redux stored streams with streams stored in backend
-    // if they dont match, add add the new stream to redux
-    // this way, only at first load (before streams was set up in redux) we will load all Stream components
+    const storedStreamsArray = store.getState().twitterReducer.streams;
+    let synced = true;
 
-    const streamsArray = store
-      .getState()
-      .twitterReducer.streams.map((stream) => ({
-        id: stream.id,
-        type: stream.type,
-        search: stream.search ? stream.search : undefined,
-        isLoading: undefined,
-        tweets: undefined,
-        metadata: undefined,
-      }));
-    if (JSON.stringify(streamsArray) !== JSON.stringify(streams)) {
-      await dispatch(updateStreams({ streams: [] }));
-      dispatch(reorderStreams({ streams }));
+    const streamsArray = streams.map((stream, idx) => {
+      if (stream.id !== storedStreamsArray[idx]) {
+        synced = false;
+      }
+      return stream.id;
+    });
+    if (!synced) {
+      await dispatch(clearAllStreams());
+      const updatedStreamsById = streams.reduce(
+        (obj, stream) => ({ ...obj, [stream.id]: { ...stream } }),
+        {}
+      );
+      await dispatch({
+        type: TWITTER_ADD_MULTIPLE_STREAMS,
+        payload: {
+          streams: streamsArray,
+          streamsById: updatedStreamsById,
+        },
+      });
     }
   } catch (err) {
     dispatch(handleError({ error: err }));
