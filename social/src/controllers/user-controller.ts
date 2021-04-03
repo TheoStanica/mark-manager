@@ -58,16 +58,33 @@ export class UserController {
     }
   }
 
-  static async getUserTwitterTokens(userID: string) {
-    const user = await User.findById(userID);
-    if (user) {
-      return {
-        oauthAccessToken: user.twitter.oauthAccessToken,
-        oauthAccessTokenSecret: user.twitter.oauthAccessTokenSecret,
-      };
-    } else {
+  static async getUserAllTwitterAccounts(userId: string) {
+    const user = await User.findById(userId).populate('twitter');
+    return user ? user : [];
+  }
+
+  static async getUserTwitterAccountTokens(
+    userId: string,
+    twitterUserId: string
+  ) {
+    const user = await User.findById(userId).populate('twitter');
+    if (!user) return null;
+
+    let tokens: TwitterTokenData = {
+      oauthAccessToken: '',
+      oauthAccessTokenSecret: '',
+    };
+
+    user.twitter?.map((account) => {
+      if (account.twitterUserId === twitterUserId) {
+        tokens.oauthAccessToken = account.oauthAccessToken;
+        tokens.oauthAccessTokenSecret = account.oauthAccessTokenSecret;
+      }
+    });
+
+    if (tokens.oauthAccessToken === '' && tokens.oauthAccessTokenSecret === '')
       return null;
-    }
+    return tokens;
   }
 
   static async deleteUserTwitterAccount(
