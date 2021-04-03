@@ -95,25 +95,6 @@ export class UserController {
     );
   }
 
-  static async addTwitterTokens(
-    userId: string,
-    oauthAccessToken: string,
-    oauthAccessTokenSecret: string
-  ) {
-    return await User.findByIdAndUpdate(
-      userId,
-      {
-        twitter: {
-          oauthAccessToken: oauthAccessToken,
-          oauthAccessTokenSecret: oauthAccessTokenSecret,
-        },
-      },
-      {
-        new: true,
-      }
-    );
-  }
-
   static async createResetTokens(email: string) {
     const user = await User.findOneAndUpdate(
       {
