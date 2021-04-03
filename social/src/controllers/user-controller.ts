@@ -1,7 +1,15 @@
+import { Twitter, TwitterAttrs, TwitterDoc } from '../models/twitter';
 import { User, UserAttrs, UserDoc } from '../models/users';
+import { TwitterController } from './twitter-controller';
 
 export interface addTwitterTokensData {
   userID: string;
+  oauthAccessToken: string;
+  oauthAccessTokenSecret: string;
+  twitterUserId: string;
+}
+
+export interface TwitterTokenData {
   oauthAccessToken: string;
   oauthAccessTokenSecret: string;
 }
@@ -14,24 +22,39 @@ export class UserController {
   }
 
   static async addTwitterTokens(data: addTwitterTokensData) {
-    const user = await User.findById(data.userID);
+    const user = await User.findById(data.userID).populate('twitter');
     if (!user) {
-      const user = User.build({ _id: data.userID });
-      user.twitter.oauthAccessToken = data.oauthAccessToken;
-      user.twitter.oauthAccessTokenSecret = data.oauthAccessTokenSecret;
-      user.save();
-      return user;
+      const newUser = User.build({ _id: data.userID });
+      const twitterDetails = TwitterController.createTwitterAccountDetails({
+        oauthAccessToken: data.oauthAccessToken,
+        oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+        twitterUserId: data.twitterUserId,
+      });
+      newUser.twitter.push(twitterDetails);
+      newUser.save();
+
+      return newUser;
     } else {
-      return await User.findByIdAndUpdate(
-        data.userID,
-        {
-          twitter: {
-            oauthAccessToken: data.oauthAccessToken,
-            oauthAccessTokenSecret: data.oauthAccessTokenSecret,
-          },
-        },
-        { new: true }
-      );
+      //check if these details are already in db
+      let exists = false;
+      user.twitter.map((twitterAccount) => {
+        if (twitterAccount.twitterUserId === data.twitterUserId) {
+          exists = true;
+        }
+      });
+      if (!exists) {
+        // a new twitter account to connect
+        const twitterDetails = Twitter.build({
+          oauthAccessToken: data.oauthAccessToken,
+          oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+          twitterUserId: data.twitterUserId,
+        });
+        twitterDetails.save();
+        user.twitter.push(twitterDetails);
+        user.save();
+        return user;
+      }
+      return null;
     }
   }
 
