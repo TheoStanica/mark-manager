@@ -70,17 +70,28 @@ export class UserController {
     }
   }
 
-  static async deleteUserTwitterTokens(userID: string) {
-    const user = await User.findByIdAndUpdate(
-      userID,
-      {
-        twitter: {
-          oauthAccessToken: null,
-          oauthAccessTokenSecret: null,
-        },
-      },
-      { new: true }
-    );
-    return user;
+  static async deleteUserTwitterAccount(
+    userId: string,
+    twitterAccountId: string
+  ) {
+    const user = await User.findById(userId).populate('twitter');
+    if (!user) return null;
+    user.twitter?.map(async (account) => {
+      if (account.twitterUserId === twitterAccountId) {
+        await TwitterController.removeTwitterAccountDetails(account.id);
+        await User.updateOne(
+          { _id: userId },
+          {
+            $pull: {
+              twitter: account.id,
+            },
+          },
+          {
+            new: true,
+            multi: true,
+          }
+        );
+      }
+    });
   }
 }
