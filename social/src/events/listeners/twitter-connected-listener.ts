@@ -9,12 +9,18 @@ export class TwitterConnectedListener extends Listener<TwitterConnectedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: TwitterConnectedEvent['data'], msg: Message) {
-    const { id, oauthAccessToken, oauthAccessTokenSecret } = data;
+    const {
+      id,
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+      twitterUserId,
+    } = data;
 
     await UserController.addTwitterTokens({
       userID: id,
-      oauthAccessToken: oauthAccessToken,
-      oauthAccessTokenSecret: oauthAccessTokenSecret,
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+      twitterUserId,
     });
 
     msg.ack();
