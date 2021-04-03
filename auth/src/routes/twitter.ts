@@ -68,16 +68,12 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
         res.clearCookie('connect.sid');
         res.redirect('/twitter/connect?success=false');
       } else {
-        await UserController.addTwitterTokens(
-          String(req.session.userId),
-          oauthAccessToken,
-          oauthAccessTokenSecret
-        );
-
         await new TwitterConnectedPublisher(natsWrapper.client).publish({
           id: String(req.session.userId),
           oauthAccessToken: oauthAccessToken,
           oauthAccessTokenSecret: oauthAccessTokenSecret,
+          twitterUserId: results.user_id,
+          twitterScreenName: results.screen_name,
         });
         res.clearCookie('connect.sid');
         res.redirect('/twitter/connect?success=true');
