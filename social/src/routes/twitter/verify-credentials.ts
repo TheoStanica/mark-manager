@@ -2,11 +2,12 @@ import express, { Request, Response } from 'express';
 import {
   BadRequestError,
   FailedConnectionError,
-  ForbiddenError,
   requireAuth,
+  validateRequest,
 } from '@tcosmin/common';
 import twit from 'twit';
 import { UserController } from '../../controllers/user-controller';
+import { query } from 'express-validator';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -15,32 +16,36 @@ const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 router.get(
   '/api/social/twitter/user',
   requireAuth,
+  [
+    query('twitterUserId')
+      .notEmpty()
+      .withMessage('Please provide a Twitter user ID'),
+  ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const tokens = await UserController.getUserTwitterTokens(
-      req.currentUser!.userId
+    const { twitterUserId } = req.query;
+    const data = await UserController.getUserTwitterAccountTokens(
+      req.currentUser!.userId,
+      String(twitterUserId)
     );
-    if (tokens && tokens.oauthAccessToken && tokens.oauthAccessTokenSecret) {
-      const { oauthAccessToken, oauthAccessTokenSecret } = tokens;
-
-      const T = new twit({
-        consumer_key: consumerKey,
-        consumer_secret: consumerSecret,
-        access_token: oauthAccessToken,
-        access_token_secret: oauthAccessTokenSecret,
-      });
-
-      try {
-        const userInfo = await T.get('account/verify_credentials');
-        if (userInfo) {
-          res.send(userInfo.data);
-        }
-      } catch (err) {
-        // Tokens are invalid or revoked (Twitter side)
-        throw new FailedConnectionError();
+    if (!data) {
+      throw new BadRequestError('Please provide a valid userId');
+    }
+    const { oauthAccessToken, oauthAccessTokenSecret } = data;
+    const T = new twit({
+      consumer_key: consumerKey,
+      consumer_secret: consumerSecret,
+      access_token: oauthAccessToken,
+      access_token_secret: oauthAccessTokenSecret,
+    });
+    try {
+      const userInfo = await T.get('account/verify_credentials');
+      if (userInfo) {
+        res.send(userInfo.data);
       }
-    } else {
-      // user didnt yet connect a twitter account
-      throw new ForbiddenError();
+    } catch (err) {
+      // Tokens are invalid or revoked (Twitter side)
+      throw new FailedConnectionError();
     }
   }
 );
