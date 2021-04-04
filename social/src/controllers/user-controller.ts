@@ -6,6 +6,7 @@ export interface addTwitterTokensData {
   userID: string;
   oauthAccessToken: string;
   oauthAccessTokenSecret: string;
+  twitterScreenName: string;
   twitterUserId: string;
 }
 
@@ -29,17 +30,27 @@ export class UserController {
         oauthAccessToken: data.oauthAccessToken,
         oauthAccessTokenSecret: data.oauthAccessTokenSecret,
         twitterUserId: data.twitterUserId,
+        twitterScreenName: data.twitterScreenName,
       });
       newUser.twitter.push(twitterDetails);
       newUser.save();
 
       return newUser;
     } else {
-      //check if these details are already in db
+      //check if these details are already in db and update if it's the case
       let exists = false;
-      user.twitter.map((twitterAccount) => {
+      user.twitter.map(async (twitterAccount) => {
         if (twitterAccount.twitterUserId === data.twitterUserId) {
           exists = true;
+          await TwitterController.updateTwitterAccountDetails(
+            twitterAccount.id,
+            {
+              oauthAccessToken: data.oauthAccessToken,
+              oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+              twitterUserId: data.twitterUserId,
+              twitterScreenName: data.twitterScreenName,
+            }
+          );
         }
       });
       if (!exists) {
@@ -48,6 +59,7 @@ export class UserController {
           oauthAccessToken: data.oauthAccessToken,
           oauthAccessTokenSecret: data.oauthAccessTokenSecret,
           twitterUserId: data.twitterUserId,
+          twitterScreenName: data.twitterScreenName,
         });
         twitterDetails.save();
         user.twitter.push(twitterDetails);
