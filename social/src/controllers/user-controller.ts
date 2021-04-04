@@ -16,9 +16,9 @@ export interface TwitterTokenData {
 }
 
 export class UserController {
-  static createUser(userAttrs: UserAttrs): UserDoc {
+  static async createUser(userAttrs: UserAttrs) {
     const user = User.build(userAttrs);
-    user.save();
+    await user.save();
     return user;
   }
 
@@ -26,14 +26,16 @@ export class UserController {
     const user = await User.findById(data.userID).populate('twitter');
     if (!user) {
       const newUser = User.build({ _id: data.userID });
-      const twitterDetails = TwitterController.createTwitterAccountDetails({
-        oauthAccessToken: data.oauthAccessToken,
-        oauthAccessTokenSecret: data.oauthAccessTokenSecret,
-        twitterUserId: data.twitterUserId,
-        twitterScreenName: data.twitterScreenName,
-      });
+      const twitterDetails = await TwitterController.createTwitterAccountDetails(
+        {
+          oauthAccessToken: data.oauthAccessToken,
+          oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+          twitterUserId: data.twitterUserId,
+          twitterScreenName: data.twitterScreenName,
+        }
+      );
       newUser.twitter.push(twitterDetails);
-      newUser.save();
+      await newUser.save();
 
       return newUser;
     } else {
