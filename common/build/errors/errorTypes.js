@@ -5,4 +5,6 @@ var errorTypes;
 (function (errorTypes) {
     errorTypes["AccountNotActivated"] = "accountNotActivated";
     errorTypes["FailedConnectionError"] = "failedConnectionError";
+    errorTypes["InvalidTokens"] = "invalidTokens";
+    errorTypes["TwitterRateLimitExceeded"] = "twitterRateLimitExceeded";
 })(errorTypes = exports.errorTypes || (exports.errorTypes = {}));
