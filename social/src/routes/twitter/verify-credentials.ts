@@ -14,8 +14,9 @@ router.get(
   requireAuth,
   [
     query('twitterUserId')
+      .isNumeric()
       .notEmpty()
-      .withMessage('Please provide a Twitter user ID'),
+      .withMessage('Please provide a valid Twitter user ID'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
