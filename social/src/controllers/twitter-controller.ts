@@ -7,6 +7,21 @@ export class TwitterController {
     return twitter;
   }
 
+  static async updateTwitterAccountDetails(
+    twitterAccountDbId: string,
+    data: TwitterAttrs
+  ) {
+    return await Twitter.findByIdAndUpdate(
+      twitterAccountDbId,
+      {
+        oauthAccessToken: data.oauthAccessToken,
+        oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+        twitterScreenName: data.twitterScreenName,
+      },
+      { new: true }
+    );
+  }
+
   static async removeTwitterAccountDetails(twitterAccountDbId: string) {
     return await Twitter.deleteOne({ _id: twitterAccountDbId });
   }
