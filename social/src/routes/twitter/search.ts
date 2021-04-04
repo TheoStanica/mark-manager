@@ -32,14 +32,14 @@ router.get(
       req.currentUser!.userId,
       String(twitterUserId)
     );
-    const T = new twit({
+    const twitterClient = new twit({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
       access_token: oauthAccessToken,
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      const tweets = await T.get('search/tweets', {
+      const tweets = await twitterClient.get('search/tweets', {
         q: String(search),
         tweet_mode: 'extended',
         max_id: maxId ? String(maxId) : undefined,

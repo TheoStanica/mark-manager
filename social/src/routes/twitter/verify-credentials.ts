@@ -27,14 +27,14 @@ router.get(
       req.currentUser!.userId,
       String(twitterUserId)
     );
-    const T = new twit({
+    const twitterClient = new twit({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
       access_token: oauthAccessToken,
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      const userInfo = await T.get('account/verify_credentials');
+      const userInfo = await twitterClient.get('account/verify_credentials');
       if (userInfo) {
         res.send(userInfo.data);
       }

@@ -32,14 +32,14 @@ router.get(
       req.currentUser!.userId,
       String(twitterUserId)
     );
-    const T = new twit({
+    const twitterClient = new twit({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
       access_token: oauthAccessToken,
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      const timeline = await T.get('statuses/home_timeline', {
+      const timeline = await twitterClient.get('statuses/home_timeline', {
         tweet_mode: 'extended',
         max_id: maxId ? String(maxId) : undefined,
         count: 50,

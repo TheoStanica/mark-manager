@@ -29,14 +29,14 @@ router.post(
       req.currentUser!.userId,
       String(twitterUserId)
     );
-    const T = new twit({
+    const twitterClient = new twit({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
       access_token: oauthAccessToken,
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      await T.post('statuses/update', { status: status });
+      await twitterClient.post('statuses/update', { status: status });
       res.sendStatus(204);
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
