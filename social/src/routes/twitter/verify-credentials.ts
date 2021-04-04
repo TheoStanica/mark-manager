@@ -8,6 +8,7 @@ import {
 import twit from 'twit';
 import { UserController } from '../../controllers/user-controller';
 import { query } from 'express-validator';
+import { getTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -24,14 +25,13 @@ router.get(
   validateRequest,
   async (req: Request, res: Response) => {
     const { twitterUserId } = req.query;
-    const data = await UserController.getUserTwitterAccountTokens(
+    const {
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+    } = await getTwitterAccountTokens(
       req.currentUser!.userId,
       String(twitterUserId)
     );
-    if (!data) {
-      throw new BadRequestError('Please provide a valid userId');
-    }
-    const { oauthAccessToken, oauthAccessTokenSecret } = data;
     const T = new twit({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
