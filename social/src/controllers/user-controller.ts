@@ -63,9 +63,9 @@ export class UserController {
           twitterUserId: data.twitterUserId,
           twitterScreenName: data.twitterScreenName,
         });
-        twitterDetails.save();
+        await twitterDetails.save();
         user.twitter.push(twitterDetails);
-        user.save();
+        await user.save();
         return user;
       }
       return null;
