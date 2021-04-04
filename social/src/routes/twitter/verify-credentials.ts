@@ -1,12 +1,10 @@
 import express, { Request, Response } from 'express';
 import {
-  BadRequestError,
   FailedConnectionError,
   requireAuth,
   validateRequest,
 } from '@tcosmin/common';
 import twit from 'twit';
-import { UserController } from '../../controllers/user-controller';
 import { query } from 'express-validator';
 import { getTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 
