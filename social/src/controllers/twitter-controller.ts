@@ -1,9 +1,9 @@
-import { Twitter, TwitterAttrs, TwitterDoc } from '../models/twitter';
+import { Twitter, TwitterAttrs } from '../models/twitter';
 
 export class TwitterController {
-  static createTwitterAccountDetails(twitterAttrs: TwitterAttrs): TwitterDoc {
+  static async createTwitterAccountDetails(twitterAttrs: TwitterAttrs) {
     const twitter = Twitter.build(twitterAttrs);
-    twitter.save();
+    await twitter.save();
     return twitter;
   }
 
