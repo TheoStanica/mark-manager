@@ -50,7 +50,7 @@ router.get(
         res.send([]);
       }
     } catch (err) {
-      await handleTwitterErrors(err, String(twitterUserId));
+      handleTwitterErrors(err, String(twitterUserId));
     }
   }
 );

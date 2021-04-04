@@ -39,7 +39,7 @@ router.post(
       await T.post('statuses/update', { status: status });
       res.sendStatus(204);
     } catch (err) {
-      await handleTwitterErrors(err, String(twitterUserId));
+      handleTwitterErrors(err, String(twitterUserId));
     }
   }
 );

@@ -39,7 +39,7 @@ router.get(
         res.send(userInfo.data);
       }
     } catch (err) {
-      await handleTwitterErrors(err, String(twitterUserId));
+      handleTwitterErrors(err, String(twitterUserId));
     }
   }
 );
