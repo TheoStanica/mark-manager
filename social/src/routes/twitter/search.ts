@@ -44,13 +44,9 @@ router.get(
         tweet_mode: 'extended',
         max_id: maxId ? String(maxId) : undefined,
       });
-      if (tweets) {
-        res.send(tweets.data);
-      } else {
-        res.send([]);
-      }
+      res.send(tweets.data || []);
     } catch (err) {
-      await handleTwitterErrors(err, String(twitterUserId));
+      handleTwitterErrors(err, String(twitterUserId));
     }
   }
 );
