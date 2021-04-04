@@ -15,7 +15,8 @@ router.get(
   [
     query('twitterUserId')
       .notEmpty()
-      .withMessage('Please provide a Twitter user ID'),
+      .isNumeric()
+      .withMessage('Please provide a valid Twitter user ID'),
     query('search').notEmpty().withMessage('Please provide a search parameter'),
     query('maxId')
       .optional()
