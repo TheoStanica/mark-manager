@@ -74,7 +74,7 @@ export class UserController {
 
   static async getUserAllTwitterAccounts(userId: string) {
     const user = await User.findById(userId).populate('twitter');
-    return user ? user : [];
+    return user?.twitter || [];
   }
 
   static async getUserTwitterAccountTokens(
