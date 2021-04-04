@@ -1,14 +1,19 @@
-import { BadRequestError, FailedConnectionError } from '@tcosmin/common';
-import { UserController } from '../controllers/user-controller';
+import {
+  FailedConnectionError,
+  TwitterInvalidTokensError,
+  TwitterRateLimitExceededError,
+} from '@tcosmin/common';
 
 export const handleTwitterErrors = async (
   err: any,
-  userId: string,
   twitterAccountId: string
 ) => {
-  if (err?.code === 89) {
-    await UserController.deleteUserTwitterAccount(userId, twitterAccountId);
-    throw new BadRequestError('Invalid or Expired Twitter Token');
+  switch (err?.code) {
+    case 88:
+      throw new TwitterRateLimitExceededError(twitterAccountId);
+    case 89:
+      throw new TwitterInvalidTokensError(twitterAccountId);
+    default:
+      throw new FailedConnectionError();
   }
-  throw new FailedConnectionError();
 };
