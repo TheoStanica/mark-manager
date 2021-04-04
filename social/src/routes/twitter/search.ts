@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import {
-  BadRequestError,
   FailedConnectionError,
-  ForbiddenError,
   requireAuth,
+  validateRequest,
 } from '@tcosmin/common';
 import twit from 'twit';
-import { UserController } from '../../controllers/user-controller';
+import { query } from 'express-validator';
+import { getTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -15,40 +15,46 @@ const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 router.get(
   '/api/social/twitter/search/tweets',
   requireAuth,
+  [
+    query('twitterUserId')
+      .notEmpty()
+      .withMessage('Please provide a Twitter user ID'),
+    query('search').notEmpty().withMessage('Please provide a search parameter'),
+    query('maxId')
+      .optional()
+      .isNumeric()
+      .withMessage('maxId must be a numeric value'),
+  ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const { search, maxId } = req.query;
-    if (!search) {
-      throw new BadRequestError('Please provide a search parameter');
-    }
-    const tokens = await UserController.getUserTwitterTokens(
-      req.currentUser!.userId
+    const { search, maxId, twitterUserId } = req.query;
+    const {
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+    } = await getTwitterAccountTokens(
+      req.currentUser!.userId,
+      String(twitterUserId)
     );
-    if (tokens && tokens.oauthAccessToken && tokens.oauthAccessTokenSecret) {
-      const { oauthAccessToken, oauthAccessTokenSecret } = tokens;
-      const T = new twit({
-        consumer_key: consumerKey,
-        consumer_secret: consumerSecret,
-        access_token: oauthAccessToken,
-        access_token_secret: oauthAccessTokenSecret,
+    const T = new twit({
+      consumer_key: consumerKey,
+      consumer_secret: consumerSecret,
+      access_token: oauthAccessToken,
+      access_token_secret: oauthAccessTokenSecret,
+    });
+    try {
+      const tweets = await T.get('search/tweets', {
+        q: String(search),
+        tweet_mode: 'extended',
+        max_id: maxId ? String(maxId) : undefined,
       });
-      try {
-        const tweets = await T.get('search/tweets', {
-          q: String(search),
-          tweet_mode: 'extended',
-          max_id: maxId ? String(maxId) : undefined,
-        });
-        if (tweets) {
-          res.send(tweets.data);
-        } else {
-          res.send([]);
-        }
-      } catch (err) {
-        // Tokens are invalid or revoked (Twitter side)
-        throw new FailedConnectionError();
+      if (tweets) {
+        res.send(tweets.data);
+      } else {
+        res.send([]);
       }
-    } else {
-      // user didnt yet connect a twitter account
-      throw new ForbiddenError();
+    } catch (err) {
+      // Tokens are invalid or revoked (Twitter side)
+      throw new FailedConnectionError();
     }
   }
 );
