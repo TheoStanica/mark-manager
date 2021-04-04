@@ -1,12 +1,9 @@
 import express, { Request, Response } from 'express';
-import {
-  FailedConnectionError,
-  requireAuth,
-  validateRequest,
-} from '@tcosmin/common';
+import { requireAuth, validateRequest } from '@tcosmin/common';
 import twit from 'twit';
 import { query } from 'express-validator';
 import { getTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../services/handleTwitterErrors';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -53,8 +50,11 @@ router.get(
         res.send([]);
       }
     } catch (err) {
-      // Tokens are invalid or revoked (Twitter side)
-      throw new FailedConnectionError();
+      await handleTwitterErrors(
+        err,
+        req.currentUser!.userId,
+        String(twitterUserId)
+      );
     }
   }
 );
