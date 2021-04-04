@@ -13,6 +13,7 @@ export class TwitterConnectedListener extends Listener<TwitterConnectedEvent> {
       id,
       oauthAccessToken,
       oauthAccessTokenSecret,
+      twitterScreenName,
       twitterUserId,
     } = data;
 
@@ -20,6 +21,7 @@ export class TwitterConnectedListener extends Listener<TwitterConnectedEvent> {
       userID: id,
       oauthAccessToken,
       oauthAccessTokenSecret,
+      twitterScreenName,
       twitterUserId,
     });
 
