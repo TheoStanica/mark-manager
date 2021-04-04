@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import {
-  BadRequestError,
   FailedConnectionError,
-  ForbiddenError,
   requireAuth,
+  validateRequest,
 } from '@tcosmin/common';
 import twit from 'twit';
-import { UserController } from '../../controllers/user-controller';
+import { query } from 'express-validator';
+import { getTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -15,39 +15,46 @@ const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 router.get(
   '/api/social/twitter/statuses/home_timeline',
   requireAuth,
+  [
+    query('maxId')
+      .optional()
+      .isNumeric()
+      .withMessage('maxId must be a numericvalue'),
+    query('twitterUserId')
+      .notEmpty()
+      .isNumeric()
+      .withMessage('Please provide a valid Twitter user ID'),
+  ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const { maxId } = req.query;
-    const tokens = await UserController.getUserTwitterTokens(
-      req.currentUser!.userId
+    const { maxId, twitterUserId } = req.query;
+    const {
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+    } = await getTwitterAccountTokens(
+      req.currentUser!.userId,
+      String(twitterUserId)
     );
-    if (tokens && tokens.oauthAccessToken && tokens.oauthAccessTokenSecret) {
-      const { oauthAccessToken, oauthAccessTokenSecret } = tokens;
-
-      const T = new twit({
-        consumer_key: consumerKey,
-        consumer_secret: consumerSecret,
-        access_token: oauthAccessToken,
-        access_token_secret: oauthAccessTokenSecret,
+    const T = new twit({
+      consumer_key: consumerKey,
+      consumer_secret: consumerSecret,
+      access_token: oauthAccessToken,
+      access_token_secret: oauthAccessTokenSecret,
+    });
+    try {
+      const timeline = await T.get('statuses/home_timeline', {
+        tweet_mode: 'extended',
+        max_id: maxId ? String(maxId) : undefined,
+        count: 50,
       });
-
-      try {
-        const timeline = await T.get('statuses/home_timeline', {
-          tweet_mode: 'extended',
-          max_id: maxId ? String(maxId) : undefined,
-          count: 50,
-        });
-        if (timeline) {
-          res.send(timeline.data);
-        } else {
-          res.send([]);
-        }
-      } catch (err) {
-        // Tokens are invalid or revoked (Twitter side)
-        throw new FailedConnectionError();
+      if (timeline) {
+        res.send(timeline.data);
+      } else {
+        res.send([]);
       }
-    } else {
-      // user didnt yet connect a twitter account
-      throw new ForbiddenError();
+    } catch (err) {
+      // Tokens are invalid or revoked (Twitter side)
+      throw new FailedConnectionError();
     }
   }
 );
