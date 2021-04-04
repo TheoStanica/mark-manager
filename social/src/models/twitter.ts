@@ -4,12 +4,14 @@ export interface TwitterAttrs {
   oauthAccessToken: string;
   oauthAccessTokenSecret: string;
   twitterUserId: string;
+  twitterScreenName: string;
 }
 
 export interface TwitterDoc extends mongoose.Document {
   oauthAccessToken: string;
   oauthAccessTokenSecret: string;
   twitterUserId: string;
+  twitterScreenName: string;
 }
 
 export interface TwitterModel extends mongoose.Model<TwitterDoc> {
@@ -22,6 +24,9 @@ const twitterAccountSchema = new mongoose.Schema(
       type: String,
     },
     oauthAccessTokenSecret: {
+      type: String,
+    },
+    twitterScreenName: {
       type: String,
     },
     twitterUserId: {
