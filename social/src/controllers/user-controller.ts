@@ -105,23 +105,30 @@ export class UserController {
     twitterAccountId: string
   ) {
     const user = await User.findById(userId).populate('twitter');
-    if (!user) return null;
-    user.twitter?.map(async (account) => {
-      if (account.twitterUserId === twitterAccountId) {
-        await TwitterController.removeTwitterAccountDetails(account.id);
-        await User.updateOne(
-          { _id: userId },
-          {
-            $pull: {
-              twitter: account.id,
-            },
-          },
-          {
-            new: true,
-            multi: true,
-          }
-        );
+    if (!user)
+      throw new BadRequestError('You have no Twitter accounts connected');
+
+    const foundAccount = user.twitter?.find(
+      (account) => account.twitterUserId === twitterAccountId
+    );
+    if (!foundAccount) {
+      throw new BadRequestError(
+        'This Twitter account is not connected to your account'
+      );
+    }
+    // transaction here
+    await TwitterController.removeTwitterAccountDetails(foundAccount.id);
+    return await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: {
+          twitter: foundAccount.id,
+        },
+      },
+      {
+        new: true,
+        multi: true,
       }
-    });
+    );
   }
 }
