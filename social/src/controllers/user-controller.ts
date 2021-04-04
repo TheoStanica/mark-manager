@@ -82,23 +82,22 @@ export class UserController {
     twitterUserId: string
   ) {
     const user = await User.findById(userId).populate('twitter');
-    if (!user) return null;
+    if (!user)
+      throw new BadRequestError('You have no Twitter accounts connected');
 
-    let tokens: TwitterTokenData = {
-      oauthAccessToken: '',
-      oauthAccessTokenSecret: '',
-    };
+    const foundAccount = user.twitter?.find(
+      (account) => account.twitterUserId === twitterUserId
+    );
 
-    user.twitter?.map((account) => {
-      if (account.twitterUserId === twitterUserId) {
-        tokens.oauthAccessToken = account.oauthAccessToken;
-        tokens.oauthAccessTokenSecret = account.oauthAccessTokenSecret;
-      }
-    });
-
-    if (tokens.oauthAccessToken === '' && tokens.oauthAccessTokenSecret === '')
-      return null;
-    return tokens;
+    if (!foundAccount) {
+      throw new BadRequestError(
+        'This Twitter account is not connected to your account'
+      );
+    }
+    return {
+      oauthAccessToken: foundAccount.oauthAccessToken,
+      oauthAccessTokenSecret: foundAccount.oauthAccessTokenSecret,
+    } as TwitterTokenData;
   }
 
   static async deleteUserTwitterAccount(
