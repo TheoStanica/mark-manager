@@ -1,4 +1,6 @@
 export declare enum errorTypes {
     AccountNotActivated = "accountNotActivated",
-    FailedConnectionError = "failedConnectionError"
+    FailedConnectionError = "failedConnectionError",
+    InvalidTokens = "invalidTokens",
+    TwitterRateLimitExceeded = "twitterRateLimitExceeded"
 }

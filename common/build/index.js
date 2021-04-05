@@ -20,6 +20,8 @@ __exportStar(require("./errors/forbidden-error"), exports);
 __exportStar(require("./errors/account-not-activated-error"), exports);
 __exportStar(require("./errors/account-already-activated-error"), exports);
 __exportStar(require("./errors/failed-connection-error"), exports);
+__exportStar(require("./errors/twitter-invalid-tokens-error"), exports);
+__exportStar(require("./errors/twitter-rate-limit-exceeded-error"), exports);
 __exportStar(require("./middlewares/error-handler"), exports);
 __exportStar(require("./middlewares/require-auth"), exports);
 __exportStar(require("./middlewares/validate-request"), exports);

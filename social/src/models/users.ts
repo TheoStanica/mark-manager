@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
+import { TwitterDoc } from './twitter';
 
 export interface UserAttrs {
   _id: string;
 }
 
 export interface UserDoc extends mongoose.Document {
-  twitter: {
-    oauthAccessToken: string | null;
-    oauthAccessTokenSecret: string | null;
-  };
+  twitter: TwitterDoc[];
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -17,20 +15,20 @@ export interface UserModel extends mongoose.Model<UserDoc> {
 
 const userSchema = new mongoose.Schema(
   {
-    twitter: {
-      oauthAccessToken: {
-        type: String,
+    twitter: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TwitterAccount',
       },
-      oauthAccessTokenSecret: {
-        type: String,
-      },
-    },
+    ],
   },
   {
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
+        delete ret.id;
+        delete ret.__v;
       },
     },
   }
