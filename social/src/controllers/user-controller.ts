@@ -116,19 +116,32 @@ export class UserController {
         'This Twitter account is not connected to your account'
       );
     }
-    // transaction here
-    await TwitterController.removeTwitterAccountDetails(foundAccount.id);
-    return await User.findByIdAndUpdate(
-      userId,
-      {
-        $pull: {
-          twitter: foundAccount.id,
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      await TwitterController.removeTwitterAccountDetails(
+        foundAccount.id,
+        session
+      );
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: {
+            twitter: foundAccount.id,
+          },
         },
-      },
-      {
-        new: true,
-        multi: true,
-      }
-    );
+        {
+          new: true,
+          multi: true,
+          session: session,
+        }
+      );
+      await session.commitTransaction();
+      session.endSession();
+    } catch (err) {
+      await session.abortTransaction();
+      session.endSession();
+      throw new DatabaseConnectionError();
+    }
   }
 }
