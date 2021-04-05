@@ -1,4 +1,5 @@
 import { Twitter, TwitterAttrs } from '../models/twitter';
+import { ClientSession } from 'mongoose';
 
 export class TwitterController {
   static async createTwitterAccountDetails(twitterAttrs: TwitterAttrs) {
@@ -22,7 +23,13 @@ export class TwitterController {
     );
   }
 
-  static async removeTwitterAccountDetails(twitterAccountDbId: string) {
-    return await Twitter.deleteOne({ _id: twitterAccountDbId });
+  static async removeTwitterAccountDetails(
+    twitterAccountDbId: string,
+    session?: ClientSession
+  ) {
+    return await Twitter.deleteOne(
+      { _id: twitterAccountDbId },
+      { session: session ? session : undefined }
+    );
   }
 }
