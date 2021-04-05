@@ -1,5 +1,7 @@
-import { Twitter, TwitterAttrs, TwitterDoc } from '../models/twitter';
-import { User, UserAttrs, UserDoc } from '../models/users';
+import { BadRequestError, DatabaseConnectionError } from '@tcosmin/common';
+import mongoose from 'mongoose';
+import { Twitter } from '../models/twitter';
+import { User, UserAttrs } from '../models/users';
 import { TwitterController } from './twitter-controller';
 
 export interface addTwitterTokensData {
@@ -23,27 +25,47 @@ export class UserController {
   }
 
   static async addTwitterTokens(data: addTwitterTokensData) {
-    const user = await User.findById(data.userID).populate('twitter');
-    if (!user) {
-      const newUser = User.build({ _id: data.userID });
-      const twitterDetails = await TwitterController.createTwitterAccountDetails(
-        {
-          oauthAccessToken: data.oauthAccessToken,
-          oauthAccessTokenSecret: data.oauthAccessTokenSecret,
-          twitterUserId: data.twitterUserId,
-          twitterScreenName: data.twitterScreenName,
-        }
-      );
-      newUser.twitter.push(twitterDetails);
-      await newUser.save();
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const user = await User.findById(data.userID)
+        .populate('twitter')
+        .session(session);
+      if (!user) {
+        const newUser = User.build({ _id: data.userID });
+        const twitterDetails = await TwitterController.createTwitterAccountDetails(
+          {
+            oauthAccessToken: data.oauthAccessToken,
+            oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+            twitterUserId: data.twitterUserId,
+            twitterScreenName: data.twitterScreenName,
+          },
+          session
+        );
+        newUser.twitter.push(twitterDetails);
+        await newUser.save({ session: session });
 
-      return newUser;
-    } else {
-      //check if these details are already in db and update if it's the case
-      let exists = false;
-      user.twitter.map(async (twitterAccount) => {
-        if (twitterAccount.twitterUserId === data.twitterUserId) {
-          exists = true;
+        await session.commitTransaction();
+        session.endSession();
+        return true;
+      } else {
+        //check if these details are already in db and update if it's the case
+        const twitterAccount = user.twitter.find(
+          (account) => account.twitterUserId === data.twitterUserId
+        );
+        if (!twitterAccount) {
+          // new twitter account to connect
+          const twitterDetails = Twitter.build({
+            oauthAccessToken: data.oauthAccessToken,
+            oauthAccessTokenSecret: data.oauthAccessTokenSecret,
+            twitterUserId: data.twitterUserId,
+            twitterScreenName: data.twitterScreenName,
+          });
+          await twitterDetails.save({ session: session });
+          user.twitter.push(twitterDetails);
+          await user.save({ session: session });
+        } else {
+          // update found account
           await TwitterController.updateTwitterAccountDetails(
             twitterAccount.id,
             {
@@ -51,24 +73,18 @@ export class UserController {
               oauthAccessTokenSecret: data.oauthAccessTokenSecret,
               twitterUserId: data.twitterUserId,
               twitterScreenName: data.twitterScreenName,
-            }
+            },
+            session
           );
         }
-      });
-      if (!exists) {
-        // a new twitter account to connect
-        const twitterDetails = Twitter.build({
-          oauthAccessToken: data.oauthAccessToken,
-          oauthAccessTokenSecret: data.oauthAccessTokenSecret,
-          twitterUserId: data.twitterUserId,
-          twitterScreenName: data.twitterScreenName,
-        });
-        await twitterDetails.save();
-        user.twitter.push(twitterDetails);
-        await user.save();
-        return user;
+        await session.commitTransaction();
+        session.endSession();
+        return true;
       }
-      return null;
+    } catch (err) {
+      await session.abortTransaction();
+      session.endSession();
+      return false;
     }
   }
 
