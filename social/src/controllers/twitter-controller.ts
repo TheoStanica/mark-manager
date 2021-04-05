@@ -2,15 +2,19 @@ import { Twitter, TwitterAttrs } from '../models/twitter';
 import { ClientSession } from 'mongoose';
 
 export class TwitterController {
-  static async createTwitterAccountDetails(twitterAttrs: TwitterAttrs) {
+  static async createTwitterAccountDetails(
+    twitterAttrs: TwitterAttrs,
+    session?: ClientSession
+  ) {
     const twitter = Twitter.build(twitterAttrs);
-    await twitter.save();
+    await twitter.save({ session: session });
     return twitter;
   }
 
   static async updateTwitterAccountDetails(
     twitterAccountDbId: string,
-    data: TwitterAttrs
+    data: TwitterAttrs,
+    session?: ClientSession
   ) {
     return await Twitter.findByIdAndUpdate(
       twitterAccountDbId,
@@ -19,7 +23,7 @@ export class TwitterController {
         oauthAccessTokenSecret: data.oauthAccessTokenSecret,
         twitterScreenName: data.twitterScreenName,
       },
-      { new: true }
+      { new: true, session: session }
     );
   }
 
