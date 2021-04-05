@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import twit from 'twit';
 import { query } from 'express-validator';
-import { getTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
+import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../services/handleTwitterErrors';
 
 const router = express.Router();
@@ -28,7 +28,7 @@ router.get(
     const {
       oauthAccessToken,
       oauthAccessTokenSecret,
-    } = await getTwitterAccountTokens(
+    } = await fetchTwitterAccountTokens(
       req.currentUser!.userId,
       String(twitterUserId)
     );

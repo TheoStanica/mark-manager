@@ -1,6 +1,6 @@
 import { UserController } from '../controllers/user-controller';
 
-export const getTwitterAccountTokens = async (
+export const fetchTwitterAccountTokens = async (
   userId: string,
   twitterUserId: string
 ) => {
