@@ -10,9 +10,16 @@ import {
   TWITTER_CLEAR_ALL_STREAMS,
   TWITTER_ADD_MULTIPLE_STREAMS,
   TWITTER_REMOVE_STREAM,
+  TWITTER_ADD_MULTIPLE_ACCOUNTS,
+  TWITTER_CLEAR_ALL_ACCOUNTS,
+  TWITTER_SET_ACCOUNT_DATA,
+  TWITTER_ISFETCHING_ACCOUNTS,
 } from '../types';
 
 const initialState = {
+  twitterAccounts: [],
+  twitterAccountsById: {},
+  isFetchingAccounts: false,
   name: '',
   screenName: '',
   profileImage: '',
@@ -118,6 +125,40 @@ const twitterReducer = (state = initialState, action) => {
         },
       };
     }
+    case TWITTER_ADD_MULTIPLE_ACCOUNTS:
+      return {
+        ...state,
+        twitterAccounts: [...state.twitterAccounts, ...action.payload.accounts],
+        twitterAccountsById: {
+          ...state.twitterAccountsById,
+          ...action.payload.accountsById,
+        },
+      };
+    case TWITTER_CLEAR_ALL_ACCOUNTS:
+      return {
+        ...state,
+        twitterAccounts: [],
+        twitterAccountsById: {},
+      };
+    case TWITTER_SET_ACCOUNT_DATA:
+      return {
+        ...state,
+        twitterAccountsById: {
+          ...state.twitterAccountsById,
+          [action.payload.id]: {
+            ...state.twitterAccountsById[action.payload.id],
+            name: action.payload.name,
+            screenName: action.payload.screenName,
+            profileImage: action.payload.profileImage,
+            isConnected: true,
+          },
+        },
+      };
+    case TWITTER_ISFETCHING_ACCOUNTS:
+      return {
+        ...state,
+        isFetchingAccounts: action.payload.isFetchingAccounts,
+      };
     default:
       return state;
   }
