@@ -48,6 +48,30 @@ export const fetchTwitterAccountsData = () => async (dispatch) => {
     dispatch(handleError({ error: err }));
   }
 };
+
+export const fetchTwitterAccountData = ({ twitterUserId }) => async (
+  dispatch
+) => {
+  try {
+    const accountData = await axiosInstance.get(
+      `/api/social/twitter/user?twitterUserId=${twitterUserId}`
+    );
+    if (accountData) {
+      await dispatch({
+        type: TWITTER_SET_ACCOUNT_DATA,
+        payload: {
+          id: accountData.data.id_str,
+          name: accountData.data.name,
+          screenName: accountData.data.screen_name,
+          profileImage: accountData.data.profile_image_url_https,
+        },
+      });
+    }
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
+
 export const fetchTwitterAccounts = () => async (dispatch) => {
   try {
     const accounts = await axiosInstance.get('/api/social/twitter/accounts');
