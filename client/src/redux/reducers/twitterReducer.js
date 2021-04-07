@@ -13,13 +13,11 @@ import {
   TWITTER_ADD_MULTIPLE_ACCOUNTS,
   TWITTER_CLEAR_ALL_ACCOUNTS,
   TWITTER_SET_ACCOUNT_DATA,
-  TWITTER_ISFETCHING_ACCOUNTS,
 } from '../types';
 
 const initialState = {
   twitterAccounts: [],
   twitterAccountsById: {},
-  isFetchingAccounts: false,
   name: '',
   screenName: '',
   profileImage: '',
@@ -153,11 +151,6 @@ const twitterReducer = (state = initialState, action) => {
             isConnected: true,
           },
         },
-      };
-    case TWITTER_ISFETCHING_ACCOUNTS:
-      return {
-        ...state,
-        isFetchingAccounts: action.payload.isFetchingAccounts,
       };
     default:
       return state;
