@@ -8,6 +8,7 @@ import TimelineHeader from './Timeline/TimelineHeader';
 import TweetCard from './Tweet/TweetCard';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
+import { createSelector } from 'reselect';
 
 const StyledContainer = styled.div`
   height: 100%;
@@ -16,9 +17,18 @@ const StyledContainer = styled.div`
   align-items: center;
 `;
 
+const selectScreenName = (streamId) =>
+  createSelector(
+    (state) =>
+      state?.twitterReducer?.twitterAccountsById[
+        state?.twitterReducer?.streamsById[streamId]?.twitterUserId
+      ]?.screenName,
+    (screenName) => screenName
+  );
+
 const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
-  const { screenName } = useSelector((state) => state.twitterReducer);
   const stream = useSelector((state) => state.twitterReducer.streamsById[id]);
+  const screenName = useSelector(selectScreenName(stream.id));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,7 +57,7 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
     <Timeline>
       <TimelineHeader
         type={type}
-        account={screenName}
+        account={screenName ? screenName : ''}
         onRefresh={onLoad}
         onRemove={() => {
           dispatch(removeStream({ id: stream.id }));
