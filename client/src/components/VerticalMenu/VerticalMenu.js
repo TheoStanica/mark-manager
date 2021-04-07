@@ -20,7 +20,7 @@ import {
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
-  const { isConnected } = useSelector((state) => state.twitterReducer);
+  const { twitterAccounts } = useSelector((state) => state.twitterReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const VerticalMenu = () => {
         </StyledMenuIcon>
         <StyledSeparator />
 
-        {isConnected ? (
+        {twitterAccounts.length > 0 ? (
           <VerticalMenuItem
             text="Create"
             offset={20}
