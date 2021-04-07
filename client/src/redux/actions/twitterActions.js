@@ -12,9 +12,13 @@ import {
   USER_SET_MESSAGES,
   TWITTER_ADD_MULTIPLE_STREAMS,
   TWITTER_REMOVE_STREAM,
+  TWITTER_ADD_MULTIPLE_ACCOUNTS,
+  TWITTER_CLEAR_ALL_ACCOUNTS,
+  TWITTER_SET_ACCOUNT_DATA,
 } from '../types';
 import { store } from '../store';
 import { v4 as uuidv4 } from 'uuid';
+import { shallowEqual } from 'react-redux';
 
 const handleError = ({ error }) => async (dispatch) => {
   if (error?.response?.data?.errors) {
@@ -105,6 +109,7 @@ export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
         id: s.id,
         type: s.type,
         search: s.search ? s.search : undefined,
+        twitterUserId: s.twitterUserId,
       };
     });
     await axiosInstance.post('/api/user/streampreferences', {
@@ -115,7 +120,9 @@ export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
   }
 };
 
-export const addStream = ({ type, search }) => async (dispatch) => {
+export const addStream = ({ twitterUserId, type, search }) => async (
+  dispatch
+) => {
   try {
     await dispatch({
       type: TWITTER_ADD_STREAM,
@@ -123,6 +130,7 @@ export const addStream = ({ type, search }) => async (dispatch) => {
         id: uuidv4(),
         type: type,
         search: search ? search : undefined,
+        twitterUserId: twitterUserId,
       },
     });
     const { streams } = store.getState().twitterReducer;
@@ -173,11 +181,13 @@ export const setStreamLoading = ({ id, isLoading }) => (dispatch) => {
   });
 };
 
-export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
+export const loadTweetSearchStream = ({ id, search, twitterUserId }) => async (
+  dispatch
+) => {
   try {
     await dispatch(setStreamLoading({ id, isLoading: true }));
     const response = await axiosInstance.get(
-      `/api/social/twitter/search/tweets?search=${search}`
+      `/api/social/twitter/search/tweets?search=${search}&twitterUserId=${twitterUserId}`
     );
     await dispatch({
       type: TWITTER_SET_STREAM_TWEETS,
@@ -195,12 +205,15 @@ export const loadTweetSearchStream = ({ id, search }) => async (dispatch) => {
   }
 };
 
-export const loadMoreTweetSearchStream = ({ id, search, maxId }) => async (
-  dispatch
-) => {
+export const loadMoreTweetSearchStream = ({
+  id,
+  search,
+  maxId,
+  twitterUserId,
+}) => async (dispatch) => {
   try {
     const response = await axiosInstance.get(
-      `/api/social/twitter/search/tweets?search=${search}&maxId=${maxId}`
+      `/api/social/twitter/search/tweets?search=${search}&maxId=${maxId}&twitterUserId=${twitterUserId}`
     );
     await dispatch({
       type: TWITTER_ADD_MORE_TWEETS,
@@ -217,11 +230,13 @@ export const loadMoreTweetSearchStream = ({ id, search, maxId }) => async (
   }
 };
 
-export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
+export const loadHomeTimelineStream = ({ id, twitterUserId }) => async (
+  dispatch
+) => {
   try {
     await dispatch(setStreamLoading({ id, isLoading: true }));
     const response = await axiosInstance.get(
-      '/api/social/twitter/statuses/home_timeline'
+      `/api/social/twitter/statuses/home_timeline?twitterUserId=${twitterUserId}`
     );
     await dispatch({
       type: TWITTER_SET_STREAM_TWEETS,
@@ -239,12 +254,14 @@ export const loadHomeTimelineStream = ({ id }) => async (dispatch) => {
   }
 };
 
-export const loadMoreHomeTimelineStream = ({ id, maxId }) => async (
-  dispatch
-) => {
+export const loadMoreHomeTimelineStream = ({
+  id,
+  maxId,
+  twitterUserId,
+}) => async (dispatch) => {
   try {
     const response = await axiosInstance.get(
-      `/api/social/twitter/statuses/home_timeline?maxId=${maxId}`
+      `/api/social/twitter/statuses/home_timeline?maxId=${maxId}&twitterUserId=${twitterUserId}`
     );
     await dispatch({
       type: TWITTER_ADD_MORE_TWEETS,
