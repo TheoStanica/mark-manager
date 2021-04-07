@@ -9,8 +9,14 @@ import Stream from './Stream';
 const TwitterSearchStream = React.memo(({ stream, provided }) => {
   const dispatch = useDispatch();
   const loadTweets = useCallback(() => {
-    dispatch(loadTweetSearchStream({ id: stream.id, search: stream.search }));
-  }, [dispatch, stream.id, stream.search]);
+    dispatch(
+      loadTweetSearchStream({
+        id: stream.id,
+        search: stream.search,
+        twitterUserId: stream.twitterUserId,
+      })
+    );
+  }, [dispatch, stream.id, stream.search, stream.twitterUserId]);
 
   return (
     <Stream
@@ -24,6 +30,7 @@ const TwitterSearchStream = React.memo(({ stream, provided }) => {
             id: stream.id,
             search: stream.search,
             maxId: stream.metadata.max_id,
+            twitterUserId: stream.twitterUserId,
           })
         )
       }
