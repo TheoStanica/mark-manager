@@ -38,6 +38,16 @@ const handleError = ({ error }) => async (dispatch) => {
   }
 };
 
+export const fetchTwitterAccountsData = () => async (dispatch) => {
+  try {
+    const accounts = store.getState().twitterReducer.twitterAccounts;
+    accounts.forEach(async (account) => {
+      await dispatch(fetchTwitterAccountData({ twitterUserId: account }));
+    });
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
 export const fetchTwitterAccounts = () => async (dispatch) => {
   try {
     const accounts = await axiosInstance.get('/api/social/twitter/accounts');
