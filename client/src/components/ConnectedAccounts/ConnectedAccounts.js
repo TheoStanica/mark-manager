@@ -11,46 +11,46 @@ import {
   StyledRoundedImage,
   StyledAccountDetailsInfo,
   StyledNotConnected,
-  StyledDivider,
   StyledConnect,
 } from './styles';
 
 const ConnectedAccounts = () => {
-  const { isConnected, name, screenName, profileImage } = useSelector(
+  const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
 
+  const renderAccountCard = (accountId, idx) => (
+    <Card key={idx} style={{ boxShadow: 'none' }}>
+      <CardBody>
+        <StyledProfileInfoWrapper>
+          <StyledRoundedImage
+            src={twitterAccountsById[accountId].profileImage}
+            alt={twitterAccountsById[accountId].profileImage}
+          />
+          <StyledAccountDetailsInfo>
+            Twitter
+            <div>
+              <strong style={{ marginRight: '.5rem', whiteSpace: 'nowrap' }}>
+                {twitterAccountsById[accountId].name}
+              </strong>
+              @{twitterAccountsById[accountId].screenName}
+            </div>
+          </StyledAccountDetailsInfo>
+        </StyledProfileInfoWrapper>
+      </CardBody>
+    </Card>
+  );
+
   const renderAccounts = () => {
-    return isConnected ? (
+    return twitterAccounts.length > 0 ? (
       <>
         <CardHeader>Your accounts</CardHeader>
-        <Card style={{ boxShadow: 'none' }}>
-          <CardBody>
-            <StyledProfileInfoWrapper>
-              <StyledRoundedImage src={profileImage} alt={profileImage} />
-              <StyledAccountDetailsInfo>
-                Twitter
-                <div>
-                  <strong style={{ marginRight: '.5rem' }}>{name}</strong>@
-                  {screenName}
-                </div>
-              </StyledAccountDetailsInfo>
-            </StyledProfileInfoWrapper>
-          </CardBody>
-        </Card>
+        {twitterAccounts?.map((account, idx) => {
+          return renderAccountCard(account, idx);
+        })}
       </>
     ) : (
       <StyledNotConnected>No accounts connected</StyledNotConnected>
-    );
-  };
-  const renderAddAccounts = () => {
-    return isConnected ? null : (
-      <>
-        <StyledDivider></StyledDivider>
-        <StyledConnect>
-          <ConnectTwitterButton />
-        </StyledConnect>
-      </>
     );
   };
 
@@ -59,7 +59,9 @@ const ConnectedAccounts = () => {
       content={
         <>
           {renderAccounts()}
-          {renderAddAccounts()}
+          <StyledConnect>
+            <ConnectTwitterButton />
+          </StyledConnect>
         </>
       }
     >

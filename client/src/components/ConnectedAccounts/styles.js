@@ -22,11 +22,6 @@ export const StyledNotConnected = styled.div`
   min-width: 300px;
 `;
 
-export const StyledDivider = styled.div`
-  height: 1px;
-  background: rgba(0, 0, 0, 0.2);
-  margin-bottom: 0.5rem;
-`;
 export const StyledConnect = styled.div`
   display: flex;
   justify-content: center;
