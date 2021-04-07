@@ -38,6 +38,42 @@ const handleError = ({ error }) => async (dispatch) => {
   }
 };
 
+export const fetchTwitterAccounts = () => async (dispatch) => {
+  try {
+    const accounts = await axiosInstance.get('/api/social/twitter/accounts');
+    if (accounts) {
+      const storedAccountsArray = store.getState().twitterReducer
+        .twitterAccounts;
+      const accountsArray = accounts.data.map(
+        (account) => account.twitterUserId
+      );
+      const synced = shallowEqual(accountsArray, storedAccountsArray);
+      if (!synced) {
+        const accountsById = accounts.data.reduce(
+          (obj, account) => ({
+            ...obj,
+            [account.twitterUserId]: { ...account },
+          }),
+          {}
+        );
+        await dispatch({
+          type: TWITTER_CLEAR_ALL_ACCOUNTS,
+        });
+        await dispatch({
+          type: TWITTER_ADD_MULTIPLE_ACCOUNTS,
+          payload: {
+            accounts: accountsArray,
+            accountsById: accountsById,
+          },
+        });
+      }
+      await dispatch(fetchTwitterAccountsData());
+    }
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
+
 export const getTwitterProfileInfoData = () => async (dispatch) => {
   try {
     const user = await axiosInstance.get('/api/social/twitter/user');
