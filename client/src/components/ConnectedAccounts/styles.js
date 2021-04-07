@@ -18,7 +18,7 @@ export const StyledAccountDetailsInfo = styled.div`
 export const StyledNotConnected = styled.div`
   display: flex;
   justify-content: center;
-  margin: 0.5rem 0;
+  margin: 1.5rem 0;
   min-width: 300px;
 `;
 
