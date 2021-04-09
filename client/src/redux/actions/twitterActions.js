@@ -17,6 +17,7 @@ import {
 import { store } from '../store';
 import { v4 as uuidv4 } from 'uuid';
 import { shallowEqual } from 'react-redux';
+import { TwitterEndpoints } from '../../services/twitterApiEndpoints';
 
 const handleError = ({ error }) => async (dispatch) => {
   if (error?.response?.data?.errors) {
@@ -52,7 +53,7 @@ export const fetchTwitterAccountData = ({ twitterUserId }) => async (
 ) => {
   try {
     const accountData = await axiosInstance.get(
-      `/api/social/twitter/user?twitterUserId=${twitterUserId}`
+      TwitterEndpoints.fetchTwitterAccountDataEndpoint({ twitterUserId })
     );
     if (accountData) {
       await dispatch({
@@ -72,7 +73,9 @@ export const fetchTwitterAccountData = ({ twitterUserId }) => async (
 
 export const fetchTwitterAccounts = () => async (dispatch) => {
   try {
-    const accounts = await axiosInstance.get('/api/social/twitter/accounts');
+    const accounts = await axiosInstance.get(
+      TwitterEndpoints.fetchTwitterAccountsEndpoint
+    );
     if (accounts) {
       const storedAccountsArray = store.getState().twitterReducer
         .twitterAccounts;
@@ -108,7 +111,9 @@ export const fetchTwitterAccounts = () => async (dispatch) => {
 
 export const connectToTwitter = () => async (dispatch) => {
   try {
-    const res = await axiosInstance.get('/api/auth/twitter/connect');
+    const res = await axiosInstance.get(
+      TwitterEndpoints.connectToTwitterEndpoint
+    );
     if (res) {
       window.location.assign(
         `https://twitter.com/oauth/authorize?oauth_token=${res.data.requestToken}`
@@ -119,10 +124,13 @@ export const connectToTwitter = () => async (dispatch) => {
   }
 };
 
-export const tweetNewMessage = ({ message }) => async (dispatch) => {
+export const tweetNewMessage = ({ message, accounts }) => async (dispatch) => {
   try {
-    await axiosInstance.post('/api/social/twitter/statuses/update', {
-      status: message,
+    accounts.forEach(async (account) => {
+      await axiosInstance.post(TwitterEndpoints.tweetMessageEndpoint, {
+        status: message,
+        twitterUserId: account,
+      });
     });
     dispatch({
       type: USER_SET_MESSAGES,
@@ -156,7 +164,7 @@ export const updateUserStreamsBackend = ({ streams }) => async (dispatch) => {
         twitterUserId: s.twitterUserId,
       };
     });
-    await axiosInstance.post('/api/user/streampreferences', {
+    await axiosInstance.post(TwitterEndpoints.updateStreamsEndpoint, {
       stream_preferences: updatedstreams,
     });
   } catch (err) {
@@ -231,7 +239,7 @@ export const loadTweetSearchStream = ({ id, search, twitterUserId }) => async (
   try {
     await dispatch(setStreamLoading({ id, isLoading: true }));
     const response = await axiosInstance.get(
-      `/api/social/twitter/search/tweets?search=${search}&twitterUserId=${twitterUserId}`
+      TwitterEndpoints.loadTweetSearchStreamEndpoint({ search, twitterUserId })
     );
     await dispatch({
       type: TWITTER_SET_STREAM_TWEETS,
@@ -257,7 +265,11 @@ export const loadMoreTweetSearchStream = ({
 }) => async (dispatch) => {
   try {
     const response = await axiosInstance.get(
-      `/api/social/twitter/search/tweets?search=${search}&maxId=${maxId}&twitterUserId=${twitterUserId}`
+      TwitterEndpoints.loadMoreTweetSearchStreamEndpoint({
+        search,
+        maxId,
+        twitterUserId,
+      })
     );
     await dispatch({
       type: TWITTER_ADD_MORE_TWEETS,
@@ -280,7 +292,7 @@ export const loadHomeTimelineStream = ({ id, twitterUserId }) => async (
   try {
     await dispatch(setStreamLoading({ id, isLoading: true }));
     const response = await axiosInstance.get(
-      `/api/social/twitter/statuses/home_timeline?twitterUserId=${twitterUserId}`
+      TwitterEndpoints.loadHomeTimelineStreamEndpoint({ twitterUserId })
     );
     await dispatch({
       type: TWITTER_SET_STREAM_TWEETS,
@@ -305,7 +317,10 @@ export const loadMoreHomeTimelineStream = ({
 }) => async (dispatch) => {
   try {
     const response = await axiosInstance.get(
-      `/api/social/twitter/statuses/home_timeline?maxId=${maxId}&twitterUserId=${twitterUserId}`
+      TwitterEndpoints.loadMoreHomeTimelineStreamEndpoint({
+        maxId,
+        twitterUserId,
+      })
     );
     await dispatch({
       type: TWITTER_ADD_MORE_TWEETS,
