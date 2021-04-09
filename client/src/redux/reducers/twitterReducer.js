@@ -1,8 +1,6 @@
 import {
   TWITTER_ADD_STREAM,
   TWITTER_ADD_MORE_TWEETS,
-  TWITTER_RESET_PROFILE_INFO,
-  TWITTER_SET_PROFILE_INFO,
   TWITTER_SET_STREAM_LOADING_STATUS,
   TWITTER_SET_STREAM_TWEETS,
   TWITTER_UPDATE_STREAMS,
@@ -18,28 +16,12 @@ import {
 const initialState = {
   twitterAccounts: [],
   twitterAccountsById: {},
-  name: '',
-  screenName: '',
-  profileImage: '',
-  isConnected: false,
   streams: [],
   streamsById: {},
 };
 
 const twitterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TWITTER_SET_PROFILE_INFO:
-      return {
-        ...state,
-        name: action.payload.name,
-        screenName: action.payload.screenName,
-        profileImage: action.payload.profileImage,
-        isConnected: true,
-      };
-    case TWITTER_RESET_PROFILE_INFO:
-      return {
-        ...initialState,
-      };
     case USER_LOGOUT: {
       return {
         ...initialState,
