@@ -29,7 +29,7 @@ const ConnectedAccountsDropdown = ({ onSelected, reset }) => {
       <img
         src={profileImage}
         alt={screenName}
-        style={{ width: 21, height: 21, marginRight: 3 }}
+        style={{ width: 21, height: 21, marginRight: 3, borderRadius: '100%' }}
       />
       <p>{screenName}</p>
     </div>
