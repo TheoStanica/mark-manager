@@ -4,8 +4,6 @@ import {
   TWITTER_ADD_MORE_TWEETS,
   TWITTER_ADD_STREAM,
   TWITTER_CLEAR_ALL_STREAMS,
-  TWITTER_RESET_PROFILE_INFO,
-  TWITTER_SET_PROFILE_INFO,
   TWITTER_SET_STREAM_LOADING_STATUS,
   TWITTER_SET_STREAM_TWEETS,
   TWITTER_UPDATE_STREAMS,
@@ -106,30 +104,6 @@ export const fetchTwitterAccounts = () => async (dispatch) => {
   } catch (err) {
     dispatch(handleError({ error: err }));
   }
-};
-
-export const getTwitterProfileInfoData = () => async (dispatch) => {
-  try {
-    const user = await axiosInstance.get('/api/social/twitter/user');
-    if (user) {
-      dispatch({
-        type: TWITTER_SET_PROFILE_INFO,
-        payload: {
-          name: user.data.name,
-          screenName: user.data.screen_name,
-          profileImage: user.data.profile_image_url,
-        },
-      });
-    }
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
-
-export const clearTwitterProfileInfoData = () => async (dispatch) => {
-  dispatch({
-    type: TWITTER_RESET_PROFILE_INFO,
-  });
 };
 
 export const connectToTwitter = () => async (dispatch) => {
