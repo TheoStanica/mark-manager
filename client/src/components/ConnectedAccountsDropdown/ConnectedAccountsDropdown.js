@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Select from 'react-select';
 
-const ConnectedAccountsDropdown = ({ onSelected, reset }) => {
+const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti }) => {
   const [selectedOption, setSelectedOption] = useState([]);
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
@@ -20,8 +20,12 @@ const ConnectedAccountsDropdown = ({ onSelected, reset }) => {
 
   const handleChange = (selected) => {
     setSelectedOption(selected);
-    const accountsSelected = selected?.map((acc) => acc.twitterUserId);
-    onSelected(accountsSelected);
+    if (isMulti) {
+      const accountsSelected = selected.map((acc) => acc.twitterUserId);
+      onSelected(accountsSelected);
+    } else {
+      onSelected(selected.twitterUserId);
+    }
   };
 
   const formatOptionLabel = ({ profileImage, screenName }) => (
@@ -39,7 +43,7 @@ const ConnectedAccountsDropdown = ({ onSelected, reset }) => {
     <Select
       value={selectedOption}
       formatOptionLabel={formatOptionLabel}
-      isMulti={true}
+      isMulti={isMulti}
       options={twitterOptions}
       onChange={handleChange}
       isSearchable={true}
