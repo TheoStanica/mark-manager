@@ -61,6 +61,7 @@ const CreateTweet = ({ visible, onClose }) => {
         <ConnectedAccountsDropdown
           reset={resetDropdown}
           onSelected={(selected) => setAccounts(selected)}
+          isMulti={true}
         />
         <StyledTextarea
           value={message}
