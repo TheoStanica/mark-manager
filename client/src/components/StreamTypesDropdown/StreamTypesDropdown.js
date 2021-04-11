@@ -22,6 +22,7 @@ const StreamTypesDropdown = ({ onSelected, reset }) => {
 
   return (
     <Select
+      styles={{ menu: (provided) => ({ ...provided, zIndex: 9999 }) }}
       value={selectedOption}
       options={options}
       onChange={handleChange}
