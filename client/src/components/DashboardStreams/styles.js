@@ -7,7 +7,7 @@ export const StyledDashboardStreams = styled.div`
 `;
 
 export const StyledStreamsWrapper = styled.div`
-  overflow: overlay;
+  overflow: scroll;
   height: 100%;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -19,6 +19,6 @@ export const StyledStreamContainer = styled.li`
 
 export const StyledStreamsList = styled.ul`
   height: 100%;
-  display: flex;
+  display: inline-flex;
   list-style: none;
 `;
