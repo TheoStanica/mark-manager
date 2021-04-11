@@ -1,26 +1,24 @@
 import styled from 'styled-components';
 
 export const StyledTimeline = styled.div`
-  width: 500px;
+  width: 33vw;
+  min-width: 350px;
+  max-width: 500px;
   height: 100%;
   display: inline-flex;
   flex-direction: column;
-  border-radius: 5px;
-  background: linear-gradient(
-    180deg,
-    rgba(44, 0, 100, 0.5) 0%,
-    rgba(227, 181, 164, 0.5) 100%
-  );
+  background: white;
 `;
 
 export const StyledSpan = styled.span``;
 export const StyledTimelineHeader = styled.div`
+  background: #068abc;
+  color: white;
   display: flex;
   justify-content: space-between;
   padding: 1rem;
   padding-bottom: 0.5rem;
   font-size: 1.125rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
   ${StyledSpan} {
     margin-right: 0.5rem;
     font-weight: bold;
@@ -28,7 +26,10 @@ export const StyledTimelineHeader = styled.div`
 `;
 
 export const StyledTimelineBody = styled.div`
-  padding: 0.5rem;
+  padding: 0.3rem;
   flex-grow: 1;
   overflow: overlay;
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+  }
 `;
