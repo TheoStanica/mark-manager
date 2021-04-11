@@ -43,7 +43,7 @@ const VerticalMenu = () => {
         </StyledMenuIcon>
         <StyledSeparator />
 
-        {twitterAccounts.length > 0 ? (
+        {twitterAccounts?.length > 0 ? (
           <VerticalMenuItem
             text="Create"
             offset={20}
