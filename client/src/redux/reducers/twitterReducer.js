@@ -11,11 +11,13 @@ import {
   TWITTER_ADD_MULTIPLE_ACCOUNTS,
   TWITTER_CLEAR_ALL_ACCOUNTS,
   TWITTER_SET_ACCOUNT_DATA,
+  TWITTER_FILTER_ACCOUNTS,
 } from '../types';
 
 const initialState = {
   twitterAccounts: [],
   twitterAccountsById: {},
+  twitterFilteredAccounts: [],
   streams: [],
   streamsById: {},
 };
@@ -133,6 +135,11 @@ const twitterReducer = (state = initialState, action) => {
             isConnected: true,
           },
         },
+      };
+    case TWITTER_FILTER_ACCOUNTS:
+      return {
+        ...state,
+        twitterFilteredAccounts: action.payload.accounts,
       };
     default:
       return state;
