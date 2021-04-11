@@ -13,6 +13,7 @@ import {
   TWITTER_ADD_MULTIPLE_ACCOUNTS,
   TWITTER_CLEAR_ALL_ACCOUNTS,
   TWITTER_SET_ACCOUNT_DATA,
+  TWITTER_FILTER_ACCOUNTS,
 } from '../types';
 import { store } from '../store';
 import { v4 as uuidv4 } from 'uuid';
@@ -101,6 +102,7 @@ export const fetchTwitterAccounts = () => async (dispatch) => {
             accountsById: accountsById,
           },
         });
+        await dispatch(filterAccounts({ accounts: accountsArray }));
       }
       await dispatch(fetchTwitterAccountsData());
     }
@@ -366,4 +368,13 @@ export const loadUserStreams = ({ streams }) => async (dispatch) => {
   } catch (err) {
     dispatch(handleError({ error: err }));
   }
+};
+
+export const filterAccounts = ({ accounts }) => (dispatch) => {
+  dispatch({
+    type: TWITTER_FILTER_ACCOUNTS,
+    payload: {
+      accounts: accounts,
+    },
+  });
 };
