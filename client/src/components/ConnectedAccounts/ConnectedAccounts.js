@@ -42,7 +42,7 @@ const ConnectedAccounts = () => {
   );
 
   const renderAccounts = () => {
-    return twitterAccounts.length > 0 ? (
+    return twitterAccounts?.length > 0 ? (
       <>
         <CardHeader>Your accounts</CardHeader>
         {twitterAccounts?.map((account, idx) => {
