@@ -10,9 +10,11 @@ import { filterAccounts } from '../../redux/actions/twitterActions';
 const FilterStreams = () => {
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
-  const { twitterAccounts } = useSelector((state) => state.twitterReducer);
+  const { twitterAccounts, twitterFilteredAccounts } = useSelector(
+    (state) => state.twitterReducer
+  );
   const [selectedAccountFilter, setSelectedAccountFilter] = useState(
-    twitterAccounts
+    twitterFilteredAccounts
   );
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
