@@ -41,6 +41,7 @@ const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti }) => {
 
   return (
     <Select
+      styles={{ menu: (provided) => ({ ...provided, zIndex: 9999 }) }}
       value={selectedOption}
       formatOptionLabel={formatOptionLabel}
       isMulti={isMulti}
