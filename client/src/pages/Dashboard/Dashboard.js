@@ -20,8 +20,8 @@ const Dashboard = () => {
     <>
       <VerticalMenu />
       <StyledDashboard>
-        <DashboardStreams />
         <DashboardMenu />
+        <DashboardStreams />
       </StyledDashboard>
     </>
   );
