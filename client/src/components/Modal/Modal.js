@@ -1,11 +1,12 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
 import CardFooter from '../Card/CardFooter';
 import { StyledModalWrapper, StyledModal } from './styles';
 
 const Modal = ({ children, visible, onClose, onSubmit }) => {
-  return (
+  return ReactDOM.createPortal(
     <StyledModal visible={visible}>
       <StyledModalWrapper className="modal-wrapper ">
         <Card>
@@ -18,7 +19,8 @@ const Modal = ({ children, visible, onClose, onSubmit }) => {
           </CardFooter>
         </Card>
       </StyledModalWrapper>
-    </StyledModal>
+    </StyledModal>,
+    document.body
   );
 };
 
