@@ -1,12 +1,18 @@
 import React from 'react';
 import { StyledButton } from './styles';
 
-const Button = ({ onClick, type, style, children, ...rest }) => {
+const Button = ({ onClick, type, style, children, ...rest }, ref) => {
   return (
-    <StyledButton onClick={onClick} type={type} style={style} {...rest}>
+    <StyledButton
+      ref={ref}
+      onClick={onClick}
+      type={type}
+      style={style}
+      {...rest}
+    >
       {children}
     </StyledButton>
   );
 };
 
-export default Button;
+export default React.forwardRef(Button);
