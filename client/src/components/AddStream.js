@@ -81,7 +81,7 @@ const AddStream = () => {
       >
         <ModalHeader>Add New Stream</ModalHeader>
         <ModalBody>
-          <div style={{ width: 500, marginBottom: 60 }}>
+          <div style={{ width: 500 }}>
             <p style={{ marginBottom: 5 }}>Select an account:</p>
             <ConnectedAccountsDropdown
               reset={reset}
