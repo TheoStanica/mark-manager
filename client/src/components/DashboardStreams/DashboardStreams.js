@@ -12,16 +12,32 @@ import TwitterHomeTimeline from '../TwitterHomeTimeline';
 import TwitterSearchStream from '../TwitterSearchStream';
 
 const DashboardStreams = () => {
-  const { streams } = useSelector((state) => state.twitterReducer);
-  const streamsById = useSelector((state) => state.twitterReducer.streamsById);
+  const { streams, streamsById, twitterFilteredAccounts } = useSelector(
+    (state) => state.twitterReducer
+  );
   const dispatch = useDispatch();
+
+  // get the streams filtered based on selected accounts
+  const filteredStreams = streams.filter((stream) =>
+    twitterFilteredAccounts.includes(streamsById[stream].twitterUserId)
+  );
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
-    const items = [...streams];
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    dispatch(reorderStreams({ streams: items }));
+    const allStreams = [...streams];
+    // get the source and destination indexes(from the filtered array)
+    // get those streams' ids
+    const sourceStreamValue = filteredStreams[result.source.index];
+    const destinationStreamValue = filteredStreams[result.destination.index];
+    // get idx of those from the unfiltered array
+    const allStreamsSourceIdx = allStreams.indexOf(sourceStreamValue);
+    const allStreamsDestinationIdx = allStreams.indexOf(destinationStreamValue);
+    // switch them in the main streams array
+    const temp = allStreams[allStreamsSourceIdx];
+    allStreams[allStreamsSourceIdx] = allStreams[allStreamsDestinationIdx];
+    allStreams[allStreamsDestinationIdx] = temp;
+
+    dispatch(reorderStreams({ streams: allStreams }));
   }
 
   const renderStream = (id, provided) => {
@@ -49,7 +65,7 @@ const DashboardStreams = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {streams.map((stream, index) => {
+                {filteredStreams?.map((stream, index) => {
                   return (
                     <Draggable
                       disableInteractiveElementBlocking="true"
