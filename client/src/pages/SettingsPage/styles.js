@@ -5,7 +5,7 @@ export const StyledSettings = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem 15vw;
-  background: #eeeeff;
+  background: #e5e8ed;
   @media only screen and (max-width: 1400px) {
     padding: 2rem 10vw;
   }
