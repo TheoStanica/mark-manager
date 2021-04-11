@@ -12,20 +12,12 @@ export const StyledListItemButton = styled.button`
   word-wrap: break-word;
 
   &:hover {
-    background: linear-gradient(
-      90deg,
-      rgba(71, 0, 161, 1) 0%,
-      rgba(161, 0, 166, 1) 100%
-    );
+    background: #068abc;
     color: white;
     outline: none;
   }
   &:focus {
-    background: linear-gradient(
-      90deg,
-      rgba(71, 0, 161, 1) 0%,
-      rgba(161, 0, 166, 1) 100%
-    );
+    background: #068abc;
     color: white;
     outline: none;
   }
@@ -38,10 +30,7 @@ export const StyledListItemButton = styled.button`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
   }
-  background: ${(props) =>
-    props.active
-      ? 'linear-gradient(90deg,rgba(71, 0, 161, 1) 0%,rgba(161, 0, 166, 1) 100%);'
-      : 'initial'};
+  background: ${(props) => (props.active ? '#068abc;' : 'initial')};
   color: ${(props) => (props.active ? 'white' : 'initial')};
   outline: ${(props) => (props.active ? 'none' : 'initial')};
 `;
