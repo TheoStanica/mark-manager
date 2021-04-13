@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StyledFilterButton } from './styles';
 
@@ -6,17 +6,17 @@ const FilterButton = ({ account, onClick }) => {
   const { twitterAccountsById, twitterFilteredAccounts } = useSelector(
     (state) => state.twitterReducer
   );
-  const [isSelected, setIsSelected] = useState(
-    twitterFilteredAccounts.includes(account)
-  );
+  const [isSelected, setIsSelected] = useState(false);
 
-  const handleClick = () => {
-    onClick(account);
-    setIsSelected(!isSelected);
-  };
+  useEffect(() => {
+    setIsSelected(twitterFilteredAccounts?.includes(account));
+  }, [twitterFilteredAccounts, account]);
 
   return (
-    <StyledFilterButton onClick={handleClick} isSelected={isSelected}>
+    <StyledFilterButton
+      onClick={() => onClick(account)}
+      isSelected={isSelected}
+    >
       {twitterAccountsById[account].screenName}
     </StyledFilterButton>
   );

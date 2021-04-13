@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePopper } from 'react-popper';
 import ReactDOM from 'react-dom';
 import ClearButton from '../ClearButton/ClearButton';
@@ -30,6 +30,10 @@ const FilterStreams = () => {
     ],
   });
 
+  useEffect(() => {
+    setSelectedAccountFilter(twitterFilteredAccounts);
+  }, [twitterFilteredAccounts]);
+
   const renderAccountsFilters = () => {
     return twitterAccounts.map((account, idx) => (
       <FilterButton
@@ -39,7 +43,6 @@ const FilterStreams = () => {
           const filteredAccounts = selectedAccountFilter.includes(account)
             ? selectedAccountFilter.filter((acc) => acc !== account)
             : [...selectedAccountFilter, account];
-          setSelectedAccountFilter(filteredAccounts);
           dispatch(filterAccounts({ accounts: filteredAccounts }));
         }}
       />
