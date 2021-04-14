@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addStream } from '../redux/actions/twitterActions';
-import ClearButton from './ClearButton/ClearButton';
 import ConnectedAccountsDropdown from './ConnectedAccountsDropdown/ConnectedAccountsDropdown';
 import Modal from './Modal/Modal';
 import ModalBody from './Modal/ModalBody';
@@ -10,6 +9,9 @@ import StreamTypesDropdown from './StreamTypesDropdown/StreamTypesDropdown';
 import InputField from './InputField/InputField';
 import { setErrors } from '../redux/actions/errorsActions';
 import DisplayErrors from './DisplayErrors';
+import Icon from './Icon/Icon';
+import PlusSign from '../assets/Pictures/PlusSign';
+import styled from 'styled-components';
 
 const AddStream = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,9 +73,11 @@ const AddStream = () => {
 
   return (
     <>
-      <ClearButton onClick={() => setModalVisible(true)}>
-        Add Stream
-      </ClearButton>
+      <StyledStickyBottomRight>
+        <Icon onClick={() => setModalVisible(true)}>
+          <PlusSign size={64} />
+        </Icon>
+      </StyledStickyBottomRight>
       <Modal
         visible={modalVisible}
         onClose={resetModal}
@@ -113,5 +117,11 @@ const AddStream = () => {
     </>
   );
 };
+
+const StyledStickyBottomRight = styled.div`
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+`;
 
 export default AddStream;
