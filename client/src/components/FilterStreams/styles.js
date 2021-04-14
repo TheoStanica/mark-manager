@@ -10,8 +10,8 @@ export const StyledFilterDiv = styled.div`
 
 export const StyledFilterButton = styled.button`
   padding: 0.5rem 1rem;
-  background: ${({ isSelected }) => (isSelected ? '#2c0064' : '#2c006488')};
-  color: white;
+  background: ${({ isSelected }) => (isSelected ? '#068abc' : '#068abc22')};
+  color: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
   outline: none;
   border: none;
   border-radius: 20px;
