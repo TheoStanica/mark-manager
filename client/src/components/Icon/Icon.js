@@ -2,14 +2,23 @@ import React from 'react';
 import ToolTip from '../ToolTip/ToolTip';
 import { StyledIcon } from './styles';
 
-const Icon = ({ size, style, icon, tooltip, position, offset, onClick }) => {
+const Icon = (
+  { size, style, icon, tooltip, position, offset, onClick, children },
+  ref
+) => {
   const renderIcon = (style, icon, onClick) => {
     return (
       <StyledIcon
-        style={{ height: size + 'px', width: size + 'px', ...style }}
+        style={{
+          height: size + 'px',
+          width: size + 'px',
+          ...style,
+        }}
         onClick={onClick}
+        ref={ref}
       >
-        <img src={icon} alt={icon} />
+        {icon ? <img src={icon} alt={icon} /> : null}
+        {children ? children : null}
       </StyledIcon>
     );
   };
@@ -23,4 +32,4 @@ const Icon = ({ size, style, icon, tooltip, position, offset, onClick }) => {
   );
 };
 
-export default Icon;
+export default React.forwardRef(Icon);
