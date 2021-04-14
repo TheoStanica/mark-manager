@@ -25,5 +25,6 @@ export const StyledNotConnected = styled.div`
 export const StyledConnect = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 `;
