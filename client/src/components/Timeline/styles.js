@@ -16,8 +16,8 @@ export const StyledTimelineHeader = styled.div`
   color: white;
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
-  padding-bottom: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
   font-size: 1.125rem;
   ${StyledSpan} {
     margin-right: 0.5rem;
