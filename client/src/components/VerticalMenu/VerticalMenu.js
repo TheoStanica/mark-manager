@@ -17,6 +17,7 @@ import {
   StyledRoundedImg,
   StyledDivider,
 } from './styles';
+import Logo from '../../assets/Pictures/Logo';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
@@ -34,11 +35,7 @@ const VerticalMenu = () => {
       <StyledTop className="top">
         <StyledMenuIcon>
           <Link to="/dashboard">
-            <img
-              className="logo"
-              src={Assets.Pictures.MarkLogo}
-              alt="Mark Logo"
-            />
+            <Logo size={44} />
           </Link>
         </StyledMenuIcon>
         <StyledSeparator />
