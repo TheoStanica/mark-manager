@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledItem = styled.li``;
 export const StyledNavbar = styled.nav`
   position: absolute;
-  background-color: ${(props) => (props.normal ? '#2c0064' : 'transparent')};
+  background-color: ${(props) => (props.normal ? '#068abc' : 'transparent')};
   width: 100%;
   display: flex;
   justify-content: space-between;
