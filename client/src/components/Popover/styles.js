@@ -22,7 +22,7 @@ export const StyledPopup = styled.div`
   border-bottom-left-radius: 0px;
   background: white;
   box-shadow: 0 0 0.875rem 0 rgb(33 37 41 / 5%);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: none;
   color: black;
   a {
     text-decoration: none;
