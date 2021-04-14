@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { usePopper } from 'react-popper';
 import ReactDOM from 'react-dom';
-import ClearButton from '../ClearButton/ClearButton';
 import { StyledFilterDiv } from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import FilterButton from './FilterButton';
 import { filterAccounts } from '../../redux/actions/twitterActions';
+import Icon from '../Icon/Icon';
+import Filter from '../../assets/Pictures/Filter';
 
 const FilterStreams = () => {
   const [referenceElement, setReferenceElement] = useState(null);
@@ -51,9 +52,13 @@ const FilterStreams = () => {
 
   return (
     <>
-      <ClearButton ref={setReferenceElement} onClick={() => setIsOpen(!isOpen)}>
-        Filter
-      </ClearButton>
+      <Icon
+        ref={setReferenceElement}
+        onClick={() => setIsOpen(!isOpen)}
+        style={{ marginRight: '1rem' }}
+      >
+        <Filter size={28} color={'#333'} />
+      </Icon>
       {isOpen &&
         ReactDOM.createPortal(
           <StyledFilterDiv
