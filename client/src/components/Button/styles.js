@@ -13,6 +13,7 @@ export const StyledButton = styled.button`
   background-blend-mode: multiply;
   z-index: 1;
   a {
+    color: #068abc;
     text-decoration: none;
   }
   &:focus {
