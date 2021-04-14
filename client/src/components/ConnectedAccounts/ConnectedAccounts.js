@@ -57,12 +57,12 @@ const ConnectedAccounts = () => {
   return (
     <Popover
       content={
-        <>
+        <div style={{ boxShadow: '0 0 0.875rem 0 rgb(33 37 41 / 20%)' }}>
           {renderAccounts()}
           <StyledConnect>
             <ConnectTwitterButton />
           </StyledConnect>
-        </>
+        </div>
       }
     >
       <ClearButton>Accounts</ClearButton>
