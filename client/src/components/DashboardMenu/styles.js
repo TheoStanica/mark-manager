@@ -6,6 +6,7 @@ export const StyledDashboardMenu = styled.div`
   height: 60px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding-left: 0.3rem;
   box-shadow: 0 0 0.875rem 0 rgb(33 37 41 / 5%);
 `;
