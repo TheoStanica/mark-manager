@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Assets } from '../../assets';
 import { StyledNavbar, StyledList, StyledItem } from './styles';
+import Logo from '../../assets/Pictures/Logo';
 
 const Header = ({ normal }) => {
   const renderNavButton = ({ route, text, className, onClick }) => {
@@ -17,7 +17,7 @@ const Header = ({ normal }) => {
   return (
     <StyledNavbar normal={normal ? true : false}>
       <Link to="/">
-        <img src={Assets.Pictures.MarkLogo} alt="Project Mark Logo" />
+        <Logo size={46} bgColor={'#068abc'} />
       </Link>
       <StyledList>
         {renderNavButton({ route: '/login', text: 'Login' })}
