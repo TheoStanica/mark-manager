@@ -12,7 +12,7 @@ export const SplashDiv = styled.div`
     padding: 0 2rem;
     background: linear-gradient(
       180deg,
-      rgba(44, 0, 100, 0.5) 0%,
+      rgba(6, 138, 188, 0.7) 0%,
       rgba(255, 255, 255, 1) 30%
     );
   }
