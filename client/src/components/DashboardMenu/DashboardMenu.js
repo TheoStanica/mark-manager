@@ -8,9 +8,11 @@ const DashboardMenu = () => {
   return (
     <StyledDashboardMenu>
       <StyledHeader>Dashboard</StyledHeader>
-      <ConnectedAccounts />
-      <AddStream />
-      <FilterStreams />
+      <div style={{ display: 'flex' }}>
+        <AddStream />
+        <ConnectedAccounts />
+        <FilterStreams />
+      </div>
     </StyledDashboardMenu>
   );
 };
