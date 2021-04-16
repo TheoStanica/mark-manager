@@ -5,7 +5,6 @@ import { logoutUser } from '../../redux/actions/userActions';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CreateTweet from '../CreateTweet/CreateTweet';
-import Popover from '../Popover/Popover';
 import VerticalMenuItem from './VerticalMenuItem';
 import { Assets } from '../../assets';
 import {
@@ -18,11 +17,13 @@ import {
   StyledDivider,
 } from './styles';
 import Logo from '../../assets/Pictures/Logo';
+import CustomPopper from '../CustomPopper/CustomPopper';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
   const { twitterAccounts } = useSelector((state) => state.twitterReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
 
   const dispatch = useDispatch();
   const handleLogout = () => {
@@ -61,8 +62,10 @@ const VerticalMenu = () => {
         </VerticalMenuItem>
       </StyledTop>
       <StyledBottom>
-        <Popover
-          content={
+        <CustomPopper
+          open={isAccountMenuOpen}
+          placement="top-start"
+          popper={
             <Card>
               <CardBody>
                 <Link to="/settings">Settings</Link>
@@ -74,10 +77,12 @@ const VerticalMenu = () => {
             </Card>
           }
         >
-          <StyledMenuIcon>
+          <StyledMenuIcon
+            onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+          >
             <StyledRoundedImg src={profilePicture} alt="Mark Logo" />
           </StyledMenuIcon>
-        </Popover>
+        </CustomPopper>
       </StyledBottom>
     </StyledVerticalMenu>
   );
