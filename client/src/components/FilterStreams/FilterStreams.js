@@ -55,9 +55,9 @@ const FilterStreams = () => {
       <Icon
         ref={setReferenceElement}
         onClick={() => setIsOpen(!isOpen)}
-        style={{ marginRight: '1rem' }}
+        style={{ marginRight: '.5rem' }}
       >
-        <Filter size={28} color={'#333'} />
+        <Filter size={35} color={'#333'} />
       </Icon>
       {isOpen &&
         ReactDOM.createPortal(
