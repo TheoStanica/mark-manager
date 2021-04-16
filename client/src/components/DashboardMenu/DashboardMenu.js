@@ -8,7 +8,7 @@ const DashboardMenu = () => {
   return (
     <StyledDashboardMenu>
       <StyledHeader>Dashboard</StyledHeader>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <AddStream />
         <ConnectedAccounts />
         <FilterStreams />
