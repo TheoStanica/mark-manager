@@ -60,6 +60,8 @@ const ConnectedAccounts = () => {
     <>
       <CustomPopper
         open={isOpen}
+        style={{ marginRight: '1rem' }}
+        placement="bottom-end"
         popper={
           <>
             {renderAccounts()}
@@ -69,10 +71,7 @@ const ConnectedAccounts = () => {
           </>
         }
       >
-        <StyledCenteredDiv
-          onClick={() => setIsOpen(!isOpen)}
-          style={{ marginRight: '1rem' }}
-        >
+        <StyledCenteredDiv onClick={() => setIsOpen(!isOpen)}>
           <GenericAccount size={35} color="#333" />
         </StyledCenteredDiv>
       </CustomPopper>
