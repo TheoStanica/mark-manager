@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import { StyledCenteredDiv, StyledWrapper } from './styles';
 
-const CustomPopper = ({ children, popper, open, onClick, placement }) => {
+const CustomPopper = ({
+  children,
+  popper,
+  open,
+  onClick,
+  placement,
+  style,
+}) => {
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement ? placement : 'top-start',
+    placement: placement ? placement : 'auto',
     modifiers: [
       {
         name: 'offset',
@@ -32,7 +39,11 @@ const CustomPopper = ({ children, popper, open, onClick, placement }) => {
           )
         : null}
 
-      <StyledCenteredDiv ref={setReferenceElement} onClick={onClick}>
+      <StyledCenteredDiv
+        ref={setReferenceElement}
+        onClick={onClick}
+        style={style}
+      >
         {children}
       </StyledCenteredDiv>
     </>
