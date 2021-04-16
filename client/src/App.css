@@ -4,6 +4,7 @@
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
+  text-decoration: none;
 }
 
 *::-webkit-scrollbar {
