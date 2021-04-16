@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
@@ -12,29 +11,15 @@ import {
   StyledNotConnected,
   StyledConnect,
   StyledCenteredDiv,
-  StyledWrapper,
 } from './styles';
 import GenericAccount from '../../assets/Pictures/GenericAccount';
-import { usePopper } from 'react-popper';
+import CustomPopper from '../CustomPopper/CustomPopper';
 
 const ConnectedAccounts = () => {
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
   const [isOpen, setIsOpen] = useState(false);
-  const [referenceElement, setReferenceElement] = useState(null);
-  const [popperElement, setPopperElement] = useState(null);
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom-start',
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 10],
-        },
-      },
-    ],
-  });
 
   const renderAccountCard = (accountId, idx) => (
     <Card key={idx} style={{ boxShadow: 'none' }}>
@@ -73,29 +58,24 @@ const ConnectedAccounts = () => {
 
   return (
     <>
-      {isOpen
-        ? ReactDOM.createPortal(
-            <StyledWrapper
-              ref={setPopperElement}
-              style={styles.popper}
-              {...attributes.popper}
-            >
-              {renderAccounts()}
-              <StyledConnect>
-                <ConnectTwitterButton />
-              </StyledConnect>
-            </StyledWrapper>,
-            document.body
-          )
-        : null}
-
-      <StyledCenteredDiv
-        style={{ marginRight: '1rem' }}
-        ref={setReferenceElement}
-        onClick={() => setIsOpen(!isOpen)}
+      <CustomPopper
+        open={isOpen}
+        popper={
+          <>
+            {renderAccounts()}
+            <StyledConnect>
+              <ConnectTwitterButton />
+            </StyledConnect>
+          </>
+        }
       >
-        <GenericAccount size={35} color="#333" />
-      </StyledCenteredDiv>
+        <StyledCenteredDiv
+          onClick={() => setIsOpen(!isOpen)}
+          style={{ marginRight: '1rem' }}
+        >
+          <GenericAccount size={35} color="#333" />
+        </StyledCenteredDiv>
+      </CustomPopper>
     </>
   );
 };
