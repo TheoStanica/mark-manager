@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CardHeader from '../Card/CardHeader';
-import ClearButton from '../ClearButton/ClearButton';
 import ConnectTwitterButton from '../ConnectTwitterButton';
 import Popover from '../Popover/Popover';
 import {
@@ -12,7 +11,9 @@ import {
   StyledAccountDetailsInfo,
   StyledNotConnected,
   StyledConnect,
+  StyledCenteredDiv,
 } from './styles';
+import GenericAccount from '../../assets/Pictures/GenericAccount';
 
 const ConnectedAccounts = () => {
   const { twitterAccounts, twitterAccountsById } = useSelector(
@@ -65,7 +66,9 @@ const ConnectedAccounts = () => {
         </div>
       }
     >
-      <ClearButton>Accounts</ClearButton>
+      <StyledCenteredDiv style={{ marginRight: '1rem' }}>
+        <GenericAccount size={35} color="#333" />
+      </StyledCenteredDiv>
     </Popover>
   );
 };
