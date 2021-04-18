@@ -5,7 +5,7 @@ export const StyledCard = styled.div`
   flex-direction: column;
   border-radius: 5px;
   background: white;
-  box-shadow: 0 0 0.875rem 0 rgb(33 37 41 / 5%);
+  box-shadow: 0 0 0.875rem 0 rgb(33 37 41 / 10%);
 `;
 
 export const StyledCardBody = styled.div`

@@ -1,7 +1,8 @@
 import React from 'react';
 import Icon from '../Icon/Icon';
-import { Assets } from '../../assets';
 import { StyledTimelineHeader, StyledSpan } from './styles';
+import Reload from '../../assets/Pictures/Reload';
+import Trashcan from '../../assets/Pictures/Trashcan';
 
 const TimelineHeader = ({ type, account, onRefresh, onRemove, ...rest }) => {
   return (
@@ -9,20 +10,18 @@ const TimelineHeader = ({ type, account, onRefresh, onRemove, ...rest }) => {
       <div>
         <StyledSpan>{type}</StyledSpan>@{account}
       </div>
-      <div>
+      <div style={{ display: 'flex' }}>
+        <Icon size={22} tooltip="Refresh" onClick={onRefresh}>
+          <Reload color="#fff" />
+        </Icon>
         <Icon
-          icon={Assets.Pictures.RefreshIcon}
-          size={24}
-          tooltip="Refresh"
-          onClick={onRefresh}
-        ></Icon>
-        <Icon
-          icon={Assets.Pictures.TrashCan}
           style={{ marginLeft: '.5rem' }}
-          size={24}
+          size={22}
           tooltip="Remove"
           onClick={onRemove}
-        ></Icon>
+        >
+          <Trashcan color="#fff" />
+        </Icon>
       </div>
     </StyledTimelineHeader>
   );

@@ -69,7 +69,7 @@ export const InputFieldDiv = styled.div`
       bottom: -1px;
       height: 100%;
       width: 0%;
-      border-bottom: 5px solid rgba(71, 0, 161, 1);
+      border-bottom: 5px solid #068abc;
       transition: all 0.3s ease;
     }
   }
@@ -81,15 +81,10 @@ export const InputFileDiv = styled.div`
   }
 `;
 export const InputFileLabel = styled.label`
-  border: 1px solid #ccc;
   display: inline-block;
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 5px;
-  background: linear-gradient(
-    90deg,
-    rgba(71, 0, 161, 1) 0%,
-    rgba(161, 0, 166, 1) 100%
-  );
+  background: #068abc;
   color: white;
 `;

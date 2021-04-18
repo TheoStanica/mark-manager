@@ -1,55 +1,39 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   loadHomeTimelineStream,
-  removeStream,
+  loadMoreHomeTimelineStream,
 } from '../redux/actions/twitterActions';
-import Loading from './Loading/Loading';
-import Timeline from './Timeline/Timeline';
-import TimelineBody from './Timeline/TimelineBody';
-import TimelineHeader from './Timeline/TimelineHeader';
-import TweetCard from './Tweet/TweetCard';
+import Stream from './Stream';
 
-const TwitterHomeTimeline = ({ stream, provided }) => {
-  const { screenName } = useSelector((state) => state.twitterReducer);
+const TwitterHomeTimeline = React.memo(({ stream, provided }) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(loadHomeTimelineStream({ id: stream.id }));
-  }, [dispatch, stream.id]);
+  const loadTweets = useCallback(() => {
+    dispatch(
+      loadHomeTimelineStream({
+        id: stream.id,
+        twitterUserId: stream.twitterUserId,
+      })
+    );
+  }, [dispatch, stream.id, stream.twitterUserId]);
 
   return (
-    <Timeline>
-      <TimelineHeader
-        type="Home"
-        account={screenName}
-        onRefresh={() => dispatch(loadHomeTimelineStream({ id: stream.id }))}
-        onRemove={() => {
-          dispatch(removeStream({ id: stream.id }));
-        }}
-        {...provided.dragHandleProps}
-      ></TimelineHeader>
-      <TimelineBody>
-        {stream.isLoading ? (
-          <div
-            style={{
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Loading />
-          </div>
-        ) : (
-          stream.tweets &&
-          stream.tweets.map((tweet, idx) => {
-            return <TweetCard tweet={tweet} key={idx} />;
+    <Stream
+      id={stream.id}
+      provided={provided}
+      type="Home"
+      onLoad={loadTweets}
+      onLoadMore={() =>
+        dispatch(
+          loadMoreHomeTimelineStream({
+            id: stream.id,
+            maxId: stream.metadata.max_id,
+            twitterUserId: stream.twitterUserId,
           })
-        )}
-      </TimelineBody>
-    </Timeline>
+        )
+      }
+    />
   );
-};
+});
 
 export default TwitterHomeTimeline;

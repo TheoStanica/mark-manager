@@ -33,12 +33,12 @@ const TwitterCard = ({ tweet }) => {
   }
 
   return (
-    <Card style={{ marginBottom: '.5rem' }}>
+    <Card style={{ marginBottom: '.3rem' }}>
       <CardHeader style={{ padding: ' .5rem ' }}>
         {isRT ? <RetweetHeader tweet={tweet} /> : null}
         <StyledHeaderWrapper>
           <StyledCircleImage
-            src={data.user.profile_image_url}
+            src={data.user.profile_image_url_https}
             alt={`${data.user.name}'s profile`}
           />
           <StyledTweetMetadata>

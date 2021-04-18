@@ -5,5 +5,5 @@ export const StyledDashboard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #eeeeff;
+  background: #e5e8ed;
 `;

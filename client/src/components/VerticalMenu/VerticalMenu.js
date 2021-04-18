@@ -17,10 +17,11 @@ import {
   StyledRoundedImg,
   StyledDivider,
 } from './styles';
+import Logo from '../../assets/Pictures/Logo';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
-  const { isConnected } = useSelector((state) => state.twitterReducer);
+  const { twitterAccounts } = useSelector((state) => state.twitterReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -34,16 +35,12 @@ const VerticalMenu = () => {
       <StyledTop className="top">
         <StyledMenuIcon>
           <Link to="/dashboard">
-            <img
-              className="logo"
-              src={Assets.Pictures.MarkLogo}
-              alt="Mark Logo"
-            />
+            <Logo size={44} />
           </Link>
         </StyledMenuIcon>
         <StyledSeparator />
 
-        {isConnected ? (
+        {twitterAccounts?.length > 0 ? (
           <VerticalMenuItem
             text="Create"
             offset={20}

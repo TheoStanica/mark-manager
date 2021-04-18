@@ -1,13 +1,18 @@
 import React from 'react';
 import ConnectedAccounts from '../ConnectedAccounts/ConnectedAccounts';
 import AddStream from '../AddStream';
-import { StyledDashboardMenu } from './styles';
+import { StyledDashboardMenu, StyledHeader } from './styles';
+import FilterStreams from '../FilterStreams/FilterStreams';
 
 const DashboardMenu = () => {
   return (
     <StyledDashboardMenu>
-      <ConnectedAccounts />
-      <AddStream />
+      <StyledHeader>Dashboard</StyledHeader>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <AddStream />
+        <ConnectedAccounts />
+        <FilterStreams />
+      </div>
     </StyledDashboardMenu>
   );
 };

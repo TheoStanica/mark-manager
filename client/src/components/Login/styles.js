@@ -35,6 +35,6 @@ export const StyledSmallText = styled.div`
   a {
     font-size: 0.9rem;
     text-decoration: none;
-    color: #fa00ff;
+    color: #068abc;
   }
 `;

@@ -1,68 +1,127 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addStream } from '../redux/actions/twitterActions';
-import ClearButton from './ClearButton/ClearButton';
-import ListItem from './ListItem/ListItem';
-import ListMenu from './ListMenu/ListMenu';
-import ListMenuHeader from './ListMenu/ListMenuHeader';
+import ConnectedAccountsDropdown from './ConnectedAccountsDropdown/ConnectedAccountsDropdown';
 import Modal from './Modal/Modal';
 import ModalBody from './Modal/ModalBody';
 import ModalHeader from './Modal/ModalHeader';
-import Popover from './Popover/Popover';
+import StreamTypesDropdown from './StreamTypesDropdown/StreamTypesDropdown';
+import InputField from './InputField/InputField';
+import { setErrors } from '../redux/actions/errorsActions';
+import DisplayErrors from './DisplayErrors';
+import Icon from './Icon/Icon';
+import PlusSign from '../assets/Pictures/PlusSign';
+import styled from 'styled-components';
 
 const AddStream = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [reset, setReset] = useState(false);
+  const [streamType, setStreamType] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (reset) {
+      setReset(false);
+    }
+  }, [reset]);
+
+  const resetModal = () => {
+    setModalVisible(false);
+    setSelectedAccount(null);
+    setSearchTerm('');
+    setStreamType(null);
+    setReset(true);
+  };
+  const dispatchErrorMessage = (message) => {
+    dispatch(setErrors({ errors: [{ message: message }] }));
+  };
+
+  const handleSubmit = () => {
+    if (!selectedAccount) {
+      dispatchErrorMessage('Please select an account');
+    } else if (!streamType) {
+      dispatchErrorMessage('Please select a stream type');
+    } else if (streamType === 'search' && searchTerm === '') {
+      dispatchErrorMessage('Please enter a search term');
+    } else {
+      switch (streamType) {
+        case 'home_timeline':
+          dispatch(
+            addStream({
+              type: 'home_timeline',
+              twitterUserId: selectedAccount,
+            })
+          );
+          break;
+        case 'search':
+          dispatch(
+            addStream({
+              type: 'search',
+              search: searchTerm,
+              twitterUserId: selectedAccount,
+            })
+          );
+          break;
+        default:
+          break;
+      }
+      resetModal();
+    }
+  };
 
   return (
     <>
-      <Popover
-        content={
-          <ListMenu>
-            <ListMenuHeader>Add Stream</ListMenuHeader>
-            <ListItem
-              text="Search"
-              onClick={() => {
-                setModalVisible(true);
-              }}
-            />
-            <ListItem
-              text="Home Timeline"
-              onClick={() => {
-                dispatch(addStream({ type: 'home_timeline' }));
-              }}
-            />
-          </ListMenu>
-        }
-      >
-        <ClearButton>Add Stream</ClearButton>
-      </Popover>
+      <StyledStickyBottomRight>
+        <Icon onClick={() => setModalVisible(true)}>
+          <PlusSign size={64} />
+        </Icon>
+      </StyledStickyBottomRight>
       <Modal
         visible={modalVisible}
-        onClose={() => {
-          setModalVisible(false);
-          setSearchTerm('');
-        }}
-        onSubmit={() => {
-          dispatch(addStream({ type: 'search', search: searchTerm }));
-          setModalVisible(false);
-          setSearchTerm('');
-        }}
+        onClose={resetModal}
+        onSubmit={handleSubmit}
       >
-        <ModalHeader>Search Stream</ModalHeader>
+        <ModalHeader>Add New Stream</ModalHeader>
         <ModalBody>
-          <textarea
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            style={{ minWidth: 400, maxHeight: 100 }}
-          />
+          <div style={{ width: 500 }}>
+            <p style={{ marginBottom: 5 }}>Select an account:</p>
+            <ConnectedAccountsDropdown
+              reset={reset}
+              onSelected={(selected) => setSelectedAccount(selected)}
+              isMulti={false}
+            />
+            <p style={{ margin: '10px 0' }}>Select stream type:</p>
+            <StreamTypesDropdown
+              reset={reset}
+              onSelected={(stream) => {
+                setStreamType(stream);
+              }}
+            />
+            {streamType === 'search' && (
+              <InputField
+                id="searchTerm"
+                type="text"
+                required={true}
+                label="Search term"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ marginTop: 10 }}
+              />
+            )}
+          </div>
+          <DisplayErrors />
         </ModalBody>
       </Modal>
     </>
   );
 };
+
+const StyledStickyBottomRight = styled.div`
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+`;
 
 export default AddStream;

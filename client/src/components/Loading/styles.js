@@ -7,7 +7,7 @@ export const StyledLoading = styled.div`
   justify-content: center;
   align-items: center;
   img {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
   }
 `;

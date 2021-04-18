@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 
 export interface StreamPreference {
-  id: number;
+  id: string;
   type: string;
   search?: string;
+  twitterUserId: string;
 }
 
 export interface UserAttrs {
@@ -56,6 +57,10 @@ const userProfileSchema = new mongoose.Schema(
         },
         search: {
           type: String,
+        },
+        twitterUserId: {
+          type: String,
+          required: true,
         },
       },
     ],

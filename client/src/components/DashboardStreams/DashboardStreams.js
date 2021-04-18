@@ -1,34 +1,55 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TwitterHomeTimeline from '../TwitterHomeTimeline';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { reorderStreams } from '../../redux/actions/twitterActions';
-import TwitterSearchStream from '../TwitterSearchStream';
 import {
   StyledDashboardStreams,
   StyledStreamsWrapper,
   StyledStreamContainer,
   StyledStreamsList,
 } from './styles';
+import TwitterHomeTimeline from '../TwitterHomeTimeline';
+import TwitterSearchStream from '../TwitterSearchStream';
 
 const DashboardStreams = () => {
-  const { streams } = useSelector((state) => state.twitterReducer);
+  const { streams, streamsById, twitterFilteredAccounts } = useSelector(
+    (state) => state.twitterReducer
+  );
   const dispatch = useDispatch();
+
+  // get the streams filtered based on selected accounts
+  const filteredStreams = streams.filter((stream) =>
+    twitterFilteredAccounts.includes(streamsById[stream].twitterUserId)
+  );
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
-    const items = [...streams];
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    dispatch(reorderStreams({ streams: items }));
+    const allStreams = [...streams];
+    // get the source and destination indexes(from the filtered array)
+    // get those streams' ids
+    const sourceStreamValue = filteredStreams[result.source.index];
+    const destinationStreamValue = filteredStreams[result.destination.index];
+    // get idx of those from the unfiltered array
+    const allStreamsSourceIdx = allStreams.indexOf(sourceStreamValue);
+    const allStreamsDestinationIdx = allStreams.indexOf(destinationStreamValue);
+    // switch them in the main streams array
+    const temp = allStreams[allStreamsSourceIdx];
+    allStreams[allStreamsSourceIdx] = allStreams[allStreamsDestinationIdx];
+    allStreams[allStreamsDestinationIdx] = temp;
+
+    dispatch(reorderStreams({ streams: allStreams }));
   }
 
-  const renderStream = (stream, provided) => {
-    switch (stream.type) {
+  const renderStream = (id, provided) => {
+    switch (streamsById[id].type) {
       case 'home_timeline':
-        return <TwitterHomeTimeline stream={stream} provided={provided} />;
+        return (
+          <TwitterHomeTimeline stream={streamsById[id]} provided={provided} />
+        );
       case 'search':
-        return <TwitterSearchStream stream={stream} provided={provided} />;
+        return (
+          <TwitterSearchStream stream={streamsById[id]} provided={provided} />
+        );
       default:
         return null;
     }
@@ -44,12 +65,12 @@ const DashboardStreams = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {streams.map((stream, index) => {
+                {filteredStreams?.map((stream, index) => {
                   return (
                     <Draggable
                       disableInteractiveElementBlocking="true"
-                      key={stream.id}
-                      draggableId={String(stream.id)}
+                      key={stream}
+                      draggableId={String(stream)}
                       index={index}
                     >
                       {(provided) => (

@@ -18,17 +18,19 @@ export const StyledAccountDetailsInfo = styled.div`
 export const StyledNotConnected = styled.div`
   display: flex;
   justify-content: center;
-  margin: 0.5rem 0;
+  margin: 1.5rem 0;
   min-width: 300px;
 `;
 
-export const StyledDivider = styled.div`
-  height: 1px;
-  background: rgba(0, 0, 0, 0.2);
-  margin-bottom: 0.5rem;
-`;
 export const StyledConnect = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+`;
+
+export const StyledCenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

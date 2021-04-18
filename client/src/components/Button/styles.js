@@ -9,10 +9,11 @@ export const StyledButton = styled.button`
   background: none;
   outline: none;
   border: none;
-  border: 1px solid rgba(71, 0, 161, 1);
+  border: 1px solid #068abc;
   background-blend-mode: multiply;
   z-index: 1;
   a {
+    color: #068abc;
     text-decoration: none;
   }
   &:focus {
@@ -25,11 +26,7 @@ export const StyledButton = styled.button`
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(71, 0, 161, 1) 0%,
-      rgba(161, 0, 166, 1) 100%
-    );
+    background: #068abc;
     z-index: -1;
     transition: transform 0.1s ease;
     transform: scaleX(0);

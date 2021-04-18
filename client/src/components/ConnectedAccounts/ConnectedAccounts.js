@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CardHeader from '../Card/CardHeader';
-import ClearButton from '../ClearButton/ClearButton';
 import ConnectTwitterButton from '../ConnectTwitterButton';
 import Popover from '../Popover/Popover';
 import {
@@ -11,59 +10,65 @@ import {
   StyledRoundedImage,
   StyledAccountDetailsInfo,
   StyledNotConnected,
-  StyledDivider,
   StyledConnect,
+  StyledCenteredDiv,
 } from './styles';
+import GenericAccount from '../../assets/Pictures/GenericAccount';
 
 const ConnectedAccounts = () => {
-  const { isConnected, name, screenName, profileImage } = useSelector(
+  const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
 
+  const renderAccountCard = (accountId, idx) => (
+    <Card key={idx} style={{ boxShadow: 'none' }}>
+      <CardBody>
+        <StyledProfileInfoWrapper>
+          <StyledRoundedImage
+            src={twitterAccountsById[accountId].profileImage}
+            alt={twitterAccountsById[accountId].profileImage}
+          />
+          <StyledAccountDetailsInfo>
+            Twitter
+            <div>
+              <strong style={{ marginRight: '.5rem', whiteSpace: 'nowrap' }}>
+                {twitterAccountsById[accountId].name}
+              </strong>
+              @{twitterAccountsById[accountId].screenName}
+            </div>
+          </StyledAccountDetailsInfo>
+        </StyledProfileInfoWrapper>
+      </CardBody>
+    </Card>
+  );
+
   const renderAccounts = () => {
-    return isConnected ? (
+    return twitterAccounts?.length > 0 ? (
       <>
         <CardHeader>Your accounts</CardHeader>
-        <Card style={{ boxShadow: 'none' }}>
-          <CardBody>
-            <StyledProfileInfoWrapper>
-              <StyledRoundedImage src={profileImage} alt={profileImage} />
-              <StyledAccountDetailsInfo>
-                Twitter
-                <div>
-                  <strong style={{ marginRight: '.5rem' }}>{name}</strong>@
-                  {screenName}
-                </div>
-              </StyledAccountDetailsInfo>
-            </StyledProfileInfoWrapper>
-          </CardBody>
-        </Card>
+        {twitterAccounts?.map((account, idx) => {
+          return renderAccountCard(account, idx);
+        })}
       </>
     ) : (
       <StyledNotConnected>No accounts connected</StyledNotConnected>
-    );
-  };
-  const renderAddAccounts = () => {
-    return isConnected ? null : (
-      <>
-        <StyledDivider></StyledDivider>
-        <StyledConnect>
-          <ConnectTwitterButton />
-        </StyledConnect>
-      </>
     );
   };
 
   return (
     <Popover
       content={
-        <>
+        <div style={{ boxShadow: '0 0 0.875rem 0 rgb(33 37 41 / 20%)' }}>
           {renderAccounts()}
-          {renderAddAccounts()}
-        </>
+          <StyledConnect>
+            <ConnectTwitterButton />
+          </StyledConnect>
+        </div>
       }
     >
-      <ClearButton>Accounts</ClearButton>
+      <StyledCenteredDiv style={{ marginRight: '1rem' }}>
+        <GenericAccount size={35} color="#333" />
+      </StyledCenteredDiv>
     </Popover>
   );
 };

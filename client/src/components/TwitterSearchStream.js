@@ -1,60 +1,41 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import {
+  loadMoreTweetSearchStream,
   loadTweetSearchStream,
-  removeStream,
 } from '../redux/actions/twitterActions';
-import Timeline from './Timeline/Timeline';
-import TimelineBody from './Timeline/TimelineBody';
-import TimelineHeader from './Timeline/TimelineHeader';
-import TweetCard from './Tweet/TweetCard';
-import Loading from './Loading/Loading';
+import Stream from './Stream';
 
-const TwitterSearchStream = ({ stream, provided }) => {
-  const { screenName } = useSelector((state) => state.twitterReducer);
-
+const TwitterSearchStream = React.memo(({ stream, provided }) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(loadTweetSearchStream({ id: stream.id, search: stream.search }));
-  }, [dispatch, stream.id, stream.search]);
+  const loadTweets = useCallback(() => {
+    dispatch(
+      loadTweetSearchStream({
+        id: stream.id,
+        search: stream.search,
+        twitterUserId: stream.twitterUserId,
+      })
+    );
+  }, [dispatch, stream.id, stream.search, stream.twitterUserId]);
 
   return (
-    <Timeline>
-      <TimelineHeader
-        type={`Search ${stream.search}`}
-        account={screenName}
-        onRefresh={() =>
-          dispatch(
-            loadTweetSearchStream({ id: stream.id, search: stream.search })
-          )
-        }
-        onRemove={() => {
-          dispatch(removeStream({ id: stream.id }));
-        }}
-        {...provided.dragHandleProps}
-      ></TimelineHeader>
-      <TimelineBody>
-        {stream.isLoading ? (
-          <div
-            style={{
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Loading />
-          </div>
-        ) : (
-          stream.tweets &&
-          stream.tweets.map((tweet, idx) => {
-            return <TweetCard tweet={tweet} key={idx} />;
+    <Stream
+      id={stream.id}
+      provided={provided}
+      type={`Search ${stream.search}`}
+      onLoad={loadTweets}
+      onLoadMore={() =>
+        dispatch(
+          loadMoreTweetSearchStream({
+            id: stream.id,
+            search: stream.search,
+            maxId: stream.metadata.max_id,
+            twitterUserId: stream.twitterUserId,
           })
-        )}
-      </TimelineBody>
-    </Timeline>
+        )
+      }
+    />
   );
-};
+});
 
 export default TwitterSearchStream;

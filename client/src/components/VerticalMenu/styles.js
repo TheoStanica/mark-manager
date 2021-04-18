@@ -11,7 +11,7 @@ export const StyledMenuItem = styled.div`
   }
 `;
 export const StyledVerticalMenu = styled.div`
-  background-color: #2c0064;
+  background-color: #068abc;
   color: white;
   width: 80px;
   display: flex;

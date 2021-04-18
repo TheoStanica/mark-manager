@@ -4,7 +4,7 @@ import { getUserInfo } from '../../redux/actions/userActions';
 import VerticalMenu from '../../components/VerticalMenu/VerticalMenu';
 import DashboardMenu from '../../components/DashboardMenu/DashboardMenu';
 import DashboardStreams from '../../components/DashboardStreams/DashboardStreams';
-import { getTwitterProfileInfoData } from '../../redux/actions/twitterActions';
+import { fetchTwitterAccounts } from '../../redux/actions/twitterActions';
 import { StyledDashboard } from './styles';
 
 const Dashboard = () => {
@@ -12,16 +12,16 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTwitterProfileInfoData());
     dispatch(getUserInfo());
+    dispatch(fetchTwitterAccounts());
   }, [dispatch]);
 
   return (
     <>
       <VerticalMenu />
       <StyledDashboard>
-        <DashboardStreams />
         <DashboardMenu />
+        <DashboardStreams />
       </StyledDashboard>
     </>
   );
