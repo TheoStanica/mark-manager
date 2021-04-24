@@ -14,8 +14,9 @@ import {
 } from './styles';
 import GenericAccount from '../../assets/Pictures/GenericAccount';
 import CustomPopper from '../CustomPopper/CustomPopper';
+import { withTheme } from 'styled-components';
 
-const ConnectedAccounts = () => {
+const ConnectedAccounts = ({ theme }) => {
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
@@ -72,11 +73,14 @@ const ConnectedAccounts = () => {
         }
       >
         <StyledCenteredDiv onClick={() => setIsOpen(!isOpen)}>
-          <GenericAccount size={35} color="#333" />
+          <GenericAccount
+            size={35}
+            color={theme.pref === 'dark' ? 'white' : '#333'}
+          />
         </StyledCenteredDiv>
       </CustomPopper>
     </>
   );
 };
 
-export default ConnectedAccounts;
+export default withTheme(ConnectedAccounts);

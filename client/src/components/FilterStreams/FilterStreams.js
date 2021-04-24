@@ -6,8 +6,9 @@ import { filterAccounts } from '../../redux/actions/twitterActions';
 import Icon from '../Icon/Icon';
 import Filter from '../../assets/Pictures/Filter';
 import CustomPopper from '../CustomPopper/CustomPopper';
+import { withTheme } from 'styled-components';
 
-const FilterStreams = () => {
+const FilterStreams = ({ theme }) => {
   const { twitterAccounts, twitterFilteredAccounts } = useSelector(
     (state) => state.twitterReducer
   );
@@ -52,11 +53,11 @@ const FilterStreams = () => {
         }
       >
         <Icon onClick={() => setIsOpen(!isOpen)}>
-          <Filter size={35} color={'#333'} />
+          <Filter size={35} color={theme.pref === 'dark' ? 'white' : '#333'} />
         </Icon>
       </CustomPopper>
     </>
   );
 };
 
-export default FilterStreams;
+export default withTheme(FilterStreams);
