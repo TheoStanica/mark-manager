@@ -1,27 +1,59 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyledMkToolTip, StyledMkToolTipSpan } from './styles';
+import ReactDOM from 'react-dom';
+import { usePopper } from 'react-popper';
+import {
+  StyledMkToolTip,
+  StyledMkToolTipSpan,
+  StyledCenteredDiv,
+} from './styles';
 
 const ToolTip = ({ children, text, offset, position }) => {
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: position ? position : 'auto',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: offset ? offset : [0, 5],
+          preventOverflow: { enabled: true },
+        },
+      },
+    ],
+  });
+
   const tooltip = useRef(null);
-  const wrapper = useRef(null);
-  const [spanWidth, setSpanWidth] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setSpanWidth(wrapper.current.clientWidth);
-  }, [offset]);
+    tooltip.current.addEventListener('mouseover', () => {
+      setIsOpen(true);
+    });
+    tooltip.current.addEventListener('mouseout', () => {
+      setIsOpen(false);
+    });
+  }, []);
 
   return (
-    <StyledMkToolTip ref={wrapper}>
-      {children}
-      <StyledMkToolTipSpan
-        ref={tooltip}
-        position={position ? position : 'right'}
-        spanWidth={spanWidth}
-        offset={offset}
-      >
-        {text ? text : 'Tooltip'}
-      </StyledMkToolTipSpan>
-    </StyledMkToolTip>
+    <>
+      {isOpen
+        ? ReactDOM.createPortal(
+            <StyledMkToolTipSpan
+              ref={setPopperElement}
+              style={{ zIndex: 10000, ...styles.popper }}
+              {...attributes.popper}
+            >
+              {text}
+            </StyledMkToolTipSpan>,
+            document.body
+          )
+        : null}
+
+      <StyledCenteredDiv ref={tooltip}>
+        <StyledMkToolTip ref={setReferenceElement}>{children}</StyledMkToolTip>
+      </StyledCenteredDiv>
+    </>
   );
 };
 
