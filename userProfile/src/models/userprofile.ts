@@ -18,6 +18,7 @@ export interface UserDoc extends mongoose.Document {
   profilePicture?: string | undefined;
   userTier?: string;
   stream_preferences: StreamPreference[];
+  themePreference?: string;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -64,6 +65,10 @@ const userProfileSchema = new mongoose.Schema(
         },
       },
     ],
+    themePreference: {
+      type: String,
+      default: 'light',
+    },
   },
   {
     toJSON: {
