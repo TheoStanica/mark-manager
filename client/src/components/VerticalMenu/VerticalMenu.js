@@ -44,7 +44,7 @@ const VerticalMenu = () => {
         {twitterAccounts?.length > 0 ? (
           <VerticalMenuItem
             text="Create"
-            offset={20}
+            offset={[0, 25]}
             onClick={() => setIsModalOpen(true)}
           >
             <img src={Assets.Pictures.CreateIcon} alt="New Post" />
@@ -55,7 +55,7 @@ const VerticalMenu = () => {
           onClose={() => setIsModalOpen(false)}
         />
 
-        <VerticalMenuItem text="Streams" offset={20}>
+        <VerticalMenuItem text="Streams" offset={[0, 25]}>
           <Link to="/dashboard">
             <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
           </Link>
