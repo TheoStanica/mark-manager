@@ -10,6 +10,7 @@ export const StyledListItemButton = styled.button`
   text-align: start;
   outline: none;
   word-wrap: break-word;
+  color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
 
   &:hover {
     background: #068abc;
@@ -31,6 +32,6 @@ export const StyledListItemButton = styled.button`
     border-top-right-radius: 4px;
   }
   background: ${(props) => (props.active ? '#068abc;' : 'initial')};
-  color: ${(props) => (props.active ? 'white' : 'initial')};
+  color: ${(props) => (props.active ? 'white' : 'none')};
   outline: ${(props) => (props.active ? 'none' : 'initial')};
 `;

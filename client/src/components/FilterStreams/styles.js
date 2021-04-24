@@ -3,9 +3,12 @@ import styled from 'styled-components';
 export const StyledFilterDiv = styled.div`
   z-index: 4200;
   padding: 0.5rem;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 0 0.875rem 0 rgb(33 37 41 / 20%);
+  background: ${(props) => (props.theme.pref === 'dark' ? '#23272A' : 'white')};
+  color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
+  box-shadow: ${(props) =>
+    props.theme.pref === 'dark'
+      ? '0 0 1rem 0 rgb(133 133 133 / 20%)'
+      : '0 0 0.875rem 0 rgb(33 37 41 / 20%)'};
 `;
 
 export const StyledFilterButton = styled.button`

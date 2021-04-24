@@ -12,6 +12,7 @@ export const StyledButton = styled.button`
   border: 1px solid #068abc;
   background-blend-mode: multiply;
   z-index: 1;
+  color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
   a {
     color: #068abc;
     text-decoration: none;

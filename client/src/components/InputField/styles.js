@@ -14,7 +14,10 @@ export const InputFieldDiv = styled.div`
   overflow: hidden;
   font-size: 1rem;
   margin-bottom: 20px;
+  background: ${(props) =>
+    props.theme.pref === 'dark' ? '#30353A' : 'transparent'};
   input {
+    color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
     width: 100%;
     height: 100%;
     padding: 20px 10px 0 10px;
@@ -32,7 +35,6 @@ export const InputFieldDiv = styled.div`
           ${ContentName} {
             transform: translateY(-90%);
             font-size: 14px;
-            color: black;
           }
           &::after {
             width: 100%;
@@ -46,7 +48,6 @@ export const InputFieldDiv = styled.div`
           ${ContentName} {
             transform: translateY(-90%);
             font-size: 14px;
-            color: black;
           }
           &::after {
             width: 100%;

@@ -5,5 +5,6 @@ export const StyledDashboard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #e5e8ed;
+  background: ${(props) =>
+    props.theme.pref === 'dark' ? '#30353A' : '#e5e8ed'};
 `;
