@@ -20,6 +20,7 @@ const CustomPopper = ({
         name: 'offset',
         options: {
           offset: [0, 10],
+          preventOverflow: { enabled: true },
         },
       },
     ],
