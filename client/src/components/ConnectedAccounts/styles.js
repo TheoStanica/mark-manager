@@ -30,7 +30,7 @@ export const StyledConnect = styled.div`
     props.theme.pref === 'dark'
       ? '1px solid rgba(255, 255, 255, 0.1)'
       : '1px solid rgba(0, 0, 0, 0.08)'};
-
+  transition: 0.2s ease-in-out;
   background: ${(props) => (props.theme.pref === 'dark' ? '#23272A' : 'white')};
 `;
 

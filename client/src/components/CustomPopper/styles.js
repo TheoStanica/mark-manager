@@ -11,6 +11,6 @@ export const StyledWrapper = styled.div`
   background: white;
   box-shadow: ${(props) =>
     props.theme.pref === 'dark'
-      ? '0 0 1rem 0 rgb(133 133 133 / 20%)'
-      : '0 0 0.875rem 0 rgb(33 37 41 / 20%)'}; ;
+      ? '0 0 1rem 0 rgb(133 133 133 / 10%)'
+      : '0 0 0.875rem 0 rgb(33 37 41 / 20%)'};
 `;

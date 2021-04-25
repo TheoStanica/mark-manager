@@ -11,4 +11,5 @@ export const StyledTextarea = styled.textarea`
   margin-top: 10px;
   background: ${(props) => (props.theme.pref === 'dark' ? '#30353A' : 'white')};
   color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
+  transition: 0.2s ease-in-out;
 `;

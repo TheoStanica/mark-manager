@@ -13,6 +13,7 @@ export const StyledMenuItem = styled.div`
 export const StyledVerticalMenu = styled.div`
   background-color: ${(props) =>
     props.theme.pref === 'dark' ? '#151719' : '#068abc'};
+  transition: 0.2s ease-in-out;
   color: white;
   width: 80px;
   display: flex;

@@ -4,10 +4,11 @@ export const ContentName = styled.span`
   position: absolute;
   bottom: 15px;
   left: 10px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 `;
 export const LabelName = styled.label``;
 export const InputFieldDiv = styled.div`
+  transition: 0.2s ease-in-out;
   width: 100%;
   position: relative;
   height: 50px;
@@ -71,7 +72,7 @@ export const InputFieldDiv = styled.div`
       height: 100%;
       width: 0%;
       border-bottom: 5px solid #068abc;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
   }
 `;
