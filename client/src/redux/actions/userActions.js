@@ -7,6 +7,7 @@ import {
   USER_RESEND_ACTIVATION,
   USER_RESET_MESSAGES,
   USER_SET_MESSAGES,
+  USER_SET_THEME,
   USER_SET_TOKENS,
   USER_UPDATE,
   USER_UPLOAD_PHOTO,
@@ -122,6 +123,7 @@ export const getUserInfo = () => async (dispatch) => {
           userTier: response.data.user.userTier,
           email: response.data.user.email,
           id: response.data.user.id,
+          themePreference: response.data.user.themePreference,
         },
       });
       dispatch(
@@ -276,5 +278,21 @@ export const activateAccount = ({ id }) => async (dispatch) => {
     return true;
   } catch (err) {
     return false;
+  }
+};
+
+export const setThemePreference = ({ themePreference }) => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_SET_THEME,
+      payload: {
+        themePreference: themePreference,
+      },
+    });
+    await axiosInstance.put('/api/user/currentuser', {
+      themePreference,
+    });
+  } catch (err) {
+    dispatch(handleError({ error: err }));
   }
 };
