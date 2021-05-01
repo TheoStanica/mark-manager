@@ -17,13 +17,18 @@ const TweetFooter = ({ tweet }) => {
   return (
     <CardFooter style={{ padding: '.5rem' }}>
       <StyledTweetFooterContainer>
-        <Icon size={18} tooltip={'Retweet'} position={'top'}>
+        <Icon
+          size={18}
+          tooltip={'Retweet'}
+          position={'top-start'}
+          offset={[0, 5]}
+        >
           <Retweet color="#000" />
         </Icon>
         <p style={{ marginLeft: 5, marginRight: 20, fontWeight: 'bold' }}>
           {formatValue(tweet.retweet_count)}
         </p>
-        <Icon size={18} tooltip={'Like'} position={'top'}>
+        <Icon size={18} tooltip={'Like'} position={'top-start'} offset={[0, 5]}>
           <Likes color="#000" />
         </Icon>
         <p style={{ marginLeft: 5, fontWeight: 'bold' }}>

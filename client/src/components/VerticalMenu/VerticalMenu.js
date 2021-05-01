@@ -5,7 +5,6 @@ import { logoutUser } from '../../redux/actions/userActions';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CreateTweet from '../CreateTweet/CreateTweet';
-import Popover from '../Popover/Popover';
 import VerticalMenuItem from './VerticalMenuItem';
 import { Assets } from '../../assets';
 import {
@@ -18,11 +17,13 @@ import {
   StyledDivider,
 } from './styles';
 import Logo from '../../assets/Pictures/Logo';
+import CustomPopper from '../CustomPopper/CustomPopper';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
   const { twitterAccounts } = useSelector((state) => state.twitterReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
 
   const dispatch = useDispatch();
   const handleLogout = () => {
@@ -43,7 +44,7 @@ const VerticalMenu = () => {
         {twitterAccounts?.length > 0 ? (
           <VerticalMenuItem
             text="Create"
-            offset={20}
+            offset={[0, 25]}
             onClick={() => setIsModalOpen(true)}
           >
             <img src={Assets.Pictures.CreateIcon} alt="New Post" />
@@ -54,15 +55,17 @@ const VerticalMenu = () => {
           onClose={() => setIsModalOpen(false)}
         />
 
-        <VerticalMenuItem text="Streams" offset={20}>
+        <VerticalMenuItem text="Streams" offset={[0, 25]}>
           <Link to="/dashboard">
             <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
           </Link>
         </VerticalMenuItem>
       </StyledTop>
       <StyledBottom>
-        <Popover
-          content={
+        <CustomPopper
+          open={isAccountMenuOpen}
+          placement="top-start"
+          popper={
             <Card>
               <CardBody>
                 <Link to="/settings">Settings</Link>
@@ -74,10 +77,12 @@ const VerticalMenu = () => {
             </Card>
           }
         >
-          <StyledMenuIcon>
+          <StyledMenuIcon
+            onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+          >
             <StyledRoundedImg src={profilePicture} alt="Mark Logo" />
           </StyledMenuIcon>
-        </Popover>
+        </CustomPopper>
       </StyledBottom>
     </StyledVerticalMenu>
   );

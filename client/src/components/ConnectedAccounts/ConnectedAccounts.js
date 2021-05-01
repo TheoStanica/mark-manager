@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import CardBody from '../Card/CardBody';
 import CardHeader from '../Card/CardHeader';
 import ConnectTwitterButton from '../ConnectTwitterButton';
-import Popover from '../Popover/Popover';
 import {
   StyledProfileInfoWrapper,
   StyledRoundedImage,
@@ -14,11 +13,13 @@ import {
   StyledCenteredDiv,
 } from './styles';
 import GenericAccount from '../../assets/Pictures/GenericAccount';
+import CustomPopper from '../CustomPopper/CustomPopper';
 
 const ConnectedAccounts = () => {
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
+  const [isOpen, setIsOpen] = useState(false);
 
   const renderAccountCard = (accountId, idx) => (
     <Card key={idx} style={{ boxShadow: 'none' }}>
@@ -56,20 +57,25 @@ const ConnectedAccounts = () => {
   };
 
   return (
-    <Popover
-      content={
-        <div style={{ boxShadow: '0 0 0.875rem 0 rgb(33 37 41 / 20%)' }}>
-          {renderAccounts()}
-          <StyledConnect>
-            <ConnectTwitterButton />
-          </StyledConnect>
-        </div>
-      }
-    >
-      <StyledCenteredDiv style={{ marginRight: '1rem' }}>
-        <GenericAccount size={35} color="#333" />
-      </StyledCenteredDiv>
-    </Popover>
+    <>
+      <CustomPopper
+        open={isOpen}
+        style={{ marginRight: '1rem' }}
+        placement="bottom-end"
+        popper={
+          <>
+            {renderAccounts()}
+            <StyledConnect>
+              <ConnectTwitterButton />
+            </StyledConnect>
+          </>
+        }
+      >
+        <StyledCenteredDiv onClick={() => setIsOpen(!isOpen)}>
+          <GenericAccount size={35} color="#333" />
+        </StyledCenteredDiv>
+      </CustomPopper>
+    </>
   );
 };
 

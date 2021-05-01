@@ -29,6 +29,7 @@ export const StyledTimelineBody = styled.div`
   padding: 0.3rem;
   flex-grow: 1;
   overflow: overlay;
+  z-index: 1;
   &::-webkit-scrollbar {
     width: 0.3rem;
   }
