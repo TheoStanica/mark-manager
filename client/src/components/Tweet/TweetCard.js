@@ -42,7 +42,7 @@ const TwitterCard = ({ tweet }) => {
             alt={`${data.user.name}'s profile`}
           />
           <StyledTweetMetadata>
-            <div>
+            <div style={{ wordBreak: 'break-word' }}>
               <strong style={{ marginRight: '.5rem' }}>{data.user.name}</strong>
               @{data.user.screen_name}
             </div>

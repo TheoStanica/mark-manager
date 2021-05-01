@@ -11,13 +11,21 @@ const TimelineHeader = ({ type, account, onRefresh, onRemove, ...rest }) => {
         <StyledSpan>{type}</StyledSpan>@{account}
       </div>
       <div style={{ display: 'flex' }}>
-        <Icon size={22} tooltip="Refresh" onClick={onRefresh}>
+        <Icon
+          size={22}
+          tooltip="Refresh"
+          onClick={onRefresh}
+          position={'top-start'}
+          offset={[0, 5]}
+        >
           <Reload color="#fff" />
         </Icon>
         <Icon
           style={{ marginLeft: '.5rem' }}
           size={22}
           tooltip="Remove"
+          position={'top-start'}
+          offset={[0, 5]}
           onClick={onRemove}
         >
           <Trashcan color="#fff" />

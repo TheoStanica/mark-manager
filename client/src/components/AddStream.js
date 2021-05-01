@@ -122,6 +122,7 @@ const StyledStickyBottomRight = styled.div`
   position: fixed;
   right: 2rem;
   bottom: 2rem;
+  z-index: 100;
 `;
 
 export default AddStream;

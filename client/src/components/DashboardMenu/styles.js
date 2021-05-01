@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledDashboardMenu = styled.div`
-  background: white;
+  transition: 0.2s ease-in-out;
+  background: ${(props) => (props.theme.pref === 'dark' ? '#23272A' : 'white')};
+  color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   height: 60px;
   display: flex;

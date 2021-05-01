@@ -35,7 +35,7 @@ const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti }) => {
         alt={screenName}
         style={{ width: 21, height: 21, marginRight: 3, borderRadius: '100%' }}
       />
-      <p>{screenName}</p>
+      <p style={{ color: 'black' }}>{screenName}</p>
     </div>
   );
 

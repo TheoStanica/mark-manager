@@ -11,7 +11,9 @@ export const StyledMenuItem = styled.div`
   }
 `;
 export const StyledVerticalMenu = styled.div`
-  background-color: #068abc;
+  background-color: ${(props) =>
+    props.theme.pref === 'dark' ? '#151719' : '#068abc'};
+  transition: 0.2s ease-in-out;
   color: white;
   width: 80px;
   display: flex;
@@ -68,6 +70,7 @@ export const StyledRoundedImg = styled.img`
 
 export const StyledDivider = styled.div`
   height: 1px;
-  background: rgba(0, 0, 0, 0.2);
+  background: ${(props) =>
+    props.theme.pref === 'dark' ? '#ffffff88' : '#00000088'};
   margin: 0.5rem 0;
 `;
