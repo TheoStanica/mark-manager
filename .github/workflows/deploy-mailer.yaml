@@ -3,7 +3,7 @@ name: deploy-mailer
 on:
   push:
     branches:
-      - master
+      - Feature/okteto-hosting
     paths:
       - 'mailer/**'
 

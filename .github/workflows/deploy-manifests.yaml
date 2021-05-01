@@ -3,7 +3,7 @@ name: deploy-manifests
 on:
   push:
     branches:
-      - master
+      - Feature/okteto-hosting
     paths:
       - 'infra/**'
 
@@ -24,15 +24,11 @@ jobs:
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s/auth-mongo-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
           manifest: infra/k8s/auth-redis-depl.yaml
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s/mailer-depl.yaml
+          manifest: infra/k8s-prod/mailer-depl.yaml
 
       - uses: okteto/apply@master
         with:
@@ -41,10 +37,6 @@ jobs:
       - uses: okteto/apply@master
         with:
           manifest: infra/k8s/userprofile-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
-          manifest: infra/k8s/userprofile-mongo-depl.yaml
 
       - uses: okteto/apply@master
         with:

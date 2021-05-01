@@ -3,7 +3,7 @@ name: deploy-userprofile
 on:
   push:
     branches:
-      - master
+      - Feature/okteto-hosting
     paths:
       - 'userprofile/**'
 
