@@ -1,40 +1,30 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
+    dev.okteto.com/auto-ingress: 'true'
+    nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
 spec:
   rules:
-    - host: www.projectmark.live
+    - host: theostanica.cloud.okteto.net
       http:
         paths:
           - path: /api/auth/?(.*)
-            pathType: Prefix
             backend:
-              service:
-                name: auth-srv
-                port:
-                  number: 3000
+              serviceName: auth-srv
+              servicePort: 3000
           - path: /api/user/?(.*)
-            pathType: Prefix
             backend:
-              service:
-                name: userprofile-srv
-                port:
-                  number: 3000
+              serviceName: userprofile-srv
+              servicePort: 3000
           - path: /api/social/?(.*)
-            pathType: Prefix
             backend:
-              service:
-                name: social-srv
-                port:
-                  number: 3000
+              serviceName: social-srv
+              servicePort: 3000
           - path: /?(.*)
-            pathType: Prefix
             backend:
-              service:
-                name: client-srv
-                port:
-                  number: 3000
+              serviceName: client-srv
+              servicePort: 3000
