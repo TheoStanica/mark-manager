@@ -9,6 +9,7 @@ import {
   USER_UPDATE,
   USER_RESET_MESSAGES,
   USER_SET_MESSAGES,
+  USER_SET_THEME,
 } from '../types';
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   message: null,
   accessToken: null,
   refreshToken: null,
+  themePreference: 'light',
 };
 
 const userReducer = (state = initialState, action) => {
@@ -32,14 +34,7 @@ const userReducer = (state = initialState, action) => {
       };
     case USER_LOGOUT:
       return {
-        ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
-        fullName: action.payload.fullName,
-        profilePicture: action.payload.profilePicture,
-        userTier: action.payload.userTier,
-        email: action.payload.email,
-        id: action.payload.id,
+        ...initialState,
       };
     case USER_REGISTER:
       return {
@@ -57,6 +52,7 @@ const userReducer = (state = initialState, action) => {
         userTier: action.payload.userTier,
         email: action.payload.email,
         id: action.payload.id,
+        themePreference: action.payload.themePreference,
       };
 
     case USER_SET_TOKENS: {
@@ -95,6 +91,13 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.payload.message,
+      };
+    }
+
+    case USER_SET_THEME: {
+      return {
+        ...state,
+        themePreference: action.payload.themePreference,
       };
     }
 

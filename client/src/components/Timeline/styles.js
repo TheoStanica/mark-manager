@@ -26,6 +26,9 @@ export const StyledTimelineHeader = styled.div`
 `;
 
 export const StyledTimelineBody = styled.div`
+  transition: 0.2s ease-in-out;
+  background: ${(props) => (props.theme.pref === 'dark' ? '#151719' : 'white')};
+  color: ${(props) => (props.theme.pref === 'dark' ? '#eee' : 'black')};
   padding: 0.3rem;
   flex-grow: 1;
   overflow: overlay;

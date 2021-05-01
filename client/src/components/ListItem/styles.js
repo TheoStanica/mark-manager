@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledListItemButton = styled.button`
+  transition: 0.2s ease-in-out;
   background: white;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -10,6 +11,7 @@ export const StyledListItemButton = styled.button`
   text-align: start;
   outline: none;
   word-wrap: break-word;
+  color: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
 
   &:hover {
     background: #068abc;
@@ -21,16 +23,7 @@ export const StyledListItemButton = styled.button`
     color: white;
     outline: none;
   }
-  &:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom: none;
-  }
-  &:first-child {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
   background: ${(props) => (props.active ? '#068abc;' : 'initial')};
-  color: ${(props) => (props.active ? 'white' : 'initial')};
+  color: ${(props) => (props.active ? 'white' : 'none')};
   outline: ${(props) => (props.active ? 'none' : 'initial')};
 `;

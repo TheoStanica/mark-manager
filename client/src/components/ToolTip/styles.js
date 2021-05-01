@@ -4,20 +4,14 @@ export const StyledMkToolTipSpan = styled.span`
   visibility: visible;
   background-color: black;
   color: #fff;
+  color: ${(props) => (props.theme.pref === 'dark' ? 'black' : 'white')};
+  background: ${(props) => (props.theme.pref === 'dark' ? 'white' : 'black')};
   text-align: center;
   padding: 0.4rem 0.8rem;
   border-radius: 5px;
   position: absolute;
   z-index: 1000;
   transform: translateY(-50%);
-
-  &::after {
-    content: ' ';
-    position: absolute;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent black transparent transparent;
-  }
 `;
 
 export const StyledMkToolTip = styled.div`

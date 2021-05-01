@@ -18,6 +18,7 @@ import {
 } from './styles';
 import Logo from '../../assets/Pictures/Logo';
 import CustomPopper from '../CustomPopper/CustomPopper';
+import ThemeController from '../ThemeController/ThemeController';
 
 const VerticalMenu = () => {
   const { profilePicture } = useSelector((state) => state.userReducer.present);
@@ -62,6 +63,7 @@ const VerticalMenu = () => {
         </VerticalMenuItem>
       </StyledTop>
       <StyledBottom>
+        <ThemeController />
         <CustomPopper
           open={isAccountMenuOpen}
           placement="top-start"
