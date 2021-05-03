@@ -86,4 +86,4 @@ router.post(
   }
 );
 
-export { router as twitterLikeRoute };
+export { router as twitterLikeRouter };

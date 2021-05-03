@@ -7,8 +7,8 @@ import { twitterTimelineRouter } from './routes/twitter/home-timeline';
 import { twitterTweetRouter } from './routes/twitter/tweet';
 import { twitterSearchRouter } from './routes/twitter/search';
 import { twitterAccountsRouter } from './routes/twitter/accounts';
-import { twitterLikeRoute } from './routes/twitter/like';
-import { twitterRetweetRoute } from './routes/twitter/retweet';
+import { twitterLikeRouter } from './routes/twitter/like';
+import { twitterRetweetRouter } from './routes/twitter/retweet';
 
 const app = express();
 app.set('trust proxy', true);
@@ -19,8 +19,8 @@ app.use(twitterCredentialsRouter);
 app.use(twitterTweetRouter);
 app.use(twitterSearchRouter);
 app.use(twitterAccountsRouter);
-app.use(twitterLikeRoute);
-app.use(twitterRetweetRoute);
+app.use(twitterLikeRouter);
+app.use(twitterRetweetRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
