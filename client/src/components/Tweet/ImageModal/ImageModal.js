@@ -6,7 +6,7 @@ import {
   StyledImageWrapper,
 } from './styles';
 
-const ImageModal = ({ children, modalContent }) => {
+const ImageModal = ({ children, photo }) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ const ImageModal = ({ children, modalContent }) => {
       {visible
         ? ReactDOM.createPortal(
             <StyledImageModal onClick={() => setVisible(false)}>
-              <StyledImageContent src={modalContent} />
+              <StyledImageContent src={photo} />
             </StyledImageModal>,
             document.body
           )
