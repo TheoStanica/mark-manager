@@ -17,7 +17,7 @@ router.post(
       .not()
       .isEmpty()
       .isNumeric()
-      .withMessage('Please provide a status'),
+      .withMessage('Please provide a Tweet ID'),
     body('twitterUserId')
       .notEmpty()
       .isNumeric()
@@ -55,7 +55,7 @@ router.post(
       .not()
       .isEmpty()
       .isNumeric()
-      .withMessage('Please provide a status'),
+      .withMessage('Please provide a Tweet ID'),
     body('twitterUserId')
       .notEmpty()
       .isNumeric()
