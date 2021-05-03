@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyledModalWrapper = styled.div`
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   position: absolute;
   top: 0;
   left: 0;
