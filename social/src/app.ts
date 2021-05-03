@@ -8,6 +8,7 @@ import { twitterTweetRouter } from './routes/twitter/tweet';
 import { twitterSearchRouter } from './routes/twitter/search';
 import { twitterAccountsRouter } from './routes/twitter/accounts';
 import { twitterLikeRoute } from './routes/twitter/like';
+import { twitterRetweetRoute } from './routes/twitter/retweet';
 
 const app = express();
 app.set('trust proxy', true);
@@ -19,6 +20,7 @@ app.use(twitterTweetRouter);
 app.use(twitterSearchRouter);
 app.use(twitterAccountsRouter);
 app.use(twitterLikeRoute);
+app.use(twitterRetweetRoute);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
