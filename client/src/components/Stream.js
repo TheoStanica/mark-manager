@@ -45,7 +45,7 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
         threshold={500}
       >
         {stream.tweets.map((tweet, idx) => {
-          return <TweetCard tweet={tweet} key={idx} />;
+          return <TweetCard streamId={id} tweet={tweet} key={idx} />;
         })}
       </InfiniteScroll>
     ) : (
