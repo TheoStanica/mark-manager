@@ -13,4 +13,8 @@ export const TwitterEndpoints = {
   connectToTwitterEndpoint: '/api/auth/twitter/connect',
   tweetMessageEndpoint: '/api/social/twitter/statuses/update',
   updateStreamsEndpoint: '/api/user/streampreferences',
+  likeTweetEndpoint: '/api/social/twitter/favorites/create',
+  unlikeTweetEndpoint: '/api/social/twitter/favorites/destroy',
+  retweetTweetEndpoint: '/api/social/twitter/statuses/retweet',
+  unRetweetTweetEndpoint: '/api/social/twitter/statuses/unretweet',
 };
