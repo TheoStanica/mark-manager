@@ -378,3 +378,43 @@ export const filterAccounts = ({ accounts }) => (dispatch) => {
     },
   });
 };
+
+export const likeTweet = ({ twitterUserId, tweetId, isLiked }) => async (
+  dispatch
+) => {
+  try {
+    if (isLiked) {
+      await axiosInstance.post(TwitterEndpoints.unlikeTweetEndpoint, {
+        twitterUserId,
+        tweetId,
+      });
+    } else {
+      await axiosInstance.post(TwitterEndpoints.likeTweetEndpoint, {
+        twitterUserId,
+        tweetId,
+      });
+    }
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
+
+export const retweetTweet = ({ twitterUserId, tweetId, isRetweeted }) => async (
+  dispatch
+) => {
+  try {
+    if (isRetweeted) {
+      await axiosInstance.post(TwitterEndpoints.unRetweetTweetEndpoint, {
+        twitterUserId,
+        tweetId,
+      });
+    } else {
+      await axiosInstance.post(TwitterEndpoints.retweetTweetEndpoint, {
+        twitterUserId,
+        tweetId,
+      });
+    }
+  } catch (err) {
+    dispatch(handleError({ error: err }));
+  }
+};
