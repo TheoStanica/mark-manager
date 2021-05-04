@@ -14,7 +14,7 @@ import TweetFooter from './TweetFooter';
 import TweetQuote from './TweetQuote';
 import RetweetHeader from './RetweetHeader';
 
-const TwitterCard = ({ tweet, streamId }) => {
+const TwitterCard = ({ tweet, streamId, isQuote }) => {
   let data = tweet;
   let isRT = false;
   let MediaComponent = null;
@@ -55,7 +55,7 @@ const TwitterCard = ({ tweet, streamId }) => {
         {MediaComponent}
         {QuoteComponent}
       </CardBody>
-      <TweetFooter tweet={data} streamId={streamId} />
+      {!isQuote ? <TweetFooter tweet={data} streamId={streamId} /> : null}
     </Card>
   );
 };
