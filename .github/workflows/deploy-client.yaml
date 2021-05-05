@@ -3,7 +3,7 @@ name: deploy-client
 on:
   push:
     branches:
-      - master
+      - Feature/110-Okteto
     paths:
       - 'client/**'
 
@@ -12,18 +12,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd client && docker build -t theocosmin/client .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - name: Build Image
+        run: cd client && docker build -t theocosmin/client .
+
+      - name: Login into Docker account
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push theocosmin/client
-      - uses: okteto/login@master
+
+      - name: Push Image
+        run: docker push theocosmin/client
+
+      - name: Login into Okteto
+        uses: okteto/login@master
         with:
           token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
 
+      - name: Activate namespace
       - uses: okteto/namespace@master
 
-      - uses: okteto/apply@master
+      - name: Restart deployment
+        uses: myrotvorets/kubectl-action@1.0.4
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.OKTETO_CONFIG_FILE }}
         with:
-          manifest: infra/k8s/client-depl.yaml
+          args: rollout restart deployment client-depl
