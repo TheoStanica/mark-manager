@@ -12,7 +12,7 @@ const Home = () => {
     <StyledHome>
       <Header normal={true} />
       <StyledHomeWrapper>
-        <h1>Welcome to Project Mark!...</h1>
+        <h1>Welcome to Project Mark!</h1>
         <Button style={{ marginBottom: '1rem', marginTop: '1rem' }}>
           <Link to="/login">Login</Link>
         </Button>
