@@ -3,7 +3,7 @@ name: deploy-client
 on:
   push:
     branches:
-      - Feature/110-Okteto
+      - master
     paths:
       - 'client/**'
 
