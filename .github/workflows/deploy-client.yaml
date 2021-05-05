@@ -11,8 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Build Image
+        uses: actions/checkout@v2
         run: cd client && docker build -t theocosmin/client .
 
       - name: Login into Docker account
