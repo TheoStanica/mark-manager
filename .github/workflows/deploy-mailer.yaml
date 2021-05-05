@@ -24,6 +24,9 @@ jobs:
 
       - uses: okteto/namespace@master
 
-      - uses: okteto/apply@master
+      - name: Restart deployment
+        uses: myrotvorets/kubectl-action@1.0.4
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.OKTETO_CONFIG_FILE }}
         with:
-          manifest: infra/k8s/mailer-depl.yaml
+          args: rollout restart deployment mailer-depl
