@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   FailedConnectionError,
   TwitterInvalidTokensError,
   TwitterRateLimitExceededError,
@@ -10,6 +11,10 @@ export const handleTwitterErrors = (err: any, twitterAccountId: string) => {
       throw new TwitterRateLimitExceededError(twitterAccountId);
     case 89:
       throw new TwitterInvalidTokensError(twitterAccountId);
+    case 139:
+      throw new BadRequestError('You have already liked this Tweet');
+    case 327:
+      throw new BadRequestError('You have already retweeted this Tweet');
     default:
       throw new FailedConnectionError();
   }

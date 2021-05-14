@@ -30,8 +30,10 @@ export const StyledTweetFooterContainer = styled.div`
 
 export const StyledQuotedTweet = styled.div`
   margin-top: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  box-shadow: ${(props) =>
+    props.theme.pref === 'dark'
+      ? 'rgba(0, 0, 0, 0.2) 0px 3px 6px, rgba(0, 0, 0, 0.3) 0px 3px 6px'
+      : 'rgba(0, 0, 0, 0.05) 0px 3px 6px, rgba(0, 0, 0, 0.05) 0px 3px 6px'};
 `;
 
 export const StyledRetweetHeader = styled.div`

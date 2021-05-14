@@ -5,7 +5,7 @@ import { StyledQuotedTweet } from './styles';
 const TweetQuote = ({ data }) => {
   return (
     <StyledQuotedTweet>
-      <TweetCard tweet={data} />
+      <TweetCard tweet={data} streamId={data.id_str} isQuote={true} />
     </StyledQuotedTweet>
   );
 };
