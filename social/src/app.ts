@@ -9,7 +9,7 @@ import { twitterSearchRouter } from './routes/twitter/search';
 import { twitterAccountsRouter } from './routes/twitter/accounts';
 import { twitterLikeRouter } from './routes/twitter/like';
 import { twitterRetweetRouter } from './routes/twitter/retweet';
-import { twitterCommentsRouter } from './routes/twitter/comments';
+import { twitterCommentsRouter } from './routes/twitter/replies';
 
 const app = express();
 app.set('trust proxy', true);
