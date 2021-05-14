@@ -38,3 +38,9 @@ export const StyledRetweetHeader = styled.div`
   padding-bottom: 0.5rem;
   display: flex;
 `;
+
+export const StyledTweetPhoto = styled.img`
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+`;
