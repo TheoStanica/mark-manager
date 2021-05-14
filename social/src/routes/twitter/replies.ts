@@ -76,7 +76,6 @@ router.get(
 
         const newReplies = tweets.data.statuses.filter( tweet => tweet.in_reply_to_status_id_str === inReplyToStatusId);
         resArray.push(...newReplies);
-        console.log('resarray is', resArray.length);
 
         // If we don't get at least 30 tweets back, it means that we got all replies already
         // or if the array of replies is empty
