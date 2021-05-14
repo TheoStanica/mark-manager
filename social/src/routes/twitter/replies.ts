@@ -32,13 +32,13 @@ router.get(
   validateRequest,
   async (req: Request, res: Response) => {
     const {
-      search,
-      maxId,
+      repliesToScreenName,
+      inReplyToStatusId,
       twitterUserId,
-      repliesTo,
-      tweetRepliedTo,
       sinceId,
+      maxId,
     } = req.query;
+
     const {
       oauthAccessToken,
       oauthAccessTokenSecret,
@@ -46,6 +46,7 @@ router.get(
       req.currentUser!.userId,
       String(twitterUserId)
     );
+
     const twitterClient = new twit({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
@@ -54,20 +55,16 @@ router.get(
     });
     try {
       const tweets = ((await twitterClient.get('search/tweets', {
-        q: `to:${repliesTo}`,
+        q: `to:${repliesToScreenName}`,
         tweet_mode: 'extended',
         since_id: sinceId ? String(sinceId) : undefined,
         max_id: maxId ? String(maxId) : undefined,
         count: 100,
-        in_reply_to_status_id: String(tweetRepliedTo),
-        result_type: 'recent',
+        in_reply_to_status_id: String(inReplyToStatusId),
       })) as unknown) as TwitterResponse;
-      let resArray: any[] = [];
-      tweets.data.statuses.forEach((tweet) => {
-        if (tweet.in_reply_to_status_id_str === tweetRepliedTo) {
-          resArray.push(tweet);
-        }
-      });
+      
+      const resArray = tweets.data.statuses.filter( tweet => tweet.in_reply_to_status_id_str === inReplyToStatusId);
+
       res.send(resArray);
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
