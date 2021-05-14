@@ -57,18 +57,36 @@ router.get(
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      const tweets = ((await twitterClient.get('search/tweets', {
-        q: `to:${repliesToScreenName}`,
-        tweet_mode: 'extended',
-        since_id: sinceId ? String(sinceId) : undefined,
-        max_id: maxId ? String(maxId) : undefined,
-        count: 100,
-        in_reply_to_status_id: String(inReplyToStatusId),
-      })) as unknown) as TwitterResponse;
-      
-      const resArray = tweets.data.statuses.filter( tweet => tweet.in_reply_to_status_id_str === inReplyToStatusId);
+      let currentSinceId = sinceId;
+      let resArray: any[] = [];
 
-      res.send(resArray);
+      while(resArray.length < 30){
+        const tweets = ((await twitterClient.get('search/tweets', {
+          q: `to:${repliesToScreenName}`,
+          tweet_mode: 'extended',
+          since_id: sinceId ? String(currentSinceId) : undefined,
+          max_id: maxId ? String(maxId) : undefined,
+          count: 100,
+          in_reply_to_status_id: String(inReplyToStatusId),
+        })) as unknown) as TwitterResponse;
+
+        // get out of the loop when we have got all replies possible and there are no new replies
+        // (or try to find replies for tweets older than 7 days - Twitter API limitation for unpaid API access)
+        if(tweets.data.statuses.length === 0 ) break;
+
+        const newReplies = tweets.data.statuses.filter( tweet => tweet.in_reply_to_status_id_str === inReplyToStatusId);
+        resArray.push(...newReplies);
+        console.log('resarray is', resArray.length);
+
+        // If we don't get at least 30 tweets back, it means that we got all replies already
+        // or if the array of replies is empty
+        if(tweets.data.statuses.length < 30 || resArray.length === 0) break;
+
+        currentSinceId = tweets.data.statuses[tweets.data.statuses.length-1].id_str;
+      }
+      
+
+      res.send(resArray.slice(0,30));
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
     }
