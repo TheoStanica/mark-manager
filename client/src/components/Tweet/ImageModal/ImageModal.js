@@ -9,17 +9,22 @@ import {
 const ImageModal = ({ children, photo }) => {
   const [visible, setVisible] = useState(false);
 
+  const changeVisibleStatus = (e) => {
+    e.stopPropagation();
+    setVisible(!visible);
+  };
+
   return (
     <>
       <StyledImageWrapper
-        onClick={() => setVisible(true)}
+        onClick={changeVisibleStatus}
         style={{ marginTop: '1rem' }}
       >
         {children}
       </StyledImageWrapper>
       {visible
         ? ReactDOM.createPortal(
-            <StyledImageModal onClick={() => setVisible(false)}>
+            <StyledImageModal onClick={changeVisibleStatus}>
               <StyledImageContent src={photo} />
             </StyledImageModal>,
             document.body
