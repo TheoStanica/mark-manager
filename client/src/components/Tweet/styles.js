@@ -46,3 +46,30 @@ export const StyledTweetPhoto = styled.img`
   max-height: 250px;
   object-fit: cover;
 `;
+
+export const StyledTweetDetailsWrapper = styled.div`
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  color: black;
+`;
+export const StyledTweetDetailsClose = styled.div`
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 1101;
+  color: white;
+  font-size: 2.25rem;
+  line-height: 2.25rem;
+  cursor: pointer;
+`;
+
+export const TweetWrapper = styled.div``;
