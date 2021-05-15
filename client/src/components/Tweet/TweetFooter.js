@@ -30,13 +30,15 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
     }).format(count);
   };
 
-  const handleLike = () => {
+  const handleLike = (e) => {
+    e.stopPropagation();
     dispatch(
       likeTweet({ twitterUserId, tweetId: tweet.id_str, isLiked: isLiked })
     );
     setIsLiked(!isLiked);
   };
-  const handleRetweet = () => {
+  const handleRetweet = (e) => {
+    e.stopPropagation();
     dispatch(
       retweetTweet({ twitterUserId, tweetId: tweet.id_str, isRetweeted })
     );
