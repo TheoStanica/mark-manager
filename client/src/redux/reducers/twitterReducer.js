@@ -12,6 +12,8 @@ import {
   TWITTER_CLEAR_ALL_ACCOUNTS,
   TWITTER_SET_ACCOUNT_DATA,
   TWITTER_FILTER_ACCOUNTS,
+  TWITTER_SET_TWEET_LIKE_STATUS,
+  TWITTER_SET_TWEET_RETWEET_STATUS,
 } from '../types';
 
 const initialState = {
@@ -118,6 +120,30 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.id]: {
             ...state.streamsById[action.payload.id],
             isLoading: action.payload.isLoading,
+          },
+        },
+      };
+    }
+    case TWITTER_SET_TWEET_LIKE_STATUS: {
+      return {
+        ...state,
+        tweetsById: {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            favorited: action.payload.liked,
+          },
+        },
+      };
+    }
+    case TWITTER_SET_TWEET_RETWEET_STATUS: {
+      return {
+        ...state,
+        tweetsById: {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            retweeted: action.payload.retweeted,
           },
         },
       };
