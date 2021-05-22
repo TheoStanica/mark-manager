@@ -235,7 +235,6 @@ export const setStreamLoading = ({ id, isLoading }) => (dispatch) => {
   });
 };
 
-export const loadTweetSearchStream = ({ id, search, twitterUserId }) => async (
 const getWhitelistedTweets = ({ blacklistedStreamId }) => {
   // gets all the tweet ids that are not inside the blacklisted Stream
   // and returns a set of tweet ids that are whitelisted
@@ -313,26 +312,42 @@ export const reloadTwitterStream = ({ id, search, twitterUserId }) => async (
   }
 };
 
-export const loadMoreHomeTimelineStream = ({
+export const loadMoreTwitterStreamTweets = ({
   id,
+  search,
   maxId,
   twitterUserId,
 }) => async (dispatch) => {
   try {
     const response = await axiosInstance.get(
-      TwitterEndpoints.loadMoreHomeTimelineStreamEndpoint({
-        maxId,
-        twitterUserId,
-      })
+      search
+        ? TwitterEndpoints.loadMoreTweetSearchStreamEndpoint({
+            search,
+            maxId,
+            twitterUserId,
+          })
+        : TwitterEndpoints.loadMoreHomeTimelineStreamEndpoint({
+            maxId,
+            twitterUserId,
+          })
     );
+
+    const newTweets = response.data.statuses.slice(1);
+    const tweetsObject = newTweets.reduce(
+      (obj, tweet) => ({ ...obj, [tweet.id_str]: { ...tweet } }),
+      {}
+    );
+    const newTweetsIds = newTweets.map((tweet) => tweet.id_str);
+
     await dispatch({
       type: TWITTER_ADD_MORE_TWEETS,
       payload: {
         id: id,
-        //remove first tweet as it is the same as the last one in our tweets array in redux
-        tweets: response.data.slice(1),
+        tweets: tweetsObject,
+        tweetsIds: newTweetsIds,
         metadata: {
-          max_id: response.data[response.data.length - 1].id,
+          max_id:
+            response.data.statuses[response.data.statuses.length - 1].id_str,
         },
       },
     });
