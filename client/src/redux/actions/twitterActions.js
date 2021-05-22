@@ -31,6 +31,7 @@ const handleError = ({ error }) => async (dispatch) => {
       },
     });
   } else {
+    console.log(error);
     dispatch({
       type: SET_ERRORS,
       payload: {
@@ -404,11 +405,14 @@ export const likeTweet = ({ twitterUserId, tweetId }) => async (dispatch) => {
   try {
     const isLiked = await store.getState().twitterReducer.tweetsById[tweetId]
       .favorited;
+    const likedCount = await store.getState().twitterReducer.tweetsById[tweetId]
+      .favorite_count;
     dispatch({
       type: TWITTER_SET_TWEET_LIKE_STATUS,
       payload: {
         tweetId: tweetId,
         liked: !isLiked,
+        count: isLiked ? likedCount - 1 : likedCount + 1,
       },
     });
     if (isLiked) {
@@ -434,11 +438,16 @@ export const retweetTweet = ({ twitterUserId, tweetId }) => async (
     const isRetweeted = await store.getState().twitterReducer.tweetsById[
       tweetId
     ].retweeted;
+    const retweetCount = await store.getState().twitterReducer.tweetsById[
+      tweetId
+    ].retweet_count;
+    console.log(isRetweeted, retweetCount);
     dispatch({
       type: TWITTER_SET_TWEET_RETWEET_STATUS,
       payload: {
         tweetId: tweetId,
         retweeted: !isRetweeted,
+        count: isRetweeted ? retweetCount - 1 : retweetCount + 1,
       },
     });
     if (isRetweeted) {

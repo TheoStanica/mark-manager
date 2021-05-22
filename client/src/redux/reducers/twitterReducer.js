@@ -132,6 +132,7 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.tweetId]: {
             ...state.tweetsById[action.payload.tweetId],
             favorited: action.payload.liked,
+            favorite_count: action.payload.count,
           },
         },
       };
@@ -144,6 +145,7 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.tweetId]: {
             ...state.tweetsById[action.payload.tweetId],
             retweeted: action.payload.retweeted,
+            retweet_count: action.payload.count,
           },
         },
       };
