@@ -256,74 +256,55 @@ const getWhitelistedTweets = ({ blacklistedStreamId }) => {
 
   return tweetsToKeepSet;
 };
+
+export const reloadTwitterStream = ({ id, search, twitterUserId }) => async (
   dispatch
 ) => {
   try {
+    const storedTweetsById = store.getState().twitterReducer.tweetsById;
+
     await dispatch(setStreamLoading({ id, isLoading: true }));
+
     const response = await axiosInstance.get(
-      TwitterEndpoints.loadTweetSearchStreamEndpoint({ search, twitterUserId })
+      search
+        ? TwitterEndpoints.loadTweetSearchStreamEndpoint({
+            search,
+            twitterUserId,
+          })
+        : TwitterEndpoints.loadHomeTimelineStreamEndpoint({ twitterUserId })
     );
+
+    // create new tweet objects from response as well as an array of IDs
+    const tweetsObject = response.data.statuses.reduce(
+      (obj, tweet) => ({ ...obj, [tweet.id_str]: { ...tweet } }),
+      {}
+    );
+    const tweetsIds = response.data.statuses.map((tweet) => tweet.id_str);
+
+    const whitelistedTweetsIdsSet = getWhitelistedTweets({
+      blacklistedStreamId: id,
+    });
+
+    // take all keys insider stream tweets array
+    // filter those keys from tweetsById(currentTweetsById)
+    const filteredTweetsObj = Object.keys(storedTweetsById)
+      .filter((tweetId) => whitelistedTweetsIdsSet?.has(tweetId))
+      .reduce(
+        (obj, tweetId) => ({ ...obj, [tweetId]: storedTweetsById[tweetId] }),
+        {}
+      );
+
     await dispatch({
       type: TWITTER_SET_STREAM_TWEETS,
       payload: {
         id: id,
-        tweets: response.data.statuses,
+        tweets: tweetsIds,
         metadata: {
-          max_id: response.data.statuses[response.data.statuses.length - 1].id,
+          max_id:
+            response.data.statuses[response.data.statuses.length - 1].id_str,
         },
-      },
-    });
-    await dispatch(setStreamLoading({ id, isLoading: false }));
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
-
-export const loadMoreTweetSearchStream = ({
-  id,
-  search,
-  maxId,
-  twitterUserId,
-}) => async (dispatch) => {
-  try {
-    const response = await axiosInstance.get(
-      TwitterEndpoints.loadMoreTweetSearchStreamEndpoint({
-        search,
-        maxId,
-        twitterUserId,
-      })
-    );
-    await dispatch({
-      type: TWITTER_ADD_MORE_TWEETS,
-      payload: {
-        id: id,
-        tweets: response.data.statuses.slice(1),
-        metadata: {
-          max_id: response.data.statuses[response.data.statuses.length - 1].id,
-        },
-      },
-    });
-  } catch (err) {
-    dispatch(handleError({ error: err }));
-  }
-};
-
-export const loadHomeTimelineStream = ({ id, twitterUserId }) => async (
-  dispatch
-) => {
-  try {
-    await dispatch(setStreamLoading({ id, isLoading: true }));
-    const response = await axiosInstance.get(
-      TwitterEndpoints.loadHomeTimelineStreamEndpoint({ twitterUserId })
-    );
-    await dispatch({
-      type: TWITTER_SET_STREAM_TWEETS,
-      payload: {
-        id: id,
-        tweets: response.data,
-        metadata: {
-          max_id: response.data[response.data.length - 1].id,
-        },
+        newTweetsById: tweetsObject,
+        filteredTweetsById: filteredTweetsObj,
       },
     });
     await dispatch(setStreamLoading({ id, isLoading: false }));
