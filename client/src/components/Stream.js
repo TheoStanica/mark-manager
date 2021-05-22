@@ -29,6 +29,7 @@ const selectScreenName = (streamId) =>
 
 const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
   const stream = useSelector((state) => state.twitterReducer.streamsById[id]);
+  const tweetsById = useSelector((state) => state.twitterReducer.tweetsById);
   const screenName = useSelector(selectScreenName(stream.id));
   const dispatch = useDispatch();
 
@@ -48,7 +49,7 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
         {stream.tweets.map((tweet, idx) => {
           return (
             <Tweet key={idx}>
-              <TweetCard streamId={id} tweet={tweet} key={idx} />
+              <TweetCard streamId={id} tweet={tweetsById[tweet]} key={idx} />
             </Tweet>
           );
         })}
