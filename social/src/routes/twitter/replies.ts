@@ -9,13 +9,6 @@ const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
-interface TwitterResponse {
-  data: {
-    statuses: any[];
-    search_metadata: any;
-  };
-}
-
 router.get(
   '/api/social/twitter/search/tweets/comments',
   requireAuth,
