@@ -80,6 +80,15 @@ const twitterReducer = (state = initialState, action) => {
             metadata: action.payload.metadata,
           },
         },
+        tweetsById: action.payload.filteredTweetsById
+          ? {
+              ...action.payload.filteredTweetsById,
+              ...action.payload.newTweetsById,
+            }
+          : {
+              ...state.tweetsById,
+              ...action.payload.newTweetsById,
+            },
       };
     }
     case TWITTER_ADD_MORE_TWEETS: {
@@ -90,10 +99,14 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.id]: {
             ...state.streamsById[action.payload.id],
             tweets: state.streamsById[action.payload.id].tweets.concat(
-              action.payload.tweets
+              action.payload.tweetsIds
             ),
             metadata: action.payload.metadata,
           },
+        },
+        tweetsById: {
+          ...state.tweetsById,
+          ...action.payload.tweets,
         },
       };
     }
