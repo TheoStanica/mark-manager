@@ -14,6 +14,8 @@ import {
   TWITTER_CLEAR_ALL_ACCOUNTS,
   TWITTER_SET_ACCOUNT_DATA,
   TWITTER_FILTER_ACCOUNTS,
+  TWITTER_SET_TWEET_LIKE_STATUS,
+  TWITTER_SET_TWEET_RETWEET_STATUS,
 } from '../types';
 import { store } from '../store';
 import { v4 as uuidv4 } from 'uuid';
@@ -398,10 +400,17 @@ export const filterAccounts = ({ accounts }) => (dispatch) => {
   });
 };
 
-export const likeTweet = ({ twitterUserId, tweetId, isLiked }) => async (
-  dispatch
-) => {
+export const likeTweet = ({ twitterUserId, tweetId }) => async (dispatch) => {
   try {
+    const isLiked = await store.getState().twitterReducer.tweetsById[tweetId]
+      .favorited;
+    dispatch({
+      type: TWITTER_SET_TWEET_LIKE_STATUS,
+      payload: {
+        tweetId: tweetId,
+        liked: !isLiked,
+      },
+    });
     if (isLiked) {
       await axiosInstance.post(TwitterEndpoints.unlikeTweetEndpoint, {
         twitterUserId,
@@ -418,10 +427,20 @@ export const likeTweet = ({ twitterUserId, tweetId, isLiked }) => async (
   }
 };
 
-export const retweetTweet = ({ twitterUserId, tweetId, isRetweeted }) => async (
+export const retweetTweet = ({ twitterUserId, tweetId }) => async (
   dispatch
 ) => {
   try {
+    const isRetweeted = await store.getState().twitterReducer.tweetsById[
+      tweetId
+    ].retweeted;
+    dispatch({
+      type: TWITTER_SET_TWEET_RETWEET_STATUS,
+      payload: {
+        tweetId: tweetId,
+        retweeted: !isRetweeted,
+      },
+    });
     if (isRetweeted) {
       await axiosInstance.post(TwitterEndpoints.unRetweetTweetEndpoint, {
         twitterUserId,
