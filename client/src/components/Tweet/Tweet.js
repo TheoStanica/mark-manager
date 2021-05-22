@@ -23,7 +23,9 @@ const Tweet = ({ children }) => {
               <StyledTweetDetailsClose onClick={changeIsVisible}>
                 X
               </StyledTweetDetailsClose>
-              <StyledTweetDetailsWrapper>{children}</StyledTweetDetailsWrapper>
+              <StyledTweetDetailsWrapper>
+                <div style={{ maxWidth: 700 }}>{children}</div>
+              </StyledTweetDetailsWrapper>
             </>,
             document.body
           )
