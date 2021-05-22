@@ -4,6 +4,7 @@ import twit from 'twit';
 import { query } from 'express-validator';
 import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { TwitterResponse } from '../../services/twitterStreamResponse';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -40,12 +41,13 @@ router.get(
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      const tweets = await twitterClient.get('search/tweets', {
+      const tweets = (await twitterClient.get('search/tweets', {
         q: String(search),
         tweet_mode: 'extended',
         max_id: maxId ? String(maxId) : undefined,
-      });
-      res.send(tweets.data || []);
+        count: 15,
+      })) as TwitterResponse;
+      res.send({ statuses: tweets.data.statuses } || []);
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
     }
