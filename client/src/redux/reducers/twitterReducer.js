@@ -20,6 +20,7 @@ const initialState = {
   twitterFilteredAccounts: [],
   streams: [],
   streamsById: {},
+  tweetsById: {},
 };
 
 const twitterReducer = (state = initialState, action) => {
@@ -61,6 +62,7 @@ const twitterReducer = (state = initialState, action) => {
         ...state,
         streams: [],
         streamsById: {},
+        tweetsById: {},
       };
     case TWITTER_UPDATE_STREAMS:
       return {
