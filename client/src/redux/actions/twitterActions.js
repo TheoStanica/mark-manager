@@ -260,8 +260,6 @@ export const reloadTwitterStream = ({ id, search, twitterUserId }) => async (
   dispatch
 ) => {
   try {
-    const storedTweetsById = store.getState().twitterReducer.tweetsById;
-
     await dispatch(setStreamLoading({ id, isLoading: true }));
 
     const response = await axiosInstance.get(
@@ -286,10 +284,15 @@ export const reloadTwitterStream = ({ id, search, twitterUserId }) => async (
 
     // take all keys insider stream tweets array
     // filter those keys from tweetsById(currentTweetsById)
-    const filteredTweetsObj = Object.keys(storedTweetsById)
+    const filteredTweetsObj = Object.keys(
+      store.getState().twitterReducer.tweetsById
+    )
       .filter((tweetId) => whitelistedTweetsIdsSet?.has(tweetId))
       .reduce(
-        (obj, tweetId) => ({ ...obj, [tweetId]: storedTweetsById[tweetId] }),
+        (obj, tweetId) => ({
+          ...obj,
+          [tweetId]: store.getState().twitterReducer.tweetsById[tweetId],
+        }),
         {}
       );
 
