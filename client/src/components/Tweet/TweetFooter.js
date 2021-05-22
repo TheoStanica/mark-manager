@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CardFooter from '../Card/CardFooter';
 import Icon from '../Icon/Icon';
 import { StyledTweetFooterContainer } from './styles';
@@ -17,8 +17,12 @@ const selectTwitterUserId = (streamId) =>
   );
 
 const TweetFooter = ({ tweet, streamId, theme }) => {
-  const [isLiked, setIsLiked] = useState(tweet.favorited);
-  const [isRetweeted, setIsRetweeted] = useState(tweet.retweeted);
+  const isLiked = useSelector(
+    (state) => state?.twitterReducer?.tweetsById[tweet.id_str]?.favorited
+  );
+  const isRetweeted = useSelector(
+    (state) => state?.twitterReducer?.tweetsById[tweet.id_str]?.retweeted
+  );
   const twitterUserId = useSelector(selectTwitterUserId(streamId));
   const dispatch = useDispatch();
 
@@ -35,14 +39,10 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
     dispatch(
       likeTweet({ twitterUserId, tweetId: tweet.id_str, isLiked: isLiked })
     );
-    setIsLiked(!isLiked);
   };
   const handleRetweet = (e) => {
     e.stopPropagation();
-    dispatch(
-      retweetTweet({ twitterUserId, tweetId: tweet.id_str, isRetweeted })
-    );
-    setIsRetweeted(!isRetweeted);
+    dispatch(retweetTweet({ twitterUserId, tweetId: tweet.id_str }));
   };
 
   return (
