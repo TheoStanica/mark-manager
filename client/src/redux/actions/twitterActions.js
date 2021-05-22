@@ -31,7 +31,6 @@ const handleError = ({ error }) => async (dispatch) => {
       },
     });
   } else {
-    console.log(error);
     dispatch({
       type: SET_ERRORS,
       payload: {
