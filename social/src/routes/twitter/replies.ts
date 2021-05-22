@@ -4,6 +4,7 @@ import twit, { Twitter } from 'twit';
 import { query } from 'express-validator';
 import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { TwitterResponse } from '../../services/twitterStreamResponse';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -12,14 +13,22 @@ const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 router.get(
   '/api/social/twitter/search/tweets/comments',
   requireAuth,
-  [ 
-    query('repliesToScreenName').notEmpty().withMessage("Please provide a Twitter Screen Name"),
-    query('inReplyToStatusId').notEmpty().isNumeric().withMessage("Please provide a valid ID"),
+  [
+    query('repliesToScreenName')
+      .notEmpty()
+      .withMessage('Please provide a Twitter Screen Name'),
+    query('inReplyToStatusId')
+      .notEmpty()
+      .isNumeric()
+      .withMessage('Please provide a valid ID'),
     query('twitterUserId')
       .notEmpty()
       .isNumeric()
       .withMessage('Please provide a valid Twitter user ID'),
-    query("sinceId").notEmpty().isNumeric().withMessage("Please provide a valid ID"),
+    query('sinceId')
+      .notEmpty()
+      .isNumeric()
+      .withMessage('Please provide a valid ID'),
     query('maxId')
       .optional()
       .isNumeric()
@@ -53,7 +62,7 @@ router.get(
       let currentSinceId = sinceId;
       let resArray: any[] = [];
 
-      while(resArray.length < 30){
+      while (resArray.length < 30) {
         const tweets = ((await twitterClient.get('search/tweets', {
           q: `to:${repliesToScreenName}`,
           tweet_mode: 'extended',
@@ -65,20 +74,22 @@ router.get(
 
         // get out of the loop when we have got all replies possible and there are no new replies
         // (or try to find replies for tweets older than 7 days - Twitter API limitation for unpaid API access)
-        if(tweets.data.statuses.length === 0 ) break;
+        if (tweets.data.statuses.length === 0) break;
 
-        const newReplies = tweets.data.statuses.filter( tweet => tweet.in_reply_to_status_id_str === inReplyToStatusId);
+        const newReplies = tweets.data.statuses.filter(
+          (tweet) => tweet.in_reply_to_status_id_str === inReplyToStatusId
+        );
         resArray.push(...newReplies);
 
         // If we don't get at least 30 tweets back, it means that we got all replies already
         // or if the array of replies is empty
-        if(tweets.data.statuses.length < 30 || resArray.length === 0) break;
+        if (tweets.data.statuses.length < 30 || resArray.length === 0) break;
 
-        currentSinceId = tweets.data.statuses[tweets.data.statuses.length-1].id_str;
+        currentSinceId =
+          tweets.data.statuses[tweets.data.statuses.length - 1].id_str;
       }
-      
 
-      res.send(resArray.slice(0,30));
+      res.send(resArray.slice(0, 30));
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
     }
