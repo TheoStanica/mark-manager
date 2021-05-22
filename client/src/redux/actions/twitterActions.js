@@ -236,6 +236,26 @@ export const setStreamLoading = ({ id, isLoading }) => (dispatch) => {
 };
 
 export const loadTweetSearchStream = ({ id, search, twitterUserId }) => async (
+const getWhitelistedTweets = ({ blacklistedStreamId }) => {
+  // gets all the tweet ids that are not inside the blacklisted Stream
+  // and returns a set of tweet ids that are whitelisted
+
+  const currentStoredStreams = store.getState().twitterReducer.streamsById;
+  const tweetsToKeepSet = new Set();
+  const streamsToKeep = Object.keys(currentStoredStreams).filter(
+    (streamId) => streamId !== blacklistedStreamId
+  );
+
+  streamsToKeep.forEach((streamId) => {
+    const tweetsToWhitelist = store.getState().twitterReducer.streamsById[
+      streamId
+    ]?.tweets;
+    if (tweetsToWhitelist?.length > 0)
+      tweetsToWhitelist.forEach((tweet) => tweetsToKeepSet.add(tweet));
+  });
+
+  return tweetsToKeepSet;
+};
   dispatch
 ) => {
   try {
