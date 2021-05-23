@@ -527,3 +527,12 @@ export const resetReplies = () => (dispatch) => {
     type: TWITTER_RESET_TWEET_REPLIES,
   });
 };
+
+export const setRepliesLoadingStatus = ({ isLoading }) => (dispatch) => {
+  dispatch({
+    type: TWITTER_SET_REPLIES_LOADING_STATUS,
+    payload: {
+      isLoading,
+    },
+  });
+};
