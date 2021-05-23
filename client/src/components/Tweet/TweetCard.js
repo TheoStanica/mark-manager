@@ -32,8 +32,16 @@ const TwitterCard = ({ tweet, streamId, isQuote, isReply }) => {
   }
 
   return (
-    <Card style={{ marginBottom: '.3rem' }}>
+    <Card style={{ marginBottom: '.3rem', width: '100%' }}>
       <CardHeader style={{ padding: ' .5rem ' }}>
+        {tweet.in_reply_to_status_id_str ? (
+          <div style={{ marginBottom: '.5rem' }}>
+            Replying to{' '}
+            <span style={{ fontWeight: 'bold' }}>
+              {tweet.in_reply_to_screen_name}
+            </span>
+          </div>
+        ) : null}
         {isRT ? <RetweetHeader tweet={tweet} /> : null}
         <StyledHeaderWrapper>
           <StyledCircleImage
