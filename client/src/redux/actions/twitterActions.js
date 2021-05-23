@@ -16,6 +16,9 @@ import {
   TWITTER_FILTER_ACCOUNTS,
   TWITTER_SET_TWEET_LIKE_STATUS,
   TWITTER_SET_TWEET_RETWEET_STATUS,
+  TWITTER_SET_TWEET_REPLIES,
+  TWITTER_RESET_TWEET_REPLIES,
+  TWITTER_SET_REPLIES_LOADING_STATUS,
 } from '../types';
 import { store } from '../store';
 import { v4 as uuidv4 } from 'uuid';
@@ -400,29 +403,40 @@ export const filterAccounts = ({ accounts }) => (dispatch) => {
   });
 };
 
-export const likeTweet = ({ twitterUserId, tweetId }) => async (dispatch) => {
+export const likeTweet = ({
+  twitterUserId,
+  tweet,
+  isReply,
+  isRetweet,
+}) => async (dispatch) => {
   try {
-    const isLiked = await store.getState().twitterReducer.tweetsById[tweetId]
-      .favorited;
-    const likedCount = await store.getState().twitterReducer.tweetsById[tweetId]
-      .favorite_count;
+    const isLiked = isRetweet
+      ? tweet.retweeted_status.favorited
+      : tweet.favorited;
+    const likedCount = isRetweet
+      ? tweet.retweeted_status.favorite_count
+      : tweet.favorite_count;
+
     dispatch({
       type: TWITTER_SET_TWEET_LIKE_STATUS,
       payload: {
-        tweetId: tweetId,
+        tweetId: tweet.id_str,
         liked: !isLiked,
         count: isLiked ? likedCount - 1 : likedCount + 1,
+        isReply: isReply,
+        isRetweet: isRetweet,
       },
     });
+
     if (isLiked) {
       await axiosInstance.post(TwitterEndpoints.unlikeTweetEndpoint, {
         twitterUserId,
-        tweetId,
+        tweetId: tweet.id_str,
       });
     } else {
       await axiosInstance.post(TwitterEndpoints.likeTweetEndpoint, {
         twitterUserId,
-        tweetId,
+        tweetId: tweet.id_str,
       });
     }
   } catch (err) {
