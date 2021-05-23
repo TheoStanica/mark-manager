@@ -9,7 +9,7 @@ import TweetCard from './Tweet/TweetCard';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
 import { createSelector } from 'reselect';
-import Tweet from './Tweet/Tweet';
+import TweetDetails from './Tweet/TweetDetails';
 
 const StyledContainer = styled.div`
   height: 100%;
@@ -45,12 +45,17 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
         hasMore={true}
         useWindow={false}
         threshold={500}
+        loader={<Loading key={0} />}
       >
-        {stream.tweets.map((tweet, idx) => {
+        {stream.tweets.map((tweet) => {
           return (
-            <Tweet key={idx}>
-              <TweetCard streamId={id} tweet={tweetsById[tweet]} key={idx} />
-            </Tweet>
+            <TweetDetails key={tweet} stream={stream} tweetId={tweet}>
+              <TweetCard
+                streamId={id}
+                tweet={tweetsById[tweet]}
+                isReply={false}
+              />
+            </TweetDetails>
           );
         })}
       </InfiniteScroll>
