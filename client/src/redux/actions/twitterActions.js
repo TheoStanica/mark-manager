@@ -521,3 +521,9 @@ export const fetchTweetReplies = ({
   });
   await dispatch(setRepliesLoadingStatus({ isLoading: false }));
 };
+
+export const resetReplies = () => (dispatch) => {
+  dispatch({
+    type: TWITTER_RESET_TWEET_REPLIES,
+  });
+};
