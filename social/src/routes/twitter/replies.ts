@@ -60,14 +60,15 @@ router.get(
     });
     try {
       let currentSinceId = sinceId;
+      let currentMaxId = maxId;
       let resArray: any[] = [];
 
       while (resArray.length < 30) {
         const tweets = ((await twitterClient.get('search/tweets', {
           q: `to:${repliesToScreenName}`,
           tweet_mode: 'extended',
-          since_id: sinceId ? String(currentSinceId) : undefined,
-          max_id: maxId ? String(maxId) : undefined,
+          since_id: currentSinceId ? String(currentSinceId) : undefined,
+          max_id: currentMaxId ? String(currentMaxId) : undefined,
           count: 100,
           in_reply_to_status_id: String(inReplyToStatusId),
         })) as unknown) as TwitterResponse;
@@ -85,7 +86,7 @@ router.get(
         // or if the array of replies is empty
         if (tweets.data.statuses.length < 30 || resArray.length === 0) break;
 
-        currentSinceId =
+        currentMaxId =
           tweets.data.statuses[tweets.data.statuses.length - 1].id_str;
       }
 
