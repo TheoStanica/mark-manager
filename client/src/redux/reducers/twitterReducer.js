@@ -125,29 +125,69 @@ const twitterReducer = (state = initialState, action) => {
       };
     }
     case TWITTER_SET_TWEET_LIKE_STATUS: {
-      return {
-        ...state,
-        tweetsById: {
+      let updatedTweetsById = {};
+      if (action.payload.isRetweet) {
+        updatedTweetsById = {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            retweeted_status: {
+              ...state.tweetsById[action.payload.tweetId].retweeted_status,
+              favorited: action.payload.liked,
+              favorite_count: action.payload.count,
+            },
+          },
+        };
+      } else if (!action.payload.isReply) {
+        updatedTweetsById = {
           ...state.tweetsById,
           [action.payload.tweetId]: {
             ...state.tweetsById[action.payload.tweetId],
             favorited: action.payload.liked,
             favorite_count: action.payload.count,
           },
-        },
+        };
+      } else {
+        updatedTweetsById = {
+          ...state.tweetsById,
+        };
+      }
+      return {
+        ...state,
+        tweetsById: updatedTweetsById,
       };
     }
     case TWITTER_SET_TWEET_RETWEET_STATUS: {
-      return {
-        ...state,
-        tweetsById: {
+      let updatedTweetsById = {};
+      if (action.payload.isRetweet) {
+        updatedTweetsById = {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            retweeted_status: {
+              ...state.tweetsById[action.payload.tweetId].retweeted_status,
+              retweeted: action.payload.retweeted,
+              retweet_count: action.payload.count,
+            },
+          },
+        };
+      } else if (!action.payload.isReply) {
+        updatedTweetsById = {
           ...state.tweetsById,
           [action.payload.tweetId]: {
             ...state.tweetsById[action.payload.tweetId],
             retweeted: action.payload.retweeted,
             retweet_count: action.payload.count,
           },
-        },
+        };
+      } else {
+        updatedTweetsById = {
+          ...state.tweetsById,
+        };
+      }
+      return {
+        ...state,
+        tweetsById: updatedTweetsById,
       };
     }
     case TWITTER_ADD_MULTIPLE_ACCOUNTS:
