@@ -444,34 +444,40 @@ export const likeTweet = ({
   }
 };
 
-export const retweetTweet = ({ twitterUserId, tweetId }) => async (
-  dispatch
-) => {
+export const retweetTweet = ({
+  twitterUserId,
+  tweet,
+  isReply,
+  isRetweet,
+}) => async (dispatch) => {
   try {
-    const isRetweeted = await store.getState().twitterReducer.tweetsById[
-      tweetId
-    ].retweeted;
-    const retweetCount = await store.getState().twitterReducer.tweetsById[
-      tweetId
-    ].retweet_count;
-    console.log(isRetweeted, retweetCount);
+    const isRetweeted = isRetweet
+      ? tweet.retweeted_status.retweeted
+      : tweet.retweeted;
+    const retweetCount = isRetweet
+      ? tweet.retweeted_status.retweet_count
+      : tweet.retweet_count;
+
     dispatch({
       type: TWITTER_SET_TWEET_RETWEET_STATUS,
       payload: {
-        tweetId: tweetId,
+        tweetId: tweet.id_str,
         retweeted: !isRetweeted,
         count: isRetweeted ? retweetCount - 1 : retweetCount + 1,
+        isReply: isReply,
+        isRetweet: isRetweet,
       },
     });
+
     if (isRetweeted) {
       await axiosInstance.post(TwitterEndpoints.unRetweetTweetEndpoint, {
         twitterUserId,
-        tweetId,
+        tweetId: tweet.id_str,
       });
     } else {
       await axiosInstance.post(TwitterEndpoints.retweetTweetEndpoint, {
         twitterUserId,
-        tweetId,
+        tweetId: tweet.id_str,
       });
     }
   } catch (err) {
