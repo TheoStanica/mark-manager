@@ -14,14 +14,13 @@ import TweetFooter from './TweetFooter';
 import TweetQuote from './TweetQuote';
 import RetweetHeader from './RetweetHeader';
 
-const TwitterCard = ({ tweet, streamId, isQuote }) => {
+const TwitterCard = ({ tweet, streamId, isQuote, isReply }) => {
   let data = tweet;
   let isRT = false;
   let MediaComponent = null;
   let QuoteComponent = null;
 
   if (tweet.retweeted_status) {
-    data = tweet.retweeted_status;
     isRT = true;
   }
 
