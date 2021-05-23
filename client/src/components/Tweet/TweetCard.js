@@ -62,7 +62,14 @@ const TwitterCard = ({ tweet, streamId, isQuote, isReply }) => {
         {MediaComponent}
         {QuoteComponent}
       </CardBody>
-      {!isQuote ? <TweetFooter tweet={data} streamId={streamId} /> : null}
+      {!isQuote ? (
+        <TweetFooter
+          tweetId={data.id_str}
+          streamId={streamId}
+          isReply={isReply}
+          isRetweet={isRT}
+        />
+      ) : null}
     </Card>
   );
 };
