@@ -5,6 +5,7 @@ import {
   USER_LOGOUT,
   TWITTER_SET_TWEET_LIKE_STATUS,
   TWITTER_SET_TWEET_RETWEET_STATUS,
+  TWITTER_ADD_MORE_REPLIES,
 } from '../types';
 
 const initialState = {
@@ -39,6 +40,20 @@ const twitterRepliesReducer = (state = initialState, action) => {
           ...action.payload.replies,
         },
         replies: [...action.payload.repliesArray],
+        metadata: {
+          ...state.metadata,
+          maxId: action.payload.maxId,
+          moreReplies: action.payload.moreReplies,
+        },
+      };
+    case TWITTER_ADD_MORE_REPLIES:
+      return {
+        ...state,
+        repliesById: {
+          ...state.repliesById,
+          ...action.payload.replies,
+        },
+        replies: [...state.replies, ...action.payload.repliesArray],
         metadata: {
           ...state.metadata,
           maxId: action.payload.maxId,
