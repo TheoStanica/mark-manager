@@ -12,10 +12,12 @@ import { createSelector } from 'reselect';
 import TweetDetails from './Tweet/TweetDetails';
 
 const StyledContainer = styled.div`
+  transition: 0.2s ease-in-out;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: ${(props) => (props.theme.pref === 'dark' ? '#23272a' : 'white')};
 `;
 
 const selectScreenName = (streamId) =>
