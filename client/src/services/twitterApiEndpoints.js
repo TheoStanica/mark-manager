@@ -17,7 +17,7 @@ export const TwitterEndpoints = {
     maxId,
   }) =>
     maxId
-      ? `/api/social/twitter/search/tweets/comments?twitterUserId=${twitterUserId}&repliesToScreenName=${repliesToScreenName}&inReplyToStatusId=${inReplyToStatusId}&sinceId=${sinceId}&maxId=${maxId}}`
+      ? `/api/social/twitter/search/tweets/comments?twitterUserId=${twitterUserId}&repliesToScreenName=${repliesToScreenName}&inReplyToStatusId=${inReplyToStatusId}&sinceId=${sinceId}&maxId=${maxId}`
       : `/api/social/twitter/search/tweets/comments?twitterUserId=${twitterUserId}&repliesToScreenName=${repliesToScreenName}&inReplyToStatusId=${inReplyToStatusId}&sinceId=${sinceId}`,
   fetchTwitterAccountsEndpoint: '/api/social/twitter/accounts',
   connectToTwitterEndpoint: '/api/auth/twitter/connect',
