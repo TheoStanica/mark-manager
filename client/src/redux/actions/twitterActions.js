@@ -245,7 +245,7 @@ const getWhitelistedTweets = ({ blacklistedStreamId }) => {
   // and returns a set of tweet ids that are whitelisted
 
   const currentStoredStreams = store.getState().twitterReducer.streamsById;
-  const tweetsToKeepSet = new Set();
+  let tweetsToKeepSet = new Set();
   const streamsToKeep = Object.keys(currentStoredStreams).filter(
     (streamId) => streamId !== blacklistedStreamId
   );
@@ -255,7 +255,10 @@ const getWhitelistedTweets = ({ blacklistedStreamId }) => {
       streamId
     ]?.tweets;
     if (tweetsToWhitelist?.length > 0)
-      tweetsToWhitelist.forEach((tweet) => tweetsToKeepSet.add(tweet));
+      tweetsToKeepSet = new Set([
+        ...tweetsToWhitelist,
+        ...tweetsToKeepSet.values(),
+      ]);
   });
 
   return tweetsToKeepSet;
