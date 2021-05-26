@@ -47,9 +47,9 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
         threshold={500}
         loader={<Loading key={0} />}
       >
-        {stream.tweets.map((tweet) => {
+        {stream.tweets.map((tweet, idx) => {
           return (
-            <TweetDetails key={tweet} stream={stream} tweetId={tweet}>
+            <TweetDetails key={idx + 1} stream={stream} tweetId={tweet}>
               <TweetCard
                 streamId={id}
                 tweet={tweetsById[tweet]}
