@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  fetchMoreReplies,
   fetchTweetReplies,
   resetReplies,
-} from '../../redux/actions/twitterActions';
+} from '../../redux/actions/twitterRepliesActions';
 import Loading from '../Loading/Loading';
 import {
   StyledHeaderWrapper,
@@ -26,7 +27,7 @@ const TweetDetails = ({ children, stream, tweetId }) => {
   const tweetObj = useSelector(
     (state) => state.twitterReducer.tweetsById[tweetId]
   );
-  const { replies, repliesById, isLoading } = useSelector(
+  const { metadata, replies, repliesById, isLoading } = useSelector(
     (state) => state.twitterRepliesReducer
   );
   const dispatch = useDispatch();
@@ -64,10 +65,20 @@ const TweetDetails = ({ children, stream, tweetId }) => {
     return (
       <InfiniteScroll
         pageStart={0}
-        loadMore={() => console.log('loading more tweets')}
+        loadMore={() =>
+          dispatch(
+            fetchMoreReplies({
+              twitterUserId: stream.twitterUserId,
+              repliesToScreenName: tweetObj.user.screen_name,
+              inReplyToStatusId: tweetObj.id_str,
+              sinceId: tweetObj.id_str,
+              maxId: metadata.maxId,
+            })
+          )
+        }
         hasMore={hasMoreReplies}
         useWindow={false}
-        threshold={400}
+        threshold={700}
         loader={<Loading key={0} />}
       >
         {replies.map((reply, idx) => (
