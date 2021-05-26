@@ -70,11 +70,11 @@ const TweetDetails = ({ children, stream, tweetId }) => {
         threshold={400}
         loader={<Loading key={0} />}
       >
-        {replies.map((reply) => (
+        {replies.map((reply, idx) => (
           <TweetCard
             streamId={stream.id}
             tweet={repliesById[reply]}
-            key={reply}
+            key={idx + 1}
             isReply={true}
           />
         ))}
