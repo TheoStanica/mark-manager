@@ -21,6 +21,7 @@ const TwitterCard = ({ tweet, streamId, isQuote, isReply }) => {
   let QuoteComponent = null;
 
   if (tweet.retweeted_status) {
+    data = tweet.retweeted_status;
     isRT = true;
   }
 
@@ -64,7 +65,7 @@ const TwitterCard = ({ tweet, streamId, isQuote, isReply }) => {
       </CardBody>
       {!isQuote ? (
         <TweetFooter
-          tweetId={data.id_str}
+          tweetId={tweet.id_str}
           streamId={streamId}
           isReply={isReply}
           isRetweet={isRT}
