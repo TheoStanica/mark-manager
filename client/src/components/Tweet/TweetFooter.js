@@ -142,6 +142,7 @@ const TweetFooter = ({ tweetId, streamId, theme, isReply, isRetweet }) => {
         </Icon>
         <ReplyTweet
           visible={isModalOpen}
+          twitterUserId={twitterUserId}
           onClose={(e) => {
             e.stopPropagation();
             setIsModalOpen(false);
