@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { tweetNewMessage } from '../../redux/actions/twitterActions';
 import Modal from '../Modal/Modal';
 import ModalBody from '../Modal/ModalBody';
 import ModalHeader from '../Modal/ModalHeader';
 import { StyledTextArea } from './styles';
 
-const ReplyTweet = ({ visible, onClose, tweet }) => {
+const ReplyTweet = ({ visible, onClose, tweet, twitterUserId }) => {
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
 
   const submitReply = (e) => {
     e.stopPropagation();
-    console.log('replying..');
+    dispatch(
+      tweetNewMessage({
+        message,
+        accounts: Array(twitterUserId),
+        inReplyToStatusId: tweet.id_str,
+      })
+    );
     onClose(e);
   };
 
@@ -24,7 +33,6 @@ const ReplyTweet = ({ visible, onClose, tweet }) => {
     >
       <ModalHeader>Reply to {tweet.user.name}</ModalHeader>
       <ModalBody>
-        Write your message...
         <StyledTextArea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
