@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardFooter from '../Card/CardFooter';
 import Icon from '../Icon/Icon';
 import { StyledTweetFooterContainer } from './styles';
@@ -9,6 +9,8 @@ import FilledLikes from '../../assets/Pictures/FilledLikes';
 import { createSelector } from 'reselect';
 import { useDispatch, useSelector } from 'react-redux';
 import { likeTweet, retweetTweet } from '../../redux/actions/twitterActions';
+import ReplyTweet from '../ReplyTweet/ReplyTweet';
+import Reply from '../../assets/Pictures/Reply';
 
 const selectTwitterUserId = (streamId) =>
   createSelector(
@@ -24,6 +26,7 @@ const TweetFooter = ({ tweetId, streamId, theme, isReply, isRetweet }) => {
   );
   const twitterUserId = useSelector(selectTwitterUserId(streamId));
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const formatValue = (count) => {
     return Intl.NumberFormat('en-US', {
@@ -109,6 +112,7 @@ const TweetFooter = ({ tweetId, streamId, theme, isReply, isRetweet }) => {
         <p
           style={{
             marginLeft: 5,
+            marginRight: 20,
             fontWeight: 'bold',
             color: tweet.favorited
               ? '#e0245e'
@@ -124,6 +128,26 @@ const TweetFooter = ({ tweetId, streamId, theme, isReply, isRetweet }) => {
               : tweet.favorite_count
           )}
         </p>
+        <Icon
+          size={18}
+          tooltip={'Reply'}
+          position={'top-start'}
+          offset={[0, 5]}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsModalOpen(true);
+          }}
+        >
+          <Reply color={theme.pref === 'dark' ? 'white' : 'black'} />
+        </Icon>
+        <ReplyTweet
+          visible={isModalOpen}
+          onClose={(e) => {
+            e.stopPropagation();
+            setIsModalOpen(false);
+          }}
+          tweet={tweet}
+        />
       </StyledTweetFooterContainer>
     </CardFooter>
   );
