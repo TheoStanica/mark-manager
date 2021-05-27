@@ -18,10 +18,14 @@ router.post(
       .notEmpty()
       .isNumeric()
       .withMessage('Please provide a valid Twitter user ID'),
+    body('inReplyToStatusId')
+      .optional()
+      .isNumeric()
+      .withMessage('Please provide a valid inReplyToStatusId'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { status, twitterUserId } = req.body;
+    const { status, twitterUserId, inReplyToStatusId } = req.body;
     const {
       oauthAccessToken,
       oauthAccessTokenSecret,
@@ -36,7 +40,12 @@ router.post(
       access_token_secret: oauthAccessTokenSecret,
     });
     try {
-      await twitterClient.post('statuses/update', { status: status });
+      await twitterClient.post('statuses/update', {
+        status: status,
+        in_reply_to_status_id: inReplyToStatusId
+          ? inReplyToStatusId
+          : undefined,
+      });
       res.sendStatus(204);
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
