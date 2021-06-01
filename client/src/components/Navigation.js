@@ -29,15 +29,13 @@ const Navigation = () => {
         <Route path="/password/reset">
           <ResetPassword />
         </Route>
-        <PrivateRoute path="/dashboard">
-          <Dashboard />
-        </PrivateRoute>
-        <PrivateRoute path="/settings">
-          <SettingsPage />
-        </PrivateRoute>
-        <PrivateRoute path="/twitter/connect">
-          <TwitterConnect />
-        </PrivateRoute>
+        <PrivateRoute path="/dashboard" component={Dashboard} exact />
+        <PrivateRoute path="/settings" component={SettingsPage} exact />
+        <PrivateRoute
+          path="/twitter/connect"
+          component={TwitterConnect}
+          exact
+        />
       </ThemeProvider>
     </Switch>
   );
