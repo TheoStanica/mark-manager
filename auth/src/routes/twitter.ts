@@ -9,6 +9,7 @@ const router = express.Router();
 
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
+const hostURL = process.env.HOST_URL;
 
 let consumer = new oauth.OAuth(
   'https://twitter.com/oauth/request_token',
@@ -16,7 +17,7 @@ let consumer = new oauth.OAuth(
   consumerKey,
   consumerSecret,
   '1.0A',
-  `http://mark.dev/api/auth/twitter/callback`,
+  `https://${hostURL}/api/auth/twitter/callback`,
   'HMAC-SHA1'
 );
 
