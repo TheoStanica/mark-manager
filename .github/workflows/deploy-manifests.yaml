@@ -24,10 +24,6 @@ jobs:
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s/auth-mongo-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
           manifest: infra/k8s/auth-redis-depl.yaml
 
       - uses: okteto/apply@master
@@ -41,10 +37,6 @@ jobs:
       - uses: okteto/apply@master
         with:
           manifest: infra/k8s/userprofile-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
-          manifest: infra/k8s/userprofile-mongo-depl.yaml
 
       - uses: okteto/apply@master
         with:
