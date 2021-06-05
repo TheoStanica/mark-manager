@@ -27,6 +27,12 @@ const TweetDetails = ({ children, stream, tweetId }) => {
   const tweetObj = useSelector(
     (state) => state.twitterReducer.tweetsById[tweetId]
   );
+  let data = tweetObj;
+
+  if (tweetObj.retweeted_status) {
+    data = tweetObj.retweeted_status;
+  }
+
   const { metadata, replies, repliesById, isLoading } = useSelector(
     (state) => state.twitterRepliesReducer
   );
@@ -42,9 +48,9 @@ const TweetDetails = ({ children, stream, tweetId }) => {
       dispatch(
         fetchTweetReplies({
           twitterUserId: stream.twitterUserId,
-          repliesToScreenName: tweetObj.user.screen_name,
-          inReplyToStatusId: tweetObj.id_str,
-          sinceId: tweetObj.id_str,
+          repliesToScreenName: data.user.screen_name,
+          inReplyToStatusId: data.id_str,
+          sinceId: data.id_str,
         })
       );
       setWasClicked(true);
@@ -56,8 +62,8 @@ const TweetDetails = ({ children, stream, tweetId }) => {
     isVisible,
     dispatch,
     stream.twitterUserId,
-    tweetObj.user.screen_name,
-    tweetObj.id_str,
+    data.user.screen_name,
+    data.id_str,
     wasClicked,
   ]);
 
@@ -69,9 +75,9 @@ const TweetDetails = ({ children, stream, tweetId }) => {
           dispatch(
             fetchMoreReplies({
               twitterUserId: stream.twitterUserId,
-              repliesToScreenName: tweetObj.user.screen_name,
-              inReplyToStatusId: tweetObj.id_str,
-              sinceId: tweetObj.id_str,
+              repliesToScreenName: data.user.screen_name,
+              inReplyToStatusId: data.id_str,
+              sinceId: data.id_str,
               maxId: metadata.maxId,
             })
           )

@@ -11,6 +11,9 @@
   width: 0.5rem;
   height: 0.5rem;
 }
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
 
 *::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);

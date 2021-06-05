@@ -128,12 +128,17 @@ export const connectToTwitter = () => async (dispatch) => {
   }
 };
 
-export const tweetNewMessage = ({ message, accounts }) => async (dispatch) => {
+export const tweetNewMessage = ({
+  message,
+  accounts,
+  inReplyToStatusId,
+}) => async (dispatch) => {
   try {
     accounts.forEach(async (account) => {
       await axiosInstance.post(TwitterEndpoints.tweetMessageEndpoint, {
         status: message,
         twitterUserId: account,
+        inReplyToStatusId: inReplyToStatusId ? inReplyToStatusId : undefined,
       });
     });
     dispatch({

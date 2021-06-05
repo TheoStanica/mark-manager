@@ -8,7 +8,7 @@ import { StyledModalWrapper, StyledModal } from './styles';
 const Modal = ({ children, visible, onClose, onSubmit }) => {
   return visible
     ? ReactDOM.createPortal(
-        <StyledModal visible={visible}>
+        <StyledModal visible={visible} onClick={(e) => e.stopPropagation()}>
           <StyledModalWrapper className="modal-wrapper ">
             <Card>
               {children}
