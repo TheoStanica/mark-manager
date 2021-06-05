@@ -44,7 +44,7 @@ spec:
                   name: jwt-refresh-secret
                   key: JWT_REFRESH_KEY
             - name: ACCESS_TOKEN_TTL
-              value: '600'
+              value: '300'
             - name: REFRESH_TOKEN_TTL
               value: '86400'
             - name: REDIS_HOST
