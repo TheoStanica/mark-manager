@@ -39,6 +39,9 @@ const start = async () => {
   if (!process.env.TWITTER_CONSUMER_SECRET) {
     throw new Error('TWITTER_CONSUMER_SECRET must be defined');
   }
+  if (!process.env.HOST_URL) {
+    throw new Error('HOST_URL must be defined');
+  }
 
   try {
     await redisWrapper.connect(process.env.REDIS_HOST);
