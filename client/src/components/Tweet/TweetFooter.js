@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CardFooter from '../Card/CardFooter';
 import Icon from '../Icon/Icon';
 import { StyledTweetFooterContainer } from './styles';
@@ -16,9 +16,12 @@ const selectTwitterUserId = (streamId) =>
     (twitterUserId) => twitterUserId
   );
 
-const TweetFooter = ({ tweet, streamId, theme }) => {
-  const [isLiked, setIsLiked] = useState(tweet.favorited);
-  const [isRetweeted, setIsRetweeted] = useState(tweet.retweeted);
+const TweetFooter = ({ tweetId, streamId, theme, isReply, isRetweet }) => {
+  const tweet = useSelector((state) =>
+    isReply
+      ? state.twitterRepliesReducer.repliesById[tweetId]
+      : state.twitterReducer.tweetsById[tweetId]
+  );
   const twitterUserId = useSelector(selectTwitterUserId(streamId));
   const dispatch = useDispatch();
 
@@ -30,17 +33,27 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
     }).format(count);
   };
 
-  const handleLike = () => {
+  const handleLike = (e) => {
+    e.stopPropagation();
     dispatch(
-      likeTweet({ twitterUserId, tweetId: tweet.id_str, isLiked: isLiked })
+      likeTweet({
+        twitterUserId,
+        isReply: isReply,
+        tweet: tweet,
+        isRetweet: isRetweet,
+      })
     );
-    setIsLiked(!isLiked);
   };
-  const handleRetweet = () => {
+  const handleRetweet = (e) => {
+    e.stopPropagation();
     dispatch(
-      retweetTweet({ twitterUserId, tweetId: tweet.id_str, isRetweeted })
+      retweetTweet({
+        twitterUserId,
+        isReply: isReply,
+        tweet: tweet,
+        isRetweet: isRetweet,
+      })
     );
-    setIsRetweeted(!isRetweeted);
   };
 
   return (
@@ -53,7 +66,8 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
           offset={[0, 5]}
           onClick={handleRetweet}
         >
-          {isRetweeted ? (
+          {(isRetweet && tweet.retweeted_status.retweeted) ||
+          tweet.retweeted ? (
             <Retweet color="#17bf63" />
           ) : (
             <Retweet color={theme.pref === 'dark' ? 'white' : 'black'} />
@@ -65,14 +79,18 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
             marginRight: 20,
             fontWeight: 'bold',
             fontSize: '.9rem',
-            color: isRetweeted
+            color: tweet.retweeted
               ? '#17bf63'
               : theme.pref === 'dark'
               ? 'white'
               : 'black',
           }}
         >
-          {formatValue(tweet.retweet_count)}
+          {formatValue(
+            isRetweet
+              ? tweet.retweeted_status.retweet_count
+              : tweet.retweet_count
+          )}
         </p>
         <Icon
           size={18}
@@ -81,7 +99,8 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
           offset={[0, 5]}
           onClick={handleLike}
         >
-          {isLiked ? (
+          {(isRetweet && tweet.retweeted_status.favorited) ||
+          tweet.favorited ? (
             <FilledLikes color="#e0245e" />
           ) : (
             <Likes color={theme.pref === 'dark' ? 'white' : 'black'} />
@@ -91,7 +110,7 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
           style={{
             marginLeft: 5,
             fontWeight: 'bold',
-            color: isLiked
+            color: tweet.favorited
               ? '#e0245e'
               : theme.pref === 'dark'
               ? 'white'
@@ -99,7 +118,11 @@ const TweetFooter = ({ tweet, streamId, theme }) => {
             fontSize: '.9rem',
           }}
         >
-          {formatValue(tweet.favorite_count)}
+          {formatValue(
+            isRetweet
+              ? tweet.retweeted_status.favorite_count
+              : tweet.favorite_count
+          )}
         </p>
       </StyledTweetFooterContainer>
     </CardFooter>

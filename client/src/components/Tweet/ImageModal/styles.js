@@ -11,7 +11,7 @@ export const StyledImageModal = styled.div`
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.8);
-  z-index: 1100;
+  z-index: 2100;
   display: flex;
   justify-content: center;
   align-items: center;

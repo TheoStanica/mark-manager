@@ -10,6 +10,18 @@ export const StyledDashboardStreams = styled.div`
 export const StyledStreamsWrapper = styled.div`
   overflow: scroll;
   height: 100%;
+  &::-webkit-scrollbar-thumb {
+    background-color: ${(props) =>
+      props.theme.pref === 'dark'
+        ? 'rgba(255, 255, 255, 0.3)'
+        : 'rgba(0, 0, 0, 0.2)'};
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: ${(props) =>
+      props.theme.pref === 'dark'
+        ? 'rgba(255, 255, 255, 0.7)'
+        : 'rgba(0, 0, 0, 0.5)'};
+  }
 `;
 
 export const StyledStreamContainer = styled.li`

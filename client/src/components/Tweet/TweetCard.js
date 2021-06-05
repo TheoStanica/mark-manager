@@ -14,14 +14,13 @@ import TweetFooter from './TweetFooter';
 import TweetQuote from './TweetQuote';
 import RetweetHeader from './RetweetHeader';
 
-const TwitterCard = ({ tweet, streamId, isQuote }) => {
+const TwitterCard = ({ tweet, streamId, isQuote, isReply }) => {
   let data = tweet;
   let isRT = false;
   let MediaComponent = null;
   let QuoteComponent = null;
 
   if (tweet.retweeted_status) {
-    data = tweet.retweeted_status;
     isRT = true;
   }
 
@@ -33,8 +32,16 @@ const TwitterCard = ({ tweet, streamId, isQuote }) => {
   }
 
   return (
-    <Card style={{ marginBottom: '.3rem' }}>
+    <Card style={{ marginBottom: '.3rem', width: '100%' }}>
       <CardHeader style={{ padding: ' .5rem ' }}>
+        {tweet.in_reply_to_status_id_str ? (
+          <div style={{ marginBottom: '.5rem' }}>
+            Replying to{' '}
+            <span style={{ fontWeight: 'bold' }}>
+              {tweet.in_reply_to_screen_name}
+            </span>
+          </div>
+        ) : null}
         {isRT ? <RetweetHeader tweet={tweet} /> : null}
         <StyledHeaderWrapper>
           <StyledCircleImage
@@ -55,7 +62,14 @@ const TwitterCard = ({ tweet, streamId, isQuote }) => {
         {MediaComponent}
         {QuoteComponent}
       </CardBody>
-      {!isQuote ? <TweetFooter tweet={data} streamId={streamId} /> : null}
+      {!isQuote ? (
+        <TweetFooter
+          tweetId={data.id_str}
+          streamId={streamId}
+          isReply={isReply}
+          isRetweet={isRT}
+        />
+      ) : null}
     </Card>
   );
 };

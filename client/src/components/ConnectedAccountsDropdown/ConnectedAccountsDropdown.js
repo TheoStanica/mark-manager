@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Select from 'react-select';
+import { withTheme } from 'styled-components';
+import styled from 'styled-components';
 
-const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti }) => {
+const StyledOptionText = styled.p`
+  color: ${(props) => (props.theme.pref === 'dark' ? '#fff' : 'black')};
+`;
+
+const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti, theme }) => {
   const [selectedOption, setSelectedOption] = useState([]);
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
@@ -35,13 +41,35 @@ const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti }) => {
         alt={screenName}
         style={{ width: 21, height: 21, marginRight: 3, borderRadius: '100%' }}
       />
-      <p style={{ color: 'black' }}>{screenName}</p>
+      <StyledOptionText>{screenName}</StyledOptionText>
     </div>
   );
 
   return (
     <Select
-      styles={{ menu: (provided) => ({ ...provided, zIndex: 9999 }) }}
+      styles={{
+        menu: (base) => ({
+          ...base,
+          zIndex: 9999,
+          background: theme.pref === 'dark' ? '#23272A' : 'white',
+          boxShadow: '0 0 1rem 0 rgb(0 0 0 / 50%)',
+          color: theme.pref === 'dark' ? '#ddda' : 'initial',
+        }),
+        control: (base) => ({
+          ...base,
+          background: theme.pref === 'dark' ? '#30353a' : 'initial',
+          borderColor: theme.pref === 'dark' ? '#ddda' : 'initial',
+        }),
+        multiValue: (base) => ({
+          ...base,
+          background: theme.pref === 'dark' ? '#23272A' : '#ddda',
+          color: theme.pref === 'dark' ? '#ddda' : 'initial',
+        }),
+        option: (base, { isFocused }) => ({
+          ...base,
+          background: isFocused ? '#168abc' : 'initial',
+        }),
+      }}
       value={selectedOption}
       formatOptionLabel={formatOptionLabel}
       isMulti={isMulti}
@@ -53,4 +81,4 @@ const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti }) => {
   );
 };
 
-export default ConnectedAccountsDropdown;
+export default withTheme(ConnectedAccountsDropdown);

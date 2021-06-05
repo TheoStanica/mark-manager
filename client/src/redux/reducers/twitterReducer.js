@@ -12,6 +12,8 @@ import {
   TWITTER_CLEAR_ALL_ACCOUNTS,
   TWITTER_SET_ACCOUNT_DATA,
   TWITTER_FILTER_ACCOUNTS,
+  TWITTER_SET_TWEET_LIKE_STATUS,
+  TWITTER_SET_TWEET_RETWEET_STATUS,
 } from '../types';
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
   twitterFilteredAccounts: [],
   streams: [],
   streamsById: {},
+  tweetsById: {},
 };
 
 const twitterReducer = (state = initialState, action) => {
@@ -61,6 +64,7 @@ const twitterReducer = (state = initialState, action) => {
         ...state,
         streams: [],
         streamsById: {},
+        tweetsById: {},
       };
     case TWITTER_UPDATE_STREAMS:
       return {
@@ -78,6 +82,15 @@ const twitterReducer = (state = initialState, action) => {
             metadata: action.payload.metadata,
           },
         },
+        tweetsById: action.payload.filteredTweetsById
+          ? {
+              ...action.payload.filteredTweetsById,
+              ...action.payload.newTweetsById,
+            }
+          : {
+              ...state.tweetsById,
+              ...action.payload.newTweetsById,
+            },
       };
     }
     case TWITTER_ADD_MORE_TWEETS: {
@@ -88,10 +101,14 @@ const twitterReducer = (state = initialState, action) => {
           [action.payload.id]: {
             ...state.streamsById[action.payload.id],
             tweets: state.streamsById[action.payload.id].tweets.concat(
-              action.payload.tweets
+              action.payload.tweetsIds
             ),
             metadata: action.payload.metadata,
           },
+        },
+        tweetsById: {
+          ...state.tweetsById,
+          ...action.payload.tweets,
         },
       };
     }
@@ -105,6 +122,72 @@ const twitterReducer = (state = initialState, action) => {
             isLoading: action.payload.isLoading,
           },
         },
+      };
+    }
+    case TWITTER_SET_TWEET_LIKE_STATUS: {
+      let updatedTweetsById = {};
+      if (action.payload.isRetweet) {
+        updatedTweetsById = {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            retweeted_status: {
+              ...state.tweetsById[action.payload.tweetId].retweeted_status,
+              favorited: action.payload.liked,
+              favorite_count: action.payload.count,
+            },
+          },
+        };
+      } else if (!action.payload.isReply) {
+        updatedTweetsById = {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            favorited: action.payload.liked,
+            favorite_count: action.payload.count,
+          },
+        };
+      } else {
+        updatedTweetsById = {
+          ...state.tweetsById,
+        };
+      }
+      return {
+        ...state,
+        tweetsById: updatedTweetsById,
+      };
+    }
+    case TWITTER_SET_TWEET_RETWEET_STATUS: {
+      let updatedTweetsById = {};
+      if (action.payload.isRetweet) {
+        updatedTweetsById = {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            retweeted_status: {
+              ...state.tweetsById[action.payload.tweetId].retweeted_status,
+              retweeted: action.payload.retweeted,
+              retweet_count: action.payload.count,
+            },
+          },
+        };
+      } else if (!action.payload.isReply) {
+        updatedTweetsById = {
+          ...state.tweetsById,
+          [action.payload.tweetId]: {
+            ...state.tweetsById[action.payload.tweetId],
+            retweeted: action.payload.retweeted,
+            retweet_count: action.payload.count,
+          },
+        };
+      } else {
+        updatedTweetsById = {
+          ...state.tweetsById,
+        };
+      }
+      return {
+        ...state,
+        tweetsById: updatedTweetsById,
       };
     }
     case TWITTER_ADD_MULTIPLE_ACCOUNTS:

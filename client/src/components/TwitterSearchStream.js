@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  loadMoreTweetSearchStream,
-  loadTweetSearchStream,
+  loadMoreTwitterStreamTweets,
+  reloadTwitterStream,
 } from '../redux/actions/twitterActions';
 import Stream from './Stream';
 
@@ -10,7 +10,7 @@ const TwitterSearchStream = React.memo(({ stream, provided }) => {
   const dispatch = useDispatch();
   const loadTweets = useCallback(() => {
     dispatch(
-      loadTweetSearchStream({
+      reloadTwitterStream({
         id: stream.id,
         search: stream.search,
         twitterUserId: stream.twitterUserId,
@@ -26,7 +26,7 @@ const TwitterSearchStream = React.memo(({ stream, provided }) => {
       onLoad={loadTweets}
       onLoadMore={() =>
         dispatch(
-          loadMoreTweetSearchStream({
+          loadMoreTwitterStreamTweets({
             id: stream.id,
             search: stream.search,
             maxId: stream.metadata.max_id,

@@ -16,7 +16,7 @@ export const StyledFilterButton = styled.button`
   transition: 0.2s ease-in-out;
   padding: 0.5rem 1rem;
   background: ${({ isSelected }) => (isSelected ? '#068abc' : '#068abc22')};
-  color: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
+  color: ${({ isSelected }) => (isSelected ? 'white' : '#ddda')};
   outline: none;
   border: none;
   border-radius: 20px;
