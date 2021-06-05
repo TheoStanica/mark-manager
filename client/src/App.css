@@ -11,10 +11,12 @@
   width: 0.5rem;
   height: 0.5rem;
 }
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
 
 *::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
 }
 *:hover::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.5);

@@ -3,7 +3,8 @@ import styled from 'styled-components';
 export const StyledItem = styled.li``;
 export const StyledNavbar = styled.nav`
   position: absolute;
-  background-color: ${(props) => (props.normal ? '#068abc' : 'transparent')};
+  border-bottom: ${(props) =>
+    props.normal ? '0.0625rem solid #e0e0e0;' : 'none'};
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -13,7 +14,7 @@ export const StyledNavbar = styled.nav`
   ${StyledItem} {
     padding-left: 2rem;
     a {
-      color: white;
+      color: ${(props) => (props.normal ? 'black' : 'white')};
       text-decoration: none;
     }
   }

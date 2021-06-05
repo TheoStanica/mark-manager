@@ -4,6 +4,7 @@ import twit from 'twit';
 import { query } from 'express-validator';
 import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { TwitterResponse } from '../../services/twitterStreamResponse';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -44,11 +45,7 @@ router.get(
         max_id: maxId ? String(maxId) : undefined,
         count: 50,
       });
-      if (timeline) {
-        res.send(timeline.data);
-      } else {
-        res.send([]);
-      }
+      res.send({ statuses: timeline.data } || []);
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
     }

@@ -9,12 +9,15 @@ import TweetCard from './Tweet/TweetCard';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
 import { createSelector } from 'reselect';
+import TweetDetails from './Tweet/TweetDetails';
 
 const StyledContainer = styled.div`
+  transition: 0.2s ease-in-out;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: ${(props) => (props.theme.pref === 'dark' ? '#23272a' : 'white')};
 `;
 
 const selectScreenName = (streamId) =>
@@ -28,6 +31,7 @@ const selectScreenName = (streamId) =>
 
 const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
   const stream = useSelector((state) => state.twitterReducer.streamsById[id]);
+  const tweetsById = useSelector((state) => state.twitterReducer.tweetsById);
   const screenName = useSelector(selectScreenName(stream.id));
   const dispatch = useDispatch();
 
@@ -43,9 +47,18 @@ const Stream = React.memo(({ id, provided, onLoad, onLoadMore, type }) => {
         hasMore={true}
         useWindow={false}
         threshold={500}
+        loader={<Loading key={0} />}
       >
         {stream.tweets.map((tweet, idx) => {
-          return <TweetCard tweet={tweet} key={idx} />;
+          return (
+            <TweetDetails key={idx + 1} stream={stream} tweetId={tweet}>
+              <TweetCard
+                streamId={id}
+                tweet={tweetsById[tweet]}
+                isReply={false}
+              />
+            </TweetDetails>
+          );
         })}
       </InfiniteScroll>
     ) : (
