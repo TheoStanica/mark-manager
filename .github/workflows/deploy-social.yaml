@@ -1,0 +1,32 @@
+name: deploy-social
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'social/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd social && docker build -t theocosmin/social .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push theocosmin/social
+      - uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_ACCESS_TOKEN }}
+
+      - uses: okteto/namespace@master
+
+      - name: Restart deployment
+        uses: myrotvorets/kubectl-action@1.0.4
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.OKTETO_CONFIG_FILE }}
+        with:
+          args: rollout restart deployment social-depl
