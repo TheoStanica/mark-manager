@@ -4,7 +4,9 @@ import twit, { Twitter } from 'twit';
 import { query } from 'express-validator';
 import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../services/handleTwitterErrors';
-import { TwitterResponse } from '../../services/twitterStreamResponse';
+import { TwitterSearchPayload } from '../../utils/interfaces/twitterSearchPayload';
+import axios from 'axios';
+import { Tweet } from '../../utils/interfaces/tweet';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -61,17 +63,17 @@ router.get(
     try {
       let currentSinceId = sinceId;
       let currentMaxId = maxId;
-      let resArray: any[] = [];
+      let resArray: Tweet[] = [];
 
       while (resArray.length < 30) {
-        const tweets = ((await twitterClient.get('search/tweets', {
+        const tweets = (await twitterClient.get('search/tweets', {
           q: `to:${repliesToScreenName}`,
           tweet_mode: 'extended',
           since_id: currentSinceId ? String(currentSinceId) : undefined,
           max_id: currentMaxId ? String(currentMaxId) : undefined,
           count: 100,
           in_reply_to_status_id: String(inReplyToStatusId),
-        })) as unknown) as TwitterResponse;
+        })) as TwitterSearchPayload;
 
         // get out of the loop when we have got all replies possible and there are no new replies
         // (or try to find replies for tweets older than 7 days - Twitter API limitation for unpaid API access)
@@ -88,9 +90,22 @@ router.get(
 
         currentMaxId =
           tweets.data.statuses[tweets.data.statuses.length - 1].id_str;
+
+        resArray.slice(0, 30);
+
+        await Promise.all(
+          resArray.map(async (tweet) => {
+            const message = tweet.full_text;
+            const sentiment = await axios.post(
+              'https://sentim-api.herokuapp.com/api/v1/',
+              { text: message }
+            );
+            tweet.sentiment = sentiment.data.result.type;
+          })
+        );
       }
 
-      res.send(resArray.slice(0, 30));
+      res.send(resArray);
     } catch (err) {
       handleTwitterErrors(err, String(twitterUserId));
     }
