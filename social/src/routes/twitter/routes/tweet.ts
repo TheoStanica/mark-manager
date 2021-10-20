@@ -1,28 +1,18 @@
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import twit from 'twit';
-import { body } from 'express-validator';
-import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { tweetValidation } from '../../../utils/validation/twitter/tweetValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.post(
-  '/api/social/twitter/statuses/update',
+  '/statuses/update',
   requireAuth,
-  [
-    body('status').not().isEmpty().withMessage('Please provide a status'),
-    body('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-    body('inReplyToStatusId')
-      .optional()
-      .isNumeric()
-      .withMessage('Please provide a valid inReplyToStatusId'),
-  ],
+  tweetValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { status, twitterUserId, inReplyToStatusId } = req.body;

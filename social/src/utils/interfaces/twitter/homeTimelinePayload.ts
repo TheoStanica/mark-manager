@@ -1,5 +1,5 @@
 import { Tweet } from './tweet';
 
-export interface TwitterHomeTimelinePayload {
+export interface HomeTimelinePayload {
   data: Tweet[];
 }

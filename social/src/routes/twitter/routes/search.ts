@@ -1,30 +1,20 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
-import { query } from 'express-validator';
-import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../services/handleTwitterErrors';
-import { TwitterSearchPayload } from '../../utils/interfaces/twitterSearchPayload';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { SearchPayload } from '../../../utils/interfaces/twitter/searchPayload';
 import axios from 'axios';
 import twit from 'twit';
+import { searchValidation } from '../../../utils/validation/twitter/searchValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.get(
-  '/api/social/twitter/search/tweets',
+  '/search/tweets',
   requireAuth,
-  [
-    query('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-    query('search').notEmpty().withMessage('Please provide a search parameter'),
-    query('maxId')
-      .optional()
-      .isNumeric()
-      .withMessage('maxId must be a numeric value'),
-  ],
+  searchValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { search, maxId, twitterUserId } = req.query;
@@ -47,7 +37,7 @@ router.get(
         tweet_mode: 'extended',
         max_id: maxId ? String(maxId) : undefined,
         count: 15,
-      })) as TwitterSearchPayload;
+      })) as SearchPayload;
 
       await Promise.all(
         tweets.data.statuses.map(async (tweet) => {

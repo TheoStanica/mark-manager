@@ -1,28 +1,18 @@
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import twit from 'twit';
-import { body } from 'express-validator';
-import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { retweetValidation } from '../../../utils/validation/twitter/retweetValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.post(
-  '/api/social/twitter/statuses/retweet',
+  '/statuses/retweet',
   requireAuth,
-  [
-    body('tweetId')
-      .not()
-      .isEmpty()
-      .isNumeric()
-      .withMessage('Please provide a Tweet ID'),
-    body('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-  ],
+  retweetValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { tweetId, twitterUserId } = req.body;
@@ -48,19 +38,9 @@ router.post(
   }
 );
 router.post(
-  '/api/social/twitter/statuses/unretweet',
+  '/statuses/unretweet',
   requireAuth,
-  [
-    body('tweetId')
-      .not()
-      .isEmpty()
-      .isNumeric()
-      .withMessage('Please provide a Tweet ID'),
-    body('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-  ],
+  retweetValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { tweetId, twitterUserId } = req.body;

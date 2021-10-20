@@ -1,28 +1,18 @@
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import twit from 'twit';
-import { body } from 'express-validator';
-import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { likeValidation } from '../../../utils/validation/twitter/likeValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.post(
-  '/api/social/twitter/favorites/create',
+  '/favorites/create',
   requireAuth,
-  [
-    body('tweetId')
-      .not()
-      .isEmpty()
-      .isNumeric()
-      .withMessage('Please provide a Tweet ID'),
-    body('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-  ],
+  likeValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { tweetId, twitterUserId } = req.body;
@@ -48,19 +38,9 @@ router.post(
   }
 );
 router.post(
-  '/api/social/twitter/favorites/destroy',
+  '/favorites/destroy',
   requireAuth,
-  [
-    body('tweetId')
-      .not()
-      .isEmpty()
-      .isNumeric()
-      .withMessage('Please provide a Tweet ID'),
-    body('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-  ],
+  likeValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { tweetId, twitterUserId } = req.body;

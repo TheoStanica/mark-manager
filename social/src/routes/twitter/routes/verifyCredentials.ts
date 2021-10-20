@@ -1,23 +1,18 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import twit from 'twit';
-import { query } from 'express-validator';
-import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../services/handleTwitterErrors';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { verifyCredentialsValidation } from '../../../utils/validation/twitter/verifyCredentialsValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.get(
-  '/api/social/twitter/user',
+  '/user',
   requireAuth,
-  [
-    query('twitterUserId')
-      .isNumeric()
-      .notEmpty()
-      .withMessage('Please provide a valid Twitter user ID'),
-  ],
+  verifyCredentialsValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { twitterUserId } = req.query;

@@ -1,41 +1,21 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
-import twit, { Twitter } from 'twit';
-import { query } from 'express-validator';
-import { fetchTwitterAccountTokens } from '../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../services/handleTwitterErrors';
-import { TwitterSearchPayload } from '../../utils/interfaces/twitterSearchPayload';
+import twit from 'twit';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { SearchPayload } from '../../../utils/interfaces/twitter/searchPayload';
 import axios from 'axios';
-import { Tweet } from '../../utils/interfaces/tweet';
+import { Tweet } from '../../../utils/interfaces/twitter/tweet';
+import { replyValidation } from '../../../utils/validation/twitter/replyValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 
 router.get(
-  '/api/social/twitter/search/tweets/comments',
+  '/search/tweets/comments',
   requireAuth,
-  [
-    query('repliesToScreenName')
-      .notEmpty()
-      .withMessage('Please provide a Twitter Screen Name'),
-    query('inReplyToStatusId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid ID'),
-    query('twitterUserId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid Twitter user ID'),
-    query('sinceId')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Please provide a valid ID'),
-    query('maxId')
-      .optional()
-      .isNumeric()
-      .withMessage('maxId must be a numeric value'),
-  ],
+  replyValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const {
@@ -73,7 +53,7 @@ router.get(
           max_id: currentMaxId ? String(currentMaxId) : undefined,
           count: 100,
           in_reply_to_status_id: String(inReplyToStatusId),
-        })) as TwitterSearchPayload;
+        })) as SearchPayload;
 
         // get out of the loop when we have got all replies possible and there are no new replies
         // (or try to find replies for tweets older than 7 days - Twitter API limitation for unpaid API access)
