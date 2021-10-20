@@ -14,8 +14,6 @@ router.get(
   validateRequest,
   async (req: Request, res: Response) => {
     const twitterIdDto = (req.params as unknown) as TwitterIdDto;
-
-    console.log(req.params);
     const userId = req.currentUser!.userId;
     const userService = Container.get(UserService);
 
