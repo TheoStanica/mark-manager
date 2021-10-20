@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import { verifyCredentialsValidation } from '../../../utils/validation/twitter/verifyCredentialsValidation';
 import { UserService } from '../../../services/userService';
-import { TwitterIdDto } from '../../../dtos/twitterUserIdDto';
+import { TwitterIdDto } from '../../../utils/dtos/twitterUserIdDto';
 import Container from 'typedi';
 
 const router = express.Router();
