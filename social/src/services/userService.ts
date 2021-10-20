@@ -1,9 +1,10 @@
 import { Service } from 'typedi';
-import { TwitterIdDto } from '../dtos/twitterUserIdDto';
+import { TwitterIdDto } from '../utils/dtos/twitterUserIdDto';
 import { TwitterDoc } from '../models/twitter';
 import { UserRepository } from '../repositories/userRepository';
 import { handleTwitterErrors } from './handleTwitterErrors';
 import { TwitterApiService } from './twitterApiService';
+import { TweetDto } from '../utils/dtos/tweetDto';
 
 @Service()
 export class UserService {
@@ -36,6 +37,29 @@ export class UserService {
       }
     } catch (error) {
       handleTwitterErrors(error, twitterUserId);
+    }
+  }
+
+  async tweet(userId: string, tweetDto: TweetDto): Promise<void> {
+    const { status, twitterUserId, inReplyToStatusId } = tweetDto;
+
+    const {
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+    } = await this.userRepository.fetchTwitterAccountTokens(
+      userId,
+      twitterUserId
+    );
+
+    const twitterApiService = new TwitterApiService(
+      oauthAccessToken,
+      oauthAccessTokenSecret
+    );
+
+    try {
+      await twitterApiService.tweet(status, inReplyToStatusId);
+    } catch (err) {
+      handleTwitterErrors(err, String(twitterUserId));
     }
   }
 }

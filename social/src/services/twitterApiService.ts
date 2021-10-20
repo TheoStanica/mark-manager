@@ -17,4 +17,11 @@ export class TwitterApiService {
   async fetchCredentials(): Promise<twit.PromiseResponse> {
     return this.client.get('account/verify_credentials');
   }
+
+  async tweet(status: string, inReplyToStatusId?: string) {
+    return this.client.post('statuses/update', {
+      status: status,
+      in_reply_to_status_id: inReplyToStatusId,
+    });
+  }
 }
