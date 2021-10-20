@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
-import twit from 'twit';
+import { verifyCredentialsValidation } from '../../../utils/validation/twitter/verifyCredentialsValidation';
 import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
-import { verifyCredentialsValidation } from '../../../utils/validation/twitter/verifyCredentialsValidation';
+import twit from 'twit';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;

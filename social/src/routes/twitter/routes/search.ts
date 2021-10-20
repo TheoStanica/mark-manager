@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
+import { searchValidation } from '../../../utils/validation/twitter/searchValidation';
 import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
 import { SearchPayload } from '../../../utils/interfaces/twitter/searchPayload';
 import axios from 'axios';
 import twit from 'twit';
-import { searchValidation } from '../../../utils/validation/twitter/searchValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;

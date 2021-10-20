@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
+import { homeTimelineValidation } from '../../../utils/validation/twitter/homeTimelineValidation';
 import { HomeTimelinePayload } from '../../../utils/interfaces/twitter/homeTimelinePayload';
 import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
 import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
 import axios from 'axios';
 import twit from 'twit';
-import { homeTimelineValidation } from '../../../utils/validation/twitter/homeTimelineValidation';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;

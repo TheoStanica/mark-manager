@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
-import twit from 'twit';
-import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
-import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
-import { SearchPayload } from '../../../utils/interfaces/twitter/searchPayload';
-import axios from 'axios';
-import { Tweet } from '../../../utils/interfaces/twitter/tweet';
 import { replyValidation } from '../../../utils/validation/twitter/replyValidation';
+import { fetchTwitterAccountTokens } from '../../../services/getTwitterAccountTokens';
+import { SearchPayload } from '../../../utils/interfaces/twitter/searchPayload';
+import { handleTwitterErrors } from '../../../services/handleTwitterErrors';
+import { Tweet } from '../../../utils/interfaces/twitter/tweet';
+import axios from 'axios';
+import twit from 'twit';
 
 const router = express.Router();
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
