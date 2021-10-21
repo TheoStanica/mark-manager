@@ -7,9 +7,8 @@ const router = express.Router();
 
 router.get('/accounts', requireAuth, async (req: Request, res: Response) => {
   const userService = Container.get(UserService);
-  const accounts = await userService.fetchConnectedTwitterAccounts(
-    req.currentUser!.userId
-  );
+  const userId = req.currentUser!.userId;
+  const accounts = await userService.fetchConnectedTwitterAccounts(userId);
   res.send(accounts);
 });
 
