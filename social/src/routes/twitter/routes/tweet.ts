@@ -1,7 +1,7 @@
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import { tweetValidation } from '../../../utils/validation/twitter/tweetValidation';
-import { TweetDto } from '../../../utils/dtos/tweetDto';
+import { TweetDto } from '../../../utils/dtos/twitter/tweetDto';
 import { Container } from 'typedi';
 import { UserService } from '../../../services/userService';
 

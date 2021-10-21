@@ -1,10 +1,12 @@
 import { Service } from 'typedi';
-import { TwitterIdDto } from '../utils/dtos/twitterUserIdDto';
+import { UserIdDto } from '../utils/dtos/twitter/twitterUserIdDto';
 import { TwitterDoc } from '../models/twitter';
 import { UserRepository } from '../repositories/userRepository';
 import { handleTwitterErrors } from './handleTwitterErrors';
 import { TwitterApiService } from './twitterApiService';
-import { TweetDto } from '../utils/dtos/tweetDto';
+import { TweetDto } from '../utils/dtos/twitter/tweetDto';
+import { SearchDto } from '../utils/dtos/twitter/searchDto';
+import { sentimentAnalysisService } from './sentimentAnalysisService';
 
 @Service()
 export class UserService {
@@ -14,20 +16,11 @@ export class UserService {
     return await this.userRepository.fetchConnectedTwitterAccounts(userId);
   }
 
-  async fetchTwitterCredentials(userId: string, twitterIdDto: TwitterIdDto) {
+  async fetchTwitterCredentials(userId: string, twitterIdDto: UserIdDto) {
     const { twitterUserId } = twitterIdDto;
-
-    const {
-      oauthAccessToken,
-      oauthAccessTokenSecret,
-    } = await this.userRepository.fetchTwitterAccountTokens(
+    const twitterApiService = await this.createTwitterApiService(
       userId,
       twitterUserId
-    );
-
-    const twitterApiService = new TwitterApiService(
-      oauthAccessToken,
-      oauthAccessTokenSecret
     );
 
     try {
@@ -42,7 +35,38 @@ export class UserService {
 
   async tweet(userId: string, tweetDto: TweetDto): Promise<void> {
     const { status, twitterUserId, inReplyToStatusId } = tweetDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
 
+    try {
+      await twitterApiService.tweet(status, inReplyToStatusId);
+    } catch (error) {
+      handleTwitterErrors(error, twitterUserId);
+    }
+  }
+
+  async search(userId: string, searchDto: SearchDto) {
+    const { search, maxId, twitterUserId } = searchDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      const tweets = await twitterApiService.search(search, maxId);
+      const statuses = sentimentAnalysisService.injectSentimentIntoTweets(
+        tweets.data.statuses
+      );
+
+      return statuses;
+    } catch (error) {
+      handleTwitterErrors(error, String(twitterUserId));
+    }
+  }
+
+  private async createTwitterApiService(userId: string, twitterUserId: string) {
     const {
       oauthAccessToken,
       oauthAccessTokenSecret,
@@ -50,16 +74,6 @@ export class UserService {
       userId,
       twitterUserId
     );
-
-    const twitterApiService = new TwitterApiService(
-      oauthAccessToken,
-      oauthAccessTokenSecret
-    );
-
-    try {
-      await twitterApiService.tweet(status, inReplyToStatusId);
-    } catch (err) {
-      handleTwitterErrors(err, String(twitterUserId));
-    }
+    return new TwitterApiService(oauthAccessToken, oauthAccessTokenSecret);
   }
 }

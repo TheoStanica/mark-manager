@@ -1,4 +1,5 @@
 import twit from 'twit';
+import { SearchPayload } from '../utils/interfaces/twitter/searchPayload';
 
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
@@ -18,10 +19,22 @@ export class TwitterApiService {
     return this.client.get('account/verify_credentials');
   }
 
-  async tweet(status: string, inReplyToStatusId?: string) {
+  async tweet(
+    status: string,
+    inReplyToStatusId?: string
+  ): Promise<twit.PromiseResponse> {
     return this.client.post('statuses/update', {
       status: status,
       in_reply_to_status_id: inReplyToStatusId,
     });
+  }
+
+  async search(search: string, maxId?: string) {
+    return (this.client.get('search/tweets', {
+      q: search,
+      tweet_mode: 'extended',
+      max_id: maxId,
+      count: 15,
+    }) as unknown) as SearchPayload;
   }
 }
