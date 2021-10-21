@@ -10,6 +10,8 @@ import { sentimentAnalysisService } from './sentimentAnalysisService';
 import { RetweetDto } from '../utils/dtos/twitter/retweetDto';
 import { LikeDto } from '../utils/dtos/twitter/likeDto';
 import { HomeTimelineDto } from '../utils/dtos/twitter/homeTimelineDto';
+import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
+import { Tweet } from '../utils/interfaces/twitter/tweet';
 
 @Service()
 export class UserService {
@@ -111,7 +113,7 @@ export class UserService {
 
     try {
       const tweets = await twitterApiService.search(search, maxId);
-      const statuses = sentimentAnalysisService.injectSentimentIntoTweets(
+      const statuses = await sentimentAnalysisService.injectSentimentIntoTweets(
         tweets.data.statuses
       );
 
@@ -130,11 +132,26 @@ export class UserService {
 
     try {
       const tweets = await twitterApiService.homeTimeline(maxId);
-      const statuses = sentimentAnalysisService.injectSentimentIntoTweets(
+      const statuses = await sentimentAnalysisService.injectSentimentIntoTweets(
         tweets.data
       );
 
       return statuses;
+    } catch (error) {
+      handleTwitterErrors(error, String(twitterUserId));
+    }
+  }
+
+  async replies(userId: string, repliesDto: RepliesDto) {
+    const { twitterUserId } = repliesDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      const tweets = await twitterApiService.replies(repliesDto);
+      return await sentimentAnalysisService.injectSentimentIntoTweets(tweets);
     } catch (error) {
       handleTwitterErrors(error, String(twitterUserId));
     }
