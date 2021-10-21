@@ -16,6 +16,7 @@ router.get(
     const searchDto = (req.query as unknown) as SearchDto;
     const userId = req.currentUser!.userId;
     const userService = Container.get(UserService);
+
     const statuses = await userService.search(userId, searchDto);
 
     res.send({ statuses });
