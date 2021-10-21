@@ -7,6 +7,7 @@ import { TwitterApiService } from './twitterApiService';
 import { TweetDto } from '../utils/dtos/twitter/tweetDto';
 import { SearchDto } from '../utils/dtos/twitter/searchDto';
 import { sentimentAnalysisService } from './sentimentAnalysisService';
+import { RetweetDto } from '../utils/dtos/twitter/retweetDto';
 
 @Service()
 export class UserService {
@@ -44,6 +45,32 @@ export class UserService {
       await twitterApiService.tweet(status, inReplyToStatusId);
     } catch (error) {
       handleTwitterErrors(error, twitterUserId);
+    }
+  }
+
+  async retweet(userId: string, retweetDto: RetweetDto) {
+    const { tweetId, twitterUserId } = retweetDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterApiService.retweet(tweetId);
+    } catch (error) {
+      handleTwitterErrors(error, String(twitterUserId));
+    }
+  }
+
+  async unretweet(userId: string, retweetDto: RetweetDto) {
+    const { tweetId, twitterUserId } = retweetDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterApiService.unretweet(tweetId);
+    } catch (error) {
+      handleTwitterErrors(error, String(twitterUserId));
     }
   }
 

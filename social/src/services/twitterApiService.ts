@@ -15,18 +15,23 @@ export class TwitterApiService {
     });
   }
 
-  async fetchCredentials(): Promise<twit.PromiseResponse> {
+  async fetchCredentials() {
     return this.client.get('account/verify_credentials');
   }
 
-  async tweet(
-    status: string,
-    inReplyToStatusId?: string
-  ): Promise<twit.PromiseResponse> {
+  async tweet(status: string, inReplyToStatusId?: string) {
     return this.client.post('statuses/update', {
       status: status,
       in_reply_to_status_id: inReplyToStatusId,
     });
+  }
+
+  async retweet(tweetId: string) {
+    return this.client.post(`statuses/retweet/${tweetId}`);
+  }
+
+  async unretweet(tweetId: string) {
+    return this.client.post(`statuses/unretweet/${tweetId}`);
   }
 
   async search(search: string, maxId?: string) {
