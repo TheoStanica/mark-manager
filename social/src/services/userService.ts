@@ -9,6 +9,7 @@ import { SearchDto } from '../utils/dtos/twitter/searchDto';
 import { sentimentAnalysisService } from './sentimentAnalysisService';
 import { RetweetDto } from '../utils/dtos/twitter/retweetDto';
 import { LikeDto } from '../utils/dtos/twitter/likeDto';
+import { HomeTimelineDto } from '../utils/dtos/twitter/homeTimelineDto';
 
 @Service()
 export class UserService {
@@ -112,6 +113,25 @@ export class UserService {
       const tweets = await twitterApiService.search(search, maxId);
       const statuses = sentimentAnalysisService.injectSentimentIntoTweets(
         tweets.data.statuses
+      );
+
+      return statuses;
+    } catch (error) {
+      handleTwitterErrors(error, String(twitterUserId));
+    }
+  }
+
+  async homeTimeline(userId: string, homeTimelineDto: HomeTimelineDto) {
+    const { maxId, twitterUserId } = homeTimelineDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      const tweets = await twitterApiService.homeTimeline(maxId);
+      const statuses = sentimentAnalysisService.injectSentimentIntoTweets(
+        tweets.data
       );
 
       return statuses;
