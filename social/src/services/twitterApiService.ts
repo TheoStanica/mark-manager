@@ -34,6 +34,14 @@ export class TwitterApiService {
     return this.client.post(`statuses/unretweet/${tweetId}`);
   }
 
+  async like(tweetId: string) {
+    return this.client.post('favorites/create', { id: tweetId });
+  }
+
+  async unlike(tweetId: string) {
+    return this.client.post('favorites/destroy', { id: tweetId });
+  }
+
   async search(search: string, maxId?: string) {
     return (this.client.get('search/tweets', {
       q: search,
