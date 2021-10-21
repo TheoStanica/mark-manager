@@ -99,10 +99,8 @@ export class TwitterApiService {
 
       currentMaxId =
         tweets.data.statuses[tweets.data.statuses.length - 1].id_str;
-
-      resArray.slice(0, 30);
     }
 
-    return resArray;
+    return resArray.slice(0, 30);
   }
 }

@@ -23,6 +23,7 @@ import { shallowEqual } from 'react-redux';
 import { TwitterEndpoints } from '../../services/twitterApiEndpoints';
 
 const handleError = ({ error }) => async (dispatch) => {
+  console.log(error);
   if (error?.response?.data?.errors) {
     dispatch({
       type: SET_ERRORS,
@@ -313,7 +314,7 @@ export const reloadTwitterStream = ({ id, search, twitterUserId }) => async (
         tweets: tweetsIds,
         metadata: {
           max_id:
-            response.data.statuses[response.data.statuses.length - 1].id_str,
+            response.data?.statuses[response.data.statuses.length - 1]?.id_str,
         },
         newTweetsById: tweetsObject,
         filteredTweetsById: filteredTweetsObj,
