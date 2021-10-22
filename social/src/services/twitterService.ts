@@ -13,14 +13,14 @@ import { HomeTimelineDto } from '../utils/dtos/twitter/homeTimelineDto';
 import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
 
 @Service()
-export class UserService {
+export class TwitterService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async fetchConnectedTwitterAccounts(userId: string): Promise<TwitterDoc[]> {
+  async fetchConnectedAccounts(userId: string): Promise<TwitterDoc[]> {
     return await this.userRepository.fetchConnectedTwitterAccounts(userId);
   }
 
-  async fetchTwitterCredentials(userId: string, twitterIdDto: UserIdDto) {
+  async fetchCredentials(userId: string, twitterIdDto: UserIdDto) {
     const { twitterUserId } = twitterIdDto;
     const twitterApiService = await this.createTwitterApiService(
       userId,

@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import { tweetValidation } from '../../../utils/validation/twitter/tweetValidation';
 import { TweetDto } from '../../../utils/dtos/twitter/tweetDto';
 import { Container } from 'typedi';
-import { UserService } from '../../../services/userService';
+import { TwitterService } from '../../../services/twitterService';
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ router.post(
   async (req: Request, res: Response) => {
     const tweetDto = req.body as TweetDto;
     const userId = req.currentUser!.userId;
-    const userService = Container.get(UserService);
+    const twitterService = Container.get(TwitterService);
 
-    await userService.tweet(userId, tweetDto);
+    await twitterService.tweet(userId, tweetDto);
 
     res.sendStatus(204);
   }

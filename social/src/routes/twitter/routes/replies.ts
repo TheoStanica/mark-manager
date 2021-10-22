@@ -3,7 +3,7 @@ import { requireAuth, validateRequest } from '@tcosmin/common';
 import { replyValidation } from '../../../utils/validation/twitter/replyValidation';
 import { RepliesDto } from '../../../utils/dtos/twitter/repliesDto';
 import Container from 'typedi';
-import { UserService } from '../../../services/userService';
+import { TwitterService } from '../../../services/twitterService';
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ router.get(
   async (req: Request, res: Response) => {
     const repliesDto = (req.query as unknown) as RepliesDto;
     const userId = req.currentUser!.userId;
-    const userService = Container.get(UserService);
+    const twitterService = Container.get(TwitterService);
 
-    const tweets = await userService.replies(userId, repliesDto);
+    const tweets = await twitterService.replies(userId, repliesDto);
 
     res.send(tweets);
   }

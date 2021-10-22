@@ -3,7 +3,7 @@ import { requireAuth, validateRequest } from '@tcosmin/common';
 import { retweetValidation } from '../../../utils/validation/twitter/retweetValidation';
 import { RetweetDto } from '../../../utils/dtos/twitter/retweetDto';
 import Container from 'typedi';
-import { UserService } from '../../../services/userService';
+import { TwitterService } from '../../../services/twitterService';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post(
   async (req: Request, res: Response) => {
     const retweetDto = req.body as RetweetDto;
     const userId = req.currentUser!.userId;
-    const userService = Container.get(UserService);
+    const userService = Container.get(TwitterService);
 
     await userService.retweet(userId, retweetDto);
 
@@ -30,9 +30,9 @@ router.post(
   async (req: Request, res: Response) => {
     const retweetDto = req.body as RetweetDto;
     const userId = req.currentUser!.userId;
-    const userService = Container.get(UserService);
+    const twitterService = Container.get(TwitterService);
 
-    await userService.unretweet(userId, retweetDto);
+    await twitterService.unretweet(userId, retweetDto);
 
     res.sendStatus(204);
   }
