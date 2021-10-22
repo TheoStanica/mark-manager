@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
 import { TwitterConnectedListener } from './events/listeners/twitterConnectedListener';
-import { natsWrapper } from './nats-wrapper';
+import { natsWrapper } from './natsWrapper';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
