@@ -313,7 +313,7 @@ export const reloadTwitterStream = ({ id, search, twitterUserId }) => async (
         tweets: tweetsIds,
         metadata: {
           max_id:
-            response.data.statuses[response.data.statuses.length - 1].id_str,
+            response.data?.statuses[response.data.statuses.length - 1]?.id_str,
         },
         newTweetsById: tweetsObject,
         filteredTweetsById: filteredTweetsObj,
