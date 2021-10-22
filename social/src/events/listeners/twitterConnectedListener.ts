@@ -5,8 +5,9 @@ import {
   TwitterConnectedEvent,
 } from '@tcosmin/common';
 import { Message } from 'node-nats-streaming';
-import { queueGroupName } from './queue-group-name';
-import { UserController } from '../../controllers/user-controller';
+import { queueGroupName } from './queueGroupName';
+import Container from 'typedi';
+import { UserService } from '../../services/userService';
 
 export class TwitterConnectedListener extends Listener<TwitterConnectedEvent> {
   subject: Subjects.TwitterConnected = Subjects.TwitterConnected;
@@ -23,8 +24,9 @@ export class TwitterConnectedListener extends Listener<TwitterConnectedEvent> {
     } = data;
 
     try {
-      const added = await UserController.addTwitterTokens({
-        userID: id,
+      const userService = Container.get(UserService);
+      const added = await userService.connectTwitterAccount({
+        userId: id,
         oauthAccessToken,
         oauthAccessTokenSecret,
         twitterScreenName,

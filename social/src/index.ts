@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
-import { TwitterConnectedListener } from './events/listeners/twitter-connected-listener';
+import { TwitterConnectedListener } from './events/listeners/twitterConnectedListener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
