@@ -5,7 +5,7 @@ import {
   TwitterRateLimitExceededError,
 } from '@tcosmin/common';
 
-export const handleTwitterErrors = (err: any, twitterAccountId: string) => {
+export const twitterErrorHandler = (err: any, twitterAccountId: string) => {
   switch (err?.code) {
     case 88:
       throw new TwitterRateLimitExceededError(twitterAccountId);

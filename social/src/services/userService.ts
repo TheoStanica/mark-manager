@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 import { UserIdDto } from '../utils/dtos/twitter/twitterUserIdDto';
 import { TwitterDoc } from '../models/twitter';
 import { UserRepository } from '../repositories/userRepository';
-import { handleTwitterErrors } from './handleTwitterErrors';
+import { twitterErrorHandler } from '../utils/handleTwitterErrors';
 import { TwitterApiService } from './twitterApiService';
 import { TweetDto } from '../utils/dtos/twitter/tweetDto';
 import { SearchDto } from '../utils/dtos/twitter/searchDto';
@@ -11,7 +11,6 @@ import { RetweetDto } from '../utils/dtos/twitter/retweetDto';
 import { LikeDto } from '../utils/dtos/twitter/likeDto';
 import { HomeTimelineDto } from '../utils/dtos/twitter/homeTimelineDto';
 import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
-import { Tweet } from '../utils/interfaces/twitter/tweet';
 
 @Service()
 export class UserService {
@@ -34,7 +33,7 @@ export class UserService {
         return user.data;
       }
     } catch (error) {
-      handleTwitterErrors(error, twitterUserId);
+      twitterErrorHandler(error, twitterUserId);
     }
   }
 
@@ -48,7 +47,7 @@ export class UserService {
     try {
       await twitterApiService.tweet(status, inReplyToStatusId);
     } catch (error) {
-      handleTwitterErrors(error, twitterUserId);
+      twitterErrorHandler(error, twitterUserId);
     }
   }
 
@@ -61,7 +60,7 @@ export class UserService {
     try {
       return await twitterApiService.retweet(tweetId);
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
@@ -74,7 +73,7 @@ export class UserService {
     try {
       return await twitterApiService.unretweet(tweetId);
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
@@ -87,7 +86,7 @@ export class UserService {
     try {
       return await twitterApiService.like(tweetId);
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
@@ -100,7 +99,7 @@ export class UserService {
     try {
       return await twitterApiService.unlike(tweetId);
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
@@ -119,7 +118,7 @@ export class UserService {
 
       return statuses;
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
@@ -138,7 +137,7 @@ export class UserService {
 
       return statuses;
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
@@ -153,7 +152,7 @@ export class UserService {
       const tweets = await twitterApiService.replies(repliesDto);
       return await sentimentAnalysisService.injectSentimentIntoTweets(tweets);
     } catch (error) {
-      handleTwitterErrors(error, String(twitterUserId));
+      twitterErrorHandler(error, String(twitterUserId));
     }
   }
 
