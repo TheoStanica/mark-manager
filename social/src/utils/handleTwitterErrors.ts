@@ -6,7 +6,10 @@ import {
 } from '@tcosmin/common';
 
 export const twitterErrorHandler = (err: any, twitterAccountId: string) => {
+  console.log(err.twitterReply);
   switch (err?.code) {
+    case 34:
+      throw new BadRequestError('Invalid WOEID');
     case 88:
       throw new TwitterRateLimitExceededError(twitterAccountId);
     case 89:

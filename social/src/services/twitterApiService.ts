@@ -2,6 +2,7 @@ import twit from 'twit';
 import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
 import { HomeTimelinePayload } from '../utils/interfaces/twitter/homeTimelinePayload';
 import { SearchPayload } from '../utils/interfaces/twitter/searchPayload';
+import { TrendsPayload } from '../utils/interfaces/twitter/trendsPayload';
 import { Tweet } from '../utils/interfaces/twitter/tweet';
 
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
@@ -46,12 +47,19 @@ export class TwitterApiService {
   }
 
   async search(search: string, maxId?: string) {
+    console.log(encodeURIComponent(search));
     return (await this.client.get('search/tweets', {
-      q: search,
+      q: encodeURIComponent(search),
       tweet_mode: 'extended',
       max_id: maxId,
       count: 15,
     })) as SearchPayload;
+  }
+
+  async trends(woeid?: string) {
+    return ((await this.client.get('trends/place', {
+      id: woeid ? woeid : '1',
+    })) as unknown) as TrendsPayload;
   }
 
   async homeTimeline(maxId?: string) {
