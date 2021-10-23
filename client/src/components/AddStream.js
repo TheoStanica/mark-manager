@@ -12,6 +12,7 @@ import DisplayErrors from './DisplayErrors';
 import Icon from './Icon/Icon';
 import PlusSign from '../assets/Pictures/PlusSign';
 import styled from 'styled-components';
+import TrendingPanel from './TrendingPanel/TrendingPanel';
 
 const AddStream = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -85,31 +86,34 @@ const AddStream = () => {
       >
         <ModalHeader>Add New Stream</ModalHeader>
         <ModalBody>
-          <div style={{ width: 500 }}>
-            <p style={{ marginBottom: 5 }}>Select an account:</p>
-            <ConnectedAccountsDropdown
-              reset={reset}
-              onSelected={(selected) => setSelectedAccount(selected)}
-              isMulti={false}
-            />
-            <p style={{ margin: '10px 0' }}>Select stream type:</p>
-            <StreamTypesDropdown
-              reset={reset}
-              onSelected={(stream) => {
-                setStreamType(stream);
-              }}
-            />
-            {streamType === 'search' && (
-              <InputField
-                id="searchTerm"
-                type="text"
-                required={true}
-                label="Search term"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ marginTop: 10 }}
+          <div style={{ width: 700, display: 'flex' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <p style={{ marginBottom: 5 }}>Select an account:</p>
+              <ConnectedAccountsDropdown
+                reset={reset}
+                onSelected={(selected) => setSelectedAccount(selected)}
+                isMulti={false}
               />
-            )}
+              <p style={{ margin: '10px 0' }}>Select stream type:</p>
+              <StreamTypesDropdown
+                reset={reset}
+                onSelected={(stream) => {
+                  setStreamType(stream);
+                }}
+              />
+              {streamType === 'search' && (
+                <InputField
+                  id="searchTerm"
+                  type="text"
+                  required={true}
+                  label="Search term"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ marginTop: 10 }}
+                />
+              )}
+            </div>
+            {streamType === 'search' && <TrendingPanel />}
           </div>
           <DisplayErrors />
         </ModalBody>
