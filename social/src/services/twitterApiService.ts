@@ -47,7 +47,6 @@ export class TwitterApiService {
   }
 
   async search(search: string, maxId?: string) {
-    console.log(encodeURIComponent(search));
     return (await this.client.get('search/tweets', {
       q: encodeURIComponent(search),
       tweet_mode: 'extended',
