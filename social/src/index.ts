@@ -30,6 +30,9 @@ const start = async () => {
   if (!process.env.TWITTER_CONSUMER_SECRET) {
     throw new Error('TWITTER_CONSUMER_SECRET must be defined');
   }
+  if (!process.env.RAPIDAPI_KEY) {
+    throw new Error('RAPIDAPI_KEY must be defined');
+  }
 
   try {
     await natsWrapper.connect(
