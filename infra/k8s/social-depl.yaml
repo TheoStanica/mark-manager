@@ -41,6 +41,11 @@ spec:
                 secretKeyRef:
                   name: jwt-refresh-secret
                   key: JWT_REFRESH_KEY
+            - name: RAPIDAPI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rapidapi-key
+                  key: RAPIDAPI_KEY
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
