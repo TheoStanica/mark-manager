@@ -145,8 +145,6 @@ const StyledModalWrapper = styled.div`
   // width: streamType === 'search' ? 900 : 500,
   display: flex;
   justify-content: center;
-  max-height: 90vh;
-  overflow: scroll;
   width: ${(props) => (props.streamType === 'search' ? '900px' : '500px')};
   @media only screen and (max-width: 1000px) {
     flex-direction: column;
