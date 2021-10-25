@@ -13,6 +13,7 @@ import Icon from './Icon/Icon';
 import PlusSign from '../assets/Pictures/PlusSign';
 import styled from 'styled-components';
 import TrendingPanel from './TrendingPanel/TrendingPanel';
+import { Typography } from '@mui/material';
 
 const AddStream = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -86,21 +87,29 @@ const AddStream = () => {
       >
         <ModalHeader>Add New Stream</ModalHeader>
         <ModalBody>
-          <div style={{ width: 700, display: 'flex' }}>
+          <StyledModalWrapper streamType={streamType}>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <p style={{ marginBottom: 5 }}>Select an account:</p>
+              <Typography variant="h6" mb={2}>
+                Select account:
+              </Typography>
               <ConnectedAccountsDropdown
                 reset={reset}
                 onSelected={(selected) => setSelectedAccount(selected)}
                 isMulti={false}
               />
-              <p style={{ margin: '10px 0' }}>Select stream type:</p>
-              <StreamTypesDropdown
-                reset={reset}
-                onSelected={(stream) => {
-                  setStreamType(stream);
-                }}
-              />
+              {selectedAccount && (
+                <>
+                  <Typography variant="h6" mt={2} mb={2}>
+                    Select stream type:
+                  </Typography>
+                  <StreamTypesDropdown
+                    reset={reset}
+                    onSelected={(stream) => {
+                      setStreamType(stream);
+                    }}
+                  />
+                </>
+              )}
               {streamType === 'search' && (
                 <InputField
                   id="searchTerm"
@@ -109,12 +118,16 @@ const AddStream = () => {
                   label="Search term"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ marginTop: 10 }}
+                  style={{ marginTop: 25 }}
                 />
               )}
             </div>
-            {streamType === 'search' && <TrendingPanel />}
-          </div>
+            <TrendingPanel
+              isVisible={streamType === 'search' ? true : false}
+              twitterUserId={selectedAccount}
+              onSelectedTrend={(term) => setSearchTerm(term)}
+            />
+          </StyledModalWrapper>
           <DisplayErrors />
         </ModalBody>
       </Modal>
@@ -127,6 +140,21 @@ const StyledStickyBottomRight = styled.div`
   right: 2rem;
   bottom: 2rem;
   z-index: 100;
+`;
+const StyledModalWrapper = styled.div`
+  // width: streamType === 'search' ? 900 : 500,
+  display: flex;
+  justify-content: center;
+  max-height: 90vh;
+  overflow: scroll;
+  width: ${(props) => (props.streamType === 'search' ? '900px' : '500px')};
+  @media only screen and (max-width: 1000px) {
+    flex-direction: column;
+    width: 500px;
+  }
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 export default AddStream;

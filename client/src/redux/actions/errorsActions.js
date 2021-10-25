@@ -7,6 +7,7 @@ export const resetErrors = () => async (dispatch) => {
 };
 
 export const setErrors = (errors) => async (dispatch) => {
+  console.log(errors);
   dispatch({
     type: SET_ERRORS,
     payload: errors,

@@ -27,4 +27,8 @@ export const TwitterEndpoints = {
   unlikeTweetEndpoint: '/api/social/twitter/favorites/destroy',
   retweetTweetEndpoint: '/api/social/twitter/statuses/retweet',
   unRetweetTweetEndpoint: '/api/social/twitter/statuses/unretweet',
+  twitterTrendsEndpoint: ({ twitterUserId, woeid }) =>
+    `/api/social/twitter/trends/place?woeid=${woeid}&twitterUserId=${twitterUserId}`,
+  twitterTrendingLocationsEndpoint: ({ twitterUserId, lat, long }) =>
+    `/api/social/twitter/trends/closest?lat=${lat}&long=${long}&twitterUserId=${twitterUserId}`,
 };
