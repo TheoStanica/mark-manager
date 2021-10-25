@@ -12,6 +12,7 @@ import { LikeDto } from '../utils/dtos/twitter/likeDto';
 import { HomeTimelineDto } from '../utils/dtos/twitter/homeTimelineDto';
 import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
 import { TrendsDto } from '../utils/dtos/twitter/trendsDto';
+import { TrendsLocationsDto } from '../utils/dtos/twitter/trendsLocationsDto';
 
 @Service()
 export class TwitterService {
@@ -133,6 +134,24 @@ export class TwitterService {
     try {
       const trends = await twitterApiService.trends(woeid);
       return trends.data[0];
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async getTrendsLocations(
+    userId: string,
+    trendsLocationDto: TrendsLocationsDto
+  ) {
+    const { twitterUserId, lat, long } = trendsLocationDto;
+    const twitterApiService = await this.createTwitterApiService(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      const locations = await twitterApiService.getTrendsLocations(lat, long);
+      return locations.data;
     } catch (error) {
       twitterErrorHandler(error, String(twitterUserId));
     }

@@ -61,6 +61,13 @@ export class TwitterApiService {
     })) as unknown) as TrendsPayload;
   }
 
+  async getTrendsLocations(lat: number, long: number) {
+    return await this.client.get('trends/closest', {
+      lat,
+      long,
+    });
+  }
+
   async homeTimeline(maxId?: string) {
     return (await this.client.get('statuses/home_timeline', {
       tweet_mode: 'extended',
