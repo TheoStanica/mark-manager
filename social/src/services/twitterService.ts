@@ -13,10 +13,15 @@ import { HomeTimelineDto } from '../utils/dtos/twitter/homeTimelineDto';
 import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
 import { TrendsDto } from '../utils/dtos/twitter/trendsDto';
 import { TrendsLocationsDto } from '../utils/dtos/twitter/trendsLocationsDto';
+import { TwitterAdsService } from './twitterAdsService';
+import { TwitterRepository } from '../repositories/twitterRepository';
 
 @Service()
 export class TwitterService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly twitterRepository: TwitterRepository
+  ) {}
 
   async fetchConnectedAccounts(userId: string): Promise<TwitterDoc[]> {
     return await this.userRepository.fetchConnectedTwitterAccounts(userId);
@@ -32,6 +37,11 @@ export class TwitterService {
     try {
       const user = await twitterApiService.fetchCredentials();
       if (user) {
+        await this.synchronizeMediaAccount(
+          userId,
+          twitterUserId,
+          user.data.name
+        );
         return user.data;
       }
     } catch (error) {
@@ -200,5 +210,50 @@ export class TwitterService {
       twitterUserId
     );
     return new TwitterApiService(oauthAccessToken, oauthAccessTokenSecret);
+  }
+
+  private async createTwitterAdsApiService(
+    userId: string,
+    twitterUserId: string
+  ) {
+    const {
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+    } = await this.userRepository.fetchTwitterAccountTokens(
+      userId,
+      twitterUserId
+    );
+    return new TwitterAdsService(oauthAccessToken, oauthAccessTokenSecret);
+  }
+
+  private async synchronizeMediaAccount(
+    userId: string,
+    twitterUserId: string,
+    name: string
+  ) {
+    const {
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+      id: twitterAccountMongoId,
+    } = await this.userRepository.fetchTwitterAccountTokens(
+      userId,
+      twitterUserId
+    );
+    const twitterAdsApiService = new TwitterAdsService(
+      oauthAccessToken,
+      oauthAccessTokenSecret
+    );
+    try {
+      const adsAccounts = await twitterAdsApiService.fetchMediaAccounts(name);
+
+      if (adsAccounts.data[0]?.id) {
+        await this.twitterRepository.addMediaAccount(
+          twitterAccountMongoId,
+          adsAccounts.data[0].id
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
