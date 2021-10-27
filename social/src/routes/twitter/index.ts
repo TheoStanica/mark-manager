@@ -1,5 +1,6 @@
 import express from 'express';
 import { twitterAccountsRouter } from './routes/accounts';
+import { scheduledTweetsRouter } from './routes/ads/scheduledTweets';
 import { twitterTimelineRouter } from './routes/homeTimeline';
 import { twitterLikeRouter } from './routes/like';
 import { twitterCommentsRouter } from './routes/replies';
@@ -20,5 +21,6 @@ twitterApi.use(twitterLikeRouter);
 twitterApi.use(twitterRetweetRouter);
 twitterApi.use(twitterCommentsRouter);
 twitterApi.use(twitterTrendsRouter);
+twitterApi.use('/ads', scheduledTweetsRouter);
 
 export { twitterApi };

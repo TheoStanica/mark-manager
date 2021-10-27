@@ -1,5 +1,7 @@
+import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { promisify } from 'util';
+import { ScheduleTweetDto } from '../utils/dtos/twitter/scheduleTweetDto';
 import { AdsAccountPayload } from '../utils/interfaces/twitter/adsAccountPayload';
 
 const TwitterAdsApi = require('twitter-ads');
@@ -10,7 +12,20 @@ const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;
 @Service()
 export class TwitterAdsService {
   private client: any;
-  constructor(oauthAccessToken: string, oauthAccessTokenSecret: string) {
+  private _adsId: string | undefined;
+
+  private get adsId() {
+    if (!this._adsId) {
+      throw new BadRequestError('You do not have an active media account');
+    }
+    return this._adsId;
+  }
+
+  constructor(
+    oauthAccessToken: string,
+    oauthAccessTokenSecret: string,
+    adsId: string | undefined
+  ) {
     this.client = new TwitterAdsApi({
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
@@ -19,6 +34,7 @@ export class TwitterAdsService {
       sandbox: false,
       api_version: '10',
     });
+    this._adsId = adsId;
   }
 
   async fetchMediaAccounts(name: string) {
@@ -27,6 +43,27 @@ export class TwitterAdsService {
     })) as AdsAccountPayload;
 
     return response;
+  }
+
+  async fetchScheduledTweets() {
+    return await this.makeRequest(
+      'get',
+      `/accounts/${this.adsId}/scheduled_tweets`
+    );
+  }
+
+  async createScheduledTweet(scheduleTweetDto: ScheduleTweetDto) {
+    const { scheduleAt, text, twitterUserId } = scheduleTweetDto;
+    return await this.makeRequest(
+      'post',
+      `/accounts/${this.adsId}/scheduled_tweets`,
+      {
+        as_user_id: twitterUserId,
+        scheduled_at: scheduleAt,
+        text: text,
+        nullcast: false,
+      }
+    );
   }
 
   private async makeRequest(

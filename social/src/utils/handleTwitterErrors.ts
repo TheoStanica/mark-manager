@@ -6,7 +6,9 @@ import {
 } from '@tcosmin/common';
 
 export const twitterErrorHandler = (err: any, twitterAccountId: string) => {
-  console.log(err);
+  if (err instanceof BadRequestError) {
+    throw err;
+  }
   switch (err?.code) {
     case 3:
       throw new BadRequestError('Invalid coordinates');

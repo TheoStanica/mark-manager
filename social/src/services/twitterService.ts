@@ -15,6 +15,7 @@ import { TrendsDto } from '../utils/dtos/twitter/trendsDto';
 import { TrendsLocationsDto } from '../utils/dtos/twitter/trendsLocationsDto';
 import { TwitterAdsService } from './twitterAdsService';
 import { TwitterRepository } from '../repositories/twitterRepository';
+import { ScheduleTweetDto } from '../utils/dtos/twitter/scheduleTweetDto';
 
 @Service()
 export class TwitterService {
@@ -201,6 +202,34 @@ export class TwitterService {
     }
   }
 
+  async fetchScheduledTweets(userId: string, twitterIdDto: UserIdDto) {
+    const { twitterUserId } = twitterIdDto;
+    const twitterAdsApiService = await this.createTwitterAdsApiService(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      return await twitterAdsApiService.fetchScheduledTweets();
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async scheduleTweet(userId: string, scheduleTweetDto: ScheduleTweetDto) {
+    const { twitterUserId } = scheduleTweetDto;
+    const twitterAdsApiService = await this.createTwitterAdsApiService(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      return await twitterAdsApiService.createScheduledTweet(scheduleTweetDto);
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
   private async createTwitterApiService(userId: string, twitterUserId: string) {
     const {
       oauthAccessToken,
@@ -219,11 +248,16 @@ export class TwitterService {
     const {
       oauthAccessToken,
       oauthAccessTokenSecret,
+      adsId,
     } = await this.userRepository.fetchTwitterAccountTokens(
       userId,
       twitterUserId
     );
-    return new TwitterAdsService(oauthAccessToken, oauthAccessTokenSecret);
+    return new TwitterAdsService(
+      oauthAccessToken,
+      oauthAccessTokenSecret,
+      adsId
+    );
   }
 
   private async synchronizeMediaAccount(
@@ -235,13 +269,15 @@ export class TwitterService {
       oauthAccessToken,
       oauthAccessTokenSecret,
       id: twitterAccountMongoId,
+      adsId,
     } = await this.userRepository.fetchTwitterAccountTokens(
       userId,
       twitterUserId
     );
     const twitterAdsApiService = new TwitterAdsService(
       oauthAccessToken,
-      oauthAccessTokenSecret
+      oauthAccessTokenSecret,
+      adsId
     );
     try {
       const adsAccounts = await twitterAdsApiService.fetchMediaAccounts(name);
