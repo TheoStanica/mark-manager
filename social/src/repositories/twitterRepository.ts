@@ -40,4 +40,14 @@ export class TwitterRepository {
       { new: true, session }
     );
   }
+
+  async addMediaAccount(twitterAccountMongoId: string, adsId: string) {
+    return await this.Twitter.findByIdAndUpdate(
+      twitterAccountMongoId,
+      {
+        $set: { adsId, hasAdsAccount: true },
+      },
+      { new: true }
+    );
+  }
 }
