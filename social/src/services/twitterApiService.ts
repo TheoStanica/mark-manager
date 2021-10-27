@@ -1,5 +1,6 @@
 import twit from 'twit';
 import { RepliesDto } from '../utils/dtos/twitter/repliesDto';
+import { AccountCredentialsPayload } from '../utils/interfaces/twitter/accountCredentialsPayload';
 import { HomeTimelinePayload } from '../utils/interfaces/twitter/homeTimelinePayload';
 import { SearchPayload } from '../utils/interfaces/twitter/searchPayload';
 import { TrendsPayload } from '../utils/interfaces/twitter/trendsPayload';
@@ -20,7 +21,9 @@ export class TwitterApiService {
   }
 
   async fetchCredentials() {
-    return this.client.get('account/verify_credentials');
+    return (await this.client.get(
+      'account/verify_credentials'
+    )) as AccountCredentialsPayload;
   }
 
   async tweet(status: string, inReplyToStatusId?: string) {
