@@ -12,6 +12,8 @@ export interface TwitterDoc extends mongoose.Document {
   oauthAccessTokenSecret: string;
   twitterUserId: string;
   twitterScreenName: string;
+  adsId: string;
+  hasAdsAccount: boolean;
 }
 
 export interface TwitterModel extends mongoose.Model<TwitterDoc> {
@@ -32,6 +34,13 @@ const twitterAccountSchema = new mongoose.Schema(
     twitterUserId: {
       type: String,
     },
+    adsId: {
+      type: String,
+    },
+    hasAdsAccount: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: {
@@ -42,6 +51,7 @@ const twitterAccountSchema = new mongoose.Schema(
         delete ret.__v;
         delete ret.oauthAccessToken;
         delete ret.oauthAccessTokenSecret;
+        delete ret.adsId;
       },
     },
   }
