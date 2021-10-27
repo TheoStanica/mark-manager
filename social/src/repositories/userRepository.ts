@@ -1,8 +1,7 @@
 import { TwitterDoc } from '../models/twitter';
-import { User, UserDoc } from '../models/users';
+import { User } from '../models/users';
 import { Service } from 'typedi';
 import { BadRequestError } from '@tcosmin/common';
-import { AccessTokensData } from '../utils/interfaces/twitter/accessTokensData';
 import { ClientSession } from 'mongoose';
 import { AddTokensDto } from '../utils/dtos/twitter/addTokensDto';
 import { TwitterRepository } from './twitterRepository';
@@ -36,10 +35,7 @@ export class UserRepository {
     return user?.twitter || [];
   }
 
-  async fetchTwitterAccountTokens(
-    userId: string,
-    twitterId: string
-  ): Promise<AccessTokensData> {
+  async fetchTwitterAccountTokens(userId: string, twitterId: string) {
     const user = await this.User.findById(userId).populate('twitter');
     if (!user)
       throw new BadRequestError('You have no Twitter accounts connected');
@@ -54,9 +50,6 @@ export class UserRepository {
       );
     }
 
-    return {
-      oauthAccessToken: foundAccount.oauthAccessToken,
-      oauthAccessTokenSecret: foundAccount.oauthAccessTokenSecret,
-    } as AccessTokensData;
+    return foundAccount;
   }
 }
