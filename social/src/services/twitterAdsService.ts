@@ -40,23 +40,18 @@ export class TwitterAdsService {
   }
 
   async fetchMediaAccounts(name: string) {
-    const response = (await this.makeRequest('get', '/accounts', {
+    return (this.makeRequest('get', '/accounts', {
       q: name,
-    })) as AdsAccountPayload;
-
-    return response;
+    }) as unknown) as AdsAccountPayload;
   }
 
   async fetchScheduledTweets() {
-    return await this.makeRequest(
-      'get',
-      `/accounts/${this.adsId}/scheduled_tweets`
-    );
+    return this.makeRequest('get', `/accounts/${this.adsId}/scheduled_tweets`);
   }
 
   async createScheduledTweet(scheduleTweetDto: ScheduleTweetDto) {
     const { scheduleAt, text, twitterUserId } = scheduleTweetDto;
-    return await this.makeRequest(
+    return this.makeRequest(
       'post',
       `/accounts/${this.adsId}/scheduled_tweets`,
       {
@@ -74,7 +69,7 @@ export class TwitterAdsService {
       scheduled_at: scheduleAt || undefined,
       text: text || undefined,
     };
-    return await this.makeRequest(
+    return this.makeRequest(
       'put',
       `/accounts/${this.adsId}/scheduled_tweets/${scheduledTweetId}`,
       params
@@ -84,7 +79,7 @@ export class TwitterAdsService {
   async deleteScheduledTweet(deleteScheduledTweetDto: DeleteScheduledTweetDto) {
     const { scheduledTweetId } = deleteScheduledTweetDto;
 
-    return await this.makeRequest(
+    return this.makeRequest(
       'delete',
       `/accounts/${this.adsId}/scheduled_tweets/${scheduledTweetId}`
     );

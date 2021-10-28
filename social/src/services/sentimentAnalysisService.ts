@@ -3,7 +3,7 @@ import { Tweet } from '../utils/interfaces/twitter/tweet';
 
 const APIKEY = process.env.RAPIDAPI_KEY;
 
-export class sentimentAnalysisService {
+export class SentimentAnalysisService {
   static async injectSentimentIntoTweets(tweets: Tweet[]): Promise<Tweet[]> {
     try {
       await Promise.all(
