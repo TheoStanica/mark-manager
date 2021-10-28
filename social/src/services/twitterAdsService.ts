@@ -2,6 +2,7 @@ import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { promisify } from 'util';
 import { ScheduleTweetDto } from '../utils/dtos/twitter/scheduleTweetDto';
+import { UpdateScheduledTweetDto } from '../utils/dtos/twitter/updateScheduledTweetDto';
 import { AdsAccountPayload } from '../utils/interfaces/twitter/adsAccountPayload';
 
 const TwitterAdsApi = require('twitter-ads');
@@ -63,6 +64,19 @@ export class TwitterAdsService {
         text: text,
         nullcast: false,
       }
+    );
+  }
+
+  async updateScheduledTweet(updateScheduledTweetDto: UpdateScheduledTweetDto) {
+    const { scheduledTweetId, scheduleAt, text } = updateScheduledTweetDto;
+    const params = {
+      scheduled_at: scheduleAt || undefined,
+      text: text || undefined,
+    };
+    return await this.makeRequest(
+      'put',
+      `/accounts/${this.adsId}/scheduled_tweets/${scheduledTweetId}`,
+      params
     );
   }
 

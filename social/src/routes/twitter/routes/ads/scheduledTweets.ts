@@ -6,6 +6,8 @@ import { UserIdDto } from '../../../../utils/dtos/twitter/twitterUserIdDto';
 import { verifyCredentialsValidation } from '../../../../utils/validation/twitter/verifyCredentialsValidation';
 import { ScheduleTweetDto } from '../../../../utils/dtos/twitter/scheduleTweetDto';
 import { scheduleTweetValidation } from '../../../../utils/validation/twitter/scheduleTweetValidation';
+import { UpdateScheduledTweetDto } from '../../../../utils/dtos/twitter/updateScheduledTweetDto';
+import { updateScheduldTweetValidation } from '../../../../utils/validation/twitter/updateScheduledTweetValidation';
 
 const router = express.Router();
 
@@ -39,6 +41,25 @@ router.post(
     const twitterService = Container.get(TwitterService);
 
     const tweet = await twitterService.scheduleTweet(userId, scheduleTweetDto);
+
+    res.send(tweet);
+  }
+);
+
+router.put(
+  '/scheduled_tweets',
+  requireAuth,
+  updateScheduldTweetValidation,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const updateScheduledTweetDto = (req.query as unknown) as UpdateScheduledTweetDto;
+    const userId = req.currentUser!.userId;
+    const twitterService = Container.get(TwitterService);
+
+    const tweet = await twitterService.updateScheduledTweet(
+      userId,
+      updateScheduledTweetDto
+    );
 
     res.send(tweet);
   }
