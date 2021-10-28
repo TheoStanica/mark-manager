@@ -27,12 +27,6 @@ export class SentimentAnalysisService {
           // @ts-ignore
           const sentiment = await axios.request(options);
           tweet.sentiment = sentiment.data.sentiment;
-
-          // const sentiment = await axios.post(
-          //   'https://sentim-api.herokuapp.com/api/v1/',
-          //   { text: message }
-          // );
-          // tweet.sentiment = sentiment.data.result.type;
         })
       );
       return tweets;
