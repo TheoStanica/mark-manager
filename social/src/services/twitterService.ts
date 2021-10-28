@@ -17,6 +17,7 @@ import { TwitterAdsService } from './twitterAdsService';
 import { TwitterRepository } from '../repositories/twitterRepository';
 import { ScheduleTweetDto } from '../utils/dtos/twitter/scheduleTweetDto';
 import { UpdateScheduledTweetDto } from '../utils/dtos/twitter/updateScheduledTweetDto';
+import { DeleteScheduledTweetDto } from '../utils/dtos/twitter/deleteScheduledTweetDto';
 
 @Service()
 export class TwitterService {
@@ -243,6 +244,24 @@ export class TwitterService {
     try {
       return await twitterAdsApiService.updateScheduledTweet(
         updateScheduledTweetDto
+      );
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async deleteScheduledTweet(
+    userId: string,
+    deleteScheduledTweetDto: DeleteScheduledTweetDto
+  ) {
+    const { twitterUserId } = deleteScheduledTweetDto;
+    const twitterAdsApiService = await this.createTwitterAdsApiService(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterAdsApiService.deleteScheduledTweet(
+        deleteScheduledTweetDto
       );
     } catch (error) {
       twitterErrorHandler(error, String(twitterUserId));

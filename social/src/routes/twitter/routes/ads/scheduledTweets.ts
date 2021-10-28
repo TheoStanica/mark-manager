@@ -8,6 +8,8 @@ import { ScheduleTweetDto } from '../../../../utils/dtos/twitter/scheduleTweetDt
 import { scheduleTweetValidation } from '../../../../utils/validation/twitter/scheduleTweetValidation';
 import { UpdateScheduledTweetDto } from '../../../../utils/dtos/twitter/updateScheduledTweetDto';
 import { updateScheduldTweetValidation } from '../../../../utils/validation/twitter/updateScheduledTweetValidation';
+import { DeleteScheduledTweetDto } from '../../../../utils/dtos/twitter/deleteScheduledTweetDto';
+import { deleteScheduledTweetValidation } from '../../../../utils/validation/twitter/deleteScheduledTweetValdiation';
 
 const router = express.Router();
 
@@ -59,6 +61,25 @@ router.put(
     const tweet = await twitterService.updateScheduledTweet(
       userId,
       updateScheduledTweetDto
+    );
+
+    res.send(tweet);
+  }
+);
+
+router.delete(
+  '/scheduled_tweets',
+  requireAuth,
+  deleteScheduledTweetValidation,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const deleteScheduledTweetDto = (req.query as unknown) as DeleteScheduledTweetDto;
+    const userId = req.currentUser!.userId;
+    const twitterService = Container.get(TwitterService);
+
+    const tweet = await twitterService.deleteScheduledTweet(
+      userId,
+      deleteScheduledTweetDto
     );
 
     res.send(tweet);

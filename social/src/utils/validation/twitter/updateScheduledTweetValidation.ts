@@ -10,7 +10,7 @@ export const updateScheduldTweetValidation = [
     .notEmpty()
     .bail()
     .isNumeric()
-    .withMessage('Please provide a valid Twitter user ID'),
+    .withMessage('Please provide a valid Tweet ID'),
   query('scheduleAt')
     .notEmpty()
     .withMessage('Please provide a date to schedule this tweet')

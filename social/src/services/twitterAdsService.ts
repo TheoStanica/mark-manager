@@ -1,6 +1,7 @@
 import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { promisify } from 'util';
+import { DeleteScheduledTweetDto } from '../utils/dtos/twitter/deleteScheduledTweetDto';
 import { ScheduleTweetDto } from '../utils/dtos/twitter/scheduleTweetDto';
 import { UpdateScheduledTweetDto } from '../utils/dtos/twitter/updateScheduledTweetDto';
 import { AdsAccountPayload } from '../utils/interfaces/twitter/adsAccountPayload';
@@ -77,6 +78,15 @@ export class TwitterAdsService {
       'put',
       `/accounts/${this.adsId}/scheduled_tweets/${scheduledTweetId}`,
       params
+    );
+  }
+
+  async deleteScheduledTweet(deleteScheduledTweetDto: DeleteScheduledTweetDto) {
+    const { scheduledTweetId } = deleteScheduledTweetDto;
+
+    return await this.makeRequest(
+      'delete',
+      `/accounts/${this.adsId}/scheduled_tweets/${scheduledTweetId}`
     );
   }
 
