@@ -1,6 +1,6 @@
 import { Listener, Subjects, UserCreatedEvent } from '@tcosmin/common';
 import { Message } from 'node-nats-streaming';
-import { queueGroupName } from './queue-group-name';
+import { queueGroupName } from './queueGroupName';
 import Container from 'typedi';
 import { UserProfileService } from '../../services/userProfileService';
 

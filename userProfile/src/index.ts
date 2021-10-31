@@ -1,9 +1,8 @@
 import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
-import { UserCreatedListener } from './events/listeners/user-created-listener';
-import { natsWrapper } from './nats-wrapper';
-import AWS from 'aws-sdk';
+import { UserCreatedListener } from './events/listeners/userCreatedListener';
+import { natsWrapper } from './natsWrapper';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {

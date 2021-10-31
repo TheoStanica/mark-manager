@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
-import { EmailChangedPublisher } from '../events/publishers/email-changed-publisher';
+import { EmailChangedPublisher } from '../events/publishers/emailChangedPublisher';
 import { UserAttrs } from '../models/userprofile';
-import { natsWrapper } from '../nats-wrapper';
+import { natsWrapper } from '../natsWrapper';
 import { UserProfileRepository } from '../repositories/userProfileRepository';
 import { UpdateStreamPreferenceDto } from '../utils/dtos/updateStreamPreferenceDto';
 import { UpdateUserDto } from '../utils/dtos/updateUserDto';
