@@ -4,7 +4,7 @@ import aws from 'aws-sdk';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 
-class AWSImageUpload {
+class ImageUploadService {
   private s3: aws.S3;
   public upload;
 
@@ -44,4 +44,4 @@ class AWSImageUpload {
   }
 }
 
-export const AWSImageUploader = new AWSImageUpload();
+export const imageUploadService = new ImageUploadService();
