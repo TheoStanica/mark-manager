@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
 import { UserCreatedListener } from './events/listeners/user-created-listener';
