@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
 import { requireAuth } from '@tcosmin/common';
-import { UserProfileController } from '../controllers/userprofile-controller';
+import Container from 'typedi';
+import { UserProfileService } from '../services/userProfileService';
 
 const router = express.Router();
 
@@ -9,9 +9,11 @@ router.get(
   '/api/user/currentUser',
   requireAuth,
   async (req: Request, res: Response) => {
-    const user = await UserProfileController.findUserWithId(
-      req.currentUser!.userId
-    );
+    const userId = req.currentUser!.userId;
+
+    const userProfileService = Container.get(UserProfileService);
+    const user = await userProfileService.fetchUser(userId);
+
     res.send({ user });
   }
 );
