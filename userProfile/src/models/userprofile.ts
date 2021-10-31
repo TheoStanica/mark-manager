@@ -1,11 +1,5 @@
 import mongoose from 'mongoose';
-
-export interface StreamPreference {
-  id: string;
-  type: string;
-  search?: string;
-  twitterUserId: string;
-}
+import { StreamPreference } from '../utils/interfaces/streamPreference';
 
 export interface UserAttrs {
   _id: string;
