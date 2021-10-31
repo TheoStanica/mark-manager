@@ -1,7 +1,8 @@
+import 'reflect-metadata';
 import { app } from './app';
-import { PasswordResetListener } from './events/listeners/reset-password-listener';
-import { SendActivationEmailListener } from './events/listeners/send-activation-email-listener';
-import { natsWrapper } from './nats-wrapper';
+import { PasswordResetListener } from './events/listeners/resetPasswordListener';
+import { SendActivationEmailListener } from './events/listeners/sendActivationEmailListener';
+import { natsWrapper } from './natsWrapper';
 
 const start = async () => {
   if (!process.env.NATS_CLIENT_ID) {
