@@ -8,7 +8,7 @@ import { UserProfileService } from '../services/userProfileService';
 const router = express.Router();
 
 router.put(
-  '/api/user/currentUser',
+  '/currentUser',
   requireAuth,
   updateUserValidation,
   validateRequest,

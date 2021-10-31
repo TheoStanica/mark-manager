@@ -5,7 +5,7 @@ import { imageUploadService } from '../services/imageUploadService';
 const router = express.Router();
 
 router.post(
-  '/api/user/uploadimage',
+  '/uploadimage',
   requireAuth,
   imageUploadService.upload.single('image'),
   async (req: Request, res: Response) => {

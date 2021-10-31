@@ -8,7 +8,7 @@ import { UpdateStreamPreferenceDto } from '../utils/dtos/updateStreamPreferenceD
 const router = express.Router();
 
 router.post(
-  '/api/user/streampreferences',
+  '/streampreferences',
   requireAuth,
   streamPreferenceValidation,
   validateRequest,
@@ -27,7 +27,7 @@ router.post(
 );
 
 router.get(
-  '/api/user/streampreferences',
+  '/streampreferences',
   requireAuth,
   async (req: Request, res: Response) => {
     const userId = req.currentUser!.userId;
