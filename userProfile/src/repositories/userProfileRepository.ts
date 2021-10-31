@@ -1,6 +1,6 @@
 import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
-import { UserProfile } from '../models/userprofile';
+import { UserAttrs, UserDoc, UserProfile } from '../models/userprofile';
 import { UpdateUserDto } from '../utils/dtos/updateUserDto';
 import { StreamPreference } from '../utils/interfaces/streamPreference';
 
@@ -9,6 +9,12 @@ export class UserProfileRepository {
   private readonly UserProfile;
   constructor() {
     this.UserProfile = UserProfile;
+  }
+
+  async createUser(userAttrs: UserAttrs) {
+    const user = UserProfile.build(userAttrs);
+    await user.save();
+    return user;
   }
 
   async fetchUser(userId: string) {
