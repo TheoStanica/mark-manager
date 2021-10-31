@@ -1,4 +1,4 @@
-export class EmailTemplates {
+export class Templates {
   static activationTemplate(activationToken: string) {
     return `
     <h1>Welcome to Project Mark!</h1>

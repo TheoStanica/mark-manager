@@ -1,7 +1,8 @@
 import { Listener, SendActivationEmail, Subjects } from '@tcosmin/common';
 import { Message } from 'node-nats-streaming';
-import { queueGroupName } from './queue-group-name';
-import { transporter } from '../../services/transporter';
+import { queueGroupName } from './queueGroupName';
+import Container from 'typedi';
+import { MailerService } from '../../services/mailerService';
 
 export class SendActivationEmailListener extends Listener<SendActivationEmail> {
   subject: Subjects.SendActivationEmail = Subjects.SendActivationEmail;
@@ -9,7 +10,10 @@ export class SendActivationEmailListener extends Listener<SendActivationEmail> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: SendActivationEmail['data'], msg: Message) {
-    transporter.sendActivationEmail(data.email, data.activationToken);
+    const { email, activationToken } = data;
+
+    const mailerService = Container.get(MailerService);
+    await mailerService.sendActivationEmail(email, activationToken);
 
     msg.ack();
   }
