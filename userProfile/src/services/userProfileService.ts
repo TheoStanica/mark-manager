@@ -1,6 +1,9 @@
 import { Service } from 'typedi';
+import { EmailChangedPublisher } from '../events/publishers/email-changed-publisher';
+import { natsWrapper } from '../nats-wrapper';
 import { UserProfileRepository } from '../repositories/userProfileRepository';
 import { UpdateStreamPreferenceDto } from '../utils/dtos/updateStreamPreferenceDto';
+import { UpdateUserDto } from '../utils/dtos/updateUserDto';
 
 @Service()
 export class UserProfileService {
@@ -25,5 +28,24 @@ export class UserProfileService {
       userId,
       stream_preferences
     );
+  }
+
+  async updateUser(userId: string, updateUserDto: UpdateUserDto) {
+    const { email } = updateUserDto;
+
+    const currentUser = await this.userProfileRepository.fetchUser(userId);
+    const updatedUser = await this.userProfileRepository.updateUser(
+      userId,
+      currentUser!.email,
+      updateUserDto
+    );
+
+    if (email && currentUser!.email !== email) {
+      await new EmailChangedPublisher(natsWrapper.client).publish({
+        userId,
+        email,
+      });
+    }
+    return updatedUser;
   }
 }
