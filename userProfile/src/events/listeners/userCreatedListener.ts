@@ -1,8 +1,8 @@
 import { Listener, Subjects, UserCreatedEvent } from '@tcosmin/common';
 import { Message } from 'node-nats-streaming';
-import { UserProfile } from '../../models/userprofile';
-import { queueGroupName } from './queue-group-name';
-import { UserProfileController } from '../../controllers/userprofile-controller';
+import { queueGroupName } from './queueGroupName';
+import Container from 'typedi';
+import { UserProfileService } from '../../services/userProfileService';
 
 export class UserCreatedListener extends Listener<UserCreatedEvent> {
   subject: Subjects.UserCreated = Subjects.UserCreated;
@@ -12,7 +12,8 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
     const { id, email } = data;
 
-    UserProfileController.createUser({
+    const userProfileService = Container.get(UserProfileService);
+    await userProfileService.createUser({
       _id: id,
       email: email,
     });
