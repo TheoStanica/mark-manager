@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
 import { EmailChangedListener } from './events/listeners/email-changed-listener';
