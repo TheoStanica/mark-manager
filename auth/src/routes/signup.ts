@@ -1,21 +1,15 @@
 import { validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
 import { CreateUserDto } from '../utils/dtos/createUserDto';
 import Container from 'typedi';
 import { AuthService } from '../services/authService';
+import { createUserValidation } from '../utils/validation/createUserValidation';
 
 const router = express.Router();
 
 router.post(
   '/signup',
-  [
-    body('email').isEmail().withMessage('Email must be valid'),
-    body('password')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Password must be between 4 and 20 characters'),
-  ],
+  createUserValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const createUserDto = req.body as CreateUserDto;
