@@ -1,21 +1,21 @@
 import { validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
-import { CreateUserDto } from '../utils/dtos/createUserDto';
+import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import Container from 'typedi';
 import { AuthService } from '../services/authService';
-import { createUserValidation } from '../utils/validation/createUserValidation';
+import { userCredentialsValidation } from '../utils/validation/userCredentialsValidation';
 
 const router = express.Router();
 
 router.post(
   '/signup',
-  createUserValidation,
+  userCredentialsValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const createUserDto = req.body as CreateUserDto;
+    const userCredentialsDto = req.body as UserCredentialsDto;
 
     const authService = Container.get(AuthService);
-    await authService.createUser(createUserDto);
+    await authService.createUser(userCredentialsDto);
 
     res.sendStatus(201);
   }

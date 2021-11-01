@@ -1,7 +1,7 @@
 import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { User, UserModel } from '../models/users';
-import { CreateUserDto } from '../utils/dtos/createUserDto';
+import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import crypto from 'crypto';
 
 @Service()
@@ -11,14 +11,14 @@ export class UserRepository {
     this.User = User;
   }
 
-  async createUser(createUserDto: CreateUserDto) {
-    const { email } = createUserDto;
+  async createUser(userCredentialsDto: UserCredentialsDto) {
+    const { email } = userCredentialsDto;
 
     if (await this.isEmailInUse(email)) {
       throw new BadRequestError('Email in use');
     }
 
-    const user = this.User.build(createUserDto);
+    const user = this.User.build(userCredentialsDto);
     user.confirmationToken = crypto.randomBytes(20).toString('hex');
     return await user.save();
   }
