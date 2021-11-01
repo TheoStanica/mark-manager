@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 
-export const createUserValidation = [
+export const userCredentialsValidation = [
   body('email').notEmpty().isEmail().withMessage('Email must be valid'),
   body('password')
     .notEmpty()
