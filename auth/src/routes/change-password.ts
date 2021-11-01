@@ -6,7 +6,7 @@ import { UserController } from '../controllers/userController';
 const router = express.Router();
 
 router.put(
-  '/api/auth/changepassword',
+  '/changepassword',
   requireAuth,
   [
     body('currentPassword')
@@ -36,4 +36,4 @@ router.put(
   }
 );
 
-export { router as ChangePasswordRouter };
+export { router as changePasswordRouter };

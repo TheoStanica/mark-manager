@@ -16,7 +16,7 @@ import { UserController } from '../controllers/userController';
 const router = express.Router();
 
 router.post(
-  '/api/auth/signin',
+  '/signin',
   [
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')

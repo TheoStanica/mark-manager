@@ -12,7 +12,7 @@ import { natsWrapper } from '../nats-wrapper';
 const router = express.Router();
 
 router.post(
-  '/api/auth/resetpassword',
+  '/resetpassword',
   [body('email').isEmail().withMessage('Please provide a valid email')],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ router.post(
 );
 
 router.post(
-  '/api/auth/resetpassword/:resetToken',
+  '/resetpassword/:resetToken',
   [
     body('password')
       .trim()
@@ -56,4 +56,4 @@ router.post(
   }
 );
 
-export { router as ResetPasswordRoute };
+export { router as resetPasswordRouter };
