@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -66,6 +67,11 @@ const userSchema = new mongoose.Schema(
         ret.id = ret._id;
         delete ret._id;
         delete ret.password;
+        delete ret.confirmed;
+        delete ret.confirmationToken;
+        delete ret.confirmationExpireDate;
+        delete ret.passwordResetToken;
+        delete ret.passwordResetExpireDate;
         delete ret.__v;
       },
     },
