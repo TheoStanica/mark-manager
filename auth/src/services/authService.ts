@@ -7,12 +7,14 @@ import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import { RedisService } from './redis-service';
+import { TokenService } from './tokenService';
 
 @Service()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly redisService: RedisService
+    private readonly redisService: RedisService,
+    private readonly tokenService: TokenService
   ) {}
 
   async createUser(userCredentialsDto: UserCredentialsDto) {
@@ -27,6 +29,28 @@ export class AuthService {
       email: user.email,
       activationToken: user.confirmationToken,
     });
+  }
+
+  async singIn(userCredentialsDto: UserCredentialsDto) {
+    const user = await this.userRepository.validateCredentials(
+      userCredentialsDto
+    );
+
+    const tokenPaylod = {
+      userId: user.id,
+      email: user.email,
+    };
+    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+      tokenPaylod
+    );
+
+    this.redisService.whitelistRefreshTokens({
+      userId: user.id,
+      accessToken,
+      refreshToken,
+    });
+
+    return { accessToken, refreshToken };
   }
 
   async logoutUser(authHeader: string | undefined) {
