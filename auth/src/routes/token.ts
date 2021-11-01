@@ -22,7 +22,7 @@ interface TokenPayload {
   iat: number;
 }
 
-router.post('/api/auth/token', async (req: Request, res: Response) => {
+router.post('/token', async (req: Request, res: Response) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken) {

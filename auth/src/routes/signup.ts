@@ -18,7 +18,7 @@ import { SendActivationEmailPublisher } from '../events/publishers/send-activati
 const router = express.Router();
 
 router.post(
-  '/api/auth/signup',
+  '/signup',
   [
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')

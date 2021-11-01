@@ -37,29 +37,25 @@ declare global {
   }
 }
 
-router.get(
-  '/api/auth/twitter/connect',
-  requireAuth,
-  (req: Request, res: Response) => {
-    consumer.getOAuthRequestToken(
-      (err, oauthToken, oauthTokenSecret, results) => {
-        if (err) {
-          console.log('error getting Oauth Request Token', err);
-        } else {
-          req.session.oauthRequestToken = oauthToken;
-          req.session.oauthRequestTokenSecret = oauthTokenSecret;
-          req.session.userId = req.currentUser?.userId;
-          res.send({
-            requestToken: oauthToken,
-            requestTokenSecret: oauthTokenSecret,
-          });
-        }
+router.get('/twitter/connect', requireAuth, (req: Request, res: Response) => {
+  consumer.getOAuthRequestToken(
+    (err, oauthToken, oauthTokenSecret, results) => {
+      if (err) {
+        console.log('error getting Oauth Request Token', err);
+      } else {
+        req.session.oauthRequestToken = oauthToken;
+        req.session.oauthRequestTokenSecret = oauthTokenSecret;
+        req.session.userId = req.currentUser?.userId;
+        res.send({
+          requestToken: oauthToken,
+          requestTokenSecret: oauthTokenSecret,
+        });
       }
-    );
-  }
-);
+    }
+  );
+});
 
-router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
+router.get('/twitter/callback', (req: Request, res: Response) => {
   consumer.getOAuthAccessToken(
     String(req.session.oauthRequestToken),
     String(req.session.oauthRequestTokenSecret),
@@ -83,4 +79,4 @@ router.get('/api/auth/twitter/callback', (req: Request, res: Response) => {
   );
 });
 
-export { router as TwitterConnectRouter };
+export { router as twitterConnectRouter };

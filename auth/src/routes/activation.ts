@@ -5,7 +5,7 @@ import { UserController } from '../controllers/userController';
 const router = express.Router();
 
 router.get(
-  '/api/auth/activation/:activationToken',
+  '/activation/:activationToken',
   async (req: Request, res: Response) => {
     // get the token from request params
     const confirmationToken = req.params.activationToken;

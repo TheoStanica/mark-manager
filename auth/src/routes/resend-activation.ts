@@ -12,7 +12,7 @@ import { natsWrapper } from '../nats-wrapper';
 const router = express.Router();
 
 router.post(
-  '/api/auth/activation/resend',
+  '/activation/resend',
   [
     body('userId')
       .isLength({ max: 24, min: 24 })
