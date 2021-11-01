@@ -1,6 +1,8 @@
 import redis, { RedisClient } from 'redis';
+import { Service } from 'typedi';
 import { PrimaryExpression } from 'typescript';
 import { promisify } from 'util';
+import { redisWrapper } from '../redis-wrapper';
 
 interface WhiteListParams {
   userId: string | undefined;
@@ -8,16 +10,25 @@ interface WhiteListParams {
   accessToken: string;
 }
 
+@Service()
 export class RedisService {
-  constructor(private client: RedisClient) {
-    this.client = client;
-  }
+  constructor() {}
 
-  private SETEXAsync = promisify(this.client.SETEX).bind(this.client);
-  private KEYSAsync = promisify(this.client.KEYS).bind(this.client);
-  private DELAsync = promisify(this.client.DEL).bind(this.client);
-  private GETAsync = promisify(this.client.GET).bind(this.client);
-  private EXISTSAsync = promisify(this.client.EXISTS).bind(this.client);
+  private SETEXAsync = promisify(redisWrapper.client.SETEX).bind(
+    redisWrapper.client
+  );
+  private KEYSAsync = promisify(redisWrapper.client.KEYS).bind(
+    redisWrapper.client
+  );
+  private DELAsync = promisify(redisWrapper.client.DEL).bind(
+    redisWrapper.client
+  );
+  private GETAsync = promisify(redisWrapper.client.GET).bind(
+    redisWrapper.client
+  );
+  private EXISTSAsync = promisify(redisWrapper.client.EXISTS).bind(
+    redisWrapper.client
+  );
 
   async SetKeyWithExpiration(
     key: string,
