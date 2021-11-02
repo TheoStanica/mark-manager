@@ -1,6 +1,7 @@
 import { Listener, EmailChangedEvent, Subjects } from '@tcosmin/common';
 import { Message } from 'node-nats-streaming';
-import { UserController } from '../../controllers/userController';
+import Container from 'typedi';
+import { AuthService } from '../../services/authService';
 import { queueGroupName } from './queue-group-name';
 
 export class EmailChangedListener extends Listener<EmailChangedEvent> {
@@ -8,9 +9,10 @@ export class EmailChangedListener extends Listener<EmailChangedEvent> {
 
   queueGroupName = queueGroupName;
   async onMessage(data: EmailChangedEvent['data'], msg: Message) {
-    await UserController.updateUserEmail(data.userId, data.email);
+    const { userId, email } = data;
 
-    // TODO after email has been changed, send an email saying that your email has been changed, maybe in userProfile service..
+    const authService = Container.get(AuthService);
+    await authService.updateEmail(userId, email);
 
     msg.ack();
   }

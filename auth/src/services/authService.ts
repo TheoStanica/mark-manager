@@ -113,6 +113,10 @@ export class AuthService {
     return tokens;
   }
 
+  async updateEmail(userId: string, email: string) {
+    await this.userRepository.updateEmail(userId, email);
+  }
+
   async logoutUser(authHeader: string | undefined) {
     const token = authHeader && authHeader.split(' ')[1];
 
