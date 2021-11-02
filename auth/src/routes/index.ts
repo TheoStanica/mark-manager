@@ -1,8 +1,8 @@
 import express from 'express';
 import { activationRouter } from './activation';
-import { changePasswordRouter } from './change-password';
-import { resendActivationRouter } from './resend-activation';
-import { resetPasswordRouter } from './reset-password';
+import { changePasswordRouter } from './changePassword';
+import { resendActivationRouter } from './resendActivation';
+import { resetPasswordRouter } from './resetPassword';
 import { signinRouter } from './signin';
 import { signoutRouter } from './signout';
 import { signupRouter } from './signup';
