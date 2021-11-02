@@ -137,6 +137,13 @@ export class UserRepository {
     return await user.save();
   }
 
+  async updateEmail(userId: string, email: string) {
+    const user = await this.User.findById(userId);
+
+    user!.email = email;
+    await user!.save();
+  }
+
   private isExpired(date: Date) {
     return new Date(date) < new Date() ? true : false;
   }
