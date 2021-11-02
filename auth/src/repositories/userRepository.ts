@@ -10,6 +10,7 @@ import crypto from 'crypto';
 import { Password } from '../services/password';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
+import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
 
 @Service()
 export class UserRepository {
@@ -98,6 +99,22 @@ export class UserRepository {
     }
 
     user.password = newPassword;
+    return await user.save();
+  }
+
+  async generatePasswordResetToken(
+    resetPasswordRequestDto: ResetPasswordRequestDto
+  ) {
+    const { email } = resetPasswordRequestDto;
+
+    const user = await this.User.findOne({ email });
+    if (!user) {
+      throw new BadRequestError('Invalid email');
+    }
+
+    const expiration = new Date(+new Date() + 10 * 60 * 1000);
+    user.passwordResetExpireDate = expiration;
+    user.passwordResetToken = crypto.randomBytes(20).toString('hex');
     return await user.save();
   }
 
