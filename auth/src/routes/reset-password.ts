@@ -4,8 +4,10 @@ import { body } from 'express-validator';
 import Container from 'typedi';
 import { UserController } from '../controllers/userController';
 import { AuthService } from '../services/authService';
+import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
 import { resetPasswordRequestValidation } from '../utils/validation/resetPasswordRequestValidation';
+import { resetPasswordValidation } from '../utils/validation/resetPasswordValidation';
 
 const router = express.Router();
 
@@ -25,26 +27,16 @@ router.post(
 
 router.post(
   '/resetpassword/:resetToken',
-  [
-    body('password')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Password must be between 4 and 20 characters'),
-  ],
+  resetPasswordValidation,
   validateRequest,
   async (req: Request, res: Response) => {
     const { resetToken } = req.params;
-    const { password } = req.body;
-    const updatedUser = await UserController.resetUserPassword(
-      resetToken,
-      password
-    );
+    const resetPasswordDto = req.body as ResetPasswordDto;
 
-    if (updatedUser) {
-      res.send('updated');
-    } else {
-      throw new BadRequestError('Invalid reset token');
-    }
+    const authService = Container.get(AuthService);
+    await authService.resetPassword(resetToken, resetPasswordDto);
+
+    res.sendStatus(204);
   }
 );
 

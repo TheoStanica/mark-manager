@@ -8,6 +8,7 @@ import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
+import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
 import { TokenRefreshDto } from '../utils/dtos/tokenRefreshDto';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
@@ -67,6 +68,10 @@ export class AuthService {
       email,
       resetToken: passwordResetToken,
     });
+  }
+
+  async resetPassword(resetToken: string, resetPasswordDto: ResetPasswordDto) {
+    await this.userRepository.resetPassword(resetToken, resetPasswordDto);
   }
 
   async singIn(userCredentialsDto: UserCredentialsDto) {

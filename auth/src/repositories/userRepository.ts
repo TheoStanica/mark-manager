@@ -11,6 +11,7 @@ import { Password } from '../services/password';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
+import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
 
 @Service()
 export class UserRepository {
@@ -115,6 +116,24 @@ export class UserRepository {
     const expiration = new Date(+new Date() + 10 * 60 * 1000);
     user.passwordResetExpireDate = expiration;
     user.passwordResetToken = crypto.randomBytes(20).toString('hex');
+    return await user.save();
+  }
+
+  async resetPassword(
+    passwordResetToken: string,
+    resetPasswordDto: ResetPasswordDto
+  ) {
+    const { password } = resetPasswordDto;
+
+    const user = await this.User.findOne({ passwordResetToken });
+    if (!user) {
+      throw new BadRequestError('Invalid reset token');
+    }
+    if (this.isExpired(user.passwordResetExpireDate)) {
+      throw new BadRequestError('Invalid reset token');
+    }
+
+    user.password = password;
     return await user.save();
   }
 
