@@ -1,12 +1,14 @@
 import { ForbiddenError, NotAuthorizedError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { AccessTokenRevokedPublisher } from '../events/publishers/access-token-revoked-publisher';
+import { ResetPasswordPublisher } from '../events/publishers/reset-password-publisher';
 import { SendActivationEmailPublisher } from '../events/publishers/send-activation-email-publisher';
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
+import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
 import { TokenRefreshDto } from '../utils/dtos/tokenRefreshDto';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import { RedisService } from './redis-service';
@@ -51,6 +53,20 @@ export class AuthService {
 
   async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
     await this.userRepository.changePassword(userId, changePasswordDto);
+  }
+
+  async resetPasswordRequest(resetPasswordRequestDto: ResetPasswordRequestDto) {
+    const {
+      email,
+      passwordResetToken,
+    } = await this.userRepository.generatePasswordResetToken(
+      resetPasswordRequestDto
+    );
+
+    await new ResetPasswordPublisher(natsWrapper.client).publish({
+      email,
+      resetToken: passwordResetToken,
+    });
   }
 
   async singIn(userCredentialsDto: UserCredentialsDto) {
