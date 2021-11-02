@@ -5,6 +5,7 @@ import { SendActivationEmailPublisher } from '../events/publishers/send-activati
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
+import { TokenRefreshDto } from '../utils/dtos/tokenRefreshDto';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import { RedisService } from './redis-service';
 import { TokenService } from './tokenService';
@@ -51,6 +52,23 @@ export class AuthService {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  async refreshTokens(tokenRefreshDto: TokenRefreshDto) {
+    const { refreshToken } = tokenRefreshDto;
+
+    const payload = await this.tokenService.validateRefreshToken(refreshToken);
+    await this.redisService.tokenTheftPrevention(refreshToken, payload.userId);
+    await this.redisService.blacklistRefreshToken(refreshToken, payload.userId);
+
+    const tokens = this.tokenService.generateTokens(payload);
+    await this.redisService.whitelistRefreshTokens({
+      userId: payload.userId,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    });
+
+    return tokens;
   }
 
   async logoutUser(authHeader: string | undefined) {
