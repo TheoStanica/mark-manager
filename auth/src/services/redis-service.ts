@@ -1,7 +1,10 @@
+import { BadRequestError } from '@tcosmin/common';
 import redis, { RedisClient } from 'redis';
 import { Service } from 'typedi';
 import { PrimaryExpression } from 'typescript';
 import { promisify } from 'util';
+import { AccessTokenRevokedPublisher } from '../events/publishers/access-token-revoked-publisher';
+import { natsWrapper } from '../nats-wrapper';
 import { redisWrapper } from '../redis-wrapper';
 
 interface WhiteListParams {
@@ -114,5 +117,19 @@ export class RedisService {
       }
     }
     return toban;
+  }
+
+  async tokenTheftPrevention(refreshToken: string, userId: string) {
+    if (!(await this.exists(`${userId}_${refreshToken}`))) {
+      const ATsToBlacklist = await this.blacklistUser(userId);
+      Promise.all(
+        ATsToBlacklist.map(async (token) => {
+          await new AccessTokenRevokedPublisher(natsWrapper.client).publish({
+            token,
+          });
+        })
+      );
+      throw new BadRequestError('You need to be logged in to access this page');
+    }
   }
 }
