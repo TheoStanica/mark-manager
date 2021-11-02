@@ -1,4 +1,8 @@
-import { AccountNotActivatedError, BadRequestError } from '@tcosmin/common';
+import {
+  AccountAlreadyActivatedError,
+  AccountNotActivatedError,
+  BadRequestError,
+} from '@tcosmin/common';
 import { Service } from 'typedi';
 import { User, UserModel } from '../models/users';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
@@ -42,6 +46,29 @@ export class UserRepository {
     }
 
     return user;
+  }
+
+  async activateAccount(activationToken: string) {
+    const user = await this.User.findOne({
+      confirmationToken: activationToken,
+    });
+
+    if (!user) {
+      throw new BadRequestError('Invalid activation token');
+    }
+    if (user.confirmed) {
+      throw new AccountAlreadyActivatedError();
+    }
+    if (this.isExpired(user.confirmationExpireDate)) {
+      throw new BadRequestError('Activation token expired');
+    }
+
+    user.confirmed = true;
+    await user.save();
+  }
+
+  private isExpired(date: Date) {
+    return new Date(date) < new Date() ? true : false;
   }
 
   private async fetchUser(email: string) {
