@@ -32,6 +32,10 @@ export class AuthService {
     });
   }
 
+  async activateAccount(activationToken: string) {
+    await this.userRepository.activateAccount(activationToken);
+  }
+
   async singIn(userCredentialsDto: UserCredentialsDto) {
     const user = await this.userRepository.validateCredentials(
       userCredentialsDto
