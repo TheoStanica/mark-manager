@@ -8,6 +8,7 @@ import { User, UserModel } from '../models/users';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import crypto from 'crypto';
 import { Password } from '../services/password';
+import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 
 @Service()
 export class UserRepository {
@@ -65,6 +66,23 @@ export class UserRepository {
 
     user.confirmed = true;
     await user.save();
+  }
+
+  async generateNewActivationData(activationRequestDto: ActivationRequestDto) {
+    const { userId } = activationRequestDto;
+
+    const user = await this.User.findById(userId);
+    if (!user) {
+      throw new BadRequestError('Invalid userId');
+    }
+    if (user.confirmed) {
+      throw new AccountAlreadyActivatedError();
+    }
+
+    const expiration = new Date(+new Date() + 10 * 60 * 1000);
+    user.confirmationExpireDate = expiration;
+    user.confirmationToken = crypto.randomBytes(20).toString('hex');
+    return await user.save();
   }
 
   private isExpired(date: Date) {
