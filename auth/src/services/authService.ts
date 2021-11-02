@@ -5,6 +5,7 @@ import { SendActivationEmailPublisher } from '../events/publishers/send-activati
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
+import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { TokenRefreshDto } from '../utils/dtos/tokenRefreshDto';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import { RedisService } from './redis-service';
@@ -34,6 +35,17 @@ export class AuthService {
 
   async activateAccount(activationToken: string) {
     await this.userRepository.activateAccount(activationToken);
+  }
+
+  async resendActivationRequest(activationRequestDto: ActivationRequestDto) {
+    const user = await this.userRepository.generateNewActivationData(
+      activationRequestDto
+    );
+
+    await new SendActivationEmailPublisher(natsWrapper.client).publish({
+      email: user.email,
+      activationToken: user.confirmationToken,
+    });
   }
 
   async singIn(userCredentialsDto: UserCredentialsDto) {
