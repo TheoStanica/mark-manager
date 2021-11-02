@@ -6,6 +6,7 @@ import { UserCreatedPublisher } from '../events/publishers/user-created-publishe
 import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
+import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
 import { TokenRefreshDto } from '../utils/dtos/tokenRefreshDto';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import { RedisService } from './redis-service';
@@ -46,6 +47,10 @@ export class AuthService {
       email: user.email,
       activationToken: user.confirmationToken,
     });
+  }
+
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    await this.userRepository.changePassword(userId, changePasswordDto);
   }
 
   async singIn(userCredentialsDto: UserCredentialsDto) {

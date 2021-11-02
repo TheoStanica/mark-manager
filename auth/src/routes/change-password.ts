@@ -1,38 +1,25 @@
-import { BadRequestError, requireAuth, validateRequest } from '@tcosmin/common';
+import { requireAuth, validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
-import { UserController } from '../controllers/userController';
+import Container from 'typedi';
+import { AuthService } from '../services/authService';
+import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
+import { changePasswordValidation } from '../utils/validation/changePasswordValidation';
 
 const router = express.Router();
 
 router.put(
   '/changepassword',
   requireAuth,
-  [
-    body('currentPassword')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Current Password is not valid'),
-    body('newPassword')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('New password must be between 4 and 20 characters'),
-  ],
+  changePasswordValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const { currentPassword, newPassword } = req.body;
+    const changePasswordDto = req.body as ChangePasswordDto;
+    const userId = req.currentUser!.userId;
 
-    const updatedUser = await UserController.updateUserPassword(
-      req.currentUser!.userId,
-      currentPassword,
-      newPassword
-    );
+    const authService = Container.get(AuthService);
+    await authService.changePassword(userId, changePasswordDto);
 
-    if (!updatedUser) {
-      throw new BadRequestError('Current Password is not correct.');
-    }
-
-    res.status(204).send();
+    res.sendStatus(204);
   }
 );
 
