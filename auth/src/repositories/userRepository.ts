@@ -9,6 +9,7 @@ import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
 import crypto from 'crypto';
 import { Password } from '../services/password';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
+import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
 
 @Service()
 export class UserRepository {
@@ -82,6 +83,21 @@ export class UserRepository {
     const expiration = new Date(+new Date() + 10 * 60 * 1000);
     user.confirmationExpireDate = expiration;
     user.confirmationToken = crypto.randomBytes(20).toString('hex');
+    return await user.save();
+  }
+
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    const { currentPassword, newPassword } = changePasswordDto;
+
+    const user = await this.User.findById(userId);
+    if (!user) {
+      throw new BadRequestError("User doesn't exist");
+    }
+    if (!(await Password.compare(user.password, currentPassword))) {
+      throw new BadRequestError('Incorrect password');
+    }
+
+    user.password = newPassword;
     return await user.save();
   }
 
