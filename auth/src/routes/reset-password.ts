@@ -1,33 +1,25 @@
-import {
-  BadRequestError,
-  validateRequest,
-  ResetPasswordEvent,
-} from '@tcosmin/common';
+import { BadRequestError, validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import Container from 'typedi';
 import { UserController } from '../controllers/userController';
-import { ResetPasswordPublisher } from '../events/publishers/reset-password-publisher';
-import { natsWrapper } from '../nats-wrapper';
+import { AuthService } from '../services/authService';
+import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
+import { resetPasswordRequestValidation } from '../utils/validation/resetPasswordRequestValidation';
 
 const router = express.Router();
 
 router.post(
   '/resetpassword',
-  [body('email').isEmail().withMessage('Please provide a valid email')],
+  resetPasswordRequestValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email } = req.body;
-    const resetToken = await UserController.createResetTokens(email);
-    if (resetToken) {
-      // publish event for Mailer with the token
-      await new ResetPasswordPublisher(natsWrapper.client).publish({
-        email: email,
-        resetToken: resetToken,
-      });
-    }
+    const resetPasswordRequestDto = req.body as ResetPasswordRequestDto;
 
-    res.send(`reset password route + ${resetToken}`);
-    // res.sendStatus(203);
+    const authService = Container.get(AuthService);
+    await authService.resetPasswordRequest(resetPasswordRequestDto);
+
+    res.sendStatus(204);
   }
 );
 
