@@ -11,6 +11,20 @@ export class TokenService {
     return { accessToken, refreshToken };
   }
 
+  validateRefreshToken(refreshToken: string) {
+    return new Promise<TokenPayload>((resolve, reject) => {
+      try {
+        const { email, userId } = jwt.verify(
+          refreshToken,
+          process.env.JWT_REFRESH_KEY!
+        ) as TokenPayload;
+        resolve({ email, userId });
+      } catch (e) {
+        reject(new BadRequestError('Invalid Token'));
+      }
+    });
+  }
+
   private generateAccessToken(data: TokenPayload): string {
     return jwt.sign(data, process.env.JWT_KEY!, {
       expiresIn: parseInt(process.env.ACCESS_TOKEN_TTL!),
