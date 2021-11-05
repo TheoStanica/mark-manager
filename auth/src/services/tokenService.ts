@@ -1,4 +1,4 @@
-import { BadRequestError } from '@tcosmin/common';
+import { BadRequestError, ForbiddenError } from '@tcosmin/common';
 import jwt from 'jsonwebtoken';
 import { Service } from 'typedi';
 import { TokenPayload } from '../utils/interfaces/tokenPayload';

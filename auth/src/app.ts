@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import { errorHandler, NotFoundError } from '@tcosmin/common';
+import { twitterConnectRouter } from './routes/twitter';
 import session from 'express-session';
 import { apiRouter } from './routes';
 

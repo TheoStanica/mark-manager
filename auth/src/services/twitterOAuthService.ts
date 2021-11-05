@@ -1,8 +1,8 @@
 import { Service } from 'typedi';
 import { OAuth } from 'oauth';
 import { Request, Response } from 'express';
-import { natsWrapper } from '../natsWrapper';
-import { TwitterConnectedPublisher } from '../events/publishers/twitterConnectedPublisher';
+import { natsWrapper } from '../nats-wrapper';
+import { TwitterConnectedPublisher } from '../events/publishers/twitter-connected-publisher';
 
 const consumerKey = process.env.TWITTER_CONSUMER_KEY!;
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET!;

@@ -1,10 +1,10 @@
 import { ForbiddenError, NotAuthorizedError } from '@tcosmin/common';
 import { Service } from 'typedi';
-import { AccessTokenRevokedPublisher } from '../events/publishers/accessTokenRevokedPublisher';
-import { ResetPasswordPublisher } from '../events/publishers/resetPasswordPublisher';
-import { SendActivationEmailPublisher } from '../events/publishers/sendActivationEmailPublisher';
-import { UserCreatedPublisher } from '../events/publishers/userCreatedPublisher';
-import { natsWrapper } from '../natsWrapper';
+import { AccessTokenRevokedPublisher } from '../events/publishers/access-token-revoked-publisher';
+import { ResetPasswordPublisher } from '../events/publishers/reset-password-publisher';
+import { SendActivationEmailPublisher } from '../events/publishers/send-activation-email-publisher';
+import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 import { UserRepository } from '../repositories/userRepository';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
@@ -12,7 +12,7 @@ import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
 import { TokenRefreshDto } from '../utils/dtos/tokenRefreshDto';
 import { UserCredentialsDto } from '../utils/dtos/userCredentialsDto';
-import { RedisService } from './redisService';
+import { RedisService } from './redis-service';
 import { TokenService } from './tokenService';
 
 @Service()
