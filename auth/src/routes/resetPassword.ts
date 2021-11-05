@@ -1,8 +1,6 @@
-import { BadRequestError, validateRequest } from '@tcosmin/common';
+import { validateRequest } from '@tcosmin/common';
 import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
 import Container from 'typedi';
-import { UserController } from '../controllers/userController';
 import { AuthService } from '../services/authService';
 import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';

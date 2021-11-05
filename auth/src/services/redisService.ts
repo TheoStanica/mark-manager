@@ -3,9 +3,9 @@ import redis, { RedisClient } from 'redis';
 import { Service } from 'typedi';
 import { PrimaryExpression } from 'typescript';
 import { promisify } from 'util';
-import { AccessTokenRevokedPublisher } from '../events/publishers/access-token-revoked-publisher';
-import { natsWrapper } from '../nats-wrapper';
-import { redisWrapper } from '../redis-wrapper';
+import { AccessTokenRevokedPublisher } from '../events/publishers/accessTokenRevokedPublisher';
+import { natsWrapper } from '../natsWrapper';
+import { redisWrapper } from '../redisWrapper';
 
 interface WhiteListParams {
   userId: string | undefined;

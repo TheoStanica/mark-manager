@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
-import { EmailChangedListener } from './events/listeners/email-changed-listener';
-import { natsWrapper } from './nats-wrapper';
-import { redisWrapper } from './redis-wrapper';
+import { EmailChangedListener } from './events/listeners/emailChangedListener';
+import { natsWrapper } from './natsWrapper';
+import { redisWrapper } from './redisWrapper';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
