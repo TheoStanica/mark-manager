@@ -61,6 +61,11 @@ const VerticalMenu = () => {
             <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
           </Link>
         </VerticalMenuItem>
+        <VerticalMenuItem text="Planner" offset={[0, 25]}>
+          <Link to="/planner">
+            <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
+          </Link>
+        </VerticalMenuItem>
       </StyledTop>
       <StyledBottom>
         <ThemeController />
