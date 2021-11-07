@@ -18,7 +18,8 @@ const TimeTableCell = ({ onClick, ...props }) => {
           6
         }px`,
       }}
-      onClick={onClick}
+      onClick={() => onClick(props)}
+      onDoubleClick={() => {}}
     />
   );
 };

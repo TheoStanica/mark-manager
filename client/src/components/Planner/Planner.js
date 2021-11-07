@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
+import {
+  ViewState,
+  EditingState,
+  IntegratedEditing,
+} from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
   DayView,
@@ -14,9 +18,12 @@ import {
   TodayButton,
   CurrentTimeIndicator,
   ConfirmationDialog,
+  AppointmentTooltip,
+  DragDropProvider,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import TimeTableCell from './TimeTableCell';
 import AppointmentComponent from './AppointmentComponent';
+import useWindowDimension from '../../hooks/useWindowDimension';
 
 const Planner = () => {
   const { scheduledTweets, scheduledTweetsById } = useSelector(
@@ -26,6 +33,7 @@ const Planner = () => {
   const [data, setData] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
   const [formMetadata, setFormMetadata] = useState({});
+  useWindowDimension();
 
   const processScheduledTweets = useCallback(() => {
     return scheduledTweets.map((tweet) => {
@@ -53,6 +61,10 @@ const Planner = () => {
     }
   }, [scheduledTweets, processScheduledTweets]);
 
+  const allowDrag = (appointment) => {
+    return appointment.startDate > new Date();
+  };
+
   return (
     <Scheduler data={data} firstDayOfWeek={1}>
       <ViewState />
@@ -61,29 +73,47 @@ const Planner = () => {
       <DateNavigator />
       <TodayButton />
       <MonthView
-        timeTableCellComponent={(props) => <TimeTableCell {...props} />}
-      />
-
-      <WeekView />
-      <DayView />
-      <EditingState />
-      <Appointments
-        appointmentComponent={(props) => (
-          <AppointmentComponent
+        timeTableCellComponent={(props) => (
+          <TimeTableCell
             {...props}
             onClick={(e) => {
-              setFormMetadata(e.data);
+              console.log(e);
+              setFormMetadata({
+                startDate: e.startDate,
+                endDate: e.endDate,
+              });
               setFormVisible(true);
             }}
           />
         )}
       />
+      <WeekView />
+      <DayView />
+      <EditingState
+        onCommitChanges={(e) => console.log('updating order or whatever', e)}
+      />
+      <IntegratedEditing />
+
+      <Appointments
+        appointmentComponent={(props) => (
+          <AppointmentComponent
+            {...props}
+            onClick={(appointment) => {
+              setFormMetadata(appointment.data);
+              setFormVisible(true);
+            }}
+          />
+        )}
+      />
+      <AppointmentTooltip />
       <AppointmentForm
         visible={formVisible}
         onVisibilityChange={(visible) => setFormVisible(visible)}
         appointmentData={formMetadata}
       />
+      <DragDropProvider allowDrag={allowDrag} />
       <CurrentTimeIndicator shadePreviousAppointments shadePreviousCells />
+
       <ConfirmationDialog />
     </Scheduler>
   );

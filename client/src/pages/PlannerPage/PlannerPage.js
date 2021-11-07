@@ -18,7 +18,7 @@ const PlannerPage = () => {
   return (
     <>
       <VerticalMenu />
-      <StyledSettings style={{ color: 'red', backgroundColor: 'white' }}>
+      <StyledSettings>
         <Planner />
       </StyledSettings>
     </>
