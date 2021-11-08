@@ -1,109 +1,93 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import ConnectedAccountsDropdown from '../ConnectedAccountsDropdown/ConnectedAccountsDropdown';
 import { useSelector } from 'react-redux';
-import { Formik } from 'formik';
-import { appointmentValidation } from './validation/appointmentValidation';
 import MockedTwitterCard from '../Tweet/MockTweet';
 
-const AppointmentFormComponent = ({ appointmentData, ...props }) => {
-  const { userId } = appointmentData;
+const AppointmentFormComponent = ({
+  appointmentData,
+  onFieldChange,
+  readOnly,
+  ...props
+}) => {
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
-  const [readOnly] = useState(appointmentData.startDate < new Date());
 
   const findAppointmentTwitterAccount = () => {
     let account = undefined;
     twitterAccounts.forEach((acc) => {
-      if (twitterAccountsById[acc].twitterUserId === userId)
+      if (
+        twitterAccountsById[acc].twitterUserId === appointmentData.userId &&
+        twitterAccountsById[acc].hasAdsAccount
+      )
         account = twitterAccountsById[acc];
     });
     return account;
   };
   const appointmentAccount = findAppointmentTwitterAccount();
 
-  const isFieldValid = (touched, errors, field) => {
-    return errors[field] && touched[field];
-  };
-
-  const fieldStyle = (touched, errors, field) => {
-    return {
-      color: isFieldValid(touched, errors, field) ? 'red' : 'black',
-    };
+  const getAdsAccounts = () => {
+    const adsAccounts = [];
+    twitterAccounts.forEach((acc) => {
+      if (twitterAccountsById[acc].hasAdsAccount) {
+        adsAccounts.push(twitterAccountsById[acc]);
+      }
+    });
+    return adsAccounts;
   };
 
   return (
     <AppointmentForm.BasicLayout
-      appointmentData={appointmentData}
       {...props}
+      appointmentData={appointmentData}
       style={{
         display: 'flex',
         flexDirection: 'column',
       }}
+      readOnly={readOnly}
     >
-      <Formik
-        validationSchema={appointmentValidation}
-        initialValues={{
-          twitterUserId: appointmentData.userId,
-          message: appointmentData.text || '',
-          scheduledAt: appointmentData.startDate,
-        }}
-        onSubmit={(values) => console.log(values)}
-      >
-        {({ values, errors, setFieldValue, handleSubmit, touched }) => (
-          <>
-            <AppointmentForm.Label
-              text="Media Account"
-              type="title"
-              style={fieldStyle(touched, errors, 'twitterUserId')}
-            />
-            <div style={{ marginTop: 16, marginBottom: 16 }}>
-              <ConnectedAccountsDropdown
-                onSelected={(id) => setFieldValue('twitterUserId', id)}
-                initialValue={[appointmentAccount]}
-                isDisabled={readOnly}
-              />
-            </div>
+      <>
+        <AppointmentForm.Label text="Media Account" type="title" />
+        <div style={{ marginTop: 16, marginBottom: 16 }}>
+          <ConnectedAccountsDropdown
+            onSelected={(userId) => {
+              onFieldChange({ userId });
+            }}
+            options={getAdsAccounts()}
+            initialValue={[appointmentAccount]}
+            isDisabled={readOnly}
+          />
+        </div>
 
-            <AppointmentForm.Label
-              text="Scheduled Date"
-              type="title"
-              style={fieldStyle(touched, errors, 'scheduledAt')}
-            />
-            <AppointmentForm.DateEditor
-              id="standard_basic"
-              value={values.scheduledAt}
-              onValueChange={(date) => setFieldValue('scheduledAt', date)}
-              style={{ background: 'white' }}
-              readOnly={readOnly}
-            />
+        <AppointmentForm.Label text="Scheduled Date" type="title" />
+        <AppointmentForm.DateEditor
+          value={appointmentData.startDate}
+          onValueChange={(startDate) => {
+            onFieldChange({ startDate });
+          }}
+          readOnly={readOnly}
+        />
 
-            <AppointmentForm.Label
-              text="Tweet"
-              type="title"
-              style={fieldStyle(touched, errors, 'message')}
-            />
-            <AppointmentForm.TextEditor
-              type="multilineTextEditor"
-              value={values.message}
-              onValueChange={(msg) => setFieldValue('message', msg)}
-              style={{ outlineColor: 'red' }}
-              readOnly={readOnly}
-            />
-            <button onClick={() => handleSubmit()}>submit</button>
+        <AppointmentForm.Label text="Tweet" type="title" />
+        <AppointmentForm.TextEditor
+          type="multilineTextEditor"
+          value={appointmentData.text}
+          onValueChange={(text) => {
+            onFieldChange({ text });
+          }}
+          readOnly={readOnly}
+        />
 
-            {values.twitterUserId && (
-              <div style={{ marginTop: 20 }}>
-                <MockedTwitterCard
-                  text={values.message}
-                  twitterUserId={values.twitterUserId}
-                />
-              </div>
-            )}
-          </>
+        {appointmentData.userId && (
+          <div style={{ marginTop: 20 }}>
+            <MockedTwitterCard
+              text={appointmentData.text || ''}
+              twitterUserId={appointmentData.userId}
+            />
+          </div>
         )}
-      </Formik>
+      </>
     </AppointmentForm.BasicLayout>
   );
 };
