@@ -9,6 +9,10 @@ const SCHEDULER_TOOLBAR_HEIGHT = 64;
 const TimeTableCell = ({ onClick, ...props }) => {
   const [, windowHeight] = useWindowDimension();
 
+  const isValidCell = () => {
+    return props.startDate > new Date();
+  };
+
   return (
     <MonthView.TimeTableCell
       {...props}
@@ -18,7 +22,11 @@ const TimeTableCell = ({ onClick, ...props }) => {
           6
         }px`,
       }}
-      onClick={() => onClick(props)}
+      onClick={() => {
+        if (isValidCell()) {
+          onClick(props);
+        }
+      }}
       onDoubleClick={() => {}}
     />
   );
