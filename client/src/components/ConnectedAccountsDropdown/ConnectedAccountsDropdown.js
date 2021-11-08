@@ -8,8 +8,15 @@ const StyledOptionText = styled.p`
   color: ${(props) => (props.theme.pref === 'dark' ? '#fff' : 'black')};
 `;
 
-const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti, theme }) => {
-  const [selectedOption, setSelectedOption] = useState([]);
+const ConnectedAccountsDropdown = ({
+  onSelected,
+  reset,
+  isMulti,
+  theme,
+  initialValue,
+  isDisabled,
+}) => {
+  const [selectedOption, setSelectedOption] = useState(initialValue || []);
   const { twitterAccounts, twitterAccountsById } = useSelector(
     (state) => state.twitterReducer
   );
@@ -77,6 +84,7 @@ const ConnectedAccountsDropdown = ({ onSelected, reset, isMulti, theme }) => {
       onChange={handleChange}
       isSearchable={true}
       noOptionsMessage={() => 'No other accounts connected'}
+      isDisabled={isDisabled}
     />
   );
 };
