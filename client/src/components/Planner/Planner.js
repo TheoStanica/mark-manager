@@ -24,6 +24,7 @@ import TimeTableCell from './TimeTableCell';
 import AppointmentComponent from './AppointmentComponent';
 import useWindowDimension from '../../hooks/useWindowDimension';
 import AppointmentFormComponent from './AppointmentFormComponent';
+import CommandLayoutComponent from './CommandLayoutComponent';
 
 const Planner = () => {
   const { scheduledTweets, scheduledTweetsById } = useSelector(
@@ -32,7 +33,7 @@ const Planner = () => {
   const { twitterAccountsById } = useSelector((state) => state.twitterReducer);
   const [data, setData] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
-  const [formMetadata, setFormMetadata] = useState({});
+  const [appointmentData, setAppointmentData] = useState({});
   useWindowDimension();
 
   const processScheduledTweets = useCallback(() => {
@@ -55,7 +56,6 @@ const Planner = () => {
 
   useEffect(() => {
     const processedTweets = processScheduledTweets();
-    console.log(processedTweets);
     setData(processedTweets);
   }, [scheduledTweets, processScheduledTweets]);
 
@@ -76,7 +76,7 @@ const Planner = () => {
             {...props}
             onClick={(e) => {
               console.log(e);
-              setFormMetadata({
+              setAppointmentData({
                 startDate: e.startDate,
                 endDate: e.endDate,
               });
@@ -97,7 +97,7 @@ const Planner = () => {
           <AppointmentComponent
             {...props}
             onClick={(appointment) => {
-              setFormMetadata(appointment.data);
+              setAppointmentData(appointment.data);
               setFormVisible(true);
             }}
           />
@@ -106,17 +106,27 @@ const Planner = () => {
       <AppointmentForm
         visible={formVisible}
         onVisibilityChange={(visible) => setFormVisible(visible)}
-        appointmentData={formMetadata}
+        appointmentData={appointmentData}
         basicLayoutComponent={AppointmentFormComponent}
         dateEditorComponent={() => null}
         textEditorComponent={() => null}
         booleanEditorComponent={() => null}
         radioGroupComponent={() => null}
         labelComponent={() => null}
-        // commandButtonComponent={() => null}
+        commandLayoutComponent={(props) => (
+          <CommandLayoutComponent
+            appointmentData={appointmentData}
+            {...props}
+          />
+        )}
+        readOnly={!isValid(appointmentData)}
       />
       <DragDropProvider allowDrag={isValid} />
-      <CurrentTimeIndicator shadePreviousAppointments shadePreviousCells />
+      <CurrentTimeIndicator
+        shadePreviousAppointments
+        shadePreviousCells
+        updateInterval={60000}
+      />
 
       <ConfirmationDialog />
     </Scheduler>
