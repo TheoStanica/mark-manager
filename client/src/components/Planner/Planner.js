@@ -18,12 +18,12 @@ import {
   TodayButton,
   CurrentTimeIndicator,
   ConfirmationDialog,
-  AppointmentTooltip,
   DragDropProvider,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import TimeTableCell from './TimeTableCell';
 import AppointmentComponent from './AppointmentComponent';
 import useWindowDimension from '../../hooks/useWindowDimension';
+import AppointmentFormComponent from './AppointmentFormComponent';
 
 const Planner = () => {
   const { scheduledTweets, scheduledTweetsById } = useSelector(
@@ -54,14 +54,12 @@ const Planner = () => {
   }, [scheduledTweets, scheduledTweetsById, twitterAccountsById]);
 
   useEffect(() => {
-    if (scheduledTweets) {
-      const processedTweets = processScheduledTweets();
-      console.log(processedTweets);
-      setData(processedTweets);
-    }
+    const processedTweets = processScheduledTweets();
+    console.log(processedTweets);
+    setData(processedTweets);
   }, [scheduledTweets, processScheduledTweets]);
 
-  const allowDrag = (appointment) => {
+  const isValid = (appointment) => {
     return appointment.startDate > new Date();
   };
 
@@ -105,13 +103,19 @@ const Planner = () => {
           />
         )}
       />
-      <AppointmentTooltip />
       <AppointmentForm
         visible={formVisible}
         onVisibilityChange={(visible) => setFormVisible(visible)}
         appointmentData={formMetadata}
+        basicLayoutComponent={AppointmentFormComponent}
+        dateEditorComponent={() => null}
+        textEditorComponent={() => null}
+        booleanEditorComponent={() => null}
+        radioGroupComponent={() => null}
+        labelComponent={() => null}
+        // commandButtonComponent={() => null}
       />
-      <DragDropProvider allowDrag={allowDrag} />
+      <DragDropProvider allowDrag={isValid} />
       <CurrentTimeIndicator shadePreviousAppointments shadePreviousCells />
 
       <ConfirmationDialog />
