@@ -15,6 +15,7 @@ const ConnectedAccountsDropdown = ({
   theme,
   initialValue,
   isDisabled,
+  options,
 }) => {
   const [selectedOption, setSelectedOption] = useState(initialValue || []);
   const { twitterAccounts, twitterAccountsById } = useSelector(
@@ -80,7 +81,7 @@ const ConnectedAccountsDropdown = ({
       value={selectedOption}
       formatOptionLabel={formatOptionLabel}
       isMulti={isMulti}
-      options={twitterOptions}
+      options={options || twitterOptions}
       onChange={handleChange}
       isSearchable={true}
       noOptionsMessage={() => 'No other accounts connected'}
