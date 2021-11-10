@@ -4,7 +4,9 @@ export const TwitterEndpoints = {
       search
     )}`,
   loadMoreTweetSearchStreamEndpoint: ({ search, maxId, twitterUserId }) =>
-    `/api/social/twitter/search/tweets?search=${search}&maxId=${maxId}&twitterUserId=${twitterUserId}`,
+    `/api/social/twitter/search/tweets?search=${encodeURIComponent(
+      search
+    )}&maxId=${maxId}&twitterUserId=${twitterUserId}`,
   loadHomeTimelineStreamEndpoint: ({ twitterUserId }) =>
     `/api/social/twitter/statuses/home_timeline?twitterUserId=${twitterUserId}`,
   loadMoreHomeTimelineStreamEndpoint: ({ maxId, twitterUserId }) =>
