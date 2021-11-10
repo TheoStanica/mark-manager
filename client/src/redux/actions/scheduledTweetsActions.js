@@ -3,7 +3,9 @@ import {
   SET_ERRORS,
   TWITTER_ADD_SCHEDULED_TWEETS,
   TWITTER_CLEAR_SCHEDULED_TWEETS,
+  TWITTER_REMOVE_SCHEDULED_TWEET,
   TWITTER_SET_SCHEDULED_TWEETS_LOADING,
+  TWITTER_UPDATE_SCHEDULED_TWEET,
 } from '../types';
 
 import { twitterAdsEndpoints } from '../../services/adsEndpoints';
@@ -37,7 +39,7 @@ export const fetchUserScheduledTweets = ({ twitterUserId }) => async (
     let cursor = null;
     do {
       const response = await axiosInstance.get(
-        twitterAdsEndpoints.fetchScheduledTweets,
+        twitterAdsEndpoints.scheduledTweets,
         {
           params: {
             twitterUserId,
@@ -68,6 +70,91 @@ export const fetchUserScheduledTweets = ({ twitterUserId }) => async (
   }
 };
 
+export const createScheduledTweet = ({
+  twitterUserId,
+  text,
+  scheduleAt,
+}) => async (dispatch) => {
+  try {
+    const response = await axiosInstance.post(
+      twitterAdsEndpoints.scheduledTweets,
+      {
+        twitterUserId,
+        scheduleAt: processDate(scheduleAt),
+        text,
+      }
+    );
+    const {
+      scheduledTweets,
+      scheduledTweetsById,
+    } = processScheduledTweetsResponse([response.data.data], twitterUserId);
+
+    await dispatch(
+      addScheduledTweets({
+        scheduledTweets,
+        scheduledTweetsById,
+        twitterUserId,
+      })
+    );
+  } catch (error) {
+    dispatch(handleError({ error }));
+  }
+};
+
+export const updateScheduledTweet = ({
+  twitterUserId,
+  scheduledTweetId,
+  scheduleAt,
+  text,
+}) => async (dispatch) => {
+  try {
+    const response = await axiosInstance.put(
+      twitterAdsEndpoints.scheduledTweets,
+      {
+        twitterUserId,
+        scheduledTweetId,
+        scheduleAt: processDate(scheduleAt),
+        text,
+      }
+    );
+
+    const tweet = response.data.data;
+
+    dispatch(
+      updateTweet({
+        twitterUserId,
+        scheduledTweetId: tweet.id_str,
+        scheduleAt: tweet.scheduled_at,
+        text: tweet.text,
+      })
+    );
+  } catch (error) {
+    dispatch(handleError({ error }));
+  }
+};
+
+export const removeScheduledTweet = ({
+  twitterUserId,
+  scheduledTweetId,
+}) => async (dispatch) => {
+  try {
+    await axiosInstance.delete(twitterAdsEndpoints.scheduledTweets, {
+      params: {
+        twitterUserId,
+        scheduledTweetId,
+      },
+    });
+
+    dispatch(
+      removeTweet({
+        scheduledTweetId,
+      })
+    );
+  } catch (error) {
+    dispatch(handleError({ error }));
+  }
+};
+
 const handleError = ({ error }) => async (dispatch) => {
   console.log(error);
   if (error?.response?.data?.errors) {
@@ -86,7 +173,8 @@ const handleError = ({ error }) => async (dispatch) => {
     });
   }
 };
-export const setScheduledTweetsLoadingStatus = ({ isLoading }) => {
+
+const setScheduledTweetsLoadingStatus = ({ isLoading }) => {
   return {
     type: TWITTER_SET_SCHEDULED_TWEETS_LOADING,
     payload: {
@@ -95,13 +183,13 @@ export const setScheduledTweetsLoadingStatus = ({ isLoading }) => {
   };
 };
 
-export const clearScheduledTweets = () => {
+const clearScheduledTweets = () => {
   return {
     type: TWITTER_CLEAR_SCHEDULED_TWEETS,
   };
 };
 
-export const addScheduledTweets = ({
+const addScheduledTweets = ({
   scheduledTweets,
   scheduledTweetsById,
   nextCursor,
@@ -114,6 +202,27 @@ export const addScheduledTweets = ({
       scheduledTweetsById,
       nextCursor,
       twitterUserId,
+    },
+  };
+};
+
+const updateTweet = ({ twitterUserId, scheduledTweetId, scheduleAt, text }) => {
+  return {
+    type: TWITTER_UPDATE_SCHEDULED_TWEET,
+    payload: {
+      twitterUserId,
+      scheduledTweetId,
+      scheduleAt,
+      text,
+    },
+  };
+};
+
+const removeTweet = ({ scheduledTweetId }) => {
+  return {
+    type: TWITTER_REMOVE_SCHEDULED_TWEET,
+    payload: {
+      scheduledTweetId,
     },
   };
 };
@@ -141,4 +250,8 @@ const processScheduledTweetsResponse = (tweets, twitterUserId) => {
     {}
   );
   return { scheduledTweets, scheduledTweetsById };
+};
+
+const processDate = (date) => {
+  return date.toISOString().split('.')[0] + 'Z';
 };
