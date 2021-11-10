@@ -14,6 +14,17 @@ const AppointmentFormComponent = ({
     (state) => state.twitterReducer
   );
 
+  React.useEffect(() => {
+    onFieldChange({ startDate: appointmentData.startDate });
+    onFieldChange({ id: appointmentData.id });
+    onFieldChange({ userId: appointmentData.userId });
+  }, [
+    onFieldChange,
+    appointmentData.startDate,
+    appointmentData.userId,
+    appointmentData.id,
+  ]);
+
   const findAppointmentTwitterAccount = () => {
     let account = undefined;
     twitterAccounts.forEach((acc) => {
@@ -80,12 +91,19 @@ const AppointmentFormComponent = ({
         />
 
         {appointmentData.userId && (
-          <div style={{ marginTop: 20 }}>
-            <MockedTwitterCard
-              text={appointmentData.text || ''}
-              twitterUserId={appointmentData.userId}
+          <>
+            <AppointmentForm.Label
+              text="Preview"
+              type="title"
+              style={{ marginTop: 16 }}
             />
-          </div>
+            <div style={{ marginTop: 8 }}>
+              <MockedTwitterCard
+                text={appointmentData.text || ''}
+                twitterUserId={appointmentData.userId}
+              />
+            </div>
+          </>
         )}
       </>
     </AppointmentForm.BasicLayout>

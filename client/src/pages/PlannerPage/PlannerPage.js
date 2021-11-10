@@ -12,7 +12,7 @@ const PlannerPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(fetchScheduledTweets());
+    dispatch(fetchScheduledTweets());
   }, [dispatch]);
 
   return (

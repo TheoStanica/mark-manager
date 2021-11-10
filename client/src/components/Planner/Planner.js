@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   ViewState,
   EditingState,
@@ -25,16 +25,23 @@ import AppointmentComponent from './AppointmentComponent';
 import useWindowDimension from '../../hooks/useWindowDimension';
 import AppointmentFormComponent from './AppointmentFormComponent';
 import CommandLayoutComponent from './CommandLayoutComponent';
+import {
+  createScheduledTweet,
+  removeScheduledTweet,
+  updateScheduledTweet,
+} from '../../redux/actions/scheduledTweetsActions';
 
 const Planner = () => {
+  useWindowDimension();
   const { scheduledTweets, scheduledTweetsById } = useSelector(
     (state) => state.scheduledTweetsReducer
   );
   const { twitterAccountsById } = useSelector((state) => state.twitterReducer);
-  const [data, setData] = useState([]);
-  const [formVisible, setFormVisible] = useState(false);
   const [appointmentData, setAppointmentData] = useState({});
-  useWindowDimension();
+  const [currentView, setCurrentView] = useState('Month');
+  const [formVisible, setFormVisible] = useState(false);
+  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
 
   const processScheduledTweets = useCallback(() => {
     return scheduledTweets.map((tweet) => {
@@ -44,10 +51,9 @@ const Planner = () => {
             .screenName,
         startDate: new Date(scheduledTweetsById[tweet].scheduled_at),
         endDate: new Date(
-          new Date(scheduledTweetsById[tweet].scheduled_at).getTime() + 1
+          new Date(scheduledTweetsById[tweet].scheduled_at).getTime() + 1000
         ),
         id: scheduledTweetsById[tweet].id_str,
-        status: scheduledTweetsById[tweet].scheduled_status,
         userId: scheduledTweetsById[tweet].twitterUserId,
         text: scheduledTweetsById[tweet].text,
       };
@@ -63,9 +69,102 @@ const Planner = () => {
     return appointment.startDate > new Date();
   };
 
+  const dispatchUpdateThunk = ({
+    twitterUserId,
+    scheduleAt,
+    scheduledTweetId,
+    text,
+  }) => {
+    dispatch(
+      updateScheduledTweet({
+        twitterUserId,
+        scheduleAt,
+        scheduledTweetId,
+        text,
+      })
+    );
+  };
+
+  const dispatchCreateThunk = ({ twitterUserId, scheduleAt, text }) => {
+    dispatch(
+      createScheduledTweet({
+        twitterUserId,
+        scheduleAt,
+        text,
+      })
+    );
+  };
+
+  const createOrUpdateTweet = (added) => {
+    const { startDate, userId, text, id } = added;
+
+    if (id) {
+      dispatchUpdateThunk({
+        twitterUserId: userId,
+        scheduleAt: startDate,
+        scheduledTweetId: id,
+        text,
+      });
+    } else {
+      dispatchCreateThunk({
+        twitterUserId: userId,
+        scheduleAt: startDate,
+        text,
+      });
+    }
+  };
+
+  const getChangedDate = (changed, scheduledTweetId) => {
+    const currentDate = new Date(
+      scheduledTweetsById[scheduledTweetId].scheduled_at
+    );
+    const changedDate = new Date(changed[scheduledTweetId].startDate);
+    changedDate.setHours(currentDate.getHours());
+    changedDate.setMinutes(currentDate.getMinutes());
+    return changedDate;
+  };
+
+  const commitChanges = ({ added, changed, deleted }) => {
+    if (added) {
+      // created or updated scheduled tweet
+      createOrUpdateTweet(added);
+    }
+    if (changed) {
+      // drag & drop change
+      const scheduledTweetId = Object.keys(changed)[0];
+      let changedDate;
+      if (currentView === 'Month') {
+        changedDate = getChangedDate(changed, scheduledTweetId);
+      } else {
+        changedDate = new Date(changed[scheduledTweetId].startDate);
+      }
+
+      const { twitterUserId } = scheduledTweetsById[scheduledTweetId];
+      dispatchUpdateThunk({
+        twitterUserId,
+        scheduleAt: changedDate,
+        scheduledTweetId,
+        text: undefined,
+      });
+    }
+    if (deleted) {
+      const scheduledTweetId = deleted;
+      const twitterUserId = scheduledTweetsById[scheduledTweetId].twitterUserId;
+      dispatch(
+        removeScheduledTweet({
+          twitterUserId,
+          scheduledTweetId,
+        })
+      );
+    }
+  };
+
   return (
     <Scheduler data={data} firstDayOfWeek={1}>
-      <ViewState />
+      <ViewState
+        currentViewName={currentView}
+        onCurrentViewNameChange={setCurrentView}
+      />
       <Toolbar />
       <ViewSwitcher />
       <DateNavigator />
@@ -75,7 +174,6 @@ const Planner = () => {
           <TimeTableCell
             {...props}
             onClick={(e) => {
-              console.log(e);
               setAppointmentData({
                 startDate: e.startDate,
                 endDate: e.endDate,
@@ -87,9 +185,7 @@ const Planner = () => {
       />
       <WeekView />
       <DayView />
-      <EditingState
-        onCommitChanges={(e) => console.log('updating order or whatever', e)}
-      />
+      <EditingState onCommitChanges={commitChanges} />
       <IntegratedEditing />
 
       <Appointments
@@ -121,14 +217,14 @@ const Planner = () => {
         )}
         readOnly={!isValid(appointmentData)}
       />
-      <DragDropProvider allowDrag={isValid} />
+      <DragDropProvider allowDrag={isValid} allowResize={() => false} />
       <CurrentTimeIndicator
         shadePreviousAppointments
         shadePreviousCells
         updateInterval={60000}
       />
 
-      <ConfirmationDialog />
+      <ConfirmationDialog ignoreCancel />
     </Scheduler>
   );
 };
