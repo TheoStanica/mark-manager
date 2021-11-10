@@ -5,6 +5,7 @@ import StreamsIcon from './StreamsIcon.svg';
 import ConnectAccounts from './ConnectAccounts.svg';
 import Engage from './Engage.svg';
 import Opinions from './Opinions.svg';
+import Planner from './Planner.svg';
 
 export const Pictures = {
   AuthSplash,
@@ -14,4 +15,5 @@ export const Pictures = {
   ConnectAccounts,
   Engage,
   Opinions,
+  Planner,
 };

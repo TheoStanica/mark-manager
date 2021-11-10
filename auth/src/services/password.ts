@@ -1,4 +1,3 @@
-import { randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
 
 export class Password {

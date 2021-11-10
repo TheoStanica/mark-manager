@@ -1,8 +1,8 @@
+import 'reflect-metadata';
 import mongoose from 'mongoose';
 import { app } from './app';
-import { TwitterConnectedListener } from './events/listeners/twitter-connected-listener';
-import { natsWrapper } from './nats-wrapper';
-import { redisWrapper } from './redis-wrapper';
+import { TwitterConnectedListener } from './events/listeners/twitterConnectedListener';
+import { natsWrapper } from './natsWrapper';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
@@ -29,6 +29,9 @@ const start = async () => {
   }
   if (!process.env.TWITTER_CONSUMER_SECRET) {
     throw new Error('TWITTER_CONSUMER_SECRET must be defined');
+  }
+  if (!process.env.RAPIDAPI_KEY) {
+    throw new Error('RAPIDAPI_KEY must be defined');
   }
 
   try {

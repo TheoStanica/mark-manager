@@ -20,6 +20,7 @@ export const StyledVerticalMenu = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 15px;
+  z-index: 2000;
 `;
 
 export const StyledMenuIcon = styled.div`

@@ -1,8 +1,12 @@
 export const TwitterEndpoints = {
   loadTweetSearchStreamEndpoint: ({ search, twitterUserId }) =>
-    `/api/social/twitter/search/tweets?search=${search}&twitterUserId=${twitterUserId}`,
+    `/api/social/twitter/search/tweets?twitterUserId=${twitterUserId}&search=${encodeURIComponent(
+      search
+    )}`,
   loadMoreTweetSearchStreamEndpoint: ({ search, maxId, twitterUserId }) =>
-    `/api/social/twitter/search/tweets?search=${search}&maxId=${maxId}&twitterUserId=${twitterUserId}`,
+    `/api/social/twitter/search/tweets?search=${encodeURIComponent(
+      search
+    )}&maxId=${maxId}&twitterUserId=${twitterUserId}`,
   loadHomeTimelineStreamEndpoint: ({ twitterUserId }) =>
     `/api/social/twitter/statuses/home_timeline?twitterUserId=${twitterUserId}`,
   loadMoreHomeTimelineStreamEndpoint: ({ maxId, twitterUserId }) =>
@@ -27,4 +31,8 @@ export const TwitterEndpoints = {
   unlikeTweetEndpoint: '/api/social/twitter/favorites/destroy',
   retweetTweetEndpoint: '/api/social/twitter/statuses/retweet',
   unRetweetTweetEndpoint: '/api/social/twitter/statuses/unretweet',
+  twitterTrendsEndpoint: ({ twitterUserId, woeid }) =>
+    `/api/social/twitter/trends/place?woeid=${woeid}&twitterUserId=${twitterUserId}`,
+  twitterTrendingLocationsEndpoint: ({ twitterUserId, lat, long }) =>
+    `/api/social/twitter/trends/closest?lat=${lat}&long=${long}&twitterUserId=${twitterUserId}`,
 };

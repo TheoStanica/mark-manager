@@ -12,6 +12,7 @@ export const StyledMkToolTipSpan = styled.span`
   position: absolute;
   z-index: 1000;
   transform: translateY(-50%);
+  text-transform: capitalize;
 `;
 
 export const StyledMkToolTip = styled.div`

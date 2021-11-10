@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { likeTweet, retweetTweet } from '../../redux/actions/twitterActions';
 import ReplyTweet from '../ReplyTweet/ReplyTweet';
 import Reply from '../../assets/Pictures/Reply';
+import TweetSentiment from './TweetSentiment';
 
 const selectTwitterUserId = (streamId) =>
   createSelector(
@@ -149,6 +150,7 @@ const TweetFooter = ({ tweetId, streamId, theme, isReply, isRetweet }) => {
           }}
           tweet={tweet}
         />
+        <TweetSentiment tweetId={tweetId} isReply={isReply} />
       </StyledTweetFooterContainer>
     </CardFooter>
   );

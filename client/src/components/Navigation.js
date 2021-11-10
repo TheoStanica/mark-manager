@@ -12,6 +12,7 @@ import LoginPage from '../pages/LoginPage/LoginPage';
 import RegisterPage from '../pages/RegisterPage/RegisterPage';
 import { ThemeProvider } from 'styled-components';
 import { useSelector } from 'react-redux';
+import PlannerPage from '../pages/PlannerPage/PlannerPage';
 
 const Navigation = () => {
   const { themePreference } = useSelector((state) => state.userReducer.present);
@@ -31,6 +32,7 @@ const Navigation = () => {
         </Route>
         <PrivateRoute path="/dashboard" component={Dashboard} exact />
         <PrivateRoute path="/settings" component={SettingsPage} exact />
+        <PrivateRoute path="/planner" component={PlannerPage} exact />
         <PrivateRoute
           path="/twitter/connect"
           component={TwitterConnect}
