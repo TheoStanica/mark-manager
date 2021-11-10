@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@tcosmin/common';
 import { TwitterService } from '../../../../services/twitterService';
 import Container from 'typedi';
-import { UserIdDto } from '../../../../utils/dtos/twitter/twitterUserIdDto';
 import { verifyCredentialsValidation } from '../../../../utils/validation/twitter/verifyCredentialsValidation';
 import { ScheduleTweetDto } from '../../../../utils/dtos/twitter/scheduleTweetDto';
 import { scheduleTweetValidation } from '../../../../utils/validation/twitter/scheduleTweetValidation';
@@ -10,6 +9,7 @@ import { UpdateScheduledTweetDto } from '../../../../utils/dtos/twitter/updateSc
 import { updateScheduldTweetValidation } from '../../../../utils/validation/twitter/updateScheduledTweetValidation';
 import { DeleteScheduledTweetDto } from '../../../../utils/dtos/twitter/deleteScheduledTweetDto';
 import { deleteScheduledTweetValidation } from '../../../../utils/validation/twitter/deleteScheduledTweetValdiation';
+import { FetchScheduledTweetsDto } from '../../../../utils/dtos/twitter/fetchScheduledTweetsDto';
 
 const router = express.Router();
 
@@ -19,13 +19,13 @@ router.get(
   verifyCredentialsValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const twitterIdDto = (req.query as unknown) as UserIdDto;
+    const fetchScheduledTweetsDto = (req.query as unknown) as FetchScheduledTweetsDto;
     const userId = req.currentUser!.userId;
     const twitterService = Container.get(TwitterService);
 
     const tweets = await twitterService.fetchScheduledTweets(
       userId,
-      twitterIdDto
+      fetchScheduledTweetsDto
     );
 
     res.send(tweets);
@@ -38,7 +38,7 @@ router.post(
   scheduleTweetValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const scheduleTweetDto = (req.query as unknown) as ScheduleTweetDto;
+    const scheduleTweetDto = req.body as ScheduleTweetDto;
     const userId = req.currentUser!.userId;
     const twitterService = Container.get(TwitterService);
 
@@ -54,7 +54,7 @@ router.put(
   updateScheduldTweetValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const updateScheduledTweetDto = (req.query as unknown) as UpdateScheduledTweetDto;
+    const updateScheduledTweetDto = req.body as UpdateScheduledTweetDto;
     const userId = req.currentUser!.userId;
     const twitterService = Container.get(TwitterService);
 

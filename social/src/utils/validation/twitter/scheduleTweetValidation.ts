@@ -1,11 +1,11 @@
-import { query } from 'express-validator';
+import { body } from 'express-validator';
 
 export const scheduleTweetValidation = [
-  query('twitterUserId')
+  body('twitterUserId')
     .isNumeric()
     .notEmpty()
     .withMessage('Please provide a valid Twitter user ID'),
-  query('scheduleAt')
+  body('scheduleAt')
     .notEmpty()
     .withMessage('Please provide a date to schedule this tweet')
     .bail()
@@ -18,7 +18,7 @@ export const scheduleTweetValidation = [
       }
       return true;
     }),
-  query('text')
+  body('text')
     .notEmpty()
     .withMessage('Please provide a tweet message')
     .optional(),
