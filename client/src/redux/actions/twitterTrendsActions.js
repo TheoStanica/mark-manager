@@ -8,7 +8,6 @@ import { TwitterEndpoints } from '../../services/twitterApiEndpoints';
 import axios from 'axios';
 
 const handleError = ({ error }) => async (dispatch) => {
-  console.log(error);
   if (error?.response?.data?.errors) {
     dispatch({
       type: SET_ERRORS,

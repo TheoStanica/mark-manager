@@ -45,8 +45,11 @@ export class TwitterAdsService {
     }) as unknown) as AdsAccountPayload;
   }
 
-  async fetchScheduledTweets() {
-    return this.makeRequest('get', `/accounts/${this.adsId}/scheduled_tweets`);
+  async fetchScheduledTweets(cursor: string) {
+    return this.makeRequest('get', `/accounts/${this.adsId}/scheduled_tweets`, {
+      cursor,
+      count: 200,
+    });
   }
 
   async createScheduledTweet(scheduleTweetDto: ScheduleTweetDto) {
