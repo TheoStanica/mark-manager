@@ -45,3 +45,7 @@ jobs:
       - uses: okteto/apply@master
         with:
           manifest: infra/k8s/client-depl.yaml
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s/social-depl.yaml
