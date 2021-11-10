@@ -68,6 +68,7 @@ const AppointmentFormComponent = ({
             options={getAdsAccounts()}
             initialValue={[appointmentAccount]}
             isDisabled={readOnly}
+            theme={{ pref: 'white' }}
           />
         </div>
 

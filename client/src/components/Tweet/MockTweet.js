@@ -22,12 +22,22 @@ const MockedTwitterCard = ({ text, twitterUserId, theme }) => {
   const { twitterAccountsById } = useSelector((state) => state.twitterReducer);
 
   return (
-    <Card style={{ marginBottom: '.3rem', width: '100%', borderRadius: 10 }}>
+    <Card
+      style={{
+        marginBottom: '.3rem',
+        width: '100%',
+        borderRadius: 10,
+        background: 'white',
+        color: 'black',
+      }}
+    >
       <CardHeader
         style={{
           padding: ' .5rem ',
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
+          background: 'white',
+          color: 'black',
         }}
       >
         <StyledHeaderWrapper>
@@ -57,7 +67,7 @@ const MockedTwitterCard = ({ text, twitterUserId, theme }) => {
             offset={[0, 5]}
             onClick={() => {}}
           >
-            <Retweet color={theme.pref === 'dark' ? 'white' : 'black'} />
+            <Retweet color={'black'} />
           </Icon>
           <p
             style={{
@@ -65,7 +75,7 @@ const MockedTwitterCard = ({ text, twitterUserId, theme }) => {
               marginRight: 20,
               fontWeight: 'bold',
               fontSize: '.9rem',
-              color: theme.pref === 'dark' ? 'white' : 'black',
+              color: 'black',
             }}
           >
             {0}
@@ -77,14 +87,14 @@ const MockedTwitterCard = ({ text, twitterUserId, theme }) => {
             offset={[0, 5]}
             onClick={() => {}}
           >
-            <Likes color={theme.pref === 'dark' ? 'white' : 'black'} />
+            <Likes color="black" />
           </Icon>
           <p
             style={{
               marginLeft: 5,
               marginRight: 20,
               fontWeight: 'bold',
-              color: theme.pref === 'dark' ? 'white' : 'black',
+              color: 'black',
               fontSize: '.9rem',
             }}
           >
@@ -97,7 +107,7 @@ const MockedTwitterCard = ({ text, twitterUserId, theme }) => {
             offset={[0, 5]}
             onClick={() => {}}
           >
-            <Reply color={theme.pref === 'dark' ? 'white' : 'black'} />
+            <Reply color="black" />
           </Icon>
         </StyledTweetFooterContainer>
       </CardFooter>
