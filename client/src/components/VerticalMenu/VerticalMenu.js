@@ -63,7 +63,7 @@ const VerticalMenu = () => {
         </VerticalMenuItem>
         <VerticalMenuItem text="Planner" offset={[0, 25]}>
           <Link to="/planner">
-            <img src={Assets.Pictures.StreamsIcon} alt="Streams" />
+            <img src={Assets.Pictures.Planner} alt="Streams" />
           </Link>
         </VerticalMenuItem>
       </StyledTop>
