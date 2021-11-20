@@ -31,6 +31,13 @@ spec:
                 secretKeyRef:
                   name: mark-password-secret
                   key: GMAIL_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 20
 
 ---
 apiVersion: v1
