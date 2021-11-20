@@ -5,6 +5,7 @@ import { errorHandler, NotFoundError } from '@tcosmin/common';
 import { apiRouter } from './routes';
 
 const app = express();
+
 app.set('trust proxy', true);
 app.use(json());
 
