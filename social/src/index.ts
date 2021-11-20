@@ -58,6 +58,7 @@ const start = async () => {
     new TwitterConnectedListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
+    process.exit();
   }
 
   app.listen(3000, () => {
