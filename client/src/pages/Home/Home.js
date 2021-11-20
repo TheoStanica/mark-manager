@@ -26,7 +26,7 @@ const Home = () => {
         <StyledColFlex>
           <StyledTitle>
             <StyledEmphasizedTitle>Engage</StyledEmphasizedTitle> with your
-            audience
+            audience!
           </StyledTitle>
           <StyledTitleDescription>
             <StyledEmphasizedTitleDescription>
