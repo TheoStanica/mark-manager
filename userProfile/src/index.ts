@@ -54,6 +54,7 @@ const start = async () => {
     new UserCreatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
+    process.exit();
   }
 
   app.listen(3000, () => {

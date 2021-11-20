@@ -10,6 +10,10 @@ app.use(json());
 
 app.use('/api/user', apiRouter);
 
+app.get('/health', (req, res) => {
+  res.sendStatus(200);
+});
+
 app.all('*', async (req, res) => {
   throw new NotFoundError();
 });
