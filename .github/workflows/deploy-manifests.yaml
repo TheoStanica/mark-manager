@@ -20,15 +20,7 @@ jobs:
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s-prod/auth-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
-          manifest: infra/k8s/auth-redis-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
-          manifest: infra/k8s-prod/mailer-depl.yaml
+          manifest: infra/k8s-prod/ingress-srv.yaml
 
       - uses: okteto/apply@master
         with:
@@ -36,16 +28,24 @@ jobs:
 
       - uses: okteto/apply@master
         with:
+          manifest: infra/k8s/auth-redis-depl.yaml
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s-prod/auth-depl.yaml
+
+      - uses: okteto/apply@master
+        with:
+          manifest: infra/k8s-prod/mailer-depl.yaml
+
+      - uses: okteto/apply@master
+        with:
           manifest: infra/k8s/userprofile-depl.yaml
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s-prod/ingress-srv.yaml
+          manifest: infra/k8s/social-depl.yaml
 
       - uses: okteto/apply@master
         with:
           manifest: infra/k8s/client-depl.yaml
-
-      - uses: okteto/apply@master
-        with:
-          manifest: infra/k8s/social-depl.yaml
