@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import { errorHandler, NotFoundError } from '@tcosmin/common';
 import session from 'express-session';
 import { apiRouter } from './routes';
+import { internalRouter } from './routes/internal';
 
 const app = express();
 app.set('trust proxy', true);
@@ -17,10 +18,7 @@ app.use(
 );
 
 app.use('/api/auth', apiRouter);
-
-app.get('/health', (req, res) => {
-  res.sendStatus(200);
-});
+app.use('/', internalRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
