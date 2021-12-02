@@ -1,30 +1,58 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mailer-depl
+  name: social-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mailer
+      app: social
   template:
     metadata:
       labels:
-        app: mailer
+        app: social
     spec:
       containers:
-        - name: mailer
-          image: theocosmin/mailer
+        - name: social
+          image: theocosmin/social
           resources:
             requests:
               memory: '250Mi'
               cpu: 200m
             limits:
-              memory: '3072Mi'
+              memory: '1000Mi'
               cpu: 1000m
           env:
-            - name: HOST_URL
-              value: theostanica.cloud.okteto.net
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: social-mongo-secret
+                  key: MONGO_URI
+            - name: TWITTER_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-twitter-consumer-key
+                  key: TWITTER_CONSUMER_KEY
+            - name: TWITTER_CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-twitter-consumer-secret
+                  key: TWITTER_CONSUMER_SECRET
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: JWT_REFRESH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refresh-secret
+                  key: JWT_REFRESH_KEY
+            - name: RAPIDAPI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rapidapi-key
+                  key: RAPIDAPI_KEY
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
@@ -33,11 +61,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: GMAIL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mark-password-secret
-                  key: GMAIL_PASSWORD
           readinessProbe:
             httpGet:
               path: /health
@@ -55,12 +78,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mailer-srv
+  name: social-srv
 spec:
   selector:
-    app: mailer
+    app: social
   ports:
-    - name: mailer
+    - name: social
       protocol: TCP
       port: 3000
       targetPort: 3000
@@ -69,12 +92,12 @@ spec:
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: mailer-autoscaler
+  name: social-autoscaler
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: mailer-depl
+    name: social-depl
   minReplicas: 1
   maxReplicas: 3
   metrics:
@@ -83,7 +106,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageValue: '950m'
+          averageUtilization: 80
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 30
