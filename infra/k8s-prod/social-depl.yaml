@@ -15,6 +15,13 @@ spec:
       containers:
         - name: social
           image: theocosmin/social
+          resources:
+            requests:
+              memory: '250Mi'
+              cpu: 200m
+            limits:
+              memory: '3072Mi'
+              cpu: 1000m
           env:
             - name: MONGO_URI
               valueFrom:
@@ -58,9 +65,14 @@ spec:
             httpGet:
               path: /health
               port: 3000
-            initialDelaySeconds: 10
-            failureThreshold: 3
-            periodSeconds: 20
+            failureThreshold: 6
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            failureThreshold: 18
+            periodSeconds: 10
 
 ---
 apiVersion: v1
@@ -75,3 +87,28 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
+
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: social-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: social-depl
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageValue: '950m'
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30
+    scaleUp:
+      stabilizationWindowSeconds: 0

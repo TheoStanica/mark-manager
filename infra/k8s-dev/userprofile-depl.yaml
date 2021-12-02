@@ -1,30 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mailer-depl
+  name: userprofile-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mailer
+      app: userprofile
   template:
     metadata:
       labels:
-        app: mailer
+        app: userprofile
     spec:
       containers:
-        - name: mailer
-          image: theocosmin/mailer
+        - name: userprofile
+          image: theocosmin/userprofile
           resources:
             requests:
               memory: '250Mi'
               cpu: 200m
             limits:
-              memory: '3072Mi'
+              memory: '1000Mi'
               cpu: 1000m
           env:
-            - name: HOST_URL
-              value: theostanica.cloud.okteto.net
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: userprofile-mongo-secret
+                  key: MONGO_URI
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-access-key
+                  key: AWS_ACCESS_KEY
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret-key
+                  key: AWS_SECRET_KEY
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
@@ -33,11 +46,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: GMAIL_PASSWORD
+            - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
-                  name: mark-password-secret
-                  key: GMAIL_PASSWORD
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: JWT_REFRESH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refresh-secret
+                  key: JWT_REFRESH_KEY
           readinessProbe:
             httpGet:
               path: /health
@@ -55,12 +73,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mailer-srv
+  name: userprofile-srv
 spec:
   selector:
-    app: mailer
+    app: userprofile
   ports:
-    - name: mailer
+    - name: userprofile
       protocol: TCP
       port: 3000
       targetPort: 3000
@@ -69,12 +87,12 @@ spec:
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: mailer-autoscaler
+  name: userprofile-autoscaler
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: mailer-depl
+    name: userprofile-depl
   minReplicas: 1
   maxReplicas: 3
   metrics:
@@ -83,7 +101,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageValue: '950m'
+          averageUtilization: 80
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 30
