@@ -11,7 +11,7 @@ internalRouter.get('/stress', (req, res) => {
   for (let i = 0; i <= 1000000; i++) {
     count = i;
   }
-  res.send('Hello');
+  res.send('Hello test');
 });
 
 export { internalRouter };
