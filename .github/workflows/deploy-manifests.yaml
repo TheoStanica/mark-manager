@@ -40,11 +40,11 @@ jobs:
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s/userprofile-depl.yaml
+          manifest: infra/k8s-prod/userprofile-depl.yaml
 
       - uses: okteto/apply@master
         with:
-          manifest: infra/k8s/social-depl.yaml
+          manifest: infra/k8s-prod/social-depl.yaml
 
       - uses: okteto/apply@master
         with:
