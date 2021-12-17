@@ -65,7 +65,7 @@ export class TwitterApiService {
   }
 
   async getTrendsLocations(lat: number, long: number) {
-    return await this.client.get('trends/closest', {
+    return this.client.get('trends/closest', {
       lat,
       long,
     });

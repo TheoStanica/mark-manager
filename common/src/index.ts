@@ -10,6 +10,7 @@ export * from './errors/account-already-activated-error';
 export * from './errors/failed-connection-error';
 export * from './errors/twitter-invalid-tokens-error';
 export * from './errors/twitter-rate-limit-exceeded-error';
+export * from './errors/internal-server-error';
 
 export * from './middlewares/error-handler';
 export * from './middlewares/require-auth';

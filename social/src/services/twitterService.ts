@@ -28,7 +28,7 @@ export class TwitterService {
   ) {}
 
   async fetchConnectedAccounts(userId: string): Promise<TwitterDoc[]> {
-    return await this.userRepository.fetchConnectedTwitterAccounts(userId);
+    return this.userRepository.fetchConnectedTwitterAccounts(userId);
   }
 
   async fetchCredentials(userId: string, twitterIdDto: UserIdDto) {

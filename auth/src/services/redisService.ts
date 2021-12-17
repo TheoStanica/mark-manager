@@ -1,7 +1,5 @@
 import { BadRequestError } from '@tcosmin/common';
-import redis, { RedisClient } from 'redis';
 import { Service } from 'typedi';
-import { PrimaryExpression } from 'typescript';
 import { promisify } from 'util';
 import { AccessTokenRevokedPublisher } from '../events/publishers/accessTokenRevokedPublisher';
 import { natsWrapper } from '../natsWrapper';
@@ -15,8 +13,6 @@ interface WhiteListParams {
 
 @Service()
 export class RedisService {
-  constructor() {}
-
   private SETEXAsync = promisify(redisWrapper.client.SETEX).bind(
     redisWrapper.client
   );
@@ -38,25 +34,25 @@ export class RedisService {
     seconds: number,
     value: string
   ): Promise<string> {
-    return await this.SETEXAsync(key, seconds, value);
+    return this.SETEXAsync(key, seconds, value);
   }
 
   async findKeysWith(key: string): Promise<string[]> {
-    return await this.KEYSAsync(`*${key}*`);
+    return this.KEYSAsync(`*${key}*`);
   }
 
   async deleteKey(key: string) {
     // @ts-ignore
-    return await this.DELAsync(key);
+    return this.DELAsync(key);
   }
 
   async getKeyValue(key: string): Promise<string | null> {
-    return await this.GETAsync(key);
+    return this.GETAsync(key);
   }
 
   async exists(key: string) {
     // @ts-ignore
-    return await this.EXISTSAsync(key);
+    return this.EXISTSAsync(key);
   }
 
   async deleteAllKeysWith(key: string): Promise<void> {
@@ -81,11 +77,11 @@ export class RedisService {
   }
 
   async isRevoked(accessToken: string) {
-    return await this.exists(`revoked_${accessToken}`);
+    return this.exists(`revoked_${accessToken}`);
   }
 
   async addRevoked(accessToken: string) {
-    return await this.SetKeyWithExpiration(
+    return this.SetKeyWithExpiration(
       `revoked_${accessToken}`,
       parseInt(process.env.ACCESS_TOKEN_TTL!),
       '0'

@@ -8,9 +8,9 @@ export interface UserAttrs {
 
 export interface UserDoc extends mongoose.Document {
   email: string;
-  fullName?: string | undefined;
-  profilePicture?: string | undefined;
-  userTier?: string;
+  fullName: string | undefined;
+  profilePicture: string | undefined;
+  userTier: string;
   stream_preferences: StreamPreference[];
   themePreference?: string;
 }

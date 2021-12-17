@@ -29,7 +29,7 @@ export class UserRepository {
 
     const user = this.User.build(userCredentialsDto);
     user.confirmationToken = crypto.randomBytes(20).toString('hex');
-    return await user.save();
+    return user.save();
   }
 
   async validateCredentials(userCredentialsDto: UserCredentialsDto) {
@@ -85,7 +85,7 @@ export class UserRepository {
     const expiration = new Date(+new Date() + 10 * 60 * 1000);
     user.confirmationExpireDate = expiration;
     user.confirmationToken = crypto.randomBytes(20).toString('hex');
-    return await user.save();
+    return user.save();
   }
 
   async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
@@ -100,7 +100,7 @@ export class UserRepository {
     }
 
     user.password = newPassword;
-    return await user.save();
+    return user.save();
   }
 
   async generatePasswordResetToken(
@@ -116,7 +116,7 @@ export class UserRepository {
     const expiration = new Date(+new Date() + 10 * 60 * 1000);
     user.passwordResetExpireDate = expiration;
     user.passwordResetToken = crypto.randomBytes(20).toString('hex');
-    return await user.save();
+    return user.save();
   }
 
   async resetPassword(
@@ -134,7 +134,7 @@ export class UserRepository {
     }
 
     user.password = password;
-    return await user.save();
+    return user.save();
   }
 
   async updateEmail(userId: string, email: string) {

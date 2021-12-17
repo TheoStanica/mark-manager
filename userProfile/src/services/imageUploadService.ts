@@ -30,6 +30,9 @@ class ImageUploadService {
     };
 
     this.upload = multer({
+      limits: {
+        fileSize: 2097152, //2MB
+      },
       fileFilter,
       storage: multerS3({
         s3: this.s3,

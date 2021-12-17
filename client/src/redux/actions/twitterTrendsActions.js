@@ -64,8 +64,6 @@ export const fetchTrendingLocations = ({
   onFinish,
 }) => async (dispatch) => {
   try {
-    // onFinish([{ name: 'random place', woeid: 1 }]);
-    // onFinish([]);
     if (location) {
       const weatherResult = await axios.get(
         `https://meta-weather.now.sh/api/location/search/?query=${location}`
