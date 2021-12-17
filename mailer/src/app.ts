@@ -5,6 +5,7 @@ import { errorHandler, NotFoundError } from '@tcosmin/common';
 import { internalRouter } from './routes/internal';
 
 const app = express();
+app.disable('x-powered-by');
 app.set('trust proxy', true);
 app.use(json());
 

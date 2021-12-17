@@ -67,6 +67,7 @@ export const StyledSeparator = styled.div`
 
 export const StyledRoundedImg = styled.img`
   border-radius: 100%;
+  object-fit: cover !important;
 `;
 
 export const StyledDivider = styled.div`

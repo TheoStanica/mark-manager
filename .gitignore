@@ -1,2 +1,5 @@
 node_modules
 build
+.scannerwork
+common/build
+sonar-project.properties

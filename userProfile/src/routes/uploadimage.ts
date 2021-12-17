@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import { BadRequestError, requireAuth } from '@tcosmin/common';
-import { imageUploadService } from '../services/imageUploadService';
+import { uploadImage } from '../utils/middlewares/uploadFile';
 
 const router = express.Router();
 
 router.post(
   '/uploadimage',
   requireAuth,
-  imageUploadService.upload.single('image'),
+  uploadImage,
   async (req: Request, res: Response) => {
     if (!req.file) {
       throw new BadRequestError('No file provided');

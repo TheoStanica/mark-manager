@@ -29,7 +29,7 @@ export class TwitterRepository {
     data: AddTokensDto,
     session?: ClientSession
   ) {
-    return await this.Twitter.findByIdAndUpdate(
+    return this.Twitter.findByIdAndUpdate(
       twitterAccountMongoId,
       {
         oauthAccessToken: data.oauthAccessToken,
@@ -42,7 +42,7 @@ export class TwitterRepository {
   }
 
   async addMediaAccount(twitterAccountMongoId: string, adsId: string) {
-    return await this.Twitter.findByIdAndUpdate(
+    return this.Twitter.findByIdAndUpdate(
       twitterAccountMongoId,
       {
         $set: { adsId, hasAdsAccount: true },

@@ -11,6 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-tls-verify-client: optional
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: 'true'
     nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
 spec:
   rules:
     - host: mark.dev

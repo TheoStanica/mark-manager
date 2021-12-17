@@ -34,7 +34,7 @@ const CreateTweet = ({ visible, onClose }) => {
       dispatchErrorMessage('Please select an account');
     } else if (message.length < 1) {
       dispatchErrorMessage('Please enter a message');
-    } else if (message.length < 1) {
+    } else if (message.length > 280) {
       dispatchErrorMessage(
         'Message is too long. Please enter a message that has less than 280 characters.'
       );
