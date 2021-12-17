@@ -1,6 +1,6 @@
 import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
-import { UserAttrs, UserDoc, UserProfile } from '../models/userprofile';
+import { UserAttrs, UserProfile } from '../models/userprofile';
 import { UpdateUserDto } from '../utils/dtos/updateUserDto';
 import { StreamPreference } from '../utils/interfaces/streamPreference';
 

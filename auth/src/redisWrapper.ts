@@ -34,26 +34,22 @@ class RedisWrapper {
     value: string
   ) {
     const async = promisify(client.SETEX).bind(client);
-    const result = await async(key, time, value);
-    return result;
+    return async(key, time, value);
   }
 
   async GETAsync(client: RedisClient, key: string) {
     const async = promisify(client.GET).bind(client);
-    const result = await async(key);
-    return result;
+    return async(key);
   }
 
   async DELAsync(client: RedisClient, key: string) {
     const async = promisify(client.DEL).bind(client);
-    //@ts-ignore
-    const result = await async(key);
-    return result;
+    // @ts-ignore
+    return async(key);
   }
   async KEYSsync(client: RedisClient, key: string) {
     const async = promisify(client.KEYS).bind(client);
-    const result = await async(key);
-    return result;
+    return async(key);
   }
 }
 

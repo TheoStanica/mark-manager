@@ -10,16 +10,16 @@ const hostURL = process.env.HOST_URL;
 
 declare module 'express-session' {
   interface SessionData {
-    oauthRequestToken?: String;
-    oauthRequestTokenSecret?: String;
-    oauthAccessToken?: String;
-    oauthAccessTokenSecret?: String;
-    userId?: String;
+    oauthRequestToken?: string;
+    oauthRequestTokenSecret?: string;
+    oauthAccessToken?: string;
+    oauthAccessTokenSecret?: string;
+    userId?: string;
   }
 }
 
 @Service()
-export class twitterOAuthService {
+export class TwitterOAuthService {
   private consumer: OAuth;
   constructor() {
     this.consumer = new OAuth(

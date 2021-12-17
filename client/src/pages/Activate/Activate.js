@@ -5,7 +5,6 @@ import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';
 import { activateAccount } from '../../redux/actions/userActions';
 import { isLoggedin } from '../../services/isLoggedIn';
-// import './Activate.css';
 import { StyledActivate } from './styles';
 
 const ActivateAccount = () => {

@@ -24,10 +24,9 @@ export class UserRepository {
   }
 
   async fetchUser(userId: string, session?: ClientSession) {
-    const user = await this.User.findById(userId)
+    return this.User.findById(userId)
       .populate('twitter')
       .session(session ? session : null);
-    return user;
   }
 
   async fetchConnectedTwitterAccounts(userId: string): Promise<TwitterDoc[]> {
