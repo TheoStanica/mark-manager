@@ -6,6 +6,7 @@ import ConnectAccounts from './ConnectAccounts.svg';
 import Engage from './Engage.svg';
 import Opinions from './Opinions.svg';
 import Planner from './Planner.svg';
+import EngageNew from './g10.svg';
 
 export const Pictures = {
   AuthSplash,
@@ -16,4 +17,5 @@ export const Pictures = {
   Engage,
   Opinions,
   Planner,
+  EngageNew,
 };

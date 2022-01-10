@@ -20,7 +20,7 @@ const Register = () => {
 
   const submitRegister = async (e) => {
     e.preventDefault();
-    dispatch(registerUser({ email, password }));
+    // dispatch(registerUser({ email, password }));
   };
 
   return (
@@ -53,8 +53,8 @@ const Register = () => {
           </Link>
         </StyledSmallText>
         <StyledMessages>
-          <DisplayErrors />
-          <DisplayUserMessages />
+          {/* <DisplayErrors />
+          <DisplayUserMessages /> */}
         </StyledMessages>
       </form>
     </StyledRegisterDiv>
