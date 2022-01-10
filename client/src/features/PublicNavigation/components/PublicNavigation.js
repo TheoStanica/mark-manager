@@ -11,14 +11,22 @@ import Mark from '../../../assets/Pictures/Mark';
 import Link from '../../../core/components/Link/Link';
 
 const PublicNavigation = ({
+  appBarStyle,
   appBarProps,
   toolBarStyle,
   toolBarProps,
   linkStyle,
+  transparent = false,
 }) => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" elevation={5} {...appBarProps}>
+      <AppBar
+        position="static"
+        elevation={5}
+        color={transparent ? 'transparent' : 'inherit'}
+        {...appBarProps}
+        sx={{ ...appBarStyle }}
+      >
         <Container maxWidth="xl">
           <Toolbar
             sx={{
@@ -51,6 +59,10 @@ const PublicNavigation = ({
     </Box>
   );
 };
+
+// const appBarDefaultStyle = (transparent) => ({
+//   color: transparent ? 'transparent' : 'red',
+// });
 
 const toolBarDefaultStyle = {
   '@media (min-width: 600px)': { padding: 0 },

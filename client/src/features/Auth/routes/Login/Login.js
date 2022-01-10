@@ -14,6 +14,7 @@ import { credentialsSchema } from '../../validation/credentials';
 import { useLoginMutation } from '../../../../api/auth/api';
 import PublicNavigation from '../../../PublicNavigation/components/PublicNavigation';
 import CredentialsForm from '../../components/CredentialsForm';
+import GradientBackground from '../../../../core/components/GradientBackground/GradientBackground';
 
 const Login = () => {
   const [login, { isLoading, isError, error }] = useLoginMutation();
@@ -22,7 +23,11 @@ const Login = () => {
 
   return (
     <>
-      <PublicNavigation />
+      <PublicNavigation
+        linkStyle={{ color: theme.palette.primary.contrastText }}
+        transparent
+      />
+      <GradientBackground />
       <Container>
         <CssBaseline />
         <Box sx={formContainerStyle}>
