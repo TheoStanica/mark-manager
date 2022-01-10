@@ -1,32 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
   CssBaseline,
   Paper,
-  Link,
   Grid,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { credentialsSchema } from '../../validation/credentials';
-import { useLoginMutation } from '../../../../api/auth/api';
+import { useRegisterMutation } from '../../../../api/auth/api';
 import PublicNavigation from '../../../PublicNavigation/components/PublicNavigation';
 import CredentialsForm from '../../components/CredentialsForm';
 import GradientBackground from '../../../../core/components/GradientBackground/GradientBackground';
+import ResendActivation from '../../components/ResendActivation';
 
 const Register = () => {
-  const [login, { isLoading, isError, error, isSuccess }] = useLoginMutation();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const [usedEmail, setUsedEmail] = useState('');
+  const [
+    register,
+    { isLoading, isError, error, isSuccess },
+  ] = useRegisterMutation();
+
   return (
     <>
-      <PublicNavigation
-        linkStyle={{ color: theme.palette.primary.contrastText }}
-        transparent
-      />
+      <PublicNavigation transparent />
       <GradientBackground />
       <Container>
         <CssBaseline />
@@ -45,17 +47,21 @@ const Register = () => {
                 password: '',
               }}
               onSubmit={async ({ email, password }) => {
-                // await login({ email, password });
+                setUsedEmail(email);
+                await register({ email, password });
               }}
               isError={isError}
               error={error}
               isLoading={isLoading}
-              isSuccess={true}
+              isSuccess={isSuccess}
               successComponent={
-                <Typography component="p">
-                  Account created! Please check your email to activate your
-                  account.
-                </Typography>
+                <>
+                  <Typography component="p">
+                    Account created! Please check your email to activate your
+                    account.
+                  </Typography>
+                  <ResendActivation email={usedEmail} sx={{ mt: 2 }} />
+                </>
               }
             />
           </Paper>
