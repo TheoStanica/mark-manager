@@ -20,11 +20,7 @@ const Landing = () => {
 
   return (
     <>
-      <PublicNavigation
-        appBarStyle={navigationAppBarStyle}
-        linkStyle={{ color: theme.palette.primary.contrastText }}
-        transparent
-      />
+      <PublicNavigation appBarStyle={navigationAppBarStyle} transparent />
       <CssBaseline />
       <GradientBackground />
       <Box container sx={sectionStyle} component="section">

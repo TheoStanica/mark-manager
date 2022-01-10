@@ -6,9 +6,11 @@ import {
   Typography,
   Button,
   Container,
+  Link,
+  useTheme,
 } from '@mui/material';
 import Mark from '../../../assets/Pictures/Mark';
-import Link from '../../../core/components/Link/Link';
+import { NavLink } from 'react-router-dom';
 
 const PublicNavigation = ({
   appBarStyle,
@@ -18,6 +20,8 @@ const PublicNavigation = ({
   linkStyle,
   transparent = false,
 }) => {
+  const theme = useTheme();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -36,7 +40,7 @@ const PublicNavigation = ({
             {...toolBarProps}
           >
             <Box sx={{ mr: 2 }}>
-              <Link to="/" style={{ display: 'flex' }} aria-label="Mark">
+              <Link component={NavLink} to="/">
                 <Mark size={48} />
               </Link>
             </Box>
@@ -44,12 +48,20 @@ const PublicNavigation = ({
               Mark
             </Typography>
             <Button color="inherit" sx={{ mr: 1 }}>
-              <Link to="/login" style={linkStyle}>
+              <Link
+                component={NavLink}
+                to="/login"
+                sx={{ ...defaultLinkStyle(theme), ...linkStyle }}
+              >
                 Login
               </Link>
             </Button>
             <Button color="inherit">
-              <Link to="/register" style={linkStyle}>
+              <Link
+                component={NavLink}
+                to="/register"
+                sx={{ ...defaultLinkStyle(theme), ...linkStyle }}
+              >
                 Register
               </Link>
             </Button>
@@ -60,9 +72,9 @@ const PublicNavigation = ({
   );
 };
 
-// const appBarDefaultStyle = (transparent) => ({
-//   color: transparent ? 'transparent' : 'red',
-// });
+const defaultLinkStyle = (theme) => ({
+  color: theme.palette.primary.contrastText,
+});
 
 const toolBarDefaultStyle = {
   '@media (min-width: 600px)': { padding: 0 },
