@@ -14,6 +14,7 @@ const CredentialsForm = ({
   isLoading,
   isSuccess,
   successComponent,
+  errorComponent,
 }) => {
   return (
     <Formik
@@ -68,6 +69,7 @@ const CredentialsForm = ({
             sx={{ pb: 1 }}
           />
           {isError && <DisplayError error={error} />}
+          {isError && errorComponent}
           {isSuccess && successComponent}
           <Box>
             <GradientButton
