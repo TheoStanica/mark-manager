@@ -1,7 +1,7 @@
-import { param } from 'express-validator';
+import { body } from 'express-validator';
 
 export const accountActivationValidation = [
-  param('activationToken')
+  body('activationToken')
     .notEmpty()
     .bail()
     .matches(/(^[A-Fa-f0-9]{40}$)/)

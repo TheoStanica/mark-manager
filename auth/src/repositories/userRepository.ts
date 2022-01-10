@@ -12,6 +12,7 @@ import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
 import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
+import { ActivationTokenDto } from '../utils/dtos/activationTokenDto';
 
 @Service()
 export class UserRepository {
@@ -52,7 +53,8 @@ export class UserRepository {
     return user;
   }
 
-  async activateAccount(activationToken: string) {
+  async activateAccount(activationTokenDto: ActivationTokenDto) {
+    const { activationToken } = activationTokenDto;
     const user = await this.User.findOne({
       confirmationToken: activationToken,
     });
@@ -72,9 +74,9 @@ export class UserRepository {
   }
 
   async generateNewActivationData(activationRequestDto: ActivationRequestDto) {
-    const { userId } = activationRequestDto;
+    const { email } = activationRequestDto;
 
-    const user = await this.User.findById(userId);
+    const user = await this.User.findOne({ email });
     if (!user) {
       throw new BadRequestError('Invalid userId');
     }

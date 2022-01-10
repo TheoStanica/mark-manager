@@ -1,3 +1,3 @@
 export interface ActivationRequestDto {
-  userId: string;
+  email: string;
 }

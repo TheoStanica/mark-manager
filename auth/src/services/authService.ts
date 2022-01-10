@@ -7,6 +7,7 @@ import { UserCreatedPublisher } from '../events/publishers/userCreatedPublisher'
 import { natsWrapper } from '../natsWrapper';
 import { UserRepository } from '../repositories/userRepository';
 import { ActivationRequestDto } from '../utils/dtos/activationRequestDto';
+import { ActivationTokenDto } from '../utils/dtos/activationTokenDto';
 import { ChangePasswordDto } from '../utils/dtos/changePasswordDto';
 import { ResetPasswordDto } from '../utils/dtos/resetPasswordDto';
 import { ResetPasswordRequestDto } from '../utils/dtos/resetPasswordRequestDto';
@@ -37,8 +38,8 @@ export class AuthService {
     });
   }
 
-  async activateAccount(activationToken: string) {
-    await this.userRepository.activateAccount(activationToken);
+  async activateAccount(activationTokenDto: ActivationTokenDto) {
+    await this.userRepository.activateAccount(activationTokenDto);
   }
 
   async resendActivationRequest(activationRequestDto: ActivationRequestDto) {
