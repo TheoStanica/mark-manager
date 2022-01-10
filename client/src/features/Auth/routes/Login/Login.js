@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -15,18 +15,20 @@ import { useLoginMutation } from '../../../../api/auth/api';
 import PublicNavigation from '../../../PublicNavigation/components/PublicNavigation';
 import CredentialsForm from '../../components/CredentialsForm';
 import GradientBackground from '../../../../core/components/GradientBackground/GradientBackground';
+import { NavLink } from 'react-router-dom';
+import ResendActivation from '../../components/ResendActivation';
 
 const Login = () => {
   const [login, { isLoading, isError, error }] = useLoginMutation();
+  const [usedEmail, setUsedEmail] = useState('');
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+  console.log(error);
+
   return (
     <>
-      <PublicNavigation
-        linkStyle={{ color: theme.palette.primary.contrastText }}
-        transparent
-      />
+      <PublicNavigation transparent />
       <GradientBackground />
       <Container>
         <CssBaseline />
@@ -45,20 +47,26 @@ const Login = () => {
                 password: '',
               }}
               onSubmit={async ({ email, password }) => {
+                setUsedEmail(email);
                 await login({ email, password });
               }}
               isError={isError}
               error={error}
               isLoading={isLoading}
+              errorComponent={
+                error?.data?.errors[0]?.errorType === 'accountNotActivated' && (
+                  <ResendActivation email={usedEmail} />
+                )
+              }
             />
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link component={NavLink} to="/forgotPassword" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link component={NavLink} to="/register" variant="body2">
                   Don't have an account? Sign Up
                 </Link>
               </Grid>
