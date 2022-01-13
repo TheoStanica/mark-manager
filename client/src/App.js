@@ -12,6 +12,7 @@ import Dashboard from '../src/pages/Dashboard/Dashboard';
 import Register from './features/Auth/pages/Register/Register';
 import AppThemeProvider from './core/components/AppThemeProvider/AppThemeProvider';
 import ForgotPassword from './features/Auth/pages/ForgotPassword/ForgotPassword';
+import Activate from './features/Auth/pages/Activate/Activate';
 
 injectStore(store);
 
@@ -33,6 +34,13 @@ const App = () => {
               </ApplicationRoute>
               <ApplicationRoute path="/register" exact onlyPublic>
                 <Register />
+              </ApplicationRoute>
+              <ApplicationRoute
+                path="/activate/:activationToken"
+                exact
+                onlyPublic
+              >
+                <Activate />
               </ApplicationRoute>
               <ApplicationRoute path="/forgotPassword" exact onlyPublic>
                 <ForgotPassword />
