@@ -8,9 +8,13 @@ import {
   Container,
   Link,
   useTheme,
+  IconButton,
 } from '@mui/material';
 import Mark from '../../../assets/Pictures/Mark';
 import { NavLink } from 'react-router-dom';
+import useApplicationTheme from '../../hooks/useApplicationTheme';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 const PublicNavigation = ({
   appBarStyle,
@@ -21,12 +25,17 @@ const PublicNavigation = ({
   transparent = false,
 }) => {
   const theme = useTheme();
+  const { mode, toggleTheme } = useApplicationTheme();
+
+  const renderToggleThemeButton = () => {
+    return mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />;
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
-        elevation={5}
+        elevation={mode === 'dark' ? 5 : 2}
         color={transparent ? 'transparent' : 'inherit'}
         {...appBarProps}
         sx={{ ...appBarStyle }}
@@ -47,24 +56,29 @@ const PublicNavigation = ({
             <Typography variant="h6" component="p" sx={{ flexGrow: 1 }}>
               Mark
             </Typography>
-            <Button color="inherit" sx={{ mr: 1 }}>
-              <Link
-                component={NavLink}
-                to="/login"
-                sx={{ ...defaultLinkStyle(theme), ...linkStyle }}
-              >
-                Login
-              </Link>
-            </Button>
-            <Button color="inherit">
-              <Link
-                component={NavLink}
-                to="/register"
-                sx={{ ...defaultLinkStyle(theme), ...linkStyle }}
-              >
-                Register
-              </Link>
-            </Button>
+            <Box>
+              <IconButton sx={{ mr: 1 }} onClick={toggleTheme}>
+                {renderToggleThemeButton()}
+              </IconButton>
+              <Button color="inherit" sx={{ mr: 1 }}>
+                <Link
+                  component={NavLink}
+                  to="/login"
+                  sx={{ ...defaultLinkStyle(theme), ...linkStyle }}
+                >
+                  Login
+                </Link>
+              </Button>
+              <Button color="inherit">
+                <Link
+                  component={NavLink}
+                  to="/register"
+                  sx={{ ...defaultLinkStyle(theme), ...linkStyle }}
+                >
+                  Register
+                </Link>
+              </Button>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
