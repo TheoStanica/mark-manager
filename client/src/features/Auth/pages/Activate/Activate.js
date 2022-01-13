@@ -3,7 +3,6 @@ import {
   CircularProgress,
   Container,
   CssBaseline,
-  Grid,
   Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
