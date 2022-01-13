@@ -40,7 +40,7 @@ const PublicNavigation = ({
             {...toolBarProps}
           >
             <Box sx={{ mr: 2 }}>
-              <Link component={NavLink} to="/">
+              <Link component={NavLink} to="/" style={{ display: 'flex' }}>
                 <Mark size={48} />
               </Link>
             </Box>
