@@ -19,19 +19,21 @@ export const authApi = createApi({
       query: ({ email, password }) => ({
         url: '/signup',
         method: 'POST',
-        body: {
-          email,
-          password,
-        },
+        body: { email, password },
       }),
     }),
     resendActivation: builder.mutation({
       query: ({ email }) => ({
         url: '/activation/resend',
         method: 'POST',
-        body: {
-          email,
-        },
+        body: { email },
+      }),
+    }),
+    activate: builder.mutation({
+      query: ({ activationToken }) => ({
+        url: '/activation',
+        method: 'POST',
+        body: { activationToken },
       }),
     }),
     resetPasswordRequest: builder.mutation({
@@ -56,5 +58,6 @@ export const {
   useRegisterMutation,
   useResendActivationMutation,
   useResetPasswordRequestMutation,
+  useActivateMutation,
   useLogoutMutation,
 } = authApi;
