@@ -13,16 +13,14 @@ import Register from './features/Auth/pages/Register/Register';
 import AppThemeProvider from './core/components/AppThemeProvider/AppThemeProvider';
 import ForgotPassword from './features/Auth/pages/ForgotPassword/ForgotPassword';
 import Activate from './features/Auth/pages/Activate/Activate';
+import ResetPassword from './features/Auth/pages/ResetPassword/ResetPassword';
 
 injectStore(store);
 
 const App = () => {
   return (
     <Provider store={store}>
-      <PersistGate
-        loading={<div style={{ backgroundColor: 'red' }}>Loading</div>}
-        persistor={persistor}
-      >
+      <PersistGate loading={<div>Loading</div>} persistor={persistor}>
         <AppThemeProvider>
           <Router>
             <Switch>
@@ -45,6 +43,10 @@ const App = () => {
               <ApplicationRoute path="/forgotPassword" exact onlyPublic>
                 <ForgotPassword />
               </ApplicationRoute>
+              <ApplicationRoute path="/password/reset" exact onlyPublic>
+                <ResetPassword />
+              </ApplicationRoute>
+
               <ApplicationRoute path="/dashboard" exact>
                 <Dashboard />
               </ApplicationRoute>
