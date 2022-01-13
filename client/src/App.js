@@ -11,6 +11,7 @@ import ApplicationRoute from './features/Auth/components/PrivateRoute';
 import Dashboard from '../src/pages/Dashboard/Dashboard';
 import Register from './features/Auth/pages/Register/Register';
 import AppThemeProvider from './core/components/AppThemeProvider/AppThemeProvider';
+import ForgotPassword from './features/Auth/pages/ForgotPassword/ForgotPassword';
 
 injectStore(store);
 
@@ -32,6 +33,9 @@ const App = () => {
               </ApplicationRoute>
               <ApplicationRoute path="/register" exact onlyPublic>
                 <Register />
+              </ApplicationRoute>
+              <ApplicationRoute path="/forgotPassword" exact onlyPublic>
+                <ForgotPassword />
               </ApplicationRoute>
               <ApplicationRoute path="/dashboard" exact>
                 <Dashboard />
