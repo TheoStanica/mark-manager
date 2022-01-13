@@ -75,7 +75,7 @@ const ForgotPassword = () => {
                     error={errors.email && touched.email}
                   />
                   {isError && <DisplayError error={error} />}
-                  {!isSuccess && (
+                  {isSuccess && (
                     <Typography component="p" mt={1}>
                       Request sent! Please check your email for further
                       instructions.
