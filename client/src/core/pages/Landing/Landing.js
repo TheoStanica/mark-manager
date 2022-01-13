@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Pictures } from '../../../assets/Pictures';
+import useApplicationTheme from '../../hooks/useApplicationTheme';
 import PublicNavigation from '../../components/PublicNaviagtion/PublicNavigation';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import GradientBackground from '../../components/GradientBackground/GradientBackground';
@@ -17,6 +18,7 @@ const Landing = () => {
   const theme = useTheme();
   const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('md'));
   const history = useHistory();
+  const { mode } = useApplicationTheme();
 
   return (
     <>
@@ -27,7 +29,7 @@ const Landing = () => {
         <Container sx={contentContainerStyle} maxWidth="xl">
           <Box sx={copyCTAStyle}>
             <Box>
-              <Typography {...copyH1Props} sx={inlineStyle(theme, true)}>
+              <Typography {...copyH1Props} sx={inlineStyle(theme, true, mode)}>
                 Engage
               </Typography>
               <Typography {...copyH1Props} sx={inlineStyle(theme)}>
@@ -35,13 +37,21 @@ const Landing = () => {
               </Typography>
             </Box>
             <Box>
-              <Typography {...copyH2Props} sx={inlineStyle(theme, 1)} mt={1}>
+              <Typography
+                {...copyH2Props}
+                sx={inlineStyle(theme, true, mode)}
+                mt={1}
+              >
                 All
               </Typography>
               <Typography {...copyH2Props} sx={inlineStyle(theme)}>
                 accounts.
               </Typography>
-              <Typography {...copyH2Props} sx={inlineStyle(theme, 1)} mt={1}>
+              <Typography
+                {...copyH2Props}
+                sx={inlineStyle(theme, true, mode)}
+                mt={1}
+              >
                 One
               </Typography>
               <Typography {...copyH2Props} sx={inlineStyle(theme)}>
@@ -58,7 +68,9 @@ const Landing = () => {
           <Box sx={copyCTAImageStyle(isLowerSizeScreen)}>
             <img
               style={{ width: '100%' }}
-              src={Pictures.EngageNew}
+              src={
+                mode === 'dark' ? Pictures.EngageNew : Pictures.EngageNewLight
+              }
               alt="Engage with your audience"
             />
           </Box>
@@ -69,7 +81,11 @@ const Landing = () => {
           <Box sx={{ ...copyCTAImageStyle(isLowerSizeScreen), width: '38%' }}>
             <img
               style={{ width: '100%' }}
-              src={Pictures.OpinionsNew}
+              src={
+                mode === 'dark'
+                  ? Pictures.OpinionsNew
+                  : Pictures.OpinionsNewLight
+              }
               alt="Find what your customers really think"
             />
           </Box>
@@ -101,7 +117,11 @@ const Landing = () => {
           <Box sx={copyCTAImageStyle(isLowerSizeScreen)}>
             <img
               style={{ width: '100%' }}
-              src={Pictures.ConnectAccountsNew}
+              src={
+                mode === 'dark'
+                  ? Pictures.ConnectAccountsNew
+                  : Pictures.ConnectAccountsNewLight
+              }
               alt="Find what your customers really think"
             />
           </Box>
@@ -111,12 +131,18 @@ const Landing = () => {
   );
 };
 
-const inlineStyle = (theme, emphasized) => ({
+const inlineStyle = (theme, emphasized, mode) => ({
   display: 'inline-block',
   mr: 1,
-  color: emphasized ? theme.palette.secondary.main : 'inherit',
+  color: emphasized ? getColorMatchingThemeMode(mode, theme) : 'inherit',
   fontWeight: emphasized ? 600 : 'inherit',
 });
+
+const getColorMatchingThemeMode = (mode, theme) => {
+  return mode === 'dark'
+    ? theme.palette.secondary.main
+    : theme.palette.primary.main;
+};
 
 const navigationAppBarStyle = {
   position: 'absolute',
