@@ -1,9 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Pictures } from '../../../../assets/Pictures';
-import PublicNavigation from '../../../PublicNavigation/components/PublicNavigation';
-import GradientButton from '../../../../core/components/GradientButton/GradientButton';
-import GradientBackground from '../../../../core/components/GradientBackground/GradientBackground';
+import { Pictures } from '../../../assets/Pictures';
+import PublicNavigation from '../../components/PublicNaviagtion/PublicNavigation';
+import GradientButton from '../../components/GradientButton/GradientButton';
+import GradientBackground from '../../components/GradientBackground/GradientBackground';
 import {
   Box,
   Container,

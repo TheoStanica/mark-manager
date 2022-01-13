@@ -7,8 +7,8 @@ import Navigation from './components/Navigation';
 import { StyledFullPage } from './styles';
 import { persistor, store } from './shared/redux/store';
 import { Route, Switch } from 'react-router-dom';
-import Login from './features/Auth/routes/Login/Login';
-import Landing from './features/Landing/routes/Landing/Landing';
+import Login from './features/Auth/pages/Login/Login';
+import Landing from './core/pages/Landing/Landing';
 import { injectStore } from './api/apiBaseQuery';
 import ApplicationRoute from './features/Auth/components/PrivateRoute';
 import Dashboard from '../src/pages/Dashboard/Dashboard';
@@ -16,7 +16,7 @@ import RegisterPage from './pages/RegisterPage/RegisterPage';
 import { createTheme, ThemeProvider } from '@mui/material';
 import useTheme from './core/hooks/useTheme';
 import { createMuiTheme } from '@material-ui/core';
-import Register from './features/Auth/routes/Register/Register';
+import Register from './features/Auth/pages/Register/Register';
 
 injectStore(store);
 

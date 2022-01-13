@@ -4,27 +4,27 @@ import {
   Container,
   CssBaseline,
   Paper,
-  Link,
   Grid,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { credentialsSchema } from '../../validation/credentials';
-import { useLoginMutation } from '../../../../api/auth/api';
-import PublicNavigation from '../../../PublicNavigation/components/PublicNavigation';
+import { useRegisterMutation } from '../../../../api/auth/api';
 import CredentialsForm from '../../components/CredentialsForm';
 import GradientBackground from '../../../../core/components/GradientBackground/GradientBackground';
-import { NavLink } from 'react-router-dom';
 import ResendActivation from '../../components/ResendActivation';
+import PublicNavigation from '../../../../core/components/PublicNaviagtion/PublicNavigation';
 
-const Login = () => {
-  const [login, { isLoading, isError, error }] = useLoginMutation();
-  const [usedEmail, setUsedEmail] = useState('');
+const Register = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  console.log(error);
+  const [usedEmail, setUsedEmail] = useState('');
+  const [
+    register,
+    { isLoading, isError, error, isSuccess },
+  ] = useRegisterMutation();
 
   return (
     <>
@@ -36,11 +36,11 @@ const Login = () => {
           <Paper sx={formStyle(isSmallScreen)}>
             <Grid container justifyContent="center">
               <Typography component="h1" variant="h4">
-                Login
+                Register
               </Typography>
             </Grid>
             <CredentialsForm
-              submitText="Log In"
+              submitText="Register"
               validationSchema={credentialsSchema}
               initialValues={{
                 email: '',
@@ -48,29 +48,22 @@ const Login = () => {
               }}
               onSubmit={async ({ email, password }) => {
                 setUsedEmail(email);
-                await login({ email, password });
+                await register({ email, password });
               }}
               isError={isError}
               error={error}
               isLoading={isLoading}
-              errorComponent={
-                error?.data?.errors[0]?.errorType === 'accountNotActivated' && (
-                  <ResendActivation email={usedEmail} />
-                )
+              isSuccess={isSuccess}
+              successComponent={
+                <>
+                  <Typography component="p">
+                    Account created! Please check your email to activate your
+                    account.
+                  </Typography>
+                  <ResendActivation email={usedEmail} sx={{ mt: 2 }} />
+                </>
               }
             />
-            <Grid container>
-              <Grid item xs>
-                <Link component={NavLink} to="/forgotPassword" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link component={NavLink} to="/register" variant="body2">
-                  Don't have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
           </Paper>
         </Box>
       </Container>
@@ -90,4 +83,4 @@ const formStyle = (isSmallScreen) => ({
   width: { sx: 1, sm: 550 },
 });
 
-export default Login;
+export default Register;
