@@ -1,16 +1,39 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React, { createContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useCurrentUserQuery } from '../../../api/user/api';
 
 export const ThemeContext = createContext();
+const getSelectedTheme = (data) => {
+  console.log(data, 'storage');
+  if (data?.user?.themePreference) return data?.user?.themePreference;
+  const localstorageTheme = localStorage.getItem('theme');
+  console.log(localstorageTheme, 'local');
+  if (localstorageTheme) return localstorageTheme;
+  // browser theme
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
+};
 
 const AppThemeProvider = ({ children }) => {
-  const [selectedTheme, setSelectedTheme] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  );
+  const { accessToken } = useSelector((state) => state.authSlice);
+  const { data } = useCurrentUserQuery(undefined, { skip: !accessToken });
+  const [selectedTheme, setSelectedTheme] = useState(getSelectedTheme(data));
   const [theme, setTheme] = useState(defaultTheme);
 
+  useEffect(() => {
+    const userTheme = data?.user?.themePreference;
+    if (userTheme) {
+      setSelectedTheme(userTheme);
+      localStorage.setItem('theme', userTheme);
+    }
+  }, [data]);
+
   const toggleTheme = () => {
-    setSelectedTheme(selectedTheme === 'light' ? 'dark' : 'light');
+    const theme = selectedTheme === 'light' ? 'dark' : 'light';
+    setSelectedTheme(theme);
+    localStorage.setItem('theme', theme);
   };
 
   useEffect(() => {
