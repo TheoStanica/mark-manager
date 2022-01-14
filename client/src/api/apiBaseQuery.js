@@ -34,20 +34,22 @@ const axiosBaseQuery = ({ urlPrefix }) => async ({
   } catch (error) {
     if (error.response && error.response.status === 401) {
       // axios interceptor equivalent
-      const refreshResult = await apiInstance.post('auth/token', {
-        refreshToken: store?.getState()?.authSlice.refreshToken,
-      });
-      if (refreshResult.data) {
-        store.dispatch(authSlice.actions.update(refreshResult.data));
-        const result = await makeRequest({
-          urlPrefix,
-          url,
-          method,
-          body,
-          params,
+      try {
+        const refreshResult = await apiInstance.post('auth/token', {
+          refreshToken: store?.getState()?.authSlice.refreshToken,
         });
-        return { data: result.data };
-      } else {
+        if (refreshResult.data) {
+          store.dispatch(authSlice.actions.update(refreshResult.data));
+          const result = await makeRequest({
+            urlPrefix,
+            url,
+            method,
+            body,
+            params,
+          });
+          return { data: result.data };
+        }
+      } catch (error) {
         store.dispatch(authSlice.actions.clear());
       }
     } else {
