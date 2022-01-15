@@ -5,10 +5,8 @@ import { useCurrentUserQuery } from '../../../api/user/api';
 
 export const ThemeContext = createContext();
 const getSelectedTheme = (data) => {
-  console.log(data, 'storage');
   if (data?.user?.themePreference) return data?.user?.themePreference;
   const localstorageTheme = localStorage.getItem('theme');
-  console.log(localstorageTheme, 'local');
   if (localstorageTheme) return localstorageTheme;
   // browser theme
   return window.matchMedia('(prefers-color-scheme: dark)').matches
