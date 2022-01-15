@@ -53,10 +53,7 @@ const PublicNavigation = ({
                 <Mark size={48} />
               </Link>
             </Box>
-            <Typography variant="h6" component="p" sx={{ flexGrow: 1 }}>
-              Mark
-            </Typography>
-            <Box>
+            <Box sx={{ marginLeft: 'auto' }}>
               <IconButton sx={{ mr: 1 }} onClick={toggleTheme}>
                 {renderToggleThemeButton()}
               </IconButton>
