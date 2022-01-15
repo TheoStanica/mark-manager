@@ -156,7 +156,7 @@ const AppDrawer = ({ children, title }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, paddingX: 2, pt: 2 }}>
+      <Box component="main" sx={{ flexGrow: 1, pt: 2 }}>
         <DrawerHeader />
         {children}
       </Box>
