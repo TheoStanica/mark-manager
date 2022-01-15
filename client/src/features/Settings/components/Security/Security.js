@@ -25,7 +25,7 @@ const Security = () => {
     if (isSuccess) {
       enqueueSnackbar('Password changed', { variant: 'success' });
     }
-  }, [isSuccess]);
+  }, [isSuccess, enqueueSnackbar]);
 
   return (
     <Container maxWidth="md">
