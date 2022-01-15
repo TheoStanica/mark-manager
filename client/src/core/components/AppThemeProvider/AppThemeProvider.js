@@ -1,7 +1,10 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import React, { createContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useCurrentUserQuery } from '../../../api/user/api';
+import {
+  useChangeThemeMutation,
+  useCurrentUserQuery,
+} from '../../../api/user/api';
 
 export const ThemeContext = createContext();
 const getSelectedTheme = (data) => {
@@ -19,6 +22,7 @@ const AppThemeProvider = ({ children }) => {
   const { data } = useCurrentUserQuery(undefined, { skip: !accessToken });
   const [selectedTheme, setSelectedTheme] = useState(getSelectedTheme(data));
   const [theme, setTheme] = useState(defaultTheme);
+  const [changeTheme, { isLoading }] = useChangeThemeMutation();
 
   useEffect(() => {
     const userTheme = data?.user?.themePreference;
@@ -28,10 +32,18 @@ const AppThemeProvider = ({ children }) => {
     }
   }, [data]);
 
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
     const theme = selectedTheme === 'light' ? 'dark' : 'light';
-    setSelectedTheme(theme);
-    localStorage.setItem('theme', theme);
+    if (accessToken) {
+      if (!isLoading) {
+        await changeTheme({ themePreference: theme });
+        setSelectedTheme(theme);
+        localStorage.setItem('theme', theme);
+      }
+    } else {
+      setSelectedTheme(theme);
+      localStorage.setItem('theme', theme);
+    }
   };
 
   useEffect(() => {
@@ -47,7 +59,7 @@ const AppThemeProvider = ({ children }) => {
           main: '#75fac8',
         },
         background: {
-          default: selectedTheme === 'dark' ? '#0b0f19' : '#fafafa',
+          default: selectedTheme === 'dark' ? '#0b0f19' : 'rgb(229, 232, 237)',
           paper: selectedTheme === 'dark' ? '#111827' : 'white',
         },
       },
