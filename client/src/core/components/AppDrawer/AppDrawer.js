@@ -14,12 +14,13 @@ import {
   List,
   ListItemText,
 } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import EventIcon from '@mui/icons-material/Event';
+import { useHistory } from 'react-router-dom';
 
 const drawerWidth = 200;
 
@@ -91,6 +92,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const AppDrawer = ({ children, title }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const history = useHistory();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -140,14 +142,18 @@ const AppDrawer = ({ children, title }) => {
           </IconButton>
         </DrawerHeader>
         <List>
-          {['Dashboard', 'Create', 'Planner'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button onClick={() => history.push('/dashboard')}>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+          <ListItem button onClick={() => history.push('/planner')}>
+            <ListItemIcon>
+              <EventIcon />
+            </ListItemIcon>
+            <ListItemText primary="Planner" />
+          </ListItem>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, paddingX: 2, pt: 2 }}>

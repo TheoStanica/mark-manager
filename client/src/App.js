@@ -17,6 +17,7 @@ import ResetPassword from './features/Auth/pages/ResetPassword/ResetPassword';
 import Dashboard from './features/Dashboard/pages/Dashboard/Dashboard';
 import Settings from './features/Settings/pages/Settings/Settings';
 import { SnackbarProvider } from 'notistack';
+import Planner from './features/Planner/pages/Planner/Planner';
 
 injectStore(store);
 
@@ -56,6 +57,9 @@ const App = () => {
                 </ApplicationRoute>
                 <ApplicationRoute path="/settings" exact>
                   <Settings />
+                </ApplicationRoute>
+                <ApplicationRoute path="/planner" exact>
+                  <Planner />
                 </ApplicationRoute>
               </Switch>
             </Router>
