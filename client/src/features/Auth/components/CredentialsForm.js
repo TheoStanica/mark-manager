@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { TextField, CircularProgress, Box, Typography } from '@mui/material';
+import { TextField, CircularProgress, Box } from '@mui/material';
 import DisplayError from '../../../core/components/DisplayErrors/DisplayError';
 import GradientButton from '../../../core/components/GradientButton/GradientButton';
 
@@ -54,8 +54,6 @@ const CredentialsForm = ({
             name="password"
             label="Password"
             type="password"
-            value={values.password}
-            onChange={handleChange}
             id="password"
             autoComplete="current-password"
             variant="standard"
