@@ -1,4 +1,3 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/dist/query';
 import axios from 'axios';
 import { authSlice } from '../features/Auth/slice';
 
