@@ -15,7 +15,26 @@ export const userApi = createApi({
       }),
       providesTags: ['User'],
     }),
+    changeTheme: builder.mutation({
+      query: ({ themePreference }) => ({
+        url: '/currentuser',
+        method: 'PUT',
+        body: { themePreference },
+      }),
+      async onQueryStarted({ themePreference }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          userApi.util.updateQueryData('currentUser', undefined, (draft) => {
+            draft.user.themePreference = themePreference;
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useCurrentUserQuery } = userApi;
+export const { useCurrentUserQuery, useChangeThemeMutation } = userApi;

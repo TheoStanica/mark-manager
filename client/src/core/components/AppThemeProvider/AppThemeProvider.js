@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import React, { createContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -22,7 +23,8 @@ const AppThemeProvider = ({ children }) => {
   const { data } = useCurrentUserQuery(undefined, { skip: !accessToken });
   const [selectedTheme, setSelectedTheme] = useState(getSelectedTheme(data));
   const [theme, setTheme] = useState(defaultTheme);
-  const [changeTheme, { isLoading }] = useChangeThemeMutation();
+  const [changeTheme, { isLoading, isError }] = useChangeThemeMutation();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const userTheme = data?.user?.themePreference;
@@ -37,14 +39,20 @@ const AppThemeProvider = ({ children }) => {
     if (accessToken) {
       if (!isLoading) {
         await changeTheme({ themePreference: theme });
-        setSelectedTheme(theme);
-        localStorage.setItem('theme', theme);
       }
     } else {
       setSelectedTheme(theme);
       localStorage.setItem('theme', theme);
     }
   };
+
+  useEffect(() => {
+    if (isError) {
+      enqueueSnackbar(`We couldn't update the theme. Please try again later `, {
+        variant: 'error',
+      });
+    }
+  }, [isError, enqueueSnackbar]);
 
   useEffect(() => {
     setTheme({
