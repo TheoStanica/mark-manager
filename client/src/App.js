@@ -8,12 +8,14 @@ import Login from './features/Auth/pages/Login/Login';
 import Landing from './core/pages/Landing/Landing';
 import { injectStore } from './api/apiBaseQuery';
 import ApplicationRoute from './features/Auth/components/PrivateRoute';
-import Dashboard from '../src/pages/Dashboard/Dashboard';
+// import Dashboard from '../src/pages/Dashboard/Dashboard';
 import Register from './features/Auth/pages/Register/Register';
 import AppThemeProvider from './core/components/AppThemeProvider/AppThemeProvider';
 import ForgotPassword from './features/Auth/pages/ForgotPassword/ForgotPassword';
 import Activate from './features/Auth/pages/Activate/Activate';
 import ResetPassword from './features/Auth/pages/ResetPassword/ResetPassword';
+import Dashboard from './features/Dashboard/pages/Dashboard/Dashboard';
+import Settings from './features/Settings/pages/Settings/Settings';
 
 injectStore(store);
 
@@ -49,6 +51,9 @@ const App = () => {
 
               <ApplicationRoute path="/dashboard" exact>
                 <Dashboard />
+              </ApplicationRoute>
+              <ApplicationRoute path="/settings" exact>
+                <Settings />
               </ApplicationRoute>
             </Switch>
           </Router>
