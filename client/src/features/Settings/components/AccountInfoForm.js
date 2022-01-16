@@ -10,6 +10,7 @@ import UploadAvatar from './UploadAvatar';
 import {
   useCurrentUserQuery,
   useUpdateUserMutation,
+  useUploadImageMutation,
 } from '../../../api/user/api';
 import { Formik } from 'formik';
 import { accountInfoSchema } from '../validation/accountInfo';
@@ -21,6 +22,10 @@ const AccountInfoForm = () => {
     updateUser,
     { isLoading, isError, isSuccess },
   ] = useUpdateUserMutation();
+  const [
+    uploadImage,
+    { isError: isImageError, isLoading: isImageLoading },
+  ] = useUploadImageMutation();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -32,7 +37,15 @@ const AccountInfoForm = () => {
         variant: 'error',
       });
     }
-  }, [isSuccess, isError, enqueueSnackbar]);
+    if (isImageError) {
+      enqueueSnackbar(
+        `We couldn't upload your profile picture. Please try again later`,
+        {
+          variant: 'error',
+        }
+      );
+    }
+  }, [isSuccess, isError, isImageError, enqueueSnackbar]);
 
   return (
     <form>
@@ -46,7 +59,22 @@ const AccountInfoForm = () => {
           }}
           enableReinitialize={true}
           onSubmit={async ({ email, name, avatar }) => {
-            await updateUser({ email, fullName: name, profilePicture: avatar });
+            let imageUrl = null;
+            try {
+              if (avatar) {
+                const image = new FormData();
+                image.append('image', avatar);
+                const imageResult = await uploadImage({
+                  image,
+                }).unwrap();
+                imageUrl = imageResult.imageUrl;
+              }
+              await updateUser({
+                email,
+                fullName: name,
+                profilePicture: imageUrl,
+              });
+            } catch {}
           }}
         >
           {({
@@ -99,7 +127,7 @@ const AccountInfoForm = () => {
                     fullWidth
                     sx={{ mt: 3, mb: 2 }}
                     startIcon={
-                      isLoading ? (
+                      isLoading || isImageLoading ? (
                         <CircularProgress color="inherit" size={20} />
                       ) : null
                     }
