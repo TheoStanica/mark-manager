@@ -30,7 +30,7 @@ const Security = () => {
   return (
     <Container maxWidth="md">
       <Paper sx={{ p: 2 }}>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" mb={2}>
           Change Password
         </Typography>
         <Formik
