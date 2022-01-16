@@ -1,8 +1,9 @@
-import { Container, Tab, Tabs } from '@mui/material';
+import { Container } from '@mui/material';
 import React, { useState } from 'react';
 import AppDrawer from '../../../../core/components/AppDrawer/AppDrawer';
+import NavTabs from '../../components/NavTabs/NavTabs';
 import Security from '../../components/Security/Security';
-import TabPanel from '../../components/TabPanel/TabPanel';
+import TabPanels from '../../components/TabPanels/TabPanels';
 
 const tabs = [
   { label: 'Account', index: 0, component: null },
@@ -20,30 +21,16 @@ const Settings = () => {
     setActiveTabIndex(value);
   };
 
-  const renderTabs = () => {
-    return tabs.map((tab) => <Tab key={tab.index} label={tab.label} />);
-  };
-
-  const renderTabPanels = () => {
-    return tabs.map((tab) => (
-      <TabPanel
-        key={tab.index}
-        tabIndex={tab.index}
-        activeIndex={activeTabIndex}
-      >
-        {tab.component}
-      </TabPanel>
-    ));
-  };
-
   return (
     <AppDrawer title="Settings">
       <Container sx={{ mb: 2 }} maxWidth="md">
-        <Tabs value={activeTabIndex} onChange={handleChange}>
-          {renderTabs()}
-        </Tabs>
+        <NavTabs
+          tabs={tabs}
+          activeTabIndex={activeTabIndex}
+          onHandleChange={handleChange}
+        />
       </Container>
-      {renderTabPanels()}
+      <TabPanels tabs={tabs} activeTabIndex={activeTabIndex} />
     </AppDrawer>
   );
 };
