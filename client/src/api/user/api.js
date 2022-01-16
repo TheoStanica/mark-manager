@@ -46,7 +46,7 @@ export const userApi = createApi({
       query: ({ image }) => ({
         url: '/uploadimage',
         method: 'POST',
-        body: { image },
+        body: image,
       }),
     }),
   }),
