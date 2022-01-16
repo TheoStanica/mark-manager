@@ -42,6 +42,13 @@ export const userApi = createApi({
       }),
       invalidatesTags: ['User'],
     }),
+    uploadImage: builder.mutation({
+      query: ({ image }) => ({
+        url: '/uploadimage',
+        method: 'POST',
+        body: { image },
+      }),
+    }),
   }),
 });
 
@@ -49,4 +56,5 @@ export const {
   useCurrentUserQuery,
   useChangeThemeMutation,
   useUpdateUserMutation,
+  useUploadImageMutation,
 } = userApi;
