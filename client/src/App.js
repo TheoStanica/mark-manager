@@ -4,20 +4,20 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './shared/redux/store';
 import { Switch } from 'react-router-dom';
-import Login from './features/Auth/pages/Login/Login';
+import Login from './features/Auth/pages/Login';
 import Landing from './core/pages/Landing/Landing';
 import { injectStore } from './api/apiBaseQuery';
 import ApplicationRoute from './features/Auth/components/PrivateRoute';
 // import Dashboard from '../src/pages/Dashboard/Dashboard';
-import Register from './features/Auth/pages/Register/Register';
+import Register from './features/Auth/pages/Register';
 import AppThemeProvider from './core/components/AppThemeProvider/AppThemeProvider';
-import ForgotPassword from './features/Auth/pages/ForgotPassword/ForgotPassword';
-import Activate from './features/Auth/pages/Activate/Activate';
-import ResetPassword from './features/Auth/pages/ResetPassword/ResetPassword';
-import Dashboard from './features/Dashboard/pages/Dashboard/Dashboard';
+import ForgotPassword from './features/Auth/pages/ForgotPassword';
+import Activate from './features/Auth/pages/Activate';
+import ResetPassword from './features/Auth/pages/ResetPassword';
+import Dashboard from './features/Dashboard/pages/Dashboard';
 import Settings from './features/Settings/pages/Settings';
 import { SnackbarProvider } from 'notistack';
-import Planner from './features/Planner/pages/Planner/Planner';
+import Planner from './features/Planner/pages/Planner';
 
 injectStore(store);
 

@@ -10,13 +10,13 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { credentialsSchema } from '../../validation/credentials';
-import { useLoginMutation } from '../../../../api/auth/api';
-import CredentialsForm from '../../components/CredentialsForm';
-import GradientBackground from '../../../../core/components/GradientBackground/GradientBackground';
+import { credentialsSchema } from '../validation/credentials';
+import { useLoginMutation } from '../../../api/auth/api';
+import CredentialsForm from '../components/CredentialsForm';
+import GradientBackground from '../../../core/components/GradientBackground/GradientBackground';
 import { NavLink } from 'react-router-dom';
-import ResendActivation from '../../components/ResendActivation';
-import PublicNavigation from '../../../../core/components/PublicNaviagtion/PublicNavigation';
+import ResendActivation from '../components/ResendActivation';
+import PublicNavigation from '../../../core/components/PublicNaviagtion/PublicNavigation';
 
 const Login = () => {
   const [login, { isLoading, isError, error }] = useLoginMutation();
