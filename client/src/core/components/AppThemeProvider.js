@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import {
   useChangeThemeMutation,
   useCurrentUserQuery,
-} from '../../../api/user/api';
+} from '../../api/user/api';
 
 export const ThemeContext = createContext();
 const getSelectedTheme = (data) => {

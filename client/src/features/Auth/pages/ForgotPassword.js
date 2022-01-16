@@ -13,11 +13,11 @@ import {
 import { Formik } from 'formik';
 import React from 'react';
 import { useResetPasswordRequestMutation } from '../../../api/auth/api';
-import GradientBackground from '../../../core/components/GradientBackground/GradientBackground';
-import GradientButton from '../../../core/components/GradientButton/GradientButton';
-import PublicNavigation from '../../../core/components/PublicNaviagtion/PublicNavigation';
+import GradientBackground from '../../../core/components/GradientBackground';
+import GradientButton from '../../../core/components/GradientButton';
+import PublicNavigation from '../../../core/components/PublicNavigation';
 import { emailSchema } from '../validation/email';
-import DisplayError from '../../../core/components/DisplayErrors/DisplayError';
+import DisplayError from '../../../core/components/DisplayError';
 
 const ForgotPassword = () => {
   const theme = useTheme();

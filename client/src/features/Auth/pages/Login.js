@@ -13,10 +13,10 @@ import {
 import { credentialsSchema } from '../validation/credentials';
 import { useLoginMutation } from '../../../api/auth/api';
 import CredentialsForm from '../components/CredentialsForm';
-import GradientBackground from '../../../core/components/GradientBackground/GradientBackground';
+import GradientBackground from '../../../core/components/GradientBackground';
 import { NavLink } from 'react-router-dom';
 import ResendActivation from '../components/ResendActivation';
-import PublicNavigation from '../../../core/components/PublicNaviagtion/PublicNavigation';
+import PublicNavigation from '../../../core/components/PublicNavigation';
 
 const Login = () => {
   const [login, { isLoading, isError, error }] = useLoginMutation();

@@ -13,10 +13,10 @@ import {
 import { Formik } from 'formik';
 import React from 'react';
 import { useResetPasswordMutation } from '../../../api/auth/api';
-import DisplayError from '../../../core/components/DisplayErrors/DisplayError';
-import GradientBackground from '../../../core/components/GradientBackground/GradientBackground';
-import GradientButton from '../../../core/components/GradientButton/GradientButton';
-import PublicNavigation from '../../../core/components/PublicNaviagtion/PublicNavigation';
+import DisplayError from '../../../core/components/DisplayError';
+import GradientBackground from '../../../core/components/GradientBackground';
+import GradientButton from '../../../core/components/GradientButton';
+import PublicNavigation from '../../../core/components/PublicNavigation';
 import { useQuery } from '../../../hooks/useQuery';
 import { resetPasswordSchema } from '../validation/resetPassword';
 

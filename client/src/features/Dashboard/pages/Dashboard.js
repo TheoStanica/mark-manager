@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLogoutMutation } from '../../../api/auth/api';
-import AppDrawer from '../../../core/components/AppDrawer/AppDrawer';
+import AppDrawer from '../../../core/components/AppDrawer';
 import useApplicationTheme from '../../../core/hooks/useApplicationTheme';
 
 const Dashboard = () => {

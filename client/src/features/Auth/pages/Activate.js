@@ -8,11 +8,11 @@ import {
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActivateMutation } from '../../../api/auth/api';
-import GradientBackground from '../../../core/components/GradientBackground/GradientBackground';
-import PublicNavigation from '../../../core/components/PublicNaviagtion/PublicNavigation';
+import GradientBackground from '../../../core/components/GradientBackground';
+import PublicNavigation from '../../../core/components/PublicNavigation';
 import useApplicationTheme from '../../../core/hooks/useApplicationTheme';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DisplayError from '../../../core/components/DisplayErrors/DisplayError';
+import DisplayError from '../../../core/components/DisplayError';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 const Activate = () => {

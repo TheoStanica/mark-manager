@@ -12,9 +12,9 @@ import {
 import { credentialsSchema } from '../validation/credentials';
 import { useRegisterMutation } from '../../../api/auth/api';
 import CredentialsForm from '../components/CredentialsForm';
-import GradientBackground from '../../../core/components/GradientBackground/GradientBackground';
+import GradientBackground from '../../../core/components/GradientBackground';
 import ResendActivation from '../components/ResendActivation';
-import PublicNavigation from '../../../core/components/PublicNaviagtion/PublicNavigation';
+import PublicNavigation from '../../../core/components/PublicNavigation';
 
 const Register = () => {
   const theme = useTheme();

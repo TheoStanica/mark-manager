@@ -9,9 +9,9 @@ import {
   useTheme,
   IconButton,
 } from '@mui/material';
-import Mark from '../../../assets/Pictures/Mark';
+import Mark from '../../assets/Pictures/Mark';
 import { NavLink } from 'react-router-dom';
-import useApplicationTheme from '../../hooks/useApplicationTheme';
+import useApplicationTheme from '../hooks/useApplicationTheme';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 

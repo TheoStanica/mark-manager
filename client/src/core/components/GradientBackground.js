@@ -1,6 +1,6 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
-import useApplicationTheme from '../../hooks/useApplicationTheme';
+import useApplicationTheme from '../hooks/useApplicationTheme';
 
 const GradientBackground = () => {
   const theme = useTheme();

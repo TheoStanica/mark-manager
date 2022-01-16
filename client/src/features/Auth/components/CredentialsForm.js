@@ -1,8 +1,8 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { TextField, CircularProgress, Box } from '@mui/material';
-import DisplayError from '../../../core/components/DisplayErrors/DisplayError';
-import GradientButton from '../../../core/components/GradientButton/GradientButton';
+import DisplayError from '../../../core/components/DisplayError';
+import GradientButton from '../../../core/components/GradientButton';
 
 const CredentialsForm = ({
   validationSchema,

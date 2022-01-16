@@ -8,9 +8,9 @@ import {
   Divider,
   Box,
 } from '@mui/material';
-import { useCurrentUserQuery } from '../../../api/user/api';
-import { useLogoutMutation } from '../../../api/auth/api';
-import useApplicationTheme from '../../hooks/useApplicationTheme';
+import { useCurrentUserQuery } from '../../api/user/api';
+import { useLogoutMutation } from '../../api/auth/api';
+import useApplicationTheme from '../hooks/useApplicationTheme';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import LogoutIcon from '@mui/icons-material/Logout';
