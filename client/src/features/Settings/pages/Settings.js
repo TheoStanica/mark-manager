@@ -4,14 +4,11 @@ import AppDrawer from '../../../core/components/AppDrawer';
 import NavTabs from '../components/Navigation/NavTabs';
 import Security from '../components/Security';
 import TabPanels from '../components/Navigation/TabPanels';
+import Account from '../components/Account';
 
 const tabs = [
-  { label: 'Account', index: 0, component: null },
-  {
-    label: 'Security',
-    index: 1,
-    component: <Security />,
-  },
+  { label: 'Account', index: 0, component: <Account /> },
+  { label: 'Security', index: 1, component: <Security /> },
 ];
 
 const Settings = () => {
