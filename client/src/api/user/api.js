@@ -34,7 +34,19 @@ export const userApi = createApi({
         }
       },
     }),
+    updateUser: builder.mutation({
+      query: ({ fullName, email, profilePicture }) => ({
+        url: '/currentUser',
+        method: 'PUT',
+        body: { fullName, email, profilePicture: profilePicture || undefined },
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
 });
 
-export const { useCurrentUserQuery, useChangeThemeMutation } = userApi;
+export const {
+  useCurrentUserQuery,
+  useChangeThemeMutation,
+  useUpdateUserMutation,
+} = userApi;
