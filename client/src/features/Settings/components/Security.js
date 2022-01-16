@@ -9,10 +9,10 @@ import { Box } from '@mui/system';
 import { Formik } from 'formik';
 import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
-import { useChangePasswordMutation } from '../../../../api/auth/api';
-import DisplayError from '../../../../core/components/DisplayErrors/DisplayError';
-import GradientButton from '../../../../core/components/GradientButton/GradientButton';
-import { changePasswordSchema } from '../../validation/changePassword';
+import { useChangePasswordMutation } from '../../../api/auth/api';
+import DisplayError from '../../../core/components/DisplayErrors/DisplayError';
+import GradientButton from '../../../core/components/GradientButton/GradientButton';
+import { changePasswordSchema } from '../validation/changePassword';
 
 const Security = () => {
   const [

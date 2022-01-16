@@ -1,9 +1,9 @@
 import { Container } from '@mui/material';
 import React, { useState } from 'react';
-import AppDrawer from '../../../../core/components/AppDrawer/AppDrawer';
-import NavTabs from '../../components/NavTabs/NavTabs';
-import Security from '../../components/Security/Security';
-import TabPanels from '../../components/TabPanels/TabPanels';
+import AppDrawer from '../../../core/components/AppDrawer/AppDrawer';
+import NavTabs from '../components/Navigation/NavTabs';
+import Security from '../components/Security';
+import TabPanels from '../components/Navigation/TabPanels';
 
 const tabs = [
   { label: 'Account', index: 0, component: null },

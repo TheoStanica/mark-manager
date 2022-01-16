@@ -15,7 +15,7 @@ import ForgotPassword from './features/Auth/pages/ForgotPassword/ForgotPassword'
 import Activate from './features/Auth/pages/Activate/Activate';
 import ResetPassword from './features/Auth/pages/ResetPassword/ResetPassword';
 import Dashboard from './features/Dashboard/pages/Dashboard/Dashboard';
-import Settings from './features/Settings/pages/Settings/Settings';
+import Settings from './features/Settings/pages/Settings';
 import { SnackbarProvider } from 'notistack';
 import Planner from './features/Planner/pages/Planner/Planner';
 

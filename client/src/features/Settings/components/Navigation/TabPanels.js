@@ -1,5 +1,5 @@
 import React from 'react';
-import TabPanel from '../TabPanel/TabPanel';
+import TabPanel from './TabPanel';
 
 const TabPanels = ({ tabs, activeTabIndex }) => {
   return tabs.map((tab) => (
