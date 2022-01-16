@@ -31,8 +31,12 @@ const UploadAvatar = ({ onImageUploaded }) => {
         onChange={onImageUpload}
       />
       <label htmlFor="contained-button-file">
-        <IconButton component="span">
-          <Avatar sx={{ width: 150, height: 150, margin: 3 }} src={imageLink} />
+        <IconButton component="span" aria-label="upload avatar">
+          <Avatar
+            sx={{ width: 150, height: 150, margin: 3 }}
+            src={imageLink}
+            alt="Avatar"
+          />
         </IconButton>
       </label>
     </>

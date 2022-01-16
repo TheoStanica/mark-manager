@@ -35,7 +35,7 @@ const ProfileMenu = () => {
 
   return (
     <>
-      <IconButton onClick={handleOpenUserMenu}>
+      <IconButton onClick={handleOpenUserMenu} aria-label="account menu">
         <Avatar
           alt={`${data?.user?.fullName}'s profile`}
           src={data?.user?.profilePicture}

@@ -133,7 +133,7 @@ const AppDrawer = ({ children, title }) => {
         PaperProps={{ sx: { border: 'none' } }}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawerClose} aria-label="close drawer">
             {theme.direction === 'rtl' ? (
               <ChevronRightIcon />
             ) : (
@@ -142,18 +142,22 @@ const AppDrawer = ({ children, title }) => {
           </IconButton>
         </DrawerHeader>
         <List>
-          <ListItem button onClick={() => history.push('/dashboard')}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button onClick={() => history.push('/planner')}>
-            <ListItemIcon>
-              <EventIcon />
-            </ListItemIcon>
-            <ListItemText primary="Planner" />
-          </ListItem>
+          <li>
+            <ListItem button onClick={() => history.push('/dashboard')}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+          </li>
+          <li>
+            <ListItem button onClick={() => history.push('/planner')}>
+              <ListItemIcon>
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText primary="Planner" />
+            </ListItem>
+          </li>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, pt: 2 }}>

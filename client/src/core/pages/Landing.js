@@ -93,7 +93,7 @@ const Landing = () => {
             <Typography {...copyH1Props} sx={inlineStyle(theme)}>
               Find what your customers really think
             </Typography>
-            <Typography {...copyH3Props} sx={{ ...inlineStyle(theme), mt: 3 }}>
+            <Typography {...copyH2Props} sx={{ ...inlineStyle(theme), mt: 3 }}>
               Keep an eye on the latest social conversations, trends and brand
               mentions. Quickly respond to comments for all your connected
               accounts
@@ -175,10 +175,6 @@ const copyH1Props = {
 const copyH2Props = {
   component: 'h2',
   variant: 'h5',
-};
-const copyH3Props = {
-  component: 'h3',
-  variant: 'body',
 };
 
 export default Landing;

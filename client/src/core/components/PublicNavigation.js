@@ -48,12 +48,21 @@ const PublicNavigation = ({
             {...toolBarProps}
           >
             <Box sx={{ mr: 2 }}>
-              <Link component={NavLink} to="/" style={{ display: 'flex' }}>
+              <Link
+                component={NavLink}
+                to="/"
+                style={{ display: 'flex' }}
+                aria-label="logo"
+              >
                 <Mark size={48} />
               </Link>
             </Box>
             <Box sx={{ marginLeft: 'auto' }}>
-              <IconButton sx={{ mr: 1 }} onClick={toggleTheme}>
+              <IconButton
+                sx={{ mr: 1 }}
+                onClick={toggleTheme}
+                aria-label="toggle theme"
+              >
                 {renderToggleThemeButton()}
               </IconButton>
               <Button color="inherit" sx={{ mr: 1 }}>
