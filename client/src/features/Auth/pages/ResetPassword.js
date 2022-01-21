@@ -5,15 +5,15 @@ import {
   CssBaseline,
   Grid,
   Paper,
-  TextField,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import React from 'react';
 import { useResetPasswordMutation } from '../../../api/auth/api';
 import DisplayError from '../../../core/components/DisplayError';
+import FormikTextField from '../../../core/components/FormikTextField';
 import GradientBackground from '../../../core/components/GradientBackground';
 import GradientButton from '../../../core/components/GradientButton';
 import PublicNavigation from '../../../core/components/PublicNavigation';
@@ -28,6 +28,13 @@ const ResetPassword = () => {
     resetPassword,
     { isLoading, isError, error, isSuccess },
   ] = useResetPasswordMutation();
+  const formik = useFormik({
+    validationSchema: resetPasswordSchema,
+    initialValues: { password: '', confirmPassword: '' },
+    onSubmit: async ({ password }) => {
+      await resetPassword({ password, token: query.get('token') });
+    },
+  });
 
   return (
     <>
@@ -42,86 +49,43 @@ const ResetPassword = () => {
                 Create New Password
               </Typography>
             </Grid>
-            <Formik
-              validationSchema={resetPasswordSchema}
-              initialValues={{ password: '', confirmPassword: '' }}
-              onSubmit={async ({ password }) => {
-                await resetPassword({ password, token: query.get('token') });
-              }}
-            >
-              {({
-                handleBlur,
-                values,
-                handleChange,
-                errors,
-                touched,
-                handleSubmit,
-              }) => (
-                <form>
-                  <TextField
-                    variant="standard"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="password"
-                    label="New Password"
-                    type="password"
-                    name="password"
-                    autoComplete="password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={
-                      errors.password && touched.password
-                        ? errors.password
-                        : null
-                    }
-                    error={errors.password && touched.password}
-                  />
-                  <TextField
-                    variant="standard"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="confirmPassword"
-                    label="Confirm New Password"
-                    type="password"
-                    name="confirmPassword"
-                    autoComplete="confirmPassword"
-                    value={values.confirmPassword}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={
-                      errors.confirmPassword && touched.confirmPassword
-                        ? errors.confirmPassword
-                        : null
-                    }
-                    error={errors.confirmPassword && touched.confirmPassword}
-                  />
-                  {isError && <DisplayError error={error} />}
-                  {isSuccess && (
-                    <Typography component="p" mt={1}>
-                      You password has been reset successfully
-                    </Typography>
-                  )}
-                  <Box>
-                    <GradientButton
-                      type="submit"
-                      onClick={handleSubmit}
-                      fullWidth
-                      sx={{ mt: 3, mb: 2 }}
-                      startIcon={
-                        isLoading ? (
-                          <CircularProgress color="inherit" size={20} />
-                        ) : null
-                      }
-                    >
-                      Change Password
-                    </GradientButton>
-                  </Box>
-                </form>
+            <form>
+              <FormikTextField
+                formik={formik}
+                id="password"
+                label="New Password"
+                type="password"
+                required
+              />
+              <FormikTextField
+                formik={formik}
+                id="confirmPassword"
+                label="Confirm New Password"
+                type="password"
+                required
+              />
+              {isError && <DisplayError error={error} />}
+              {isSuccess && (
+                <Typography component="p" mt={1}>
+                  You password has been reset successfully
+                </Typography>
               )}
-            </Formik>
+              <Box>
+                <GradientButton
+                  type="submit"
+                  onClick={formik.handleSubmit}
+                  fullWidth
+                  sx={{ mt: 3, mb: 2 }}
+                  startIcon={
+                    isLoading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null
+                  }
+                >
+                  Change Password
+                </GradientButton>
+              </Box>
+            </form>
           </Paper>
         </Box>
       </Container>
