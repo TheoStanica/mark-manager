@@ -1,23 +1,15 @@
-import {
-  Box,
-  CircularProgress,
-  Container,
-  CssBaseline,
-  Typography,
-} from '@mui/material';
+import { Box, Container, CssBaseline } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActivateMutation } from '../../../api/auth/api';
 import GradientBackground from '../../../core/components/GradientBackground';
 import PublicNavigation from '../../../core/components/PublicNavigation';
-import useApplicationTheme from '../../../core/hooks/useApplicationTheme';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DisplayError from '../../../core/components/DisplayError';
-import CancelIcon from '@mui/icons-material/Cancel';
+import Loading from '../../../core/components/FetchStatus/Loading';
+import Failure from '../../../core/components/FetchStatus/Failure';
+import Success from '../../../core/components/FetchStatus/Success';
 
 const Activate = () => {
   const { activationToken } = useParams();
-  const { mode } = useApplicationTheme();
   const [
     activate,
     { isLoading, isError, isSuccess, error },
@@ -30,36 +22,6 @@ const Activate = () => {
     activateAccount();
   }, [activationToken, activate]);
 
-  const loadingContent = () => (
-    <>
-      <CircularProgress
-        sx={{ mb: 2 }}
-        color={mode === 'dark' ? 'secondary' : 'primary'}
-      />
-      <Typography>Hold on.. Activating your account</Typography>
-    </>
-  );
-
-  const successContent = () => (
-    <>
-      <CheckCircleIcon
-        sx={{ mb: 2, fontSize: 50 }}
-        color={mode === 'dark' ? 'secondary' : 'primary'}
-      />
-      <Typography>Account activated!</Typography>
-    </>
-  );
-
-  const errorContent = () => (
-    <>
-      <CancelIcon
-        sx={{ mb: 2, fontSize: 50 }}
-        color={mode === 'dark' ? 'secondary' : 'primary'}
-      />
-      <DisplayError error={error} simple />
-    </>
-  );
-
   return (
     <>
       <PublicNavigation transparent appBarStyle={{ position: 'absolute' }} />
@@ -68,9 +30,21 @@ const Activate = () => {
         <CssBaseline />
         <Box sx={contentContainerStyle}>
           <Box sx={centeredContainer}>
-            {isLoading && loadingContent()}
-            {isSuccess && successContent()}
-            {isError && errorContent()}
+            {isLoading && (
+              <Loading
+                message="Hold on.. Activating your account.."
+                circularProgressProps={{ size: 100 }}
+              />
+            )}
+            {isSuccess && (
+              <Success
+                message="Account activated!"
+                style={{ width: 148, height: 148 }}
+              />
+            )}
+            {isError && (
+              <Failure error={error} style={{ height: 110, width: 110 }} />
+            )}
           </Box>
         </Box>
       </Container>
