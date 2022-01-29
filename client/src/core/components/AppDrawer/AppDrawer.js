@@ -8,19 +8,14 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  ListItem,
-  ListItemIcon,
   styled,
   List,
-  ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ProfileMenu from './ProfileMenu';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import EventIcon from '@mui/icons-material/Event';
-import { useHistory } from 'react-router-dom';
+import ProfileMenu from '../ProfileMenu';
+import DrawerItems from './DrawerItems';
 
 const drawerWidth = 200;
 
@@ -92,7 +87,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const AppDrawer = ({ children, title }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const history = useHistory();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -142,22 +136,7 @@ const AppDrawer = ({ children, title }) => {
           </IconButton>
         </DrawerHeader>
         <List>
-          <li>
-            <ListItem button onClick={() => history.push('/dashboard')}>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-          </li>
-          <li>
-            <ListItem button onClick={() => history.push('/planner')}>
-              <ListItemIcon>
-                <EventIcon />
-              </ListItemIcon>
-              <ListItemText primary="Planner" />
-            </ListItem>
-          </li>
+          <DrawerItems />
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, pt: 2 }}>

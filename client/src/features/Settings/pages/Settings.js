@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import React, { useState } from 'react';
-import AppDrawer from '../../../core/components/AppDrawer';
+import AppDrawer from '../../../core/components/AppDrawer/AppDrawer';
 import NavTabs from '../components/Navigation/NavTabs';
 import Security from '../components/Security';
 import TabPanels from '../components/Navigation/TabPanels';
