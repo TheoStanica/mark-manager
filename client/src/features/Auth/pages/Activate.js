@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActivateMutation } from '../../../api/auth/api';
 import GradientBackground from '../../../core/components/GradientBackground';
-import PublicNavigation from '../../../core/components/PublicNavigation';
+import PublicNavigation from '../../../core/components/PublicNavigation/PublicNavigation';
 import Loading from '../../../core/components/FetchStatus/Loading';
 import Failure from '../../../core/components/FetchStatus/Failure';
 import Success from '../../../core/components/FetchStatus/Success';

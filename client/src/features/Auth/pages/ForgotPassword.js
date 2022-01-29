@@ -14,7 +14,7 @@ import React from 'react';
 import { useResetPasswordRequestMutation } from '../../../api/auth/api';
 import GradientBackground from '../../../core/components/GradientBackground';
 import GradientButton from '../../../core/components/GradientButton';
-import PublicNavigation from '../../../core/components/PublicNavigation';
+import PublicNavigation from '../../../core/components/PublicNavigation/PublicNavigation';
 import { emailSchema } from '../validation/email';
 import DisplayError from '../../../core/components/DisplayError';
 import FormikTextField from '../../../core/components/FormikTextField';

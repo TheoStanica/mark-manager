@@ -16,7 +16,7 @@ import CredentialsForm from '../components/CredentialsForm';
 import GradientBackground from '../../../core/components/GradientBackground';
 import { NavLink } from 'react-router-dom';
 import ResendActivation from '../components/ResendActivation';
-import PublicNavigation from '../../../core/components/PublicNavigation';
+import PublicNavigation from '../../../core/components/PublicNavigation/PublicNavigation';
 
 const Login = () => {
   const [login, { isLoading, isError, error }] = useLoginMutation();

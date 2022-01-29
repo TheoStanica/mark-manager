@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Pictures } from '../../assets/Pictures';
 import useApplicationTheme from '../hooks/useApplicationTheme';
-import PublicNavigation from '../components/PublicNavigation';
+import PublicNavigation from '../components/PublicNavigation/PublicNavigation';
 import GradientButton from '../components/GradientButton';
 import GradientBackground from '../components/GradientBackground';
 import {

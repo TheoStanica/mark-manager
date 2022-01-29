@@ -14,7 +14,7 @@ import { useRegisterMutation } from '../../../api/auth/api';
 import CredentialsForm from '../components/CredentialsForm';
 import GradientBackground from '../../../core/components/GradientBackground';
 import ResendActivation from '../components/ResendActivation';
-import PublicNavigation from '../../../core/components/PublicNavigation';
+import PublicNavigation from '../../../core/components/PublicNavigation/PublicNavigation';
 
 const Register = () => {
   const theme = useTheme();
