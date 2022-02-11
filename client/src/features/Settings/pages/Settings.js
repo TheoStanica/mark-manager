@@ -5,10 +5,12 @@ import NavTabs from '../components/Navigation/NavTabs';
 import Security from '../components/Security';
 import TabPanels from '../components/Navigation/TabPanels';
 import Account from '../components/Account';
+import ConnectedAccounts from '../components/ConnectedAccounts/ConnectedAccounts';
 
 const tabs = [
   { label: 'Account', index: 0, component: <Account /> },
   { label: 'Security', index: 1, component: <Security /> },
+  { label: 'Connected Accounts', index: 2, component: <ConnectedAccounts /> },
 ];
 
 const Settings = () => {

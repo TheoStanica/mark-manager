@@ -3,7 +3,12 @@ import React from 'react';
 
 const NavTabs = ({ tabs, onHandleChange, activeTabIndex }) => {
   return (
-    <Tabs value={activeTabIndex} onChange={onHandleChange}>
+    <Tabs
+      value={activeTabIndex}
+      onChange={onHandleChange}
+      variant="scrollable"
+      scrollButtons="auto"
+    >
       {tabs.map((tab) => (
         <Tab key={tab.index} label={tab.label} />
       ))}

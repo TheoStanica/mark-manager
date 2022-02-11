@@ -12,7 +12,7 @@ const AddSocialDialog = ({ open, onClose }) => {
       aria-describedby="dialog-dialog-platforms"
     >
       <DialogTitle id="dialog-dialog-title" sx={{ textAlign: 'center' }}>
-        Select platform
+        Add a Social Media account
       </DialogTitle>
       <DialogContent>
         <Box id="dialog-dialog-platforms" sx={platformsStyle}>
