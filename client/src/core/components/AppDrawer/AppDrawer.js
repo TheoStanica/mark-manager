@@ -10,12 +10,14 @@ import {
   IconButton,
   styled,
   List,
+  Divider,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ProfileMenu from '../ProfileMenu';
 import DrawerItems from './DrawerItems';
+import AddSocialAccount from './AddSocialAccount';
 
 const drawerWidth = 200;
 
@@ -136,12 +138,14 @@ const AppDrawer = ({ children, title }) => {
           </IconButton>
         </DrawerHeader>
         <List>
+          <AddSocialAccount />
+          <Divider />
           <DrawerItems />
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, pt: 2 }}>
+      <Box component="main" sx={{ pt: 2, flexGrow: 1, overflow: 'hidden' }}>
         <DrawerHeader />
-        {children}
+        <Box sx={{ minWidth: 350 }}>{children}</Box>
       </Box>
     </Box>
   );
