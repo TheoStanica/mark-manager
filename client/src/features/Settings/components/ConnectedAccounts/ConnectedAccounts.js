@@ -22,7 +22,7 @@ const ConnectedAccounts = () => {
               noMessage
             />
           )}
-          {data?.map((account, index) => (
+          {data?.map((account) => (
             <ConnectedAccount key={uuidv4()} account={account} />
           ))}
         </Box>
