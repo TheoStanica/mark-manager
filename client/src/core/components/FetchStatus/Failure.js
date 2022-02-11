@@ -16,7 +16,7 @@ const defaultStyle = {
   width: 46,
 };
 
-const Failure = ({ error, noMessage = false, options, style }) => {
+const Failure = ({ error, message, noMessage = false, options, style }) => {
   const { mode } = useApplicationTheme();
   const [lottieOptions, setLottieOptions] = useState({
     ...defaultOptions,
@@ -38,7 +38,8 @@ const Failure = ({ error, noMessage = false, options, style }) => {
   return (
     <>
       {View}
-      {!noMessage && (
+      {!noMessage && message}
+      {error && (
         <Box sx={{ mt: 1 }}>
           <DisplayError error={error} simple />
         </Box>
