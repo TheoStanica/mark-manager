@@ -15,11 +15,18 @@ import storage from 'redux-persist/lib/storage';
 import persistReducer from 'redux-persist/es/persistReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { userApi } from '../../api/user/api';
+import {
+  createStateSyncMiddleware,
+  initMessageListener,
+  initStateWithPrevTab,
+} from 'redux-state-sync';
+import { twitterApi } from '../../api/twitter/api';
 
 const reducers = {
   [authSlice.name]: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [twitterApi.reducerPath]: twitterApi.reducer,
 };
 
 const combinedReducer = combineReducers(reducers);
@@ -40,9 +47,16 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(authApi.middleware, userApi.middleware),
+    }).concat(
+      createStateSyncMiddleware({ blacklist: ['persist/PERSIST'] }),
+      authApi.middleware,
+      userApi.middleware,
+      twitterApi.middleware
+    ),
 });
 
 export const persistor = persistStore(store);
+initMessageListener(persistor);
+initStateWithPrevTab(persistor);
 export const useAppDispatch = () => useDispatch();
 export const useAppSelector = useSelector;
