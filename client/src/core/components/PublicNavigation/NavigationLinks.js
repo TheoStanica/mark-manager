@@ -32,8 +32,8 @@ const NavigationLinks = ({ linkStyle }) => {
           {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>
       </li>
-      {linksData.map((item) => (
-        <li>
+      {linksData.map((item, index) => (
+        <li key={index}>
           <Button color="inherit" aria-label={item.name}>
             <Link
               component={NavLink}
