@@ -57,6 +57,12 @@ export const authApi = createApi({
         body: { currentPassword, newPassword },
       }),
     }),
+    connectTwitter: builder.query({
+      query: () => ({
+        url: '/twitter/connect',
+        method: 'GET',
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: '/signout',
@@ -75,5 +81,6 @@ export const {
   useResetPasswordRequestMutation,
   useResetPasswordMutation,
   useChangePasswordMutation,
+  useConnectTwitterQuery,
   useLogoutMutation,
 } = authApi;
