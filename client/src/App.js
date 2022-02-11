@@ -18,6 +18,7 @@ import Dashboard from './features/Dashboard/pages/Dashboard';
 import Settings from './features/Settings/pages/Settings';
 import { SnackbarProvider } from 'notistack';
 import Planner from './features/Planner/pages/Planner';
+import TwitterConnect from './features/ConnectSocialAccount/pages/TwitterConnect';
 
 injectStore(store);
 
@@ -60,6 +61,9 @@ const App = () => {
                 </ApplicationRoute>
                 <ApplicationRoute path="/planner" exact>
                   <Planner />
+                </ApplicationRoute>
+                <ApplicationRoute path="/twitter/connect" exact>
+                  <TwitterConnect />
                 </ApplicationRoute>
               </Switch>
             </Router>
