@@ -34,6 +34,25 @@ export const userApi = createApi({
         }
       },
     }),
+    updateStreamPreferences: builder.mutation({
+      query: ({ streams }) => ({
+        url: '/streampreferences',
+        method: 'POST',
+        body: { stream_preferences: streams },
+      }),
+      async onQueryStarted({ streams }, { dispatch, queryFulfilled }) {
+        const postResult = dispatch(
+          userApi.util.updateQueryData('currentUser', undefined, (draft) => {
+            draft.user.stream_preferences = streams;
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          postResult.undo();
+        }
+      },
+    }),
     updateUser: builder.mutation({
       query: ({ fullName, email, profilePicture }) => ({
         url: '/currentUser',
@@ -55,6 +74,7 @@ export const userApi = createApi({
 export const {
   useCurrentUserQuery,
   useChangeThemeMutation,
+  useUpdateStreamPreferencesMutation,
   useUpdateUserMutation,
   useUploadImageMutation,
 } = userApi;
