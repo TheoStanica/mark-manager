@@ -19,6 +19,7 @@ import Settings from './features/Settings/pages/Settings';
 import { SnackbarProvider } from 'notistack';
 import Planner from './features/Planner/pages/Planner';
 import TwitterConnect from './features/ConnectSocialAccount/pages/TwitterConnect';
+import { CssBaseline } from '@mui/material';
 
 injectStore(store);
 
@@ -28,6 +29,7 @@ const App = () => {
       <PersistGate loading={<div>Loading</div>} persistor={persistor}>
         <SnackbarProvider maxSnack={3}>
           <AppThemeProvider>
+            <CssBaseline enableColorScheme />
             <Router>
               <Switch>
                 <ApplicationRoute path="/" exact onlyPublic>
