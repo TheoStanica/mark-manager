@@ -22,7 +22,7 @@ const Settings = () => {
 
   return (
     <AppDrawer title="Settings">
-      <Container sx={{ mb: 2 }} maxWidth="md">
+      <Container sx={{ my: 2 }} maxWidth="md">
         <NavTabs
           tabs={tabs}
           activeTabIndex={activeTabIndex}
