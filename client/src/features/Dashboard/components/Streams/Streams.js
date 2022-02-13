@@ -1,14 +1,23 @@
-import { Box } from '@mui/material';
 import React from 'react';
+import { Box } from '@mui/material';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { useCurrentUserQuery } from '../../../../api/user/api';
+
+import {
+  useCurrentUserQuery,
+  useUpdateStreamPreferencesMutation,
+} from '../../../../api/user/api';
 import Stream from './Stream/Stream';
 
 const Streams = () => {
   const { data } = useCurrentUserQuery();
+  const [update] = useUpdateStreamPreferencesMutation();
 
-  function handleOnDragEnd(result) {
+  async function handleOnDragEnd(result) {
     if (!result.destination) return;
+    const items = [...data.user.stream_preferences];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    await update({ streams: items });
   }
 
   return (
