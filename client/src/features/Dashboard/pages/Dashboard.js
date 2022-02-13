@@ -1,17 +1,11 @@
 import React from 'react';
-import { useLogoutMutation } from '../../../api/auth/api';
 import AppDrawer from '../../../core/components/AppDrawer/AppDrawer';
-import useApplicationTheme from '../../../core/hooks/useApplicationTheme';
+import Streams from '../components/Streams/Streams';
 
 const Dashboard = () => {
-  const [logout] = useLogoutMutation();
-  const { toggleTheme } = useApplicationTheme();
-
   return (
     <AppDrawer title="Dashboard">
-      <button onClick={logout}>logout</button>
-
-      <button onClick={toggleTheme}>toggle theme</button>
+      <Streams />
     </AppDrawer>
   );
 };
