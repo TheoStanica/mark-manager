@@ -11,6 +11,7 @@ import {
   styled,
   List,
   Divider,
+  useMediaQuery,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -89,6 +90,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const AppDrawer = ({ children, title }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -143,12 +145,20 @@ const AppDrawer = ({ children, title }) => {
           <DrawerItems />
         </List>
       </Drawer>
-      <Box component="main" sx={{ pt: 2, flexGrow: 1, overflow: 'hidden' }}>
+      <Box component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <DrawerHeader />
-        <Box sx={{ minWidth: 350 }}>{children}</Box>
+        <Box sx={container(isLowerSizeScreen)}>{children}</Box>
       </Box>
     </Box>
   );
 };
+
+const container = (isLowerSizeScreen) => ({
+  minWidth: 350,
+  overflow: 'auto',
+  height: `calc(100vh - ${isLowerSizeScreen ? 56 : 64}px)`,
+  display: 'flex',
+  flexDirection: 'column',
+});
 
 export default AppDrawer;
