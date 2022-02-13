@@ -53,6 +53,7 @@ export const store = configureStore({
       userApi.middleware,
       twitterApi.middleware
     ),
+  devTools: false,
 });
 
 export const persistor = persistStore(store);
