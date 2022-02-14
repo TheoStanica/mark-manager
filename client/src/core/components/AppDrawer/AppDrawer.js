@@ -139,13 +139,13 @@ const AppDrawer = ({ children, title }) => {
             )}
           </IconButton>
         </DrawerHeader>
+        <AddSocialAccount />
+        <Divider />
         <List>
-          <AddSocialAccount />
-          <Divider />
           <DrawerItems />
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
+      <Box component="main" sx={main}>
         <DrawerHeader />
         <Box sx={container(isLowerSizeScreen)}>{children}</Box>
       </Box>
@@ -153,10 +153,15 @@ const AppDrawer = ({ children, title }) => {
   );
 };
 
+const main = {
+  overflow: 'hidden',
+  width: '100%',
+};
+
 const container = (isLowerSizeScreen) => ({
-  minWidth: 350,
-  overflow: 'auto',
-  height: `calc(100vh - ${isLowerSizeScreen ? 56 : 64}px)`,
+  boxSizing: 'content-box',
+  minWidth: 320,
+  minHeight: `calc(100vh - ${isLowerSizeScreen ? 56 : 64}px)`,
   display: 'flex',
   flexDirection: 'column',
 });
