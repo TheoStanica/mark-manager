@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import {
@@ -11,12 +11,16 @@ import Stream from './Stream/Stream';
 const Streams = () => {
   const { data } = useCurrentUserQuery();
   const [update] = useUpdateStreamPreferencesMutation();
+  const [isDragging, setIsDragging] = useState(false);
+  const theme = useTheme();
+  const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   async function handleOnDragEnd(result) {
     if (!result.destination) return;
     const items = [...data.user.stream_preferences];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
+    setIsDragging(false);
     await update({ streams: items });
   }
 
@@ -25,7 +29,7 @@ const Streams = () => {
       <Droppable droppableId="streams" direction="horizontal">
         {(provided) => (
           <Box
-            sx={container}
+            sx={container(isLowerSizeScreen)}
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
@@ -36,18 +40,22 @@ const Streams = () => {
                 draggableId={stream.id}
                 index={index}
               >
-                {(provided) => (
-                  <div
-                    style={{ height: '100%' }}
+                {(provided, snapshot) => (
+                  <Box
                     ref={provided.innerRef}
+                    sx={{
+                      scrollSnapAlign: isDragging ? 'none' : 'start',
+                    }}
                     {...provided.draggableProps}
                   >
                     <Stream
                       key={stream.id}
                       stream={stream}
                       provided={provided}
+                      snapshot={snapshot}
+                      onDragging={() => setIsDragging(true)}
                     />
-                  </div>
+                  </Box>
                 )}
               </Draggable>
             ))}
@@ -59,11 +67,14 @@ const Streams = () => {
   );
 };
 
-const container = {
+const container = (isLowerSizeScreen) => ({
+  scrollSnapType: 'x mandatory',
   display: 'inline-flex',
-  gap: 1,
+  flex: 1,
+  overflow: 'auto',
   height: '100%',
-  p: 1,
-};
+  gap: isLowerSizeScreen ? 0 : 1,
+  p: isLowerSizeScreen ? 0 : 1,
+});
 
 export default Streams;

@@ -27,10 +27,10 @@ const StreamHeader = ({ stream, dragHandleProps, onReload, onDelete }) => {
           <StreamAccountName stream={stream} />
         </Box>
         <Box sx={control}>
-          <IconButton onClick={handleOnReload}>
+          <IconButton onClick={handleOnReload} aria-label="refresh stream">
             <ReplayIcon fontSize="small" />
           </IconButton>
-          <IconButton onClick={handleOnDelete}>
+          <IconButton onClick={handleOnDelete} aria-label="delete stream">
             <DeleteIcon fontSize="small" />
           </IconButton>
         </Box>
