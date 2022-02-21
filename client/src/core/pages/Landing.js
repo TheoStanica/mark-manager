@@ -10,14 +10,12 @@ import {
   Container,
   CssBaseline,
   Typography,
-  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import useIsMobileScreen from '../hooks/useIsMobileScreen';
 
 const Landing = () => {
   const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isMobile = useIsMobileScreen();
 
   const history = useHistory();

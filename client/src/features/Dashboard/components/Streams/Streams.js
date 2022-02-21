@@ -1,11 +1,5 @@
-import React, { useRef, useState } from 'react';
-import {
-  Box,
-  useTheme,
-  useMediaQuery,
-  Slide,
-  useScrollTrigger,
-} from '@mui/material';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import {
