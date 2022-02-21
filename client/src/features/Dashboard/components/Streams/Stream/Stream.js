@@ -1,11 +1,11 @@
-import { Paper, useTheme, useMediaQuery } from '@mui/material';
+import { Paper } from '@mui/material';
 import React, { useEffect } from 'react';
+import useIsMobileScreen from '../../../../../core/hooks/useIsMobileScreen';
 import StreamBody from './StreamBody';
 import StreamHeader from './StreamHeader/StreamHeader';
 
 const Stream = ({ stream, provided, snapshot, onDragging }) => {
-  const theme = useTheme();
-  const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useIsMobileScreen();
 
   useEffect(() => {
     // required to disable snap scrolling in parent container while dragging
@@ -15,7 +15,7 @@ const Stream = ({ stream, provided, snapshot, onDragging }) => {
   }, [snapshot, onDragging]);
 
   return (
-    <Paper elevation={3} sx={container(isLowerSizeScreen)}>
+    <Paper elevation={isMobile ? 1 : 3} sx={container(isMobile)}>
       <StreamHeader
         dragHandleProps={provided.dragHandleProps}
         stream={stream}
@@ -25,11 +25,14 @@ const Stream = ({ stream, provided, snapshot, onDragging }) => {
   );
 };
 
-const container = (isLowerSizeSceen) => ({
+const container = (isMobile) => ({
   minWidth: 300,
-  maxWidth: isLowerSizeSceen ? '100vw' : 500,
-  width: isLowerSizeSceen ? '100vw' : '33vw',
+  maxWidth: isMobile ? '100vw' : 500,
+  width: isMobile ? '100vw' : '33vw',
   height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: isMobile ? 0 : 1,
 });
 
 export default Stream;
