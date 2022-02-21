@@ -11,7 +11,7 @@ const useCustomScrollTrigger = (options) => {
 
   useEffect(() => {
     setContextTrigger(trigger);
-  }, [trigger]);
+  }, [trigger, setContextTrigger]);
 
   return contextTrigger;
 };
