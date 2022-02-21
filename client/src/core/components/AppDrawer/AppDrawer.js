@@ -11,7 +11,7 @@ import {
   styled,
   List,
   Divider,
-  useMediaQuery,
+  Collapse,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -19,6 +19,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ProfileMenu from '../ProfileMenu';
 import DrawerItems from './DrawerItems';
 import AddSocialAccount from './AddSocialAccount';
+import useCustomScrollTrigger from '../../hooks/useCustomScrollTrigger';
+import useIsMobileScreen from '../../hooks/useIsMobileScreen';
 
 const drawerWidth = 200;
 
@@ -37,9 +39,9 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(0)} + 1px)`,
+  width: theme.spacing(0),
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(7)} + 1px)`,
+    width: theme.spacing(7),
   },
 });
 
@@ -90,7 +92,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const AppDrawer = ({ children, title }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const trigger = useCustomScrollTrigger();
+  const isMobile = useIsMobileScreen();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -103,28 +106,31 @@ const AppDrawer = ({ children, title }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} color="inherit" elevation={0}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {title}
-          </Typography>
-          <Box ml="auto">
-            <ProfileMenu />
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <Collapse in={!(trigger && isMobile)}>
+        <AppBar position="fixed" open={open} color="inherit" elevation={0}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              {title}
+            </Typography>
+            <Box ml="auto">
+              <ProfileMenu />
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </Collapse>
+
       <Drawer
         variant="permanent"
         open={open}
@@ -146,8 +152,10 @@ const AppDrawer = ({ children, title }) => {
         </List>
       </Drawer>
       <Box component="main" sx={main}>
-        <DrawerHeader />
-        <Box sx={container(isLowerSizeScreen)}>{children}</Box>
+        <Collapse in={!(trigger && isMobile)}>
+          <DrawerHeader />
+        </Collapse>
+        <Box sx={container(isMobile)}>{children}</Box>
       </Box>
     </Box>
   );
@@ -158,10 +166,10 @@ const main = {
   width: '100%',
 };
 
-const container = (isLowerSizeScreen) => ({
+const container = (isMobile) => ({
   boxSizing: 'content-box',
   minWidth: 320,
-  minHeight: `calc(100vh - ${isLowerSizeScreen ? 56 : 64}px)`,
+  minHeight: `calc(100vh - ${isMobile ? 56 : 64}px)`,
   display: 'flex',
   flexDirection: 'column',
 });
