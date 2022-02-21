@@ -13,10 +13,13 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import useIsMobileScreen from '../hooks/useIsMobileScreen';
 
 const Landing = () => {
   const theme = useTheme();
-  const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('md'));
+  // const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobileScreen();
+
   const history = useHistory();
   const { mode } = useApplicationTheme();
 
@@ -65,7 +68,7 @@ const Landing = () => {
               Register now
             </GradientButton>
           </Box>
-          <Box sx={copyCTAImageStyle(isLowerSizeScreen)}>
+          <Box sx={copyCTAImageStyle(isMobile)}>
             <img
               style={{ width: '100%' }}
               src={
@@ -78,7 +81,7 @@ const Landing = () => {
       </Box>
       <Box container sx={sectionStyle} component="section">
         <Container sx={contentContainerStyle} maxWidth="xl">
-          <Box sx={{ ...copyCTAImageStyle(isLowerSizeScreen), width: '38%' }}>
+          <Box sx={{ ...copyCTAImageStyle(isMobile), width: '38%' }}>
             <img
               style={{ width: '100%' }}
               src={
@@ -89,7 +92,7 @@ const Landing = () => {
               alt="Find what your customers really think"
             />
           </Box>
-          <Box sx={{ ...copyCTAStyle, pl: isLowerSizeScreen ? 0 : 8 }}>
+          <Box sx={{ ...copyCTAStyle, pl: isMobile ? 0 : 8 }}>
             <Typography {...copyH1Props} sx={inlineStyle(theme)}>
               Find what your customers really think
             </Typography>
@@ -114,7 +117,7 @@ const Landing = () => {
               Register now
             </GradientButton>
           </Box>
-          <Box sx={copyCTAImageStyle(isLowerSizeScreen)}>
+          <Box sx={copyCTAImageStyle(isMobile)}>
             <img
               style={{ width: '100%' }}
               src={
@@ -163,9 +166,9 @@ const copyCTAStyle = {
   alignItems: 'baseline',
 };
 
-const copyCTAImageStyle = (isLowerSizeScreen) => ({
+const copyCTAImageStyle = (isMobile) => ({
   width: '40vw',
-  display: isLowerSizeScreen ? 'none' : 'flex',
+  display: isMobile ? 'none' : 'flex',
 });
 
 const copyH1Props = {
