@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Box, Divider, IconButton } from '@mui/material';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -7,38 +7,40 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import StreamType from './StreamType';
 import StreamAccountName from './StreamAccountName';
 
-const StreamHeader = ({ stream, dragHandleProps, onReload, onDelete }) => {
-  const handleOnReload = (e) => {
-    e.stopPropagation();
-    if (onReload) onReload();
-  };
+const StreamHeader = forwardRef(
+  ({ stream, dragHandleProps, onReload, onDelete }, ref) => {
+    const handleOnReload = (e) => {
+      e.stopPropagation();
+      if (onReload) onReload();
+    };
 
-  const handleOnDelete = (e) => {
-    e.stopPropagation();
-    if (onDelete) onDelete();
-  };
+    const handleOnDelete = (e) => {
+      e.stopPropagation();
+      if (onDelete) onDelete();
+    };
 
-  return (
-    <>
-      <Box {...dragHandleProps} sx={container}>
-        <Box sx={info}>
-          <TwitterIcon fontSize="small" />
-          <StreamType stream={stream} />
-          <StreamAccountName stream={stream} />
+    return (
+      <Box ref={ref}>
+        <Box {...dragHandleProps} sx={container}>
+          <Box sx={info}>
+            <TwitterIcon fontSize="small" />
+            <StreamType stream={stream} />
+            <StreamAccountName stream={stream} />
+          </Box>
+          <Box sx={control}>
+            <IconButton onClick={handleOnReload} aria-label="refresh stream">
+              <ReplayIcon fontSize="small" />
+            </IconButton>
+            <IconButton onClick={handleOnDelete} aria-label="delete stream">
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Box>
         </Box>
-        <Box sx={control}>
-          <IconButton onClick={handleOnReload} aria-label="refresh stream">
-            <ReplayIcon fontSize="small" />
-          </IconButton>
-          <IconButton onClick={handleOnDelete} aria-label="delete stream">
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </Box>
+        <Divider />
       </Box>
-      <Divider />
-    </>
-  );
-};
+    );
+  }
+);
 
 const container = {
   display: 'flex',
