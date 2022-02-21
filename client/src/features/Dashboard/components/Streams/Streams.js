@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import {
+  Box,
+  useTheme,
+  useMediaQuery,
+  Slide,
+  useScrollTrigger,
+} from '@mui/material';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import {
@@ -7,13 +13,15 @@ import {
   useUpdateStreamPreferencesMutation,
 } from '../../../../api/user/api';
 import Stream from './Stream/Stream';
+import useCustomScrollTrigger from '../../../../core/hooks/useCustomScrollTrigger';
+import useIsMobileScreen from '../../../../core/hooks/useIsMobileScreen';
 
 const Streams = () => {
   const { data } = useCurrentUserQuery();
   const [update] = useUpdateStreamPreferencesMutation();
   const [isDragging, setIsDragging] = useState(false);
-  const theme = useTheme();
-  const isLowerSizeScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const trigger = useCustomScrollTrigger();
+  const isMobile = useIsMobileScreen();
 
   async function handleOnDragEnd(result) {
     if (!result.destination) return;
@@ -29,7 +37,7 @@ const Streams = () => {
       <Droppable droppableId="streams" direction="horizontal">
         {(provided) => (
           <Box
-            sx={container(isLowerSizeScreen)}
+            sx={container(trigger, isMobile)}
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
@@ -67,14 +75,25 @@ const Streams = () => {
   );
 };
 
-const container = (isLowerSizeScreen) => ({
-  scrollSnapType: 'x mandatory',
+const container = (trigger, isMobile) => ({
   display: 'inline-flex',
   flex: 1,
   overflow: 'auto',
+  scrollSnapType: 'x mandatory',
+  scrollPaddingLeft: isMobile ? 0 : 8,
   height: '100%',
-  gap: isLowerSizeScreen ? 0 : 1,
-  p: isLowerSizeScreen ? 0 : 1,
+  maxHeight: getMinHeight(trigger, isMobile),
+  gap: isMobile ? 0 : 1,
+  p: isMobile ? 0 : 1,
 });
+
+const getMinHeight = (trigger, isMobile) => {
+  let occupiedSpace = 0;
+  occupiedSpace += isMobile ? 56 : 80;
+  if (trigger && isMobile) {
+    occupiedSpace = 0;
+  }
+  return `calc(100vh - ${occupiedSpace}px)`;
+};
 
 export default Streams;
