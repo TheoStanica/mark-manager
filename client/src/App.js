@@ -20,6 +20,7 @@ import { SnackbarProvider } from 'notistack';
 import Planner from './features/Planner/pages/Planner';
 import TwitterConnect from './features/ConnectSocialAccount/pages/TwitterConnect';
 import { CssBaseline } from '@mui/material';
+import ScrollTriggerProvider from './core/components/ScrollTriggerProvider/ScrollTriggerProvider';
 
 injectStore(store);
 
@@ -29,46 +30,48 @@ const App = () => {
       <PersistGate loading={<div>Loading</div>} persistor={persistor}>
         <SnackbarProvider maxSnack={3}>
           <AppThemeProvider>
-            <CssBaseline enableColorScheme />
-            <Router>
-              <Switch>
-                <ApplicationRoute path="/" exact onlyPublic>
-                  <Landing />
-                </ApplicationRoute>
-                <ApplicationRoute path="/login" exact onlyPublic>
-                  <Login />
-                </ApplicationRoute>
-                <ApplicationRoute path="/register" exact onlyPublic>
-                  <Register />
-                </ApplicationRoute>
-                <ApplicationRoute
-                  path="/activate/:activationToken"
-                  exact
-                  onlyPublic
-                >
-                  <Activate />
-                </ApplicationRoute>
-                <ApplicationRoute path="/forgotPassword" exact onlyPublic>
-                  <ForgotPassword />
-                </ApplicationRoute>
-                <ApplicationRoute path="/password/reset" exact onlyPublic>
-                  <ResetPassword />
-                </ApplicationRoute>
+            <ScrollTriggerProvider>
+              <CssBaseline enableColorScheme />
+              <Router>
+                <Switch>
+                  <ApplicationRoute path="/" exact onlyPublic>
+                    <Landing />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/login" exact onlyPublic>
+                    <Login />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/register" exact onlyPublic>
+                    <Register />
+                  </ApplicationRoute>
+                  <ApplicationRoute
+                    path="/activate/:activationToken"
+                    exact
+                    onlyPublic
+                  >
+                    <Activate />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/forgotPassword" exact onlyPublic>
+                    <ForgotPassword />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/password/reset" exact onlyPublic>
+                    <ResetPassword />
+                  </ApplicationRoute>
 
-                <ApplicationRoute path="/dashboard" exact>
-                  <Dashboard />
-                </ApplicationRoute>
-                <ApplicationRoute path="/settings" exact>
-                  <Settings />
-                </ApplicationRoute>
-                <ApplicationRoute path="/planner" exact>
-                  <Planner />
-                </ApplicationRoute>
-                <ApplicationRoute path="/twitter/connect" exact>
-                  <TwitterConnect />
-                </ApplicationRoute>
-              </Switch>
-            </Router>
+                  <ApplicationRoute path="/dashboard" exact>
+                    <Dashboard />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/settings" exact>
+                    <Settings />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/planner" exact>
+                    <Planner />
+                  </ApplicationRoute>
+                  <ApplicationRoute path="/twitter/connect" exact>
+                    <TwitterConnect />
+                  </ApplicationRoute>
+                </Switch>
+              </Router>
+            </ScrollTriggerProvider>
           </AppThemeProvider>
         </SnackbarProvider>
       </PersistGate>
