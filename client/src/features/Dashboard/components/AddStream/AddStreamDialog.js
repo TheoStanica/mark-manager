@@ -3,8 +3,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
+  useTheme,
 } from '@mui/material';
 import React from 'react';
 
@@ -12,14 +12,12 @@ import GradientButton from '../../../../core/components/GradientButton';
 import SelectConnectedAccount from '../../../../core/components/SelectConnectedAccount';
 
 const AddStreamDialog = ({ open, onClose }) => {
+  const theme = useTheme();
+
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog onClose={onClose} open={open} maxWidth="sm" fullWidth>
       <DialogTitle>Add a new stream</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Test. Let Google help apps determine location. This means sending
-          anonymous location data to Google, even when no apps are running.
-        </DialogContentText>
+      <DialogContent sx={{ pt: `${theme.spacing(1)} !important` }}>
         <SelectConnectedAccount />
       </DialogContent>
       <DialogActions>
