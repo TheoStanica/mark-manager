@@ -30,6 +30,7 @@ const SelectConnectedAccount = ({ onSelect }) => {
 
   return (
     <TextField
+      aria-label="Select connected social media account"
       label="Social Account"
       select
       value={selectedAccount}
