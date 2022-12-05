@@ -3,3 +3,4 @@ build
 .scannerwork
 common/build
 sonar-project.properties
+secrets.yaml
