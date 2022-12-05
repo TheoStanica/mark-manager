@@ -28,27 +28,27 @@ spec:
             - name: MONGO_URI
               valueFrom:
                 secretKeyRef:
-                  name: auth-mongo-secret
+                  name: auth-secrets
                   key: MONGO_URI
             - name: TWITTER_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: auth-twitter-consumer-key
+                  name: auth-secrets
                   key: TWITTER_CONSUMER_KEY
             - name: TWITTER_CONSUMER_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: auth-twitter-consumer-secret
+                  name: auth-secrets
                   key: TWITTER_CONSUMER_SECRET
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
+                  name: auth-secrets
                   key: JWT_KEY
             - name: JWT_REFRESH_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jwt-refresh-secret
+                  name: auth-secrets
                   key: JWT_REFRESH_KEY
             - name: ACCESS_TOKEN_TTL
               value: '600'

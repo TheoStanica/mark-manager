@@ -36,7 +36,7 @@ spec:
             - name: GMAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mark-password-secret
+                  name: mailer-secrets
                   key: GMAIL_PASSWORD
           readinessProbe:
             httpGet:
