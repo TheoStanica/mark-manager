@@ -15,6 +15,7 @@ export const userApi = createApi({
       }),
       providesTags: ['User'],
     }),
+<<<<<<< HEAD
     changeTheme: builder.mutation({
       query: ({ themePreference }) => ({
         url: '/currentuser',
@@ -78,3 +79,9 @@ export const {
   useUpdateUserMutation,
   useUploadImageMutation,
 } = userApi;
+=======
+  }),
+});
+
+export const { useCurrentUserQuery } = userApi;
+>>>>>>> fe04bfb (aa)

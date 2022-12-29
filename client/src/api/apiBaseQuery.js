@@ -10,6 +10,7 @@ const apiInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
+<<<<<<< HEAD
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -24,6 +25,8 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
+=======
+>>>>>>> fe04bfb (aa)
 const makeRequest = ({ urlPrefix, url, method, body, params }) => {
   return apiInstance({
     url: urlPrefix + url,
@@ -36,6 +39,7 @@ const makeRequest = ({ urlPrefix, url, method, body, params }) => {
   });
 };
 
+<<<<<<< HEAD
 apiInstance.interceptors.request.use(
   (config) => {
     if (store?.getState()?.authSlice.accessToken)
@@ -95,6 +99,8 @@ apiInstance.interceptors.response.use(
   }
 );
 
+=======
+>>>>>>> fe04bfb (aa)
 const axiosBaseQuery = ({ urlPrefix }) => async ({
   url,
   method,
@@ -105,9 +111,35 @@ const axiosBaseQuery = ({ urlPrefix }) => async ({
     const result = await makeRequest({ urlPrefix, url, method, body, params });
     return { data: result.data };
   } catch (error) {
+<<<<<<< HEAD
     return {
       error: { status: error.response?.status, data: error.response?.data },
     };
+=======
+    if (error.response && error.response.status === 401) {
+      // axios interceptor equivalent
+      const refreshResult = await apiInstance.post('auth/token', {
+        refreshToken: store?.getState()?.authSlice.refreshToken,
+      });
+      if (refreshResult.data) {
+        store.dispatch(authSlice.actions.update(refreshResult.data));
+        const result = await makeRequest({
+          urlPrefix,
+          url,
+          method,
+          body,
+          params,
+        });
+        return { data: result.data };
+      } else {
+        store.dispatch(authSlice.actions.clear());
+      }
+    } else {
+      return {
+        error: { status: error.response?.status, data: error.response?.data },
+      };
+    }
+>>>>>>> fe04bfb (aa)
   }
 };
 
