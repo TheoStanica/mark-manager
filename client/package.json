@@ -20,7 +20,6 @@
     "axios": "^0.21.1",
     "formik": "^2.2.9",
     "lottie-react": "^2.1.0",
-    "formik": "^2.2.9",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.0.0",

@@ -15,7 +15,6 @@ export const authApi = createApi({
         body: { email, password },
       }),
     }),
-<<<<<<< HEAD
     register: builder.mutation({
       query: ({ email, password }) => ({
         url: '/signup',
@@ -64,8 +63,6 @@ export const authApi = createApi({
         method: 'GET',
       }),
     }),
-=======
->>>>>>> fe04bfb (aa)
     logout: builder.mutation({
       query: () => ({
         url: '/signout',
@@ -76,7 +73,6 @@ export const authApi = createApi({
   }),
 });
 
-<<<<<<< HEAD
 export const {
   useLoginMutation,
   useRegisterMutation,
@@ -88,6 +84,3 @@ export const {
   useConnectTwitterQuery,
   useLogoutMutation,
 } = authApi;
-=======
-export const { useLoginMutation, useLogoutMutation } = authApi;
->>>>>>> fe04bfb (aa)

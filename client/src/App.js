@@ -22,7 +22,6 @@ import Planner from './features/Planner/pages/Planner';
 import TwitterConnect from './features/ConnectSocialAccount/pages/TwitterConnect';
 import { CssBaseline } from '@mui/material';
 import ScrollTriggerProvider from './core/components/ScrollTriggerProvider/ScrollTriggerProvider';
-=======
 // import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import Navigation from './components/Navigation';
@@ -39,7 +38,6 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import useTheme from './core/hooks/useTheme';
 import { createMuiTheme } from '@material-ui/core';
 import Register from './features/Auth/routes/Register/Register';
->>>>>>> fe04bfb (aa)
 
 injectStore(store);
 
@@ -131,58 +129,6 @@ const App = () => {
   const testtheme = createTheme(defaultTheme);
 
   return (
-<<<<<<< HEAD
-    <Provider store={store}>
-      <PersistGate loading={<div>Loading</div>} persistor={persistor}>
-        <SnackbarProvider maxSnack={3}>
-          <AppThemeProvider>
-            <ScrollTriggerProvider>
-              <CssBaseline enableColorScheme />
-              <Router>
-                <Switch>
-                  <ApplicationRoute path="/" exact onlyPublic>
-                    <Landing />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/login" exact onlyPublic>
-                    <Login />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/register" exact onlyPublic>
-                    <Register />
-                  </ApplicationRoute>
-                  <ApplicationRoute
-                    path="/activate/:activationToken"
-                    exact
-                    onlyPublic
-                  >
-                    <Activate />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/forgotPassword" exact onlyPublic>
-                    <ForgotPassword />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/password/reset" exact onlyPublic>
-                    <ResetPassword />
-                  </ApplicationRoute>
-
-                  <ApplicationRoute path="/dashboard" exact>
-                    <Dashboard />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/settings" exact>
-                    <Settings />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/planner" exact>
-                    <Planner />
-                  </ApplicationRoute>
-                  <ApplicationRoute path="/twitter/connect" exact>
-                    <TwitterConnect />
-                  </ApplicationRoute>
-                </Switch>
-              </Router>
-            </ScrollTriggerProvider>
-          </AppThemeProvider>
-        </SnackbarProvider>
-      </PersistGate>
-    </Provider>
-=======
     <ThemeProvider theme={testtheme}>
       <Provider store={store}>
         <PersistGate
@@ -211,7 +157,6 @@ const App = () => {
         </PersistGate>
       </Provider>
     </ThemeProvider>
->>>>>>> fe04bfb (aa)
   );
 };
 
