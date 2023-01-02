@@ -1,111 +1,73 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { Provider } from 'react-redux';
+import { store, persistor } from './core/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import AppRoute, { Props as AppRouteProps } from './core/components/AppRoute';
+import Landing from './features/landing/pages';
+import ErrorPage from './features/error/pages';
+import Login from './features/auth/pages/Login';
+import Register from './features/auth/pages/Register';
+import { defaultTheme } from './theme';
+import AppThemeProvider from './core/components/AppThemeProvider';
+import { SnackbarProvider } from 'notistack';
+import Dashboard from './features/dashboard/pages';
+import { injectStore } from './api/index';
+import ForgotPassword from './features/auth/pages/ForgotPassword';
+import ResetPassword from './features/auth/pages/ResetPassword';
+
+injectStore(store);
+
+type createRouteProps = Omit<AppRouteProps, 'children'>;
 
 function App() {
-  const defaultTheme = {
-    // palette: {
-    //   mode: 'dark',
-    //   primary: {
-    //     main: '#7e84ff',
-    //   },
-    //   secondary: {
-    //     main: '#75fac8',
-    //   },
-    //   background: {
-    //     default: '#0b0f19',
-    //     // default: 'white',
-    //     paper: '#111827',
-    //   },
-    // },
-    components: {
-      // MuiButton: {
-      //   styleOverrides: {
-      //     root: {
-      //       background:
-      //         // 'linear-gradient(43deg, #4158D0 0%, #597fac 46%, #75fac8 100%)',
-      //         // 'linear-gradient(60deg, #09d3df 0%,  #ff08f9 100%)',
-      //         'linear-gradient(60deg, #7e84ff 10%,  #75fac8 90%)',
-      //       border: 0,
-      //       borderRadius: 3,
-      //       color: 'black',
-      //       height: 48,
-      //       padding: '0 30px',
-      //       fontWeight: 600,
-      //     },
-      //   },
-      // },
-      MuiSwitch: {
-        styleOverrides: {
-          root: {
-            width: 46,
-            height: 26,
-            padding: 0,
-            margin: 8,
-          },
-          switchBase: {
-            padding: 1,
-            '&$checked, &$colorPrimary$checked, &$colorSecondary$checked': {
-              transform: 'translateX(16px)',
-              color: '#fff',
-              '& + $track': {
-                opacity: 1,
-                border: 'none',
-              },
-            },
-          },
-          thumb: {
-            width: 24,
-            height: 24,
-          },
-          track: {
-            borderRadius: 13,
-            backgroundColor: '#fafafa',
-            opacity: 1,
-            transition:
-              'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-          },
-        },
-      },
-    },
-    props: {
-      MuiAppBar: {
-        color: 'transparent',
-      },
-      MuiTooltip: {
-        arrow: true,
-      },
-    },
-    typography: {
-      fontFamily: '"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif',
-    },
-    shape: {
-      borderRadius: 8,
-    },
+  const createRoute = (element: JSX.Element, props?: createRouteProps) => {
+    return <AppRoute {...props}>{element}</AppRoute>;
   };
 
-  const testtheme = createTheme(defaultTheme);
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: createRoute(<Landing />, { onlyPublic: true }),
+      // errorElement: <ErrorPage />,
+    },
+    {
+      path: '/login',
+      element: createRoute(<Login />, { onlyPublic: true }),
+    },
+    {
+      path: '/register',
+      element: createRoute(<Register />, { onlyPublic: true }),
+    },
+    {
+      path: '/forgotPassword',
+      element: createRoute(<ForgotPassword />, { onlyPublic: true }),
+    },
+    {
+      path: '/password/reset',
+      element: createRoute(<ResetPassword />, { onlyPublic: true }),
+    },
+    {
+      path: '/dashboard',
+      element: createRoute(<Dashboard />, { onlyPublic: false }),
+    },
+  ]);
 
   return (
-    <ThemeProvider theme={testtheme}>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            NOOW
-          </a>
-        </header>
-      </div>
+    <ThemeProvider theme={defaultTheme}>
+      <Provider store={store}>
+        <PersistGate
+          loading={<div style={{ backgroundColor: 'white' }}>Loading</div>}
+          persistor={persistor}
+        >
+          <SnackbarProvider>
+            <AppThemeProvider>
+              <CssBaseline />
+              <RouterProvider router={router} />
+            </AppThemeProvider>
+          </SnackbarProvider>
+        </PersistGate>
+      </Provider>
     </ThemeProvider>
   );
 }
