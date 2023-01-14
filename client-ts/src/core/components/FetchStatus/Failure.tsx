@@ -20,10 +20,10 @@ const defaultStyle = {
 
 interface Props {
   error: ApplicationError | SerializedError;
-  message: string;
+  message?: string;
   noMessage?: boolean;
-  options: any;
-  style: any;
+  options?: any;
+  style?: any;
 }
 
 const Failure = ({

@@ -15,6 +15,7 @@ import Dashboard from './features/dashboard/pages';
 import { injectStore } from './api/index';
 import ForgotPassword from './features/auth/pages/ForgotPassword';
 import ResetPassword from './features/auth/pages/ResetPassword';
+import Activate from './features/auth/pages/Activate';
 
 injectStore(store);
 
@@ -38,6 +39,10 @@ function App() {
     {
       path: '/register',
       element: createRoute(<Register />, { onlyPublic: true }),
+    },
+    {
+      path: '/activate/:activationToken',
+      element: createRoute(<Activate />, { onlyPublic: true }),
     },
     {
       path: '/forgotPassword',
