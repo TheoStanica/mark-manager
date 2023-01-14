@@ -12,7 +12,7 @@ export const userApi = createApi({
   baseQuery: axiosBaseQuery({ urlPrefix: 'user' }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
-    currentUser: builder.query<ICurrentUser, undefined>({
+    currentUser: builder.query<ICurrentUser, void>({
       query: () => ({
         url: '/currentuser',
         method: 'GET',
