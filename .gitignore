@@ -4,3 +4,4 @@ build
 common/build
 sonar-project.properties
 secrets.yaml
+infra/config/secrets
