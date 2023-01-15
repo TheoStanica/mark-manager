@@ -1,18 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '..';
+import { IUserData } from './types';
 
 export const USER_API_REDUCER_KEY = 'userApi';
-
-interface ICurrentUser {
-  [key: string]: any;
-}
 
 export const userApi = createApi({
   reducerPath: USER_API_REDUCER_KEY,
   baseQuery: axiosBaseQuery({ urlPrefix: 'user' }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
-    currentUser: builder.query<ICurrentUser, void>({
+    currentUser: builder.query<IUserData, void>({
       query: () => ({
         url: '/currentuser',
         method: 'GET',

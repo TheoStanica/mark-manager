@@ -39,7 +39,7 @@ const Security = () => {
 
   return (
     <Container maxWidth="md">
-      <Paper sx={{ p: 2 }}>
+      <Paper sx={{ p: 2 }} elevation={5}>
         <Typography component="h1" variant="h5" mb={2}>
           Change Password
         </Typography>
