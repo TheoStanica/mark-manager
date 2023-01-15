@@ -7,9 +7,9 @@ import {
 import React from 'react';
 
 interface Props {
-  circularProgressProps: CircularProgressProps;
+  circularProgressProps?: CircularProgressProps;
   noMessage?: boolean;
-  message: string;
+  message?: string;
 }
 
 const Loading = ({

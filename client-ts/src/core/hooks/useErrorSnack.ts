@@ -23,7 +23,8 @@ const useErrorSnack = ({ error }: Props) => {
   useEffect(() => {
     if (error && 'data' in error) {
       if (typeof error.data === 'string') {
-        sendMessage(error.data);
+        sendMessage('Something went wrong. Try again later');
+        // sendMessage(error.data);
         return;
       }
       error.data.errors.map((error) => sendMessage(error.message));

@@ -19,7 +19,7 @@ const defaultStyle = {
 };
 
 interface Props {
-  error: ApplicationError | SerializedError;
+  error?: ApplicationError | SerializedError;
   message?: string;
   noMessage?: boolean;
   options?: any;

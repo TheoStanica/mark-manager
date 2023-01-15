@@ -1,8 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { CircularProgress, Box, Button } from '@mui/material';
-// import DisplayError from '../../../core/components/DisplayError';
-// import GradientButton from '../../../core/components/GradientButton';
 import FormikTextField from '../../../core/components/FormikTextField';
 import useErrorSnack from '../../../core/hooks/useErrorSnack';
 
@@ -41,7 +39,6 @@ const CredentialsForm = ({
         required
         sx={{ pb: 1 }}
       />
-      {/* {isError && <DisplayError error={error} />} */}
       {isError && errorComponent}
       {isSuccess && successComponent}
       <Box>

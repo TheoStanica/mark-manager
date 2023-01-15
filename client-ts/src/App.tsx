@@ -16,6 +16,8 @@ import { injectStore } from './api/index';
 import ForgotPassword from './features/auth/pages/ForgotPassword';
 import ResetPassword from './features/auth/pages/ResetPassword';
 import Activate from './features/auth/pages/Activate';
+import TwitterConnect from './features/conntectSocial/pages/TwitterConnect';
+import Settings from './features/settings/pages';
 
 injectStore(store);
 
@@ -55,6 +57,14 @@ function App() {
     {
       path: '/dashboard',
       element: createRoute(<Dashboard />, { onlyPublic: false }),
+    },
+    {
+      path: '/twitter/connect',
+      element: createRoute(<TwitterConnect />, { onlyPublic: false }),
+    },
+    {
+      path: '/settings',
+      element: createRoute(<Settings />, { onlyPublic: false }),
     },
   ]);
 
