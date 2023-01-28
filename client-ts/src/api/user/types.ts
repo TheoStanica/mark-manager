@@ -7,13 +7,26 @@ export interface ICurrentUser {
   fullName?: string;
   profilePicture?: string;
   userTier: string;
-  stream_preferences: Array<IStreamPreference>;
+  stream_preferences: Array<IStreamPreference<unknown>>;
   themePreference?: string;
 }
 
-export interface IStreamPreference {
+export type TwitterStreamTypes = 'home_timeline' | 'search';
+export type StreamPlatformType = 'twitter';
+export interface IStreamPreference<T> {
   id: string;
-  type: string;
+  platform: StreamPlatformType;
+  data: T;
+}
+
+export interface ITwitterStreamData {
+  type: TwitterStreamTypes;
   search?: string;
   twitterUserId: string;
+}
+
+export function isTwitterStream(
+  stream: IStreamPreference<unknown>
+): stream is IStreamPreference<ITwitterStreamData> {
+  return stream.platform === 'twitter';
 }

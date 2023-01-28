@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { IConnectedAccount } from '../../../../api/twitter/types';
+import { IConnectedAccount } from '../../../../core/types/social';
+import { isTwitterAccount } from '../../../../api/social/types';
 
 interface Props {
-  account: IConnectedAccount;
+  account: IConnectedAccount<unknown>;
 }
 
 const ConnectedAccount = ({ account }: Props) => {
+  const name = useMemo(() => {
+    if (isTwitterAccount(account)) {
+      return account.data.twitterScreenName;
+    }
+    return null;
+  }, [account]);
+
   return (
     <Box sx={style}>
       <Box sx={container}>
         <TwitterIcon htmlColor="#1DA1F2" />
-        <Typography>{account.twitterScreenName}</Typography>
+        <Typography>{name}</Typography>
       </Box>
       <Button disabled>Disconnect</Button>
     </Box>

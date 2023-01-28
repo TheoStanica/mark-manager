@@ -2,7 +2,7 @@ import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { UserAttrs, UserProfile } from '../models/userprofile';
 import { UpdateUserDto } from '../utils/dtos/updateUserDto';
-import { StreamPreference } from '../utils/interfaces/streamPreference';
+import { IStreamPreference } from '../utils/interfaces/streamPreference';
 
 @Service()
 export class UserProfileRepository {
@@ -21,7 +21,10 @@ export class UserProfileRepository {
     return this.UserProfile.findById(userId);
   }
 
-  async updateStreamPreference(userId: string, streams: StreamPreference[]) {
+  async updateStreamPreference(
+    userId: string,
+    streams: IStreamPreference<unknown>[]
+  ) {
     return this.UserProfile.findByIdAndUpdate(
       userId,
       { stream_preferences: streams },

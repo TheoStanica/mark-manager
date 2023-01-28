@@ -27,10 +27,6 @@ export class TwitterService {
     private readonly twitterRepository: TwitterRepository
   ) {}
 
-  async fetchConnectedAccounts(userId: string): Promise<TwitterDoc[]> {
-    return this.userRepository.fetchConnectedTwitterAccounts(userId);
-  }
-
   async fetchCredentials(userId: string, twitterIdDto: UserIdDto) {
     const { twitterUserId } = twitterIdDto;
     const twitterApiService = await this.createTwitterApiService(
@@ -269,13 +265,11 @@ export class TwitterService {
   }
 
   private async createTwitterApiService(userId: string, twitterUserId: string) {
-    const {
-      oauthAccessToken,
-      oauthAccessTokenSecret,
-    } = await this.userRepository.fetchTwitterAccountTokens(
-      userId,
-      twitterUserId
-    );
+    const { oauthAccessToken, oauthAccessTokenSecret } =
+      await this.userRepository.fetchTwitterAccountTokens(
+        userId,
+        twitterUserId
+      );
     return new TwitterApiService(oauthAccessToken, oauthAccessTokenSecret);
   }
 
@@ -283,14 +277,11 @@ export class TwitterService {
     userId: string,
     twitterUserId: string
   ) {
-    const {
-      oauthAccessToken,
-      oauthAccessTokenSecret,
-      adsId,
-    } = await this.userRepository.fetchTwitterAccountTokens(
-      userId,
-      twitterUserId
-    );
+    const { oauthAccessToken, oauthAccessTokenSecret, adsId } =
+      await this.userRepository.fetchTwitterAccountTokens(
+        userId,
+        twitterUserId
+      );
     return new TwitterAdsService(
       oauthAccessToken,
       oauthAccessTokenSecret,

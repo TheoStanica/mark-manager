@@ -5,6 +5,10 @@ import { BadRequestError } from '@tcosmin/common';
 import { ClientSession } from 'mongoose';
 import { AddTokensDto } from '../utils/dtos/twitter/addTokensDto';
 import { TwitterRepository } from './twitterRepository';
+import {
+  IConnectedAccount,
+  ITwitterData,
+} from '../utils/interfaces/connectedAccount';
 
 @Service()
 export class UserRepository {
@@ -15,10 +19,8 @@ export class UserRepository {
 
   async addUserWithTokens(data: AddTokensDto, session: ClientSession) {
     const newUser = this.User.build({ _id: data.userId });
-    const twitterDetails = await this.twitterRepository.addTwitterAccountCredentials(
-      data,
-      session
-    );
+    const twitterDetails =
+      await this.twitterRepository.addTwitterAccountCredentials(data, session);
     newUser.twitter.push(twitterDetails);
     await newUser.save({ session });
   }
@@ -29,9 +31,16 @@ export class UserRepository {
       .session(session ? session : null);
   }
 
-  async fetchConnectedTwitterAccounts(userId: string): Promise<TwitterDoc[]> {
+  async fetchConnectedTwitterAccounts(
+    userId: string
+  ): Promise<IConnectedAccount<ITwitterData>[]> {
     const user = await this.fetchUser(userId);
-    return user?.twitter || [];
+    const accounts = user?.twitter || [];
+
+    return accounts?.map((account) => ({
+      type: 'twitter',
+      data: account,
+    }));
   }
 
   async fetchTwitterAccountTokens(userId: string, twitterId: string) {

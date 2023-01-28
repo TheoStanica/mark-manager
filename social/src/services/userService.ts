@@ -4,6 +4,10 @@ import { UserDoc } from '../models/users';
 import { TwitterRepository } from '../repositories/twitterRepository';
 import { UserRepository } from '../repositories/userRepository';
 import { AddTokensDto } from '../utils/dtos/twitter/addTokensDto';
+import {
+  IConnectedAccount,
+  ITwitterData,
+} from '../utils/interfaces/connectedAccount';
 
 @Service()
 export class UserService {
@@ -11,6 +15,12 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly twitterRepository: TwitterRepository
   ) {}
+
+  async fetchConnectedAccounts(
+    userId: string
+  ): Promise<Array<IConnectedAccount<ITwitterData>>> {
+    return this.userRepository.fetchConnectedTwitterAccounts(userId);
+  }
 
   async connectTwitterAccount(data: AddTokensDto) {
     const session = await mongoose.startSession();
@@ -43,10 +53,11 @@ export class UserService {
     );
 
     if (!twitterAccount) {
-      const twitterCredentials = await this.twitterRepository.addTwitterAccountCredentials(
-        data,
-        session
-      );
+      const twitterCredentials =
+        await this.twitterRepository.addTwitterAccountCredentials(
+          data,
+          session
+        );
       user.twitter.push(twitterCredentials);
       await user.save({ session });
     } else {

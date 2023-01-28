@@ -10,7 +10,7 @@ import { IStreamPreference } from '../../../../../../api/user/types';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
 interface Props {
-  stream: IStreamPreference;
+  stream: IStreamPreference<unknown>;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
   onReload: () => any;
   onDelete: () => any;

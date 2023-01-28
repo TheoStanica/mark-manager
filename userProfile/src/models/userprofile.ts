@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { StreamPreference } from '../utils/interfaces/streamPreference';
+import { IStreamPreference } from '../utils/interfaces/streamPreference';
 
 export interface UserAttrs {
   _id: string;
@@ -11,13 +11,46 @@ export interface UserDoc extends mongoose.Document {
   fullName: string | undefined;
   profilePicture: string | undefined;
   userTier: string;
-  stream_preferences: StreamPreference[];
+  stream_preferences: IStreamPreference<unknown>[];
   themePreference?: string;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
+
+const streamPreferenceDataSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['home_timeline', 'search'],
+    required: true,
+  },
+  search: {
+    type: String,
+    required: false,
+  },
+  twitterUserId: {
+    type: String,
+    required: true,
+  },
+});
+
+const streamPreferenceSchema = new mongoose.Schema({
+  _id: false,
+  id: {
+    type: String,
+    required: true,
+  },
+  platform: {
+    type: String,
+    enum: ['twitter'],
+    required: true,
+  },
+  data: {
+    type: streamPreferenceDataSchema,
+    required: true,
+  },
+});
 
 const userProfileSchema = new mongoose.Schema(
   {
@@ -41,22 +74,7 @@ const userProfileSchema = new mongoose.Schema(
     },
     stream_preferences: [
       {
-        _id: false,
-        id: {
-          type: String,
-          required: true,
-        },
-        type: {
-          type: String,
-          required: true,
-        },
-        search: {
-          type: String,
-        },
-        twitterUserId: {
-          type: String,
-          required: true,
-        },
+        type: streamPreferenceSchema,
       },
     ],
     themePreference: {

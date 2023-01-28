@@ -4,7 +4,7 @@ import React from 'react';
 import ConnectedAccount from './ConnectedAccount';
 import { v4 as uuidv4 } from 'uuid';
 import Loading from '../../../../core/components/FetchStatus/Loading';
-import { useFetchConnectedAccountsQuery } from '../../../../api/twitter';
+import { useFetchConnectedAccountsQuery } from '../../../../api/social';
 
 const ConnectedAccounts = () => {
   const { data, isLoading } = useFetchConnectedAccountsQuery();

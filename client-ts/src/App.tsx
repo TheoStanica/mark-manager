@@ -5,7 +5,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AppRoute, { Props as AppRouteProps } from './core/components/AppRoute';
 import Landing from './features/landing/pages';
-import ErrorPage from './features/error/pages';
 import Login from './features/auth/pages/Login';
 import Register from './features/auth/pages/Register';
 import { defaultTheme } from './theme';
@@ -18,6 +17,7 @@ import ResetPassword from './features/auth/pages/ResetPassword';
 import Activate from './features/auth/pages/Activate';
 import TwitterConnect from './features/conntectSocial/pages/TwitterConnect';
 import Settings from './features/settings/pages';
+import ScrollTriggerProvider from './core/components/ScrollTriggerProvider';
 
 injectStore(store);
 
@@ -32,7 +32,6 @@ function App() {
     {
       path: '/',
       element: createRoute(<Landing />, { onlyPublic: true }),
-      // errorElement: <ErrorPage />,
     },
     {
       path: '/login',
@@ -76,10 +75,12 @@ function App() {
           persistor={persistor}
         >
           <SnackbarProvider>
-            <AppThemeProvider>
-              <CssBaseline />
-              <RouterProvider router={router} />
-            </AppThemeProvider>
+            <ScrollTriggerProvider>
+              <AppThemeProvider>
+                <CssBaseline />
+                <RouterProvider router={router} />
+              </AppThemeProvider>
+            </ScrollTriggerProvider>
           </SnackbarProvider>
         </PersistGate>
       </Provider>

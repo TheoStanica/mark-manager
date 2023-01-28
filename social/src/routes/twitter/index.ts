@@ -1,5 +1,4 @@
 import express from 'express';
-import { twitterAccountsRouter } from './routes/accounts';
 import { scheduledTweetsRouter } from './routes/ads/scheduledTweets';
 import { twitterTimelineRouter } from './routes/homeTimeline';
 import { twitterLikeRouter } from './routes/like';
@@ -16,7 +15,6 @@ twitterApi.use(twitterTimelineRouter);
 twitterApi.use(twitterCredentialsRouter);
 twitterApi.use(twitterTweetRouter);
 twitterApi.use(twitterSearchRouter);
-twitterApi.use(twitterAccountsRouter);
 twitterApi.use(twitterLikeRouter);
 twitterApi.use(twitterRetweetRouter);
 twitterApi.use(twitterCommentsRouter);

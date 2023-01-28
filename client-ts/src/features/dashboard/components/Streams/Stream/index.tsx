@@ -10,7 +10,7 @@ interface Props {
   provided: DraggableProvided;
   snapshot: DraggableStateSnapshot;
   onDragging: () => any;
-  stream: IStreamPreference;
+  stream: IStreamPreference<unknown>;
 }
 
 const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {

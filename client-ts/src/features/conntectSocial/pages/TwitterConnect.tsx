@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import Loading from '../../../core/components/FetchStatus/Loading';
 import Success from '../../../core/components/FetchStatus/Success';
 import Failure from '../../../core/components/FetchStatus/Failure';
-import { twitterApi } from '../../../api/twitter';
+import { socialApi } from '../../../api/social';
 import { useConnectTwitterQuery } from '../../../api/auth';
 
 const TwitterConnect = () => {
@@ -24,7 +24,7 @@ const TwitterConnect = () => {
     } else {
       if (success === 'true') {
         setStatus('success');
-        dispatch(twitterApi.util.invalidateTags(['Twitter Accounts']));
+        dispatch(socialApi.util.invalidateTags(['Connected Accounts']));
       } else {
         setStatus('failure');
       }

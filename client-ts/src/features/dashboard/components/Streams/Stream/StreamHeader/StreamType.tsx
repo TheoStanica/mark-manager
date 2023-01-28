@@ -1,21 +1,27 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import { IStreamPreference } from '../../../../../../api/user/types';
+import {
+  IStreamPreference,
+  isTwitterStream,
+} from '../../../../../../api/user/types';
 
 interface Props {
-  stream: IStreamPreference;
+  stream: IStreamPreference<unknown>;
 }
 
 const StreamType = ({ stream }: Props) => {
   const getStreamType = () => {
-    switch (stream?.type) {
-      case 'home_timeline':
-        return 'Home Timeline';
-      case 'search':
-        return `Search ${stream.search}`;
-      default:
-        return null;
+    if (isTwitterStream(stream)) {
+      switch (stream.data.type) {
+        case 'home_timeline':
+          return 'Home Timeline';
+        case 'search':
+          return `Search ${stream.data.search}`;
+        default:
+          return null;
+      }
     }
+    return null;
   };
 
   return (
