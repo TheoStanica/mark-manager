@@ -30,3 +30,7 @@ export function isTwitterStream(
 ): stream is IStreamPreference<ITwitterStreamData> {
   return stream.platform === 'twitter';
 }
+
+export interface IStreamPreferenceMutation {
+  stream_preferences: Array<IStreamPreference<unknown>>;
+}

@@ -23,7 +23,7 @@ const Streams = () => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     setIsDragging(false);
-    await update({ streams: items });
+    await update({ stream_preferences: items });
   }
 
   return (

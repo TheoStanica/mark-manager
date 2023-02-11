@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '..';
-import { IUserData } from './types';
+import { IUserData, IStreamPreferenceMutation } from './types';
 
 export const USER_API_REDUCER_KEY = 'userApi';
 
@@ -35,16 +35,19 @@ export const userApi = createApi({
         }
       },
     }),
-    updateStreamPreferences: builder.mutation({
-      query: ({ streams }) => ({
+    updateStreamPreferences: builder.mutation<void, IStreamPreferenceMutation>({
+      query: ({ stream_preferences }) => ({
         url: '/streampreferences',
         method: 'POST',
-        body: { stream_preferences: streams },
+        body: { stream_preferences },
       }),
-      async onQueryStarted({ streams }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { stream_preferences },
+        { dispatch, queryFulfilled }
+      ) {
         const postResult = dispatch(
           userApi.util.updateQueryData('currentUser', undefined, (draft) => {
-            draft.user.stream_preferences = streams;
+            draft.user.stream_preferences = stream_preferences;
           })
         );
         try {

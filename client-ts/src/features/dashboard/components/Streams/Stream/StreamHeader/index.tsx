@@ -36,7 +36,7 @@ const StreamHeader = forwardRef(
       <Box ref={ref}>
         <Box {...dragHandleProps} sx={container}>
           <Box sx={info}>
-            <TwitterIcon fontSize="small" />
+            <TwitterIcon fontSize="small" htmlColor="#1DA1F2" />
             <StreamType stream={stream} />
             <StreamAccountName stream={stream} />
           </Box>
