@@ -13,7 +13,7 @@ interface Props {
   stream: IStreamPreference<unknown>;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
   onReload: () => any;
-  onDelete: () => any;
+  onDelete: (streamId: string) => any;
 }
 
 const StreamHeader = forwardRef(
@@ -29,7 +29,7 @@ const StreamHeader = forwardRef(
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
       e.stopPropagation();
-      if (onDelete) onDelete();
+      if (onDelete) onDelete(stream.id);
     };
 
     return (

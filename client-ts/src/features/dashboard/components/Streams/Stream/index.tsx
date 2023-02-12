@@ -1,6 +1,10 @@
 import { Paper } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
+import {
+  useCurrentUserQuery,
+  useUpdateStreamPreferencesMutation,
+} from '../../../../../api/user';
 import { IStreamPreference } from '../../../../../api/user/types';
 import useIsMobileScreen from '../../../../../core/hooks/useIsMobileScreen';
 import StreamBody from './StreamBody';
@@ -14,6 +18,8 @@ interface Props {
 }
 
 const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {
+  const { data } = useCurrentUserQuery();
+  const [update] = useUpdateStreamPreferencesMutation();
   const isMobile = useIsMobileScreen();
 
   useEffect(() => {
@@ -23,12 +29,26 @@ const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {
     }
   }, [snapshot, onDragging]);
 
+  const onDelete = useCallback(
+    (streamId: string) => {
+      if (!data) {
+        return;
+      }
+      const stream_preferences = data.user.stream_preferences;
+      const newPref = stream_preferences.filter(
+        (stream) => stream.id !== streamId
+      );
+      update({ stream_preferences: newPref });
+    },
+    [data, update]
+  );
+
   return (
     <Paper elevation={isMobile ? 1 : 3} sx={container(isMobile)}>
       <StreamHeader
         dragHandleProps={provided.dragHandleProps}
         stream={stream}
-        onDelete={() => console.log('delete')}
+        onDelete={onDelete}
         onReload={() => console.log('on reload')}
       />
       <StreamBody />
