@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Box } from '@mui/material';
-import useCustomScrollTrigger from '../../../../../core/hooks/useCustomScrollTrigger';
+import useCustomScrollTrigger from '../../../../../../core/hooks/useCustomScrollTrigger';
 
 const StreamBody = () => {
   const scrollTriggerTargetRef = useRef(null);
