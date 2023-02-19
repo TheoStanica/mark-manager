@@ -1,38 +1,32 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Box } from '@mui/material';
 import useCustomScrollTrigger from '../../../../../../core/hooks/useCustomScrollTrigger';
+import {
+  IStreamPreference,
+  isTwitterStream,
+} from '../../../../../../api/user/types';
+import TwitterSearchStream from './TwitterSearchStream';
 
-const StreamBody = () => {
+interface Props {
+  stream: IStreamPreference<unknown>;
+}
+
+const StreamBody = ({ stream }: Props) => {
   const scrollTriggerTargetRef = useRef(null);
   useCustomScrollTrigger({
     target: scrollTriggerTargetRef?.current || window,
     threshold: 100,
   });
 
+  const renderStream = useCallback(() => {
+    if (isTwitterStream(stream)) {
+      return <TwitterSearchStream stream={stream} />;
+    }
+  }, [stream]);
+
   return (
     <Box ref={scrollTriggerTargetRef} sx={style}>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
-      <Box sx={element}>something</Box>
+      {renderStream()}
     </Box>
   );
 };
@@ -40,7 +34,7 @@ const StreamBody = () => {
 const style = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 20,
+  gap: 5,
   overflowY: 'overlay',
   '&::-webkit-scrollbar': {
     width: '0.5rem',
@@ -52,12 +46,6 @@ const style = {
   '&:hover::-webkit-scrollbar-thumb': {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-};
-
-const element = {
-  py: 10,
-  flex: 1,
-  backgroundColor: '#343c51',
 };
 
 export default StreamBody;

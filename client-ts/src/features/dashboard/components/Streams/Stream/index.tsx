@@ -51,7 +51,7 @@ const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {
         onDelete={onDelete}
         onReload={() => console.log('on reload')}
       />
-      <StreamBody />
+      <StreamBody stream={stream} />
     </Paper>
   );
 };

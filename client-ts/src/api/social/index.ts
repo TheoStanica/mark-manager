@@ -2,10 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { IConnectedAccount } from '../../core/types/social';
 import { axiosBaseQuery } from '../index';
 
-export const TWITTER_API_REDUCER_KEY = 'twitterApi';
+export const SOCIAL_REDUCER_KEY = 'socialApi';
 
 export const socialApi = createApi({
-  reducerPath: TWITTER_API_REDUCER_KEY,
+  reducerPath: SOCIAL_REDUCER_KEY,
   baseQuery: axiosBaseQuery({ urlPrefix: 'social' }),
   tagTypes: ['Connected Accounts'],
   endpoints: (builder) => ({

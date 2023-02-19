@@ -21,12 +21,14 @@ import { authApi } from '../../api/auth';
 import { authSlice, authReducer } from '../../features/auth/redux/slice';
 import { userApi } from '../../api/user';
 import { socialApi } from '../../api/social';
+import { twitterApi } from '../../api/twitter';
 
 const reducers = {
   [authSlice.name]: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [socialApi.reducerPath]: socialApi.reducer,
+  [twitterApi.reducerPath]: twitterApi.reducer,
 };
 
 const combinedReducer = combineReducers(reducers);
@@ -51,7 +53,8 @@ export const store = configureStore({
       createStateSyncMiddleware({ blacklist: ['persist/PERSIST'] }),
       authApi.middleware,
       userApi.middleware,
-      socialApi.middleware
+      socialApi.middleware,
+      twitterApi.middleware
     ),
   devTools: true,
 });
