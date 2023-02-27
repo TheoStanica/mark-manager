@@ -5,12 +5,17 @@ import GenericCard from '../GenericCard';
 import Retweet from '@mui/icons-material/Sync';
 import Content from './Content';
 import Footer from './Footer';
+import {
+  IStreamPreference,
+  ITwitterStreamData,
+} from '../../../../../../../api/user/types';
 
 interface Props {
   data: ITweet;
+  stream: IStreamPreference<ITwitterStreamData>;
 }
 
-const TwitterCard = ({ data }: Props) => {
+const TwitterCard = ({ data, stream }: Props) => {
   const isRetweet = useMemo(() => {
     if (data.retweeted_status) {
       return true;
@@ -69,7 +74,7 @@ const TwitterCard = ({ data }: Props) => {
       subheader={subHeader}
       avatarSrc={avatar}
       content={<Content tweet={data} isRetweet={isRetweet} />}
-      footer={<Footer tweet={data} isRetweet={isRetweet} />}
+      footer={<Footer tweet={data} isRetweet={isRetweet} stream={stream} />}
     />
   );
 };

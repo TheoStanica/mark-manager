@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '../index';
 import {
+  ILikeTweetMutation,
   ISearchTweetsQueryRequest,
   ISearchTweetsResponse,
   ISearchTweetsResponseExtended,
@@ -51,7 +52,52 @@ export const twitterApi = createApi({
         };
       },
     }),
+
+    likeTweet: builder.mutation<void, ILikeTweetMutation>({
+      query: ({ tweet, twitterStreamData }) => ({
+        url: '/favorites/create',
+        method: 'POST',
+        body: {
+          tweetId: tweet.id_str,
+          twitterUserId: twitterStreamData.twitterUserId,
+        },
+      }),
+      async onQueryStarted(
+        { streamId, twitterStreamData, tweet },
+        { dispatch, queryFulfilled }
+      ) {
+        const postResult = dispatch(
+          twitterApi.util.updateQueryData(
+            'fetchTweets',
+            {
+              id: streamId,
+              tweet: twitterStreamData,
+            },
+            (draft) => {
+              draft.statuses.map((status) => {
+                if (status.id_str === tweet.id_str) {
+                  if (status.retweeted_status) {
+                    status.retweeted_status.favorite_count =
+                      status.retweeted_status.favorite_count + 1;
+                    status.retweeted_status.favorited = true;
+                  } else {
+                    status.favorite_count = status.favorite_count + 1;
+                    status.favorited = true;
+                  }
+                }
+                return status;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          postResult.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useFetchTweetsQuery } = twitterApi;
+export const { useFetchTweetsQuery, useLikeTweetMutation } = twitterApi;

@@ -65,7 +65,7 @@ const TwitterSearchStream = ({ stream }: Props) => {
     >
       <>
         {data?.statuses.map((tweet) => (
-          <TwitterCard key={tweet.id} data={tweet} />
+          <TwitterCard key={tweet.id} data={tweet} stream={stream} />
         ))}
       </>
     </InfiniteScroll>

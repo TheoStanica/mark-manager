@@ -82,3 +82,9 @@ export interface ISearchTweetsResponseExtended extends ISearchTweetsResponse {
 export interface ILinkedInMessage {
   id: number;
 }
+
+export interface ILikeTweetMutation {
+  tweet: ITweet;
+  streamId: string;
+  twitterStreamData: ISearchTweetsRequest;
+}

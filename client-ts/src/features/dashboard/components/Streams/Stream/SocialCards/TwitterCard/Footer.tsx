@@ -1,17 +1,28 @@
 import { Box, IconButton, Tooltip } from '@mui/material';
-import React, { useMemo } from 'react';
-import { ITweet } from '../../../../../../../api/twitter/types';
+import React, { useCallback, useMemo } from 'react';
+import {
+  ILikeTweetMutation,
+  ITweet,
+} from '../../../../../../../api/twitter/types';
 import ReplayIcon from '@mui/icons-material/Replay';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Container } from '@mui/system';
 import { StyleSheet } from '../../../../../../../core/types/stylesheet';
+import {
+  IStreamPreference,
+  ITwitterStreamData,
+} from '../../../../../../../api/user/types';
+import { useLikeTweetMutation } from '../../../../../../../api/twitter';
 
 interface Props {
   tweet: ITweet;
   isRetweet: boolean;
+  stream: IStreamPreference<ITwitterStreamData>;
 }
 
-const Footer = ({ tweet, isRetweet }: Props) => {
+const Footer = ({ tweet, isRetweet, stream }: Props) => {
+  const [likeTweet] = useLikeTweetMutation();
+
   const likes = useMemo(() => {
     if (isRetweet) {
       return tweet.retweeted_status?.favorite_count;
@@ -40,11 +51,29 @@ const Footer = ({ tweet, isRetweet }: Props) => {
     return tweet.favorited;
   }, [isRetweet, tweet]);
 
+  const onLike = useCallback(() => {
+    console.log('like tweet');
+    const data: ILikeTweetMutation = {
+      streamId: stream.id,
+      tweet: tweet,
+      twitterStreamData: {
+        search: stream.data.search!,
+        twitterUserId: stream.data.twitterUserId,
+      },
+    };
+    likeTweet(data);
+    console.log(data);
+  }, [tweet, stream, likeTweet]);
+
+  const onRetweet = useCallback(() => {
+    console.log('retweet tweet');
+  }, []);
+
   return (
     <Container maxWidth={false} sx={styles().container}>
       <Box sx={styles().box}>
         <Tooltip title="Retweet" arrow>
-          <IconButton size="small">
+          <IconButton size="small" onClick={onRetweet}>
             <ReplayIcon
               fontSize="small"
               htmlColor={isRetweeted ? '#17bf63' : undefined}
@@ -55,7 +84,7 @@ const Footer = ({ tweet, isRetweet }: Props) => {
       </Box>
       <Box sx={styles().box}>
         <Tooltip title="Favorite" arrow>
-          <IconButton size="small">
+          <IconButton size="small" onClick={onLike}>
             <FavoriteIcon
               fontSize="small"
               htmlColor={isFavorited ? '#e0245e' : undefined}
