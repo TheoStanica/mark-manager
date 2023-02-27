@@ -4,6 +4,7 @@ import { ITweet } from '../../../../../../../api/twitter/types';
 import GenericCard from '../GenericCard';
 import Retweet from '@mui/icons-material/Sync';
 import Content from './Content';
+import Footer from './Footer';
 
 interface Props {
   data: ITweet;
@@ -68,6 +69,7 @@ const TwitterCard = ({ data }: Props) => {
       subheader={subHeader}
       avatarSrc={avatar}
       content={<Content tweet={data} isRetweet={isRetweet} />}
+      footer={<Footer tweet={data} isRetweet={isRetweet} />}
     />
   );
 };

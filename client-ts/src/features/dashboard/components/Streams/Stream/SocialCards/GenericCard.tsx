@@ -1,4 +1,11 @@
-import { Avatar, Card, CardContent, CardHeader, useTheme } from '@mui/material';
+import {
+  Avatar,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  useTheme,
+} from '@mui/material';
 import { Theme } from '@mui/system';
 import React, { ReactNode } from 'react';
 import { StyleSheet } from '../../../../../../core/types/stylesheet';
@@ -9,6 +16,7 @@ interface Props {
   subheader?: string;
   avatarSrc?: string;
   content: ReactNode;
+  footer?: ReactNode;
 }
 const GenericCard = ({
   beforeHeader,
@@ -16,6 +24,7 @@ const GenericCard = ({
   subheader,
   avatarSrc,
   content,
+  footer,
 }: Props) => {
   const theme = useTheme();
 
@@ -35,11 +44,7 @@ const GenericCard = ({
         subheader={subheader}
       />
       <CardContent sx={styles(theme).content}>{content}</CardContent>
-      {/* <CardActions>
-        <IconButton size="small">
-          <ShareIcon />
-        </IconButton>
-      </CardActions> */}
+      {footer && <CardActions>{footer}</CardActions>}
     </Card>
   );
 };
@@ -59,6 +64,7 @@ const styles = (theme: Theme): StyleSheet => ({
   },
   content: {
     paddingTop: theme.spacing(0),
+    paddingBottom: theme.spacing(0),
   },
 });
 

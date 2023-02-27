@@ -16,7 +16,36 @@ export interface ITweet {
   full_text: string;
   user: ITweetUserData;
   retweeted_status?: IRetweetedStatusData;
-  entities: Array<any>;
+  entities: ITweetEntity;
+  retweet_count: number;
+  retweeted: boolean;
+  favorite_count: number;
+  favorited: boolean;
+}
+
+export interface ITweetEntity {
+  hashtags?: Array<unknown>;
+  urls?: Array<unknown>;
+  user_mentions?: Array<unknown>;
+  media?: Array<ITweetMediaEntity>;
+  symbols?: Array<unknown>;
+  polls?: Array<unknown>;
+}
+
+export interface ITweetMediaEntity {
+  id: number;
+  id_str: string;
+  url: string;
+  display_url: string;
+  expanded_url: string;
+  media_url_https: string;
+  sizes: {
+    small: {
+      h: number;
+      w: number;
+      resize: 'fit';
+    };
+  };
 }
 
 export interface ITweetUserData {
@@ -33,7 +62,11 @@ export interface IRetweetedStatusData {
   id_str: string;
   full_text: string;
   user: ITweetUserData;
-  entities: Array<any>;
+  entities: ITweetEntity;
+  retweet_count: number;
+  retweeted: boolean;
+  favorite_count: number;
+  favorited: boolean;
 }
 
 export interface ISearchTweetsResponse {
