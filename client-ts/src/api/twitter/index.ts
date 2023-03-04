@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '../index';
 import {
   ILikeTweetMutation,
+  IRetweetTweetMutation,
   ISearchTweetsQueryRequest,
   ISearchTweetsResponse,
   ISearchTweetsResponseExtended,
@@ -107,7 +108,65 @@ export const twitterApi = createApi({
         }
       },
     }),
+    retweetTweet: builder.mutation<void, IRetweetTweetMutation>({
+      query: ({ tweet, twitterStreamData }) => {
+        const isRetweet = tweet.retweeted_status !== undefined;
+        const isRetweeted = isRetweet
+          ? tweet.retweeted_status!.retweeted
+          : tweet.retweeted;
+        const pathSuffix = isRetweeted ? 'unretweet' : 'retweet';
+
+        return {
+          url: `/statuses/${pathSuffix}`,
+          method: 'POST',
+          body: {
+            tweetId: tweet.id_str,
+            twitterUserId: twitterStreamData.twitterUserId,
+          },
+        };
+      },
+      async onQueryStarted(
+        { streamId, twitterStreamData, tweet },
+        { dispatch, queryFulfilled }
+      ) {
+        const postResult = dispatch(
+          twitterApi.util.updateQueryData(
+            'fetchTweets',
+            {
+              id: streamId,
+              tweet: twitterStreamData,
+            },
+            (draft) => {
+              draft.statuses.map((status) => {
+                const isRetweet = status.retweeted_status !== undefined;
+                const isSameTweet = status.id_str === tweet.id_str;
+
+                if (isSameTweet) {
+                  const tweetToModify = isRetweet
+                    ? status.retweeted_status!
+                    : status;
+                  const wasRetweeted = tweetToModify.retweeted;
+
+                  tweetToModify.retweet_count += wasRetweeted ? -1 : 1;
+                  tweetToModify.retweeted = !wasRetweeted;
+                }
+                return status;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          postResult.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useFetchTweetsQuery, useLikeTweetMutation } = twitterApi;
+export const {
+  useFetchTweetsQuery,
+  useLikeTweetMutation,
+  useRetweetTweetMutation,
+} = twitterApi;

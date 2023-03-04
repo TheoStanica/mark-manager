@@ -2,6 +2,7 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import {
   ILikeTweetMutation,
+  IRetweetTweetMutation,
   ITweet,
 } from '../../../../../../../api/twitter/types';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -12,7 +13,10 @@ import {
   IStreamPreference,
   ITwitterStreamData,
 } from '../../../../../../../api/user/types';
-import { useLikeTweetMutation } from '../../../../../../../api/twitter';
+import {
+  useLikeTweetMutation,
+  useRetweetTweetMutation,
+} from '../../../../../../../api/twitter';
 
 interface Props {
   tweet: ITweet;
@@ -22,6 +26,7 @@ interface Props {
 
 const Footer = ({ tweet, isRetweet, stream }: Props) => {
   const [likeTweet] = useLikeTweetMutation();
+  const [retweetTweet] = useRetweetTweetMutation();
 
   const likes = useMemo(() => {
     if (isRetweet) {
@@ -52,7 +57,6 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
   }, [isRetweet, tweet]);
 
   const onLike = useCallback(() => {
-    console.log('like tweet');
     const data: ILikeTweetMutation = {
       streamId: stream.id,
       tweet: tweet,
@@ -62,12 +66,19 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
       },
     };
     likeTweet(data);
-    console.log(data);
   }, [tweet, stream, likeTweet]);
 
   const onRetweet = useCallback(() => {
-    console.log('retweet tweet');
-  }, []);
+    const data: IRetweetTweetMutation = {
+      streamId: stream.id,
+      tweet: tweet,
+      twitterStreamData: {
+        search: stream.data.search!,
+        twitterUserId: stream.data.twitterUserId,
+      },
+    };
+    retweetTweet(data);
+  }, [tweet, stream, retweetTweet]);
 
   return (
     <Container maxWidth={false} sx={styles().container}>

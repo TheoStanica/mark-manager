@@ -88,3 +88,9 @@ export interface ILikeTweetMutation {
   streamId: string;
   twitterStreamData: ISearchTweetsRequest;
 }
+
+export interface IRetweetTweetMutation {
+  tweet: ITweet;
+  streamId: string;
+  twitterStreamData: ISearchTweetsRequest;
+}

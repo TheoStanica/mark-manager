@@ -25,7 +25,6 @@ const Content = ({ isRetweet, tweet }: Props) => {
   const text = useMemo(() => {
     let _message = message;
     if (entities?.media) {
-      console.log('replacing the shit thing');
       entities.media.forEach((element) => {
         _message = _message.replace(element.url, '');
       });
