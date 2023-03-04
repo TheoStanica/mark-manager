@@ -54,14 +54,22 @@ export const twitterApi = createApi({
     }),
 
     likeTweet: builder.mutation<void, ILikeTweetMutation>({
-      query: ({ tweet, twitterStreamData }) => ({
-        url: '/favorites/create',
-        method: 'POST',
-        body: {
-          tweetId: tweet.id_str,
-          twitterUserId: twitterStreamData.twitterUserId,
-        },
-      }),
+      query: ({ tweet, twitterStreamData }) => {
+        const isRetweet = tweet.retweeted_status !== undefined;
+        const isFavorited = isRetweet
+          ? tweet.retweeted_status!.favorited
+          : tweet.favorited;
+        const pathSuffix = isFavorited ? 'destroy' : 'create';
+
+        return {
+          url: `/favorites/${pathSuffix}`,
+          method: 'POST',
+          body: {
+            tweetId: tweet.id_str,
+            twitterUserId: twitterStreamData.twitterUserId,
+          },
+        };
+      },
       async onQueryStarted(
         { streamId, twitterStreamData, tweet },
         { dispatch, queryFulfilled }
@@ -75,15 +83,17 @@ export const twitterApi = createApi({
             },
             (draft) => {
               draft.statuses.map((status) => {
-                if (status.id_str === tweet.id_str) {
-                  if (status.retweeted_status) {
-                    status.retweeted_status.favorite_count =
-                      status.retweeted_status.favorite_count + 1;
-                    status.retweeted_status.favorited = true;
-                  } else {
-                    status.favorite_count = status.favorite_count + 1;
-                    status.favorited = true;
-                  }
+                const isRetweet = status.retweeted_status !== undefined;
+                const isSameTweet = status.id_str === tweet.id_str;
+
+                if (isSameTweet) {
+                  const tweetToModify = isRetweet
+                    ? status.retweeted_status!
+                    : status;
+                  const wasFavorited = tweetToModify.favorited;
+
+                  tweetToModify.favorite_count += wasFavorited ? -1 : 1;
+                  tweetToModify.favorited = !wasFavorited;
                 }
                 return status;
               });
