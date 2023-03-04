@@ -1,6 +1,6 @@
-export interface ISearchTweetsRequest {
-  search: string;
-  twitterUserId: string;
+import { ITwitterStreamData } from '../user/types';
+
+export interface ISearchTweetsRequest extends ITwitterStreamData {
   maxId?: string;
 }
 

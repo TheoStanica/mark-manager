@@ -61,6 +61,7 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
       streamId: stream.id,
       tweet: tweet,
       twitterStreamData: {
+        type: stream.data.type,
         search: stream.data.search!,
         twitterUserId: stream.data.twitterUserId,
       },
@@ -73,7 +74,8 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
       streamId: stream.id,
       tweet: tweet,
       twitterStreamData: {
-        search: stream.data.search!,
+        type: stream.data.type,
+        search: stream.data.search,
         twitterUserId: stream.data.twitterUserId,
       },
     };

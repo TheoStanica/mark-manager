@@ -34,7 +34,8 @@ const TwitterSearchStream = ({ stream }: Props) => {
     return {
       id: stream.id,
       tweet: {
-        search: stream.data.search!,
+        type: stream.data.type,
+        search: stream.data.search,
         twitterUserId: stream.data.twitterUserId,
         maxId: maxId,
       },

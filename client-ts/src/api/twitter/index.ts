@@ -19,15 +19,21 @@ export const twitterApi = createApi({
       ISearchTweetsResponseExtended,
       ISearchTweetsQueryRequest
     >({
-      query: ({ tweet }) => ({
-        url: `/search/tweets`,
-        method: 'GET',
-        params: {
-          twitterUserId: tweet.twitterUserId,
-          search: tweet.search,
-          maxId: tweet.maxId,
-        },
-      }),
+      query: ({ tweet }) => {
+        const url =
+          tweet.type === 'search'
+            ? '/search/tweets'
+            : '/statuses/home_timeline';
+        return {
+          url,
+          method: 'GET',
+          params: {
+            twitterUserId: tweet.twitterUserId,
+            search: tweet.search,
+            maxId: tweet.maxId,
+          },
+        };
+      },
 
       serializeQueryArgs: ({ queryArgs, endpointDefinition, endpointName }) => {
         const { id } = queryArgs;
