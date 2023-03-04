@@ -41,9 +41,9 @@ const StreamHeader = forwardRef(
             <StreamAccountName stream={stream} />
           </Box>
           <Box sx={control}>
-            <IconButton onClick={handleOnReload} aria-label="refresh stream">
+            {/* <IconButton onClick={handleOnReload} aria-label="refresh stream">
               <ReplayIcon fontSize="small" />
-            </IconButton>
+            </IconButton> */}
             <IconButton onClick={handleOnDelete} aria-label="delete stream">
               <DeleteIcon fontSize="small" />
             </IconButton>
