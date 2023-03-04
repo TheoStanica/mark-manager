@@ -1,6 +1,8 @@
 import { Paper } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
+import { useDispatch } from 'react-redux';
+import { twitterApi } from '../../../../../api/twitter';
 import {
   useCurrentUserQuery,
   useUpdateStreamPreferencesMutation,
@@ -21,6 +23,7 @@ const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {
   const { data } = useCurrentUserQuery();
   const [update] = useUpdateStreamPreferencesMutation();
   const isMobile = useIsMobileScreen();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // required to disable snap scrolling in parent container while dragging
@@ -49,7 +52,9 @@ const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {
         dragHandleProps={provided.dragHandleProps}
         stream={stream}
         onDelete={onDelete}
-        onReload={() => console.log('on reload')}
+        onReload={() => {
+          dispatch(twitterApi.util.resetApiState());
+        }}
       />
       <StreamBody stream={stream} />
     </Paper>
