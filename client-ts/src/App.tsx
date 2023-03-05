@@ -18,6 +18,7 @@ import Activate from './features/auth/pages/Activate';
 import TwitterConnect from './features/conntectSocial/pages/TwitterConnect';
 import Settings from './features/settings/pages';
 import ScrollTriggerProvider from './core/components/ScrollTriggerProvider';
+import Planner from './features/planner/pages';
 
 injectStore(store);
 
@@ -56,6 +57,10 @@ function App() {
     {
       path: '/dashboard',
       element: createRoute(<Dashboard />, { onlyPublic: false }),
+    },
+    {
+      path: '/planner',
+      element: createRoute(<Planner />, { onlyPublic: false }),
     },
     {
       path: '/twitter/connect',
