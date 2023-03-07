@@ -54,6 +54,7 @@ const start = async () => {
       useFindAndModify: false,
     });
     console.log('Connected to MongoDB');
+    console.log('agenda configuration..');
 
     new TwitterConnectedListener(natsWrapper.client).listen();
   } catch (err) {
