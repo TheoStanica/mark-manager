@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import { TwitterConnectedListener } from './events/listeners/twitterConnectedListener';
 import { natsWrapper } from './natsWrapper';
+import { scheduler } from './agenda';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
@@ -54,7 +55,10 @@ const start = async () => {
       useFindAndModify: false,
     });
     console.log('Connected to MongoDB');
-    console.log('agenda configuration..');
+
+    await scheduler.init();
+    scheduler.defineJobs();
+    console.log('Initialized the job scheduler');
 
     new TwitterConnectedListener(natsWrapper.client).listen();
   } catch (err) {
