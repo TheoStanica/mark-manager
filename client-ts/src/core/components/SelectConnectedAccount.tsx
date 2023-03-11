@@ -14,14 +14,19 @@ import { isTwitterAccount } from '../../api/social/types';
 interface Props {
   onSelect: (accounts: Array<IConnectedAccount<unknown>>) => any;
   multiple?: boolean;
+  initialUsers?: string;
 }
 
-interface Option {
+export interface Option {
   label: string;
   account: IConnectedAccount<unknown>;
 }
 
-const SelectConnectedAccount = ({ multiple, onSelect }: Props) => {
+const SelectConnectedAccount = ({
+  multiple,
+  onSelect,
+  initialUsers,
+}: Props) => {
   const { data } = useFetchConnectedAccountsQuery();
 
   const options: Array<Option> = useMemo(() => {
@@ -36,6 +41,21 @@ const SelectConnectedAccount = ({ multiple, onSelect }: Props) => {
       return { label, account: acc };
     });
   }, [data]);
+
+  const valueMem = useMemo(() => {
+    let val;
+    if (!initialUsers) {
+      return null;
+    }
+    options.forEach((option) => {
+      if (isTwitterAccount(option.account)) {
+        if (option.account.data.twitterUserId === initialUsers) {
+          val = option;
+        }
+      }
+    });
+    return val;
+  }, [options, initialUsers]);
 
   const onSelected = (option: Option | Array<Option> | null) => {
     if (!option) {
@@ -57,6 +77,7 @@ const SelectConnectedAccount = ({ multiple, onSelect }: Props) => {
       fullWidth
       multiple={multiple}
       options={options}
+      value={valueMem}
       renderInput={(params) => <TextField {...params} label="Social Account" />}
       renderOption={(props, option) => (
         <MenuItem {...props}>

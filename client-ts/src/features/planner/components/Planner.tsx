@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   AppointmentModel,
   EditingState,
@@ -22,6 +22,9 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import MonthCell from './MonthCell';
 import moment from 'moment';
+import { useFetchTwitterPostsQuery } from '../../../api/twitterPlanner';
+import useErrorSnack from '../../../core/hooks/useErrorSnack';
+import AppointmentFormComp from './AppointmentFormComp';
 
 const Planner = () => {
   const [currentView, setCurrentView] = useState('Month');
@@ -30,24 +33,27 @@ const Planner = () => {
   >(undefined);
   const [formVisible, setFormVisible] = useState(false);
 
-  const data: AppointmentModel[] = [
-    {
-      title: 'test',
-      startDate: moment().add(1, 'day').toDate(),
-      endDate: moment().add(1, 'day').add(1, 'minute').toDate(),
-      id: 'sdgsdgsdg',
-      userId: 'nowu',
-      text: 'shiiiish',
-    },
-    {
-      title: 'test2',
-      startDate: moment().add(0, 'day').toDate(),
-      endDate: moment().add(1, 'day').add(2, 'minute').toDate(),
-      id: 'sdgsdgssssgadg',
-      userId: 'nowu',
-      text: 'shiiiish',
-    },
-  ];
+  const { data: rawData, error } = useFetchTwitterPostsQuery();
+  useErrorSnack({ error });
+
+  const data: AppointmentModel[] = useMemo(() => {
+    // return [];
+
+    if (!rawData) {
+      return [];
+    }
+    return rawData.tweets.map((post) => {
+      return {
+        title: post.data.twitterUserId,
+        startDate: moment(post.data.date).toDate(),
+        endDate: moment(post.data.date).add(1, 's').toDate(),
+        id: post._id,
+        text: post.data.message,
+        platform: post.data.platform,
+        twitterUserId: post.data.twitterUserId,
+      };
+    });
+  }, [rawData]);
 
   const commitChanges = () => {};
 
@@ -84,7 +90,17 @@ const Planner = () => {
       <EditingState onCommitChanges={commitChanges} />
       <IntegratedEditing />
 
-      <Appointments />
+      <Appointments
+        appointmentComponent={(props) => (
+          <Appointments.Appointment
+            {...props}
+            onClick={(appointment) => {
+              setAppointmentData(appointment.data);
+              setFormVisible(true);
+            }}
+          ></Appointments.Appointment>
+        )}
+      />
       {/* <AppointmentForm
         visible={formVisible}
         onVisibilityChange={(visible) => setFormVisible(visible)}
@@ -105,18 +121,7 @@ const Planner = () => {
         }
         readOnly={!isValid(appointmentData)}
       /> */}
-      <AppointmentForm
-        visible={formVisible}
-        onVisibilityChange={(visible) => setFormVisible(visible)}
-        // basicLayoutComponent={() => null}
-        // dateEditorComponent={() => null}
-        // textEditorComponent={() => null}
-        // booleanEditorComponent={() => null}
-        // radioGroupComponent={() => null}
-        // labelComponent={() => null}
-        // appointmentData={appointmentData}
-        // readOnly={!isValid(appointmentData)}
-      />
+
       <DragDropProvider allowDrag={isValid} allowResize={() => false} />
       <CurrentTimeIndicator
         shadePreviousAppointments
@@ -125,6 +130,19 @@ const Planner = () => {
       />
 
       <ConfirmationDialog ignoreCancel />
+
+      <AppointmentForm
+        visible={formVisible}
+        onVisibilityChange={(visible) => setFormVisible(visible)}
+        appointmentData={appointmentData}
+        dateEditorComponent={() => null}
+        textEditorComponent={() => null}
+        booleanEditorComponent={() => null}
+        radioGroupComponent={() => null}
+        labelComponent={() => null}
+        basicLayoutComponent={(props) => <AppointmentFormComp {...props} />}
+        // readOnly={!isValid(appointmentData)}
+      />
     </Scheduler>
   );
 };
