@@ -1,30 +1,8 @@
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
-import React, { useMemo } from 'react';
-import { useFetchConnectedAccountsQuery } from '../../../api/social';
 import { isTwitterAccount } from '../../../api/social/types';
 import SelectConnectedAccount from '../../../core/components/SelectConnectedAccount';
 
 const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
-  const { data } = useFetchConnectedAccountsQuery();
-
-  const connectedAccountValue = useMemo(() => {
-    if (!data || data.length <= 0) {
-      return undefined;
-    }
-    let value = undefined;
-    data.forEach((acc) => {
-      if (isTwitterAccount(acc)) {
-        if (acc.data.twitterUserId === props.appointmentData.twitterUserId) {
-          value = {
-            label: acc.data.twitterScreenName,
-            account: acc,
-          };
-        }
-      }
-    });
-    return value;
-  }, [data, props.appointmentData]);
-
   return (
     <AppointmentForm.BasicLayout {...props}>
       {JSON.stringify(props.appointmentData)}
@@ -66,16 +44,3 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
 };
 
 export default AppointmentFormComp;
-
-// const options: Array<Option> = useMemo(() => {
-//   if (!data || data.length <= 0) {
-//     return [];
-//   }
-//   return data.map((acc) => {
-//     let label = 'unknown';
-//     if (isTwitterAccount(acc)) {
-//       label = acc.data.twitterScreenName;
-//     }
-//     return { label, account: acc };
-//   });
-// }, [data]);

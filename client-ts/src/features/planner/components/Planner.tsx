@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   AppointmentModel,
   EditingState,
@@ -25,6 +25,12 @@ import moment from 'moment';
 import { useFetchTwitterPostsQuery } from '../../../api/twitterPlanner';
 import useErrorSnack from '../../../core/hooks/useErrorSnack';
 import AppointmentFormComp from './AppointmentFormComp';
+import { useFetchConnectedAccountsQuery } from '../../../api/social';
+import {
+  isTwitterAccount,
+  ITwitterAccountData,
+} from '../../../api/social/types';
+import { IConnectedAccount } from '../../../core/types/social';
 
 const Planner = () => {
   const [currentView, setCurrentView] = useState('Month');
@@ -34,7 +40,23 @@ const Planner = () => {
   const [formVisible, setFormVisible] = useState(false);
 
   const { data: rawData, error } = useFetchTwitterPostsQuery();
+  const { data: connectedAccounts } = useFetchConnectedAccountsQuery();
   useErrorSnack({ error });
+
+  const postTitle = useCallback(
+    (userId: string) => {
+      const twitterAccount = connectedAccounts?.find(
+        (account) =>
+          isTwitterAccount(account) && account.data.twitterUserId === userId
+      );
+
+      return (
+        (twitterAccount as IConnectedAccount<ITwitterAccountData>)?.data
+          .twitterScreenName || userId
+      );
+    },
+    [connectedAccounts]
+  );
 
   const data: AppointmentModel[] = useMemo(() => {
     // return [];
@@ -44,7 +66,7 @@ const Planner = () => {
     }
     return rawData.tweets.map((post) => {
       return {
-        title: post.data.twitterUserId,
+        title: postTitle(post.data.twitterUserId),
         startDate: moment(post.data.date).toDate(),
         endDate: moment(post.data.date).add(1, 's').toDate(),
         id: post._id,
@@ -53,7 +75,7 @@ const Planner = () => {
         twitterUserId: post.data.twitterUserId,
       };
     });
-  }, [rawData]);
+  }, [rawData, postTitle]);
 
   const commitChanges = () => {};
 
