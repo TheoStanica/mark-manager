@@ -4,10 +4,12 @@ import SelectConnectedAccount from '../../../core/components/SelectConnectedAcco
 
 const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
   return (
-    <AppointmentForm.BasicLayout {...props}>
-      {JSON.stringify(props.appointmentData)}
-
-      <AppointmentForm.Label text="Select accounts" type="titleLabel" />
+    <AppointmentForm.BasicLayout {...props} fullSize>
+      <AppointmentForm.Label
+        text="Select accounts"
+        type="titleLabel"
+        style={{ paddingBottom: '1rem' }}
+      />
       <SelectConnectedAccount
         readOnly={props.readOnly}
         initialUsers={props.appointmentData.twitterUserId}
@@ -21,7 +23,11 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
         }}
       />
 
-      <AppointmentForm.Label text="Publish Date" type="titleLabel" />
+      <AppointmentForm.Label
+        text="Publish Date"
+        type="titleLabel"
+        style={{ paddingTop: '1rem' }}
+      />
       <AppointmentForm.DateEditor
         value={props.appointmentData.startDate?.toString()}
         onValueChange={(startDate) => {
@@ -30,7 +36,11 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
         readOnly={props.readOnly}
       />
 
-      <AppointmentForm.Label text="Message" type="titleLabel" />
+      <AppointmentForm.Label
+        text="Message"
+        type="titleLabel"
+        style={{ paddingBottom: '1rem' }}
+      />
       <AppointmentForm.TextEditor
         placeholder=""
         type="multilineTextEditor"

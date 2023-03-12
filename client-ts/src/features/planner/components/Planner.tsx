@@ -172,6 +172,7 @@ const Planner = () => {
         appointmentComponent={(props) => (
           <Appointments.Appointment
             {...props}
+            // drag drop disabled for now
             draggable={false}
             onClick={(appointment) => {
               setAppointmentData(appointment.data);
