@@ -25,16 +25,17 @@ export const scheduleTweetValidation = [
 ];
 
 export const updateScheduldTweetValidation = [
-  body('twitterUserId')
-    .notEmpty()
-    .bail()
-    .isNumeric()
-    .withMessage('Please provide a valid Twitter user ID'),
   body('id')
     .notEmpty()
     .bail()
     .isString()
     .withMessage('Please provide a valid ID'),
+  body('twitterUserId')
+    .notEmpty()
+    .bail()
+    .isNumeric()
+    .withMessage('Please provide a valid Twitter user ID')
+    .optional(),
   body('scheduleAt')
     .notEmpty()
     .withMessage('Please provide a date to schedule this tweet')

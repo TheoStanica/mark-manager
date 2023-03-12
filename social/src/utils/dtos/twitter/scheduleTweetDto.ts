@@ -6,7 +6,7 @@ export interface ScheduleTweetDto {
 
 export interface UpdateScheduledTweetDto {
   id: string;
-  twitterUserId: string;
+  twitterUserId?: string;
   text?: string;
   scheduleAt?: string;
 }

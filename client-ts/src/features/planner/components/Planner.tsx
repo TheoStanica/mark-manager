@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   AppointmentModel,
+  ChangeSet,
   EditingState,
   IntegratedEditing,
   ViewState,
@@ -22,7 +23,12 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import MonthCell from './MonthCell';
 import moment from 'moment';
-import { useFetchTwitterPostsQuery } from '../../../api/twitterPlanner';
+import {
+  useDeleteTwitterPostMutation,
+  useFetchTwitterPostsQuery,
+  useScheduleTwitterPostMutation,
+  useUpdateTwitterPostMutation,
+} from '../../../api/twitterPlanner';
 import useErrorSnack from '../../../core/hooks/useErrorSnack';
 import AppointmentFormComp from './AppointmentFormComp';
 import { useFetchConnectedAccountsQuery } from '../../../api/social';
@@ -31,6 +37,7 @@ import {
   ITwitterAccountData,
 } from '../../../api/social/types';
 import { IConnectedAccount } from '../../../core/types/social';
+import CommandLayoutComponent from './CommandLayoutComp';
 
 const Planner = () => {
   const [currentView, setCurrentView] = useState('Month');
@@ -41,7 +48,14 @@ const Planner = () => {
 
   const { data: rawData, error } = useFetchTwitterPostsQuery();
   const { data: connectedAccounts } = useFetchConnectedAccountsQuery();
+  const [schedulePost, { error: createError }] =
+    useScheduleTwitterPostMutation();
+  const [updatePost, { error: updateError }] = useUpdateTwitterPostMutation();
+  const [deletePost, { error: deleteError }] = useDeleteTwitterPostMutation();
   useErrorSnack({ error });
+  useErrorSnack({ error: createError });
+  useErrorSnack({ error: updateError });
+  useErrorSnack({ error: deleteError });
 
   const postTitle = useCallback(
     (userId: string) => {
@@ -75,14 +89,55 @@ const Planner = () => {
     });
   }, [rawData, postTitle]);
 
-  const commitChanges = () => {};
+  const addOrUpdatePost = useCallback(
+    (added?: { [key: string]: any }) => {
+      // @ts-ignore
+      const { startDate, twitterUserId, text } = added;
+      if (!appointmentData?.id) {
+        schedulePost({
+          scheduleAt: startDate || appointmentData?.startDate,
+          text,
+          twitterUserId,
+        });
+        return;
+      }
+      updatePost({
+        id: String(appointmentData.id),
+        twitterUserId,
+        scheduleAt: startDate,
+        text,
+      });
+    },
+    [appointmentData, schedulePost, updatePost]
+  );
 
-  const isValid = (appointment: any) => {
+  const commitChanges = useCallback(
+    (changes: ChangeSet) => {
+      const { added, changed, deleted } = changes;
+      if (added) {
+        addOrUpdatePost(added);
+        return;
+      }
+      if (changed) {
+        // add support to drag drop
+        return;
+      }
+      if (deleted) {
+        deletePost({
+          id: String(deleted),
+          twitterUserId: appointmentData?.twitterUserId,
+        });
+      }
+    },
+    [appointmentData, addOrUpdatePost, deletePost]
+  );
+
+  const isValid = useCallback((appointment: any) => {
     if (!appointment) {
       return false;
     }
     return appointment.startDate > new Date();
-  };
+  }, []);
 
   return (
     <Scheduler data={data} firstDayOfWeek={1}>
@@ -117,6 +172,7 @@ const Planner = () => {
         appointmentComponent={(props) => (
           <Appointments.Appointment
             {...props}
+            draggable={false}
             onClick={(appointment) => {
               setAppointmentData(appointment.data);
               setFormVisible(true);
@@ -124,26 +180,6 @@ const Planner = () => {
           ></Appointments.Appointment>
         )}
       />
-      {/* <AppointmentForm
-        visible={formVisible}
-        onVisibilityChange={(visible) => setFormVisible(visible)}
-        appointmentData={appointmentData}
-        // basicLayoutComponent={AppointmentFormComponent}
-        basicLayoutComponent={() => null}
-        dateEditorComponent={() => null}
-        textEditorComponent={() => null}
-        booleanEditorComponent={() => null}
-        radioGroupComponent={() => null}
-        labelComponent={() => null}
-        commandLayoutComponent={(props) =>
-          // <CommandLayoutComponent
-          //   appointmentData={appointmentData}
-          //   {...props}
-          // />
-          null
-        }
-        readOnly={!isValid(appointmentData)}
-      /> */}
 
       <DragDropProvider allowDrag={isValid} allowResize={() => false} />
       <CurrentTimeIndicator
@@ -164,6 +200,12 @@ const Planner = () => {
         radioGroupComponent={() => null}
         labelComponent={() => null}
         basicLayoutComponent={(props) => <AppointmentFormComp {...props} />}
+        commandLayoutComponent={(props) => (
+          <CommandLayoutComponent
+            {...props}
+            appointmentData={appointmentData}
+          />
+        )}
         readOnly={!isValid(appointmentData)}
       />
     </Scheduler>

@@ -50,7 +50,6 @@ export class AgendaService {
       _id: new mongoose.Types.ObjectId(data.id),
       name: JOB_NAME,
       'data.userId': userId,
-      'data.twitterUserId': data.twitterUserId,
     });
 
     if (!jobs[0]) {
@@ -63,6 +62,9 @@ export class AgendaService {
     jobs[0].attrs.data.date = data.scheduleAt
       ? data.scheduleAt
       : jobs[0].attrs.data.date;
+    jobs[0].attrs.data.twitterUserId = data.twitterUserId
+      ? data.twitterUserId
+      : jobs[0].attrs.data.twitterUserId;
 
     await jobs[0].save();
   }
