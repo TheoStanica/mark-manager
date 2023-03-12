@@ -59,8 +59,6 @@ const Planner = () => {
   );
 
   const data: AppointmentModel[] = useMemo(() => {
-    // return [];
-
     if (!rawData) {
       return [];
     }
@@ -80,6 +78,9 @@ const Planner = () => {
   const commitChanges = () => {};
 
   const isValid = (appointment: any) => {
+    if (!appointment) {
+      return false;
+    }
     return appointment.startDate > new Date();
   };
 
