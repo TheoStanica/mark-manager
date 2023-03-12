@@ -163,7 +163,7 @@ const Planner = () => {
         radioGroupComponent={() => null}
         labelComponent={() => null}
         basicLayoutComponent={(props) => <AppointmentFormComp {...props} />}
-        // readOnly={!isValid(appointmentData)}
+        readOnly={!isValid(appointmentData)}
       />
     </Scheduler>
   );

@@ -9,6 +9,7 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
 
       <AppointmentForm.Label text="Select accounts" type="titleLabel" />
       <SelectConnectedAccount
+        readOnly={props.readOnly}
         initialUsers={props.appointmentData.twitterUserId}
         onSelect={(acc) => {
           if (!acc[0]) {

@@ -15,6 +15,7 @@ interface Props {
   onSelect: (accounts: Array<IConnectedAccount<unknown>>) => any;
   multiple?: boolean;
   initialUsers?: string;
+  readOnly?: boolean;
 }
 
 export interface Option {
@@ -24,8 +25,9 @@ export interface Option {
 
 const SelectConnectedAccount = ({
   multiple,
-  onSelect,
   initialUsers,
+  readOnly,
+  onSelect,
 }: Props) => {
   const { data } = useFetchConnectedAccountsQuery();
 
@@ -75,6 +77,8 @@ const SelectConnectedAccount = ({
     <Autocomplete
       id="select-account"
       fullWidth
+      readOnly={readOnly}
+      disabled={readOnly}
       multiple={multiple}
       options={options}
       value={valueMem}
