@@ -1,6 +1,7 @@
 import express from 'express';
 import { activationRouter } from './activation';
 import { changePasswordRouter } from './changePassword';
+import { facebookConnectRouter } from './facebook';
 import { resendActivationRouter } from './resendActivation';
 import { resetPasswordRouter } from './resetPassword';
 import { signinRouter } from './signin';
@@ -20,5 +21,6 @@ apiRouter.use(signoutRouter);
 apiRouter.use(signupRouter);
 apiRouter.use(tokenRouter);
 apiRouter.use(twitterConnectRouter);
+apiRouter.use(facebookConnectRouter);
 
 export { apiRouter };

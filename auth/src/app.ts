@@ -6,8 +6,11 @@ import session from 'express-session';
 import { apiRouter } from './routes';
 import { internalRouter } from './routes/internal';
 import promBundle from 'express-prom-bundle';
+import './utils/passport/facebookStrategy';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 const metricsMiddleware = promBundle({
   includeMethod: true,
   includePath: true,

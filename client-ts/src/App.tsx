@@ -19,6 +19,7 @@ import TwitterConnect from './features/conntectSocial/pages/TwitterConnect';
 import Settings from './features/settings/pages';
 import ScrollTriggerProvider from './core/components/ScrollTriggerProvider';
 import Planner from './features/planner/pages';
+import FacebookConnect from './features/conntectSocial/pages/FacebookConnect';
 
 injectStore(store);
 
@@ -65,6 +66,10 @@ function App() {
     {
       path: '/twitter/connect',
       element: createRoute(<TwitterConnect />, { onlyPublic: false }),
+    },
+    {
+      path: '/facebook/connect',
+      element: createRoute(<FacebookConnect />, { onlyPublic: false }),
     },
     {
       path: '/settings',

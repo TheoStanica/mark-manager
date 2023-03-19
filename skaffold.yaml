@@ -41,8 +41,8 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: theocosmin/client
-      context: client
+    - image: theocosmin/client-ts
+      context: client-ts
       docker:
         dockerfile: Dockerfile
       sync:

@@ -40,6 +40,16 @@ spec:
                 secretKeyRef:
                   name: auth-secrets
                   key: TWITTER_CONSUMER_SECRET
+            - name: FACEBOOK_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: FACEBOOK_APP_ID
+            - name: FACEBOOK_APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: FACEBOOK_APP_SECRET
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

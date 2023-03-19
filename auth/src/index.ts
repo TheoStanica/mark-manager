@@ -43,6 +43,12 @@ const start = async () => {
   if (!process.env.HOST_URL) {
     throw new Error('HOST_URL must be defined');
   }
+  if (!process.env.FACEBOOK_APP_ID) {
+    throw new Error('FACEBOOK_APP_ID must be defined');
+  }
+  if (!process.env.FACEBOOK_APP_SECRET) {
+    throw new Error('FACEBOOK_APP_SECRET must be defined');
+  }
 
   try {
     await redisWrapper.connect(process.env.REDIS_HOST);

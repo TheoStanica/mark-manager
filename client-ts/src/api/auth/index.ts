@@ -70,6 +70,12 @@ export const authApi = createApi({
         method: 'GET',
       }),
     }),
+    connectFacebook: builder.query({
+      query: () => ({
+        url: '/facebook/connect',
+        method: 'GET',
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: '/signout',
@@ -89,5 +95,6 @@ export const {
   useResetPasswordMutation,
   useChangePasswordMutation,
   useConnectTwitterQuery,
+  useConnectFacebookQuery,
   useLogoutMutation,
 } = authApi;
