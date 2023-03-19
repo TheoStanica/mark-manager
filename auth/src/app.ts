@@ -7,10 +7,9 @@ import { apiRouter } from './routes';
 import { internalRouter } from './routes/internal';
 import promBundle from 'express-prom-bundle';
 import './utils/passport/facebookStrategy';
-import cors from 'cors';
+import passport from 'passport';
 
 const app = express();
-app.use(cors());
 const metricsMiddleware = promBundle({
   includeMethod: true,
   includePath: true,
@@ -31,6 +30,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(passport.initialize());
 
 app.use(metricsMiddleware);
 app.use('/api/auth', apiRouter);

@@ -51,7 +51,7 @@ const FacebookConnect = () => {
       const { appId, redirect } = data;
       if (appId && redirect) {
         window.location.assign(
-          ` https://www.facebook.com/v3.2/dialog/oauth?response_type=code&redirect_uri=${new URLSearchParams(
+          ` https://www.facebook.com/v3.2/dialog/oauth?response_type=code&redirect_uri=${encodeURIComponent(
             redirect
           )}&client_id=${appId}`
         );
