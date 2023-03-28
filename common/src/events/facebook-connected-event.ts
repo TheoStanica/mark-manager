@@ -8,8 +8,8 @@ export interface FacebookConnectedEvent {
     accessToken: string;
     data: {
       id: string;
+      displayName: string;
       username?: string;
-      displayName?: string;
     };
   };
 }
