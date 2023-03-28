@@ -5,6 +5,7 @@ export enum Subjects {
 
   AccessTokenRevoked = 'auth:accessToken_revoked',
   TwitterConnected = 'auth:Twitter_Connected',
+  FacebookConnected = 'auth:Facebook_Connected',
 
   EmailChanged = 'userprofile:email_changed',
 
