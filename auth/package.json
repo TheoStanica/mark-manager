@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tcosmin/common": "^1.0.53",
+    "@tcosmin/common": "^1.0.56",
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-session": "^2.0.41",
     "@types/cors": "^2.8.13",

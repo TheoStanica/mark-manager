@@ -9,6 +9,7 @@ router.get(
   '/facebook/connect',
   requireAuth,
   async (req: Request, res: Response) => {
+    req.session.userId = req.currentUser?.userId;
     res.send({
       appId: process.env.FACEBOOK_APP_ID,
       redirect: `https://${hostURL}/api/auth/facebook/callback`,
