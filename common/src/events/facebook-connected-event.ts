@@ -1,6 +1,6 @@
 import { Subjects } from './subjects';
 
-export interface FacebookConnectedEvent<T> {
+export interface FacebookConnectedEvent {
   subject: Subjects.FacebookConnected;
 
   data: {
