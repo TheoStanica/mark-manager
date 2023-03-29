@@ -1,7 +1,7 @@
 import mongoose, { ClientSession } from 'mongoose';
 import { Service } from 'typedi';
 import { UserDoc } from '../models/users';
-// import { FacebookRepository } from '../repositories/facebookRepository';
+import { FacebookRepository } from '../repositories/facebookRepository';
 import { TwitterRepository } from '../repositories/twitterRepository';
 import { UserRepository } from '../repositories/userRepository';
 import { AddFacebookAccountDto } from '../utils/dtos/facebook/create';
@@ -15,7 +15,8 @@ import {
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly twitterRepository: TwitterRepository // private readonly facebookRepository: FacebookRepository
+    private readonly twitterRepository: TwitterRepository,
+    private readonly facebookRepository: FacebookRepository
   ) {}
 
   async fetchConnectedAccounts(
@@ -46,27 +47,27 @@ export class UserService {
     }
   }
 
-  // async connectFacebookAccount(data: AddFacebookAccountDto) {
-  //   const session = await mongoose.startSession();
-  //   session.startTransaction();
-  //   try {
-  //     const user = await this.userRepository.fetchUser(data.id, session);
-  //     if (!user) {
-  //       await this.userRepository.addUser(data.id);
-  //       await this.userRepository.addFacebookTokens(data, session);
-  //     } else {
-  //       await this.addOrUpdateFacebookAccountCredentials(user, data, session);
-  //     }
+  async connectFacebookAccount(data: AddFacebookAccountDto) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const user = await this.userRepository.fetchUser(data.id, session);
+      if (!user) {
+        await this.userRepository.addUser(data.id);
+        await this.userRepository.addFacebookTokens(data, session);
+      } else {
+        await this.addOrUpdateFacebookAccountCredentials(user, data, session);
+      }
 
-  //     await session.commitTransaction();
-  //     session.endSession();
-  //     return true;
-  //   } catch (error) {
-  //     await session.abortTransaction();
-  //     session.endSession();
-  //     return false;
-  //   }
-  // }
+      await session.commitTransaction();
+      session.endSession();
+      return true;
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      return false;
+    }
+  }
 
   private async addOrUpdateTwitterAccountCredentials(
     user: UserDoc,
@@ -93,29 +94,29 @@ export class UserService {
       );
     }
   }
-  // private async addOrUpdateFacebookAccountCredentials(
-  //   user: UserDoc,
-  //   data: AddFacebookAccountDto,
-  //   session: ClientSession
-  // ) {
-  //   const twitterAccount = user.facebook.find(
-  //     (account) => account.data.id === data.data.id
-  //   );
+  private async addOrUpdateFacebookAccountCredentials(
+    user: UserDoc,
+    data: AddFacebookAccountDto,
+    session: ClientSession
+  ) {
+    const facebookAccount = user.facebook.find(
+      (account) => account.data.id === data.data.id
+    );
 
-  //   if (!twitterAccount) {
-  //     const twitterCredentials =
-  //       await this.facebookRepository.addFacebookAccountCredentials(
-  //         data,
-  //         session
-  //       );
-  //     user.twitter.push(twitterCredentials);
-  //     await user.save({ session });
-  //   } else {
-  //     await this.facebookRepository.updateFacebookAccountCredentials(
-  //       twitterAccount.id,
-  //       data,
-  //       session
-  //     );
-  //   }
-  // }
+    if (!facebookAccount) {
+      const facebookCredentials =
+        await this.facebookRepository.addFacebookAccountCredentials(
+          data,
+          session
+        );
+      user.facebook.push(facebookCredentials);
+      await user.save({ session });
+    } else {
+      await this.facebookRepository.updateFacebookAccountCredentials(
+        facebookAccount.id,
+        data,
+        session
+      );
+    }
+  }
 }

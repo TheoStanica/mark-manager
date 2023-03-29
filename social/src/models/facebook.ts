@@ -2,23 +2,25 @@ import mongoose from 'mongoose';
 
 export interface FacebookAttrs {
   accessToken: string;
-  facebookData: {
+  data: {
     id: string;
     displayName: string;
   };
 }
 
-export interface FacebookDoc extends mongoose.Document {
+export interface FacebookDoc {
+  id: string;
   accessToken: string;
-  facebookData: {
+  data: {
     id: string;
     displayName: string;
     username?: string;
   };
 }
 
-export interface FacebookModel extends mongoose.Model<FacebookDoc> {
-  build(attrs: FacebookAttrs): FacebookDoc;
+export interface FacebookModel
+  extends mongoose.Model<FacebookDoc & mongoose.Document> {
+  build(attrs: FacebookAttrs): FacebookDoc & mongoose.Document;
 }
 
 const facebookAccountSchema = new mongoose.Schema({
@@ -26,7 +28,7 @@ const facebookAccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  facebookData: {
+  data: {
     id: {
       type: String,
       required: true,
@@ -46,7 +48,7 @@ facebookAccountSchema.statics.build = (attrs: FacebookAttrs) => {
   return new Facebook(attrs);
 };
 
-const Facebook = mongoose.model<FacebookDoc, FacebookModel>(
+const Facebook = mongoose.model<FacebookDoc & mongoose.Document, FacebookModel>(
   'FacebookAccount',
   facebookAccountSchema
 );

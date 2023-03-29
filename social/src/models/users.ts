@@ -8,7 +8,7 @@ export interface UserAttrs {
 
 export interface UserDoc extends mongoose.Document {
   twitter: Array<TwitterDoc>;
-  facebook: any;
+  facebook: Array<FacebookDoc>;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
@@ -38,7 +38,7 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 
 userSchema.set('versionKey', false);
 
-userSchema.set('strict', false);
+userSchema.set('strict', true);
 
 // @ts-ignore
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);

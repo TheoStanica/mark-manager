@@ -17,8 +17,8 @@ export class FacebookConnectedListener extends Listener<FacebookConnectedEvent> 
   async onMessage(data: FacebookConnectedEvent['data'], msg: Message) {
     try {
       const userService = Container.get(UserService);
-      // const added = await userService.connectFacebookAccount(data);
-      // if (added) msg.ack();
+      const added = await userService.connectFacebookAccount(data);
+      if (added) msg.ack();
     } catch (err) {
       throw new DatabaseConnectionError();
     }
