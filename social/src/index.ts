@@ -4,6 +4,7 @@ import { app } from './app';
 import { TwitterConnectedListener } from './events/listeners/twitterConnectedListener';
 import { natsWrapper } from './natsWrapper';
 import { scheduler } from './agenda';
+// import { FacebookConnectedListener } from './events/listeners/facebookConnectedListener';
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
@@ -61,6 +62,7 @@ const start = async () => {
     console.log('Initialized the job scheduler');
 
     new TwitterConnectedListener(natsWrapper.client).listen();
+    // new FacebookConnectedListener(natsWrapper.client).listen();
   } catch (err) {
     console.log(err);
     process.exit();

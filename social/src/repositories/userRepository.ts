@@ -9,11 +9,16 @@ import {
   IConnectedAccount,
   ITwitterData,
 } from '../utils/interfaces/connectedAccount';
+import { AddFacebookAccountDto } from '../utils/dtos/facebook/create';
+// import { FacebookRepository } from './facebookRepository';
 
 @Service()
 export class UserRepository {
   private readonly User;
-  constructor(private readonly twitterRepository: TwitterRepository) {
+  constructor(
+    private readonly twitterRepository: TwitterRepository
+  ) // private readonly facebookRepository: FacebookRepository
+  {
     this.User = User;
   }
 
@@ -24,6 +29,30 @@ export class UserRepository {
     newUser.twitter.push(twitterDetails);
     await newUser.save({ session });
   }
+
+  // async addUser(id: string) {
+  //   const user = this.User.build({ _id: id });
+  //   return user;
+  // }
+
+  // async addTwitterTokens(data: AddTokensDto, session: ClientSession) {
+  //   const user = this.User.findById(data.userId);
+  //   const twitterDetails =
+  //     await this.twitterRepository.addTwitterAccountCredentials(data, session);
+  //   user.twitter.push(twitterDetails);
+  //   await user.save({ session });
+  // }
+
+  // async addFacebookTokens(data: AddFacebookAccountDto, session: ClientSession) {
+  //   const user = this.User.findById(data.id);
+  //   const twitterDetails =
+  //     await this.facebookRepository.addFacebookAccountCredentials(
+  //       data,
+  //       session
+  //     );
+  //   user.facebook.push(twitterDetails);
+  //   await user.save({ session });
+  // }
 
   async fetchUser(userId: string, session?: ClientSession) {
     return this.User.findById(userId)
