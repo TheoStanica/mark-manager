@@ -1,5 +1,5 @@
 import { TwitterDoc } from '../models/twitter';
-import { User } from '../models/users';
+import { User, UserModel } from '../models/users';
 import { Service } from 'typedi';
 import { BadRequestError } from '@tcosmin/common';
 import { ClientSession } from 'mongoose';
@@ -45,6 +45,7 @@ export class UserRepository {
 
   async addFacebookTokens(data: AddFacebookAccountDto, session: ClientSession) {
     const user = this.User.findById(data.id);
+
     const twitterDetails =
       await this.facebookRepository.addFacebookAccountCredentials(
         data,
@@ -57,6 +58,7 @@ export class UserRepository {
   async fetchUser(userId: string, session?: ClientSession) {
     return this.User.findById(userId)
       .populate('twitter')
+      .populate('facebook')
       .session(session ? session : null);
   }
 
@@ -84,6 +86,24 @@ export class UserRepository {
     if (!foundAccount) {
       throw new BadRequestError(
         'This Twitter account is not connected to your account'
+      );
+    }
+
+    return foundAccount;
+  }
+
+  async fetchFacebookAccountTokens(userId: string, facebookId: string) {
+    const user = await this.User.findById(userId).populate('facebook');
+    if (!user)
+      throw new BadRequestError('You have no Facebook accounts connected');
+
+    const foundAccount = user.facebook?.find(
+      (account) => account.data.id === facebookId
+    );
+
+    if (!foundAccount) {
+      throw new BadRequestError(
+        'This Facebook account is not connected to your account'
       );
     }
 

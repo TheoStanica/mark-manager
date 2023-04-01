@@ -20,14 +20,12 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TwitterAccount',
-      required: false,
     },
   ],
   facebook: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'FacebookAccount',
-      required: false,
     },
   ],
 });
@@ -35,10 +33,6 @@ const userSchema = new mongoose.Schema({
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };
-
-userSchema.set('versionKey', false);
-
-userSchema.set('strict', true);
 
 // @ts-ignore
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
