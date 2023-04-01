@@ -1,11 +1,13 @@
+import { BadRequestError } from '@tcosmin/common';
 import { ClientSession } from 'mongoose';
 import { Service } from 'typedi';
-import { Facebook } from '../models/facebook';
+import { Facebook, FacebookModel } from '../models/facebook';
 import { AddFacebookAccountDto } from '../utils/dtos/facebook/create';
+import { FacebookAccountPageData } from '../utils/interfaces/facebook/accountPagesPayload';
 
 @Service()
 export class FacebookRepository {
-  private readonly Facebook;
+  private readonly Facebook: FacebookModel;
   constructor() {
     this.Facebook = Facebook;
   }
@@ -43,5 +45,27 @@ export class FacebookRepository {
       },
       { new: true, session }
     );
+  }
+
+  async addPageCredentials(
+    facebookAccountMongoID: string,
+    page: FacebookAccountPageData
+  ) {
+    const account = await this.Facebook.findById(facebookAccountMongoID);
+
+    if (!account) {
+      throw new BadRequestError('');
+    }
+
+    const idx = account.pages.findIndex((pg) => pg.id === page.id);
+    if (idx !== -1) {
+      account.pages[idx].access_token = page.access_token;
+      account.pages[idx].name = page.name;
+      account.pages[idx].category = page.category;
+    } else {
+      account.pages.push(page);
+    }
+
+    return await account.save();
   }
 }

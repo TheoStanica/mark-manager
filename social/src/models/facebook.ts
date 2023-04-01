@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { FacebookAccountPageData } from '../utils/interfaces/facebook/accountPagesPayload';
 
 export interface FacebookAttrs {
   accessToken: string;
@@ -16,6 +17,7 @@ export interface FacebookDoc {
     displayName: string;
     username?: string;
   };
+  pages: Array<FacebookAccountPageData>;
 }
 
 export interface FacebookModel
@@ -42,6 +44,27 @@ const facebookAccountSchema = new mongoose.Schema({
       required: false,
     },
   },
+  pages: [
+    {
+      access_token: {
+        type: String,
+        required: true,
+      },
+      category: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
+      _id: false,
+    },
+  ],
 });
 
 facebookAccountSchema.statics.build = (attrs: FacebookAttrs) => {
