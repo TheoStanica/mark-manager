@@ -1,4 +1,5 @@
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
+import moment from 'moment';
 import { isTwitterAccount } from '../../../api/social/types';
 import SelectConnectedAccount from '../../../core/components/SelectConnectedAccount';
 
@@ -29,7 +30,7 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
         style={{ paddingTop: '1rem' }}
       />
       <AppointmentForm.DateEditor
-        value={props.appointmentData.startDate?.toString()}
+        value={moment(props.appointmentData.startDate) as unknown as string}
         onValueChange={(startDate) => {
           props.onFieldChange({ startDate });
         }}
