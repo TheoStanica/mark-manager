@@ -39,7 +39,7 @@ export class FacebookService {
       data.facebookUserId
     );
 
-    const account = await this.facebookRepository.addPageCredentials(acc._id, {
+    const account = await this.facebookRepository.addPageCredentials(acc.id, {
       access_token: data.access_token,
       category: data.category,
       id: data.id,

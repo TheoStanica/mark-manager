@@ -1,11 +1,11 @@
 import { ClientSession } from 'mongoose';
 import { Service } from 'typedi';
-import { Twitter } from '../models/twitter';
+import { Twitter, TwitterModel } from '../models/twitter';
 import { AddTokensDto } from '../utils/dtos/twitter/addTokensDto';
 
 @Service()
 export class TwitterRepository {
-  private readonly Twitter;
+  private readonly Twitter: TwitterModel;
   constructor() {
     this.Twitter = Twitter;
   }

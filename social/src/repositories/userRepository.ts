@@ -14,7 +14,7 @@ import { FacebookRepository } from './facebookRepository';
 
 @Service()
 export class UserRepository {
-  private readonly User;
+  private readonly User: UserModel;
   constructor(
     private readonly twitterRepository: TwitterRepository,
     private readonly facebookRepository: FacebookRepository
@@ -36,16 +36,23 @@ export class UserRepository {
   }
 
   async addTwitterTokens(data: AddTokensDto, session: ClientSession) {
-    const user = this.User.findById(data.userId);
+    const user = await this.User.findById(data.userId);
+    if (!user) {
+      throw new BadRequestError('');
+    }
     const twitterDetails =
       await this.twitterRepository.addTwitterAccountCredentials(data, session);
     user.twitter.push(twitterDetails);
+
     await user.save({ session });
   }
 
   async addFacebookTokens(data: AddFacebookAccountDto, session: ClientSession) {
-    const user = this.User.findById(data.id);
+    const user = await this.User.findById(data.id);
 
+    if (!user) {
+      throw new BadRequestError('');
+    }
     const twitterDetails =
       await this.facebookRepository.addFacebookAccountCredentials(
         data,

@@ -7,7 +7,8 @@ export interface TwitterAttrs {
   twitterScreenName: string;
 }
 
-export interface TwitterDoc extends mongoose.Document {
+export interface TwitterDoc {
+  id: string;
   oauthAccessToken: string;
   oauthAccessTokenSecret: string;
   twitterUserId: string;
@@ -16,8 +17,9 @@ export interface TwitterDoc extends mongoose.Document {
   hasAdsAccount: boolean;
 }
 
-export interface TwitterModel extends mongoose.Model<TwitterDoc> {
-  build(attrs: TwitterAttrs): TwitterDoc;
+export interface TwitterModel
+  extends mongoose.Model<TwitterDoc & mongoose.Document> {
+  build(attrs: TwitterAttrs): TwitterDoc & mongoose.Document;
 }
 
 const twitterAccountSchema = new mongoose.Schema({
@@ -46,7 +48,7 @@ twitterAccountSchema.statics.build = (attrs: TwitterAttrs) => {
   return new Twitter(attrs);
 };
 
-const Twitter = mongoose.model<TwitterDoc, TwitterModel>(
+const Twitter = mongoose.model<TwitterDoc & mongoose.Document, TwitterModel>(
   'TwitterAccount',
   twitterAccountSchema
 );
