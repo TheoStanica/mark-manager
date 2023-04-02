@@ -12,7 +12,7 @@ export interface ICurrentUser {
 }
 
 export type TwitterStreamTypes = 'home_timeline' | 'search';
-export type StreamPlatformType = 'twitter';
+export type StreamPlatformType = 'twitter' | 'facebook';
 export interface IStreamPreference<T> {
   id: string;
   platform: StreamPlatformType;

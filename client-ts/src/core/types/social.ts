@@ -1,4 +1,4 @@
-export type ConnectedAccountTypes = 'twitter';
+export type ConnectedAccountTypes = 'twitter' | 'facebook';
 
 export interface IConnectedAccount<T> {
   type: ConnectedAccountTypes;

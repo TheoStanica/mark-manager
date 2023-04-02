@@ -23,6 +23,7 @@ import { userApi } from '../../api/user';
 import { socialApi } from '../../api/social';
 import { twitterApi } from '../../api/twitter';
 import { twitterPlannerApi } from '../../api/twitterPlanner';
+import { facebookApi } from '../../api/facebook';
 
 const reducers = {
   [authSlice.name]: authReducer,
@@ -31,6 +32,7 @@ const reducers = {
   [socialApi.reducerPath]: socialApi.reducer,
   [twitterApi.reducerPath]: twitterApi.reducer,
   [twitterPlannerApi.reducerPath]: twitterPlannerApi.reducer,
+  [facebookApi.reducerPath]: facebookApi.reducer,
 };
 
 const combinedReducer = combineReducers(reducers);
@@ -57,7 +59,8 @@ export const store = configureStore({
       userApi.middleware,
       socialApi.middleware,
       twitterApi.middleware,
-      twitterPlannerApi.middleware
+      twitterPlannerApi.middleware,
+      facebookApi.middleware
     ),
   devTools: true,
 });

@@ -5,17 +5,23 @@ import { useLocation } from 'react-router-dom';
 import Loading from '../../../core/components/FetchStatus/Loading';
 import Success from '../../../core/components/FetchStatus/Success';
 import Failure from '../../../core/components/FetchStatus/Failure';
-import { socialApi } from '../../../api/social';
+import { socialApi, useFetchConnectedAccountsQuery } from '../../../api/social';
 import { useConnectFacebookQuery } from '../../../api/auth';
+import { useFetchAccountPagesQuery } from '../../../api/facebook';
+import { isFacebookAccount } from '../../../api/social/types';
 
 const FacebookConnect = () => {
   const [initConnect, setInitConnect] = useState(true);
   const [status, setStatus] = useState('loading');
-  const [initClose, setInitClose] = useState(false);
+  const [connected, setConnected] = useState(false);
   const { data } = useConnectFacebookQuery(undefined, { skip: initConnect });
   const location = useLocation();
   const query = useMemo(() => new URLSearchParams(location.search), [location]);
   const dispatch = useDispatch();
+  const { data: facebookPages } = useFetchAccountPagesQuery(undefined, {
+    skip: !connected,
+  });
+  const { data: connectedAccounts } = useFetchConnectedAccountsQuery();
 
   useEffect(() => {
     const success = query.get('success');
@@ -28,23 +34,27 @@ const FacebookConnect = () => {
       } else {
         setStatus('failure');
       }
-      setInitClose(true);
+      setConnected(true);
     }
   }, [query, dispatch]);
 
+  const connectedFacebookAccounts = useMemo(() => {
+    return connectedAccounts?.filter((account) => isFacebookAccount(account));
+  }, [connectedAccounts]);
+
   useEffect(() => {
     let timeout: NodeJS.Timeout | undefined;
-    if (initClose) {
-      timeout = setTimeout(() => {
-        window.close();
-      }, 3000);
-    }
-    return () => {
-      if (timeout !== null) {
-        clearTimeout(timeout);
-      }
-    };
-  }, [initClose]);
+    // if (connected) {
+    //   timeout = setTimeout(() => {
+    //     window.close();
+    //   }, 3000);
+    // }
+    // return () => {
+    //   if (timeout !== null) {
+    //     clearTimeout(timeout);
+    //   }
+    // };
+  }, [connected]);
 
   useEffect(() => {
     if (data) {
@@ -64,6 +74,8 @@ const FacebookConnect = () => {
   return (
     <>
       <CssBaseline />
+      {/* {JSON.stringify(facebookPages)} */}
+      {JSON.stringify(connectedFacebookAccounts)}
       <Box sx={containerStyle}>
         {status === 'loading' && <Loading noMessage />}
         {status === 'success' && <Success message="Connected" />}
