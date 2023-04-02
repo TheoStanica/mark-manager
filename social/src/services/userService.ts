@@ -8,6 +8,7 @@ import { AddFacebookAccountDto } from '../utils/dtos/facebook/create';
 import { AddTokensDto } from '../utils/dtos/twitter/addTokensDto';
 import {
   IConnectedAccount,
+  IFacebookData,
   ITwitterData,
 } from '../utils/interfaces/connectedAccount';
 
@@ -21,7 +22,7 @@ export class UserService {
 
   async fetchConnectedAccounts(
     userId: string
-  ): Promise<Array<IConnectedAccount<ITwitterData>>> {
+  ): Promise<Array<IConnectedAccount<ITwitterData | IFacebookData>>> {
     // TODO update this to include facebook too
     return this.userRepository.fetchConnectedTwitterAccounts(userId);
   }

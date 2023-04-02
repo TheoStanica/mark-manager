@@ -7,6 +7,7 @@ import { AddTokensDto } from '../utils/dtos/twitter/addTokensDto';
 import { TwitterRepository } from './twitterRepository';
 import {
   IConnectedAccount,
+  IFacebookData,
   ITwitterData,
 } from '../utils/interfaces/connectedAccount';
 import { AddFacebookAccountDto } from '../utils/dtos/facebook/create';
@@ -71,14 +72,22 @@ export class UserRepository {
 
   async fetchConnectedTwitterAccounts(
     userId: string
-  ): Promise<IConnectedAccount<ITwitterData>[]> {
+  ): Promise<IConnectedAccount<ITwitterData | IFacebookData>[]> {
     const user = await this.fetchUser(userId);
-    const accounts = user?.twitter || [];
+    const twitter = user?.twitter || [];
+    const fb = user?.facebook || [];
 
-    return accounts?.map((account) => ({
-      type: 'twitter',
+    const twitterAccounts = twitter?.map<IConnectedAccount<ITwitterData>>(
+      (account) => ({
+        type: 'twitter',
+        data: account,
+      })
+    );
+    const fbAccounts = fb?.map<IConnectedAccount<IFacebookData>>((account) => ({
+      type: 'facebook',
       data: account,
     }));
+    return [...twitterAccounts, ...fbAccounts];
   }
 
   async fetchTwitterAccountTokens(userId: string, twitterId: string) {

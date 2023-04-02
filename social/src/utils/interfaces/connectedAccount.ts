@@ -1,8 +1,11 @@
+import { FacebookDoc } from '../../models/facebook';
 import { TwitterDoc } from '../../models/twitter';
 
-export type ConnectedAccountTypes = 'twitter';
+export type ConnectedAccountTypes = 'twitter' | 'facebook';
 
 export interface ITwitterData extends TwitterDoc {}
+
+export interface IFacebookData extends FacebookDoc {}
 
 export interface IConnectedAccount<T> {
   type: ConnectedAccountTypes;

@@ -22,27 +22,39 @@ export interface TwitterModel
   build(attrs: TwitterAttrs): TwitterDoc & mongoose.Document;
 }
 
-const twitterAccountSchema = new mongoose.Schema({
-  oauthAccessToken: {
-    type: String,
+const twitterAccountSchema = new mongoose.Schema(
+  {
+    oauthAccessToken: {
+      type: String,
+    },
+    oauthAccessTokenSecret: {
+      type: String,
+    },
+    twitterScreenName: {
+      type: String,
+    },
+    twitterUserId: {
+      type: String,
+    },
+    adsId: {
+      type: String,
+    },
+    hasAdsAccount: {
+      type: Boolean,
+      default: false,
+    },
   },
-  oauthAccessTokenSecret: {
-    type: String,
-  },
-  twitterScreenName: {
-    type: String,
-  },
-  twitterUserId: {
-    type: String,
-  },
-  adsId: {
-    type: String,
-  },
-  hasAdsAccount: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.__v;
+        delete ret.oauthAccessToken;
+        delete ret.oauthAccessTokenSecret;
+        delete ret.adsId;
+      },
+    },
+  }
+);
 
 twitterAccountSchema.statics.build = (attrs: TwitterAttrs) => {
   return new Twitter(attrs);

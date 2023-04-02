@@ -15,20 +15,29 @@ export interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
-const userSchema = new mongoose.Schema({
-  twitter: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'TwitterAccount',
+const userSchema = new mongoose.Schema(
+  {
+    twitter: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TwitterAccount',
+      },
+    ],
+    facebook: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'FacebookAccount',
+      },
+    ],
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.__v;
+      },
     },
-  ],
-  facebook: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'FacebookAccount',
-    },
-  ],
-});
+  }
+);
 
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
