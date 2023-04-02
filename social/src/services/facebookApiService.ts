@@ -1,7 +1,6 @@
 import { DatabaseConnectionError } from '@tcosmin/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { Service } from 'typedi';
-import { FacebookAccountPagesPayload } from '../utils/interfaces/facebook/accountPagesPayload';
 
 @Service()
 export class FacebookApiService {
@@ -25,19 +24,12 @@ export class FacebookApiService {
 
   public async accounts(facebookAccountId: string, accessToken: string) {
     try {
-      const res = await this.api.get<FacebookAccountPagesPayload>(
-        `/${facebookAccountId}/accounts`,
-        {
-          params: {
-            access_token: accessToken,
-          },
-        }
-      );
-
-      return {
-        data: res.data.data.map(({ access_token, ...rest }) => rest),
-        paging: res.data.paging,
-      };
+      const res = await this.api.get(`/${facebookAccountId}/accounts`, {
+        params: {
+          access_token: accessToken,
+        },
+      });
+      return res.data;
     } catch (error) {
       console.log(error);
       throw new DatabaseConnectionError();
