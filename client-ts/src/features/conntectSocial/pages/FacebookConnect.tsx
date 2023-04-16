@@ -3,12 +3,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Loading from '../../../core/components/FetchStatus/Loading';
-import Success from '../../../core/components/FetchStatus/Success';
-import Failure from '../../../core/components/FetchStatus/Failure';
 import { socialApi, useFetchConnectedAccountsQuery } from '../../../api/social';
 import { useConnectFacebookQuery } from '../../../api/auth';
-import { useFetchAccountPagesQuery } from '../../../api/facebook';
-import { isFacebookAccount } from '../../../api/social/types';
+import FacebookPagesList from '../components/Facebook/FacebookPagesList';
+import { useAddFacebookAccountPageMutation } from '../../../api/facebook';
+import { IAddFacebookAccountPageRequest } from '../../../api/facebook/types';
 
 const FacebookConnect = () => {
   const [initConnect, setInitConnect] = useState(true);
@@ -18,10 +17,12 @@ const FacebookConnect = () => {
   const location = useLocation();
   const query = useMemo(() => new URLSearchParams(location.search), [location]);
   const dispatch = useDispatch();
-  const { data: facebookPages } = useFetchAccountPagesQuery(undefined, {
-    skip: !connected,
-  });
-  const { data: connectedAccounts } = useFetchConnectedAccountsQuery();
+  const { data: connectedAccounts } = useFetchConnectedAccountsQuery(
+    undefined,
+    { skip: !connected }
+  );
+
+  const [addPage] = useAddFacebookAccountPageMutation();
 
   useEffect(() => {
     const success = query.get('success');
@@ -38,23 +39,14 @@ const FacebookConnect = () => {
     }
   }, [query, dispatch]);
 
-  const connectedFacebookAccounts = useMemo(() => {
-    return connectedAccounts?.filter((account) => isFacebookAccount(account));
-  }, [connectedAccounts]);
+  const onSubmit = async (pages: IAddFacebookAccountPageRequest[]) => {
+    setStatus('loading');
+    for (const page of pages) {
+      await addPage(page);
+    }
 
-  useEffect(() => {
-    let timeout: NodeJS.Timeout | undefined;
-    // if (connected) {
-    //   timeout = setTimeout(() => {
-    //     window.close();
-    //   }, 3000);
-    // }
-    // return () => {
-    //   if (timeout !== null) {
-    //     clearTimeout(timeout);
-    //   }
-    // };
-  }, [connected]);
+    window.close();
+  };
 
   useEffect(() => {
     if (data) {
@@ -66,20 +58,18 @@ const FacebookConnect = () => {
           )}&client_id=${appId}`
         );
       }
-
-      // https://www.facebook.com/v3.2/dialog/oauth?response_type=code&redirect_uri=https%3A%2F%2Fmark.dev%2Fapi%2Fauth%2Ffacebook%2Fcallback&client_id=602020558451811
     }
   }, [data]);
 
   return (
     <>
       <CssBaseline />
-      {/* {JSON.stringify(facebookPages)} */}
-      {JSON.stringify(connectedFacebookAccounts)}
       <Box sx={containerStyle}>
+        <FacebookPagesList
+          connectedAccounts={connectedAccounts}
+          onSubmit={onSubmit}
+        />
         {status === 'loading' && <Loading noMessage />}
-        {status === 'success' && <Success message="Connected" />}
-        {status === 'failure' && <Failure message="Failed to connect" />}
       </Box>
     </>
   );

@@ -14,3 +14,15 @@ export interface IFacebookAccountPagesPayload {
     };
   };
 }
+
+export interface IBaseFacebookAccountRequest {
+  facebookUserId: string;
+}
+
+export interface IAddFacebookAccountPageRequest
+  extends IBaseFacebookAccountRequest {
+  access_token: string;
+  category: string;
+  name: string;
+  id: string;
+}

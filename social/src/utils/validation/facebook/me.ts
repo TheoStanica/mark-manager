@@ -1,7 +1,7 @@
-import { body } from 'express-validator';
+import { query } from 'express-validator';
 
 export const meValidation = [
-  body('facebookUserId')
+  query('facebookUserId')
     .notEmpty()
     .isNumeric()
     .withMessage('Please provide a valid Facebook user ID'),

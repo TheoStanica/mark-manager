@@ -15,7 +15,7 @@ router.get(
   meValidation,
   validateRequest,
   async (req: Request, res: Response) => {
-    const dto = req.body as FacebookMeDto;
+    const dto = req.query as unknown as FacebookMeDto;
     const userId = req.currentUser!.userId;
     const FBService = Container.get(FacebookService);
     const pages = await FBService.pages(userId, dto.facebookUserId);
