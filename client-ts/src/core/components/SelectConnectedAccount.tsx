@@ -7,12 +7,13 @@ import {
 } from '@mui/material';
 import { useMemo } from 'react';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import { useFetchConnectedAccountsQuery } from '../../api/social';
 import { IConnectedAccount } from '../types/social';
-import { isTwitterAccount } from '../../api/social/types';
+import { isFacebookAccount, isTwitterAccount } from '../../api/social/types';
 
 interface Props {
-  onSelect: (accounts: Array<IConnectedAccount<unknown>>) => any;
+  onSelect: (accounts: Array<Option>) => any;
   multiple?: boolean;
   initialUsers?: string;
   readOnly?: boolean;
@@ -21,6 +22,7 @@ interface Props {
 export interface Option {
   label: string;
   account: IConnectedAccount<unknown>;
+  pageId?: string;
 }
 
 const SelectConnectedAccount = ({
@@ -35,38 +37,54 @@ const SelectConnectedAccount = ({
     if (!data || data.length <= 0) {
       return [];
     }
-    return data.map((acc) => {
+    const pages = data.flatMap((acc) => {
+      if (isFacebookAccount(acc)) {
+        return acc.data.pages.map((page) => ({
+          label: acc.data.data.displayName + ` - ${page.name} (page)`,
+          account: acc,
+          pageId: page.id,
+        }));
+      } else {
+        return [];
+      }
+    });
+    const accounts = data.flatMap((acc) => {
       let label = 'unknown';
       if (isTwitterAccount(acc)) {
         label = acc.data.twitterScreenName;
       }
+      if (isFacebookAccount(acc)) {
+        return [];
+      }
       return { label, account: acc };
     });
+    return [...accounts, ...pages];
   }, [data]);
 
-  const valueMem = useMemo(() => {
-    let val;
-    if (!initialUsers) {
-      return null;
-    }
-    options.forEach((option) => {
-      if (isTwitterAccount(option.account)) {
-        if (option.account.data.twitterUserId === initialUsers) {
-          val = option;
-        }
-      }
-    });
-    return val;
-  }, [options, initialUsers]);
+  // const valueMem = useMemo(() => {
+  //   let val;
+  //   if (!initialUsers) {
+  //     return null;
+  //   }
+  //   options.forEach((option) => {
+  //     if (isTwitterAccount(option.account)) {
+  //       if (option.account.data.twitterUserId === initialUsers) {
+  //         val = option;
+  //       }
+  //     }
+
+  //   });
+  //   return val;
+  // }, [options, initialUsers]);
 
   const onSelected = (option: Option | Array<Option> | null) => {
     if (!option) {
       return onSelect([]);
     }
     if (Array.isArray(option)) {
-      return onSelect(option.map((opt) => opt.account));
+      return onSelect(option);
     }
-    return onSelect([option.account]);
+    return onSelect([option]);
   };
 
   if (!data || data.length <= 0) {
@@ -81,12 +99,17 @@ const SelectConnectedAccount = ({
       disabled={readOnly}
       multiple={multiple}
       options={options}
-      value={valueMem}
+      // value={valueMem}
       renderInput={(params) => <TextField {...params} label="Social Account" />}
       renderOption={(props, option) => (
         <MenuItem {...props}>
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <TwitterIcon fontSize="small" htmlColor="#1DA1F2" />
+            {option.account.type === 'twitter' && (
+              <TwitterIcon fontSize="small" htmlColor="#1DA1F2" />
+            )}
+            {option.account.type === 'facebook' && (
+              <FacebookIcon fontSize="small" htmlColor="#4267B2" />
+            )}
             <Typography>{option.label}</Typography>
           </Box>
         </MenuItem>

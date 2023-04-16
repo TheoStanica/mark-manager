@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material';
 import React, { useMemo } from 'react';
 import {
+  FacebookStreamTypes,
   StreamPlatformType,
   TwitterStreamTypes,
 } from '../../../../api/user/types';
@@ -9,12 +10,12 @@ export type StreamType = TwitterStreamTypes;
 
 interface Option {
   label: string;
-  value: StreamType;
+  value: StreamType | FacebookStreamTypes;
 }
 
 interface Props {
   platform?: StreamPlatformType;
-  onSelect: (streamType?: StreamType) => any;
+  onSelect: (streamType?: StreamType | FacebookStreamTypes) => any;
 }
 
 const SelectStreamType = ({ platform, onSelect }: Props) => {
@@ -28,6 +29,14 @@ const SelectStreamType = ({ platform, onSelect }: Props) => {
         {
           label: 'Search',
           value: 'search',
+        },
+      ];
+    }
+    if (platform === 'facebook') {
+      return [
+        {
+          label: 'Page Feed',
+          value: 'page',
         },
       ];
     }

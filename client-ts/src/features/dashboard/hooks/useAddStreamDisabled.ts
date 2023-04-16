@@ -1,40 +1,47 @@
 import { useMemo } from 'react';
-import { isTwitterAccount } from '../../../api/social/types';
-import { IConnectedAccount } from '../../../core/types/social';
+import { isFacebookAccount, isTwitterAccount } from '../../../api/social/types';
+import { FacebookStreamTypes } from '../../../api/user/types';
+import { Option } from '../../../core/components/SelectConnectedAccount';
 import { StreamType } from '../components/AddStream/SelectStreamType';
 
 interface Props {
-  selectedAccount?: IConnectedAccount<unknown>;
-  selectedStreamType?: StreamType;
+  selectedOption?: Option;
+  selectedStreamType?: StreamType | FacebookStreamTypes;
   search?: string;
 }
 const useAddStreamDisabled = ({
-  selectedAccount,
+  selectedOption,
   selectedStreamType,
   search,
 }: Props) => {
   const isSubmitDisabled = useMemo(() => {
-    if (!selectedAccount) {
+    if (!selectedOption) {
       return true;
     }
     if (!selectedStreamType) {
       return true;
     }
     if (
-      isTwitterAccount(selectedAccount) &&
+      isTwitterAccount(selectedOption.account) &&
       selectedStreamType === 'home_timeline'
     ) {
       return false;
     }
     if (
-      isTwitterAccount(selectedAccount) &&
+      isTwitterAccount(selectedOption.account) &&
       selectedStreamType === 'search' &&
       search
     ) {
       return false;
     }
+    if (
+      isFacebookAccount(selectedOption.account) &&
+      selectedStreamType === 'page'
+    ) {
+      return false;
+    }
     return true;
-  }, [selectedAccount, selectedStreamType, search]);
+  }, [selectedOption, selectedStreamType, search]);
 
   return isSubmitDisabled;
 };

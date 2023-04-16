@@ -18,8 +18,10 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
           if (!acc[0]) {
             return;
           }
-          if (isTwitterAccount(acc[0])) {
-            props.onFieldChange({ twitterUserId: acc[0].data.twitterUserId });
+          if (isTwitterAccount(acc[0].account)) {
+            props.onFieldChange({
+              twitterUserId: acc[0].account.data.twitterUserId,
+            });
           }
         }}
       />

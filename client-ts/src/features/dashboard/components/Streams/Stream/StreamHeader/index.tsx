@@ -1,12 +1,17 @@
 import React, { forwardRef } from 'react';
 import { Box, Divider, IconButton } from '@mui/material';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import ReplayIcon from '@mui/icons-material/Replay';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import StreamType from './StreamType';
 import StreamAccountName from './StreamAccountName';
-import { IStreamPreference } from '../../../../../../api/user/types';
+import {
+  isFacebookStream,
+  IStreamPreference,
+  isTwitterStream,
+} from '../../../../../../api/user/types';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
 interface Props {
@@ -36,7 +41,12 @@ const StreamHeader = forwardRef(
       <Box ref={ref}>
         <Box {...dragHandleProps} sx={container}>
           <Box sx={info}>
-            <TwitterIcon fontSize="small" htmlColor="#1DA1F2" />
+            {isTwitterStream(stream) && (
+              <TwitterIcon fontSize="small" htmlColor="#1DA1F2" />
+            )}
+            {isFacebookStream(stream) && (
+              <FacebookIcon fontSize="small" htmlColor="#4267B2" />
+            )}
             <StreamType stream={stream} />
             <StreamAccountName stream={stream} />
           </Box>

@@ -8,17 +8,24 @@ import {
   useTheme,
 } from '@mui/material';
 import { ChangeEvent, useCallback, useState } from 'react';
-import { isTwitterAccount } from '../../../../api/social/types';
+import {
+  isFacebookAccount,
+  isTwitterAccount,
+} from '../../../../api/social/types';
 import {
   useCurrentUserQuery,
   useUpdateStreamPreferencesMutation,
 } from '../../../../api/user';
 import {
+  FacebookStreamTypes,
+  IFacebookStreamData,
   IStreamPreference,
   ITwitterStreamData,
+  TwitterStreamTypes,
 } from '../../../../api/user/types';
-import SelectConnectedAccount from '../../../../core/components/SelectConnectedAccount';
-import { IConnectedAccount } from '../../../../core/types/social';
+import SelectConnectedAccount, {
+  Option,
+} from '../../../../core/components/SelectConnectedAccount';
 import useAddStreamDisabled from '../../hooks/useAddStreamDisabled';
 import SelectStreamType, { StreamType } from './SelectStreamType';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,31 +37,31 @@ interface Props {
 
 const AddStreamDialog = ({ open, onClose }: Props) => {
   const theme = useTheme();
-  const [selectedAccount, setSelectedAccount] = useState<
-    IConnectedAccount<unknown> | undefined
-  >(undefined);
+  const [selectedOption, setSelectedOption] = useState<Option | undefined>(
+    undefined
+  );
   const [selectedStreamType, setSelectedStreamType] = useState<
-    StreamType | undefined
+    StreamType | FacebookStreamTypes | undefined
   >(undefined);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const isSubmitDisabled = useAddStreamDisabled({
-    selectedAccount,
+    selectedOption,
     selectedStreamType,
     search,
   });
   const { data } = useCurrentUserQuery();
   const [update] = useUpdateStreamPreferencesMutation();
 
-  const onSelectAccount = useCallback(
-    (accounts: Array<IConnectedAccount<unknown>>) => {
-      setSelectedAccount(accounts[0] || undefined);
+  const onSelectAccount = useCallback((accounts: Array<Option>) => {
+    setSelectedOption(accounts[0] || undefined);
+  }, []);
+
+  const onSelectStreamType = useCallback(
+    (stream?: StreamType | FacebookStreamTypes) => {
+      setSelectedStreamType(stream);
     },
     []
   );
-
-  const onSelectStreamType = useCallback((stream?: StreamType) => {
-    setSelectedStreamType(stream);
-  }, []);
 
   const onSearch = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -65,7 +72,7 @@ const AddStreamDialog = ({ open, onClose }: Props) => {
 
   const onSubmit = useCallback(() => {
     const streams = data?.user.stream_preferences;
-    if (!selectedAccount?.type) {
+    if (!selectedOption?.account?.type) {
       return;
     }
     if (!selectedStreamType) {
@@ -75,24 +82,38 @@ const AddStreamDialog = ({ open, onClose }: Props) => {
     if (!streams) {
       return;
     }
-    if (isTwitterAccount(selectedAccount)) {
+    if (isTwitterAccount(selectedOption.account)) {
       const newStream: IStreamPreference<ITwitterStreamData> = {
         id: uuidv4(),
-        platform: selectedAccount?.type,
+        platform: selectedOption.account?.type,
         data: {
-          twitterUserId: selectedAccount.data.twitterUserId,
-          type: selectedStreamType,
+          twitterUserId: selectedOption.account.data.twitterUserId,
+          type: selectedStreamType as TwitterStreamTypes,
           search: search,
         },
       };
       const updateData = [...streams, newStream];
       update({ stream_preferences: updateData });
     }
+    if (isFacebookAccount(selectedOption.account)) {
+      const newStream: IStreamPreference<IFacebookStreamData> = {
+        id: uuidv4(),
+        platform: selectedOption.account?.type,
+        data: {
+          facebookUserId: selectedOption.account.data.data.id,
+          type: selectedStreamType as FacebookStreamTypes,
+          pageId: selectedOption.pageId as string,
+        },
+      };
+      const updateData = [...streams, newStream];
+
+      update({ stream_preferences: updateData });
+    }
     onClose();
   }, [
     data?.user.stream_preferences,
     search,
-    selectedAccount,
+    selectedOption,
     selectedStreamType,
     update,
     onClose,
@@ -104,7 +125,7 @@ const AddStreamDialog = ({ open, onClose }: Props) => {
       <DialogContent sx={{ pt: `${theme.spacing(1)} !important` }}>
         <SelectConnectedAccount onSelect={onSelectAccount} />
         <SelectStreamType
-          platform={selectedAccount?.type}
+          platform={selectedOption?.account?.type}
           onSelect={onSelectStreamType}
         />
         {selectedStreamType === 'search' && (

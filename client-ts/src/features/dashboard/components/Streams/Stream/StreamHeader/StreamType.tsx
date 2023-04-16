@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 import {
+  isFacebookStream,
   IStreamPreference,
   isTwitterStream,
 } from '../../../../../../api/user/types';
@@ -20,6 +21,9 @@ const StreamType = ({ stream }: Props) => {
         default:
           return null;
       }
+    }
+    if (isFacebookStream(stream)) {
+      return 'Feed';
     }
     return null;
   };

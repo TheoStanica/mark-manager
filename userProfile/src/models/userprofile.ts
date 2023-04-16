@@ -35,6 +35,23 @@ const streamPreferenceDataSchema = new mongoose.Schema({
   },
 });
 
+const facebookStreamPreferenceSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['page'],
+    required: true,
+    default: 'page',
+  },
+  pageId: {
+    type: String,
+    required: true,
+  },
+  facebookUserId: {
+    type: String,
+    required: true,
+  },
+});
+
 const streamPreferenceSchema = new mongoose.Schema({
   _id: false,
   id: {
@@ -47,7 +64,7 @@ const streamPreferenceSchema = new mongoose.Schema({
     required: true,
   },
   data: {
-    type: streamPreferenceDataSchema,
+    type: mongoose.Schema.Types.Mixed,
     required: true,
   },
 });
