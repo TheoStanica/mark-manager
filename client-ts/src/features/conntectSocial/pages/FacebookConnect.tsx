@@ -55,7 +55,7 @@ const FacebookConnect = () => {
         window.location.assign(
           ` https://www.facebook.com/v3.2/dialog/oauth?response_type=code&redirect_uri=${encodeURIComponent(
             redirect
-          )}&client_id=${appId}`
+          )}&client_id=${appId}&scope=pages_read_engagement,publish_to_groups,pages_manage_posts`
         );
       }
     }

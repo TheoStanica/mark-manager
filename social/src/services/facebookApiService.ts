@@ -59,4 +59,21 @@ export class FacebookApiService {
       throw new DatabaseConnectionError();
     }
   }
+
+  public async postPageFeed(
+    pageId: string,
+    accessToken: string,
+    message: string
+  ) {
+    try {
+      const res = await this.api.post(`/${pageId}/feed`, {
+        access_token: accessToken,
+        message,
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw new DatabaseConnectionError();
+    }
+  }
 }

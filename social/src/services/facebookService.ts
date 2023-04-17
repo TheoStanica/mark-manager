@@ -3,7 +3,10 @@ import { Service } from 'typedi';
 import { FacebookRepository } from '../repositories/facebookRepository';
 import { UserRepository } from '../repositories/userRepository';
 import { FacebookFeedDto } from '../utils/dtos/facebook/feed';
-import { FacebookAddPageDto } from '../utils/dtos/facebook/pages';
+import {
+  FacebookAddPageDto,
+  FacebookPostOnPageDto,
+} from '../utils/dtos/facebook/pages';
 import { FacebookAccountPagesPayload } from '../utils/interfaces/facebook/accountPagesPayload';
 import { FacebookApiService } from './facebookApiService';
 
@@ -68,6 +71,27 @@ export class FacebookService {
       accessToken,
       data.before,
       data.after
+    );
+  }
+
+  public async postPageFeed(userId: string, data: FacebookPostOnPageDto) {
+    const acc = await this.userRepository.fetchFacebookAccountTokens(
+      userId,
+      data.facebookUserId
+    );
+
+    const accessToken = acc.pages.find(
+      (pg) => pg.id === data.pageId
+    )?.access_token;
+
+    if (!accessToken) {
+      throw new BadRequestError('Page not found');
+    }
+
+    return await this.facebookApiService.postPageFeed(
+      data.pageId,
+      accessToken,
+      data.message
     );
   }
 }
