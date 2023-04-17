@@ -2,6 +2,7 @@ import { BadRequestError } from '@tcosmin/common';
 import { Service } from 'typedi';
 import { FacebookRepository } from '../repositories/facebookRepository';
 import { UserRepository } from '../repositories/userRepository';
+import { FacebookFeedDto } from '../utils/dtos/facebook/feed';
 import { FacebookAddPageDto } from '../utils/dtos/facebook/pages';
 import { FacebookAccountPagesPayload } from '../utils/interfaces/facebook/accountPagesPayload';
 import { FacebookApiService } from './facebookApiService';
@@ -46,5 +47,27 @@ export class FacebookService {
       name: data.name,
     });
     return account;
+  }
+
+  public async fetchPageFeed(userId: string, data: FacebookFeedDto) {
+    const acc = await this.userRepository.fetchFacebookAccountTokens(
+      userId,
+      data.facebookUserId
+    );
+
+    const accessToken = acc.pages.find(
+      (pg) => pg.id === data.pageId
+    )?.access_token;
+
+    if (!accessToken) {
+      throw new BadRequestError('Page not found');
+    }
+
+    return await this.facebookApiService.pageFeed(
+      data.pageId,
+      accessToken,
+      data.before,
+      data.after
+    );
   }
 }

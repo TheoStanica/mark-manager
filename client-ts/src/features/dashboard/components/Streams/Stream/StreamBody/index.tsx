@@ -2,10 +2,12 @@ import React, { useCallback, useRef } from 'react';
 import { Box } from '@mui/material';
 import useCustomScrollTrigger from '../../../../../../core/hooks/useCustomScrollTrigger';
 import {
+  isFacebookStream,
   IStreamPreference,
   isTwitterStream,
 } from '../../../../../../api/user/types';
 import TwitterSearchStream from './TwitterSearchStream';
+import FacebookPageFeedStream from './FacebookPageFeedStream';
 
 interface Props {
   stream: IStreamPreference<unknown>;
@@ -21,6 +23,9 @@ const StreamBody = ({ stream }: Props) => {
   const renderStream = useCallback(() => {
     if (isTwitterStream(stream)) {
       return <TwitterSearchStream stream={stream} />;
+    }
+    if (isFacebookStream(stream)) {
+      return <FacebookPageFeedStream stream={stream} />;
     }
   }, [stream]);
 

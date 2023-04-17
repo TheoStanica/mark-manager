@@ -4,6 +4,8 @@ import {
   IAddFacebookAccountPageRequest,
   IBaseFacebookAccountRequest,
   IFacebookAccountPagesPayload,
+  IFacebookPageFeedReqestExtended,
+  IFacebookPageFeedResponsePayload,
 } from './types';
 
 export const FACEBOOK_REDUCER_KEY = 'facebookApi';
@@ -49,8 +51,47 @@ export const facebookApi = createApi({
         },
       }),
     }),
+
+    fetchPosts: builder.query<
+      IFacebookPageFeedResponsePayload,
+      IFacebookPageFeedReqestExtended
+    >({
+      query: ({ facebookUserId, pageId, after, before }) => {
+        const url = '/pages/feed';
+        return {
+          url,
+          method: 'GET',
+          params: {
+            facebookUserId,
+            pageId,
+            after,
+            before,
+          },
+        };
+      },
+
+      serializeQueryArgs: ({ queryArgs, endpointDefinition, endpointName }) => {
+        const { id } = queryArgs;
+        return id;
+      },
+
+      merge: (currentCache, newItems) => {
+        console.log(
+          'my current cache',
+          currentCache.data.length,
+          newItems.data.length
+        );
+        return {
+          data: [...currentCache.data, ...newItems.data],
+          paging: newItems.paging,
+        };
+      },
+    }),
   }),
 });
 
-export const { useFetchAccountPagesQuery, useAddFacebookAccountPageMutation } =
-  facebookApi;
+export const {
+  useFetchAccountPagesQuery,
+  useAddFacebookAccountPageMutation,
+  useFetchPostsQuery,
+} = facebookApi;
