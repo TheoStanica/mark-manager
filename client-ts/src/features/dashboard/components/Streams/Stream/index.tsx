@@ -2,6 +2,7 @@ import { Paper } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
+import { facebookApi } from '../../../../../api/facebook';
 import { twitterApi } from '../../../../../api/twitter';
 import {
   useCurrentUserQuery,
@@ -54,6 +55,7 @@ const Stream = ({ stream, provided, snapshot, onDragging }: Props) => {
         onDelete={onDelete}
         onReload={() => {
           dispatch(twitterApi.util.resetApiState());
+          dispatch(facebookApi.util.resetApiState());
         }}
       />
       <StreamBody stream={stream} />
