@@ -171,6 +171,7 @@ export class AgendaService {
       name: SCHEDULE_FACEBOOK_POST,
       'data.userId': userId,
       'data.facebookUserId': data.facebookUserId,
+      'data.pageId': data.pageId,
     });
 
     if (!jobs[0]) {
