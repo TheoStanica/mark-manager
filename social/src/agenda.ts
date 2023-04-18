@@ -1,5 +1,6 @@
 import Agenda, { Job, JobAttributesData } from 'agenda';
 import Container, { Service } from 'typedi';
+import { FacebookApiService } from './services/facebookApiService';
 import { TwitterAdsService } from './services/twitterAdsService';
 import { TwitterApiService } from './services/twitterApiService';
 import { TwitterService } from './services/twitterService';
@@ -9,6 +10,15 @@ export interface IScheduleTweetContract extends JobAttributesData {
   twitterUserId: string;
   message: string;
   userId: string;
+}
+
+export interface IScheduleFacebookPostContract extends JobAttributesData {
+  userId: string;
+  date: Date;
+  facebookUserId: string;
+  accessToken: string;
+  pageId: string;
+  message: string;
 }
 
 @Service()
@@ -34,6 +44,16 @@ class AgendaWrapper {
           status: data.message,
           twitterUserId: data.twitterUserId,
         });
+      }
+    );
+    this.agenda.define(
+      'scheduleFacebookPost',
+      {},
+      async (job: Job<IScheduleFacebookPostContract>) => {
+        const fb = Container.get(FacebookApiService);
+        const { data } = job.attrs;
+        console.log('posting..... someshit', job.attrs.data);
+        // fb.postPageFeed(data.pageId, data.accessToken, data.message);
       }
     );
   }
