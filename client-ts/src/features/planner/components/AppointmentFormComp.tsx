@@ -1,6 +1,6 @@
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import moment from 'moment';
-import { isTwitterAccount } from '../../../api/social/types';
+import { isFacebookAccount, isTwitterAccount } from '../../../api/social/types';
 import SelectConnectedAccount from '../../../core/components/SelectConnectedAccount';
 
 const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
@@ -13,7 +13,7 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
       />
       <SelectConnectedAccount
         readOnly={props.readOnly}
-        initialUsers={props.appointmentData.twitterUserId}
+        // initialUsers={props.appointmentData.twitterUserId}
         onSelect={(acc) => {
           if (!acc[0]) {
             return;
@@ -21,6 +21,12 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
           if (isTwitterAccount(acc[0].account)) {
             props.onFieldChange({
               twitterUserId: acc[0].account.data.twitterUserId,
+            });
+          }
+          if (isFacebookAccount(acc[0].account)) {
+            props.onFieldChange({
+              facebookUserId: acc[0].account.data.data.id,
+              pageId: acc[0].pageId,
             });
           }
         }}

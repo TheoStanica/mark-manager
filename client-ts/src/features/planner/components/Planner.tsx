@@ -33,11 +33,19 @@ import useErrorSnack from '../../../core/hooks/useErrorSnack';
 import AppointmentFormComp from './AppointmentFormComp';
 import { useFetchConnectedAccountsQuery } from '../../../api/social';
 import {
+  IFacebookAccountData,
+  isFacebookAccount,
   isTwitterAccount,
   ITwitterAccountData,
 } from '../../../api/social/types';
 import { IConnectedAccount } from '../../../core/types/social';
 import CommandLayoutComponent from './CommandLayoutComp';
+import {
+  useFetchFacebookPostsQuery,
+  useScheduleFacebookPostMutation,
+  useUpdateFacebookPostMutation,
+  useDeleteFacebookPostMutation,
+} from '../../../api/facebookPlanner';
 
 const Planner = () => {
   const [currentView, setCurrentView] = useState('Month');
@@ -47,15 +55,27 @@ const Planner = () => {
   const [formVisible, setFormVisible] = useState(false);
 
   const { data: rawData, error } = useFetchTwitterPostsQuery();
+  const { data: rawFbData, error: fbError } = useFetchFacebookPostsQuery();
   const { data: connectedAccounts } = useFetchConnectedAccountsQuery();
   const [schedulePost, { error: createError }] =
     useScheduleTwitterPostMutation();
   const [updatePost, { error: updateError }] = useUpdateTwitterPostMutation();
   const [deletePost, { error: deleteError }] = useDeleteTwitterPostMutation();
+  const [scheduleFbPost, { error: createFbError }] =
+    useScheduleFacebookPostMutation();
+  const [updateFbPost, { error: updateFbError }] =
+    useUpdateFacebookPostMutation();
+  const [deleteFbPost, { error: deleteFbError }] =
+    useDeleteFacebookPostMutation();
+
   useErrorSnack({ error });
   useErrorSnack({ error: createError });
   useErrorSnack({ error: updateError });
   useErrorSnack({ error: deleteError });
+  useErrorSnack({ error: fbError });
+  useErrorSnack({ error: createFbError });
+  useErrorSnack({ error: updateFbError });
+  useErrorSnack({ error: deleteFbError });
 
   const postTitle = useCallback(
     (userId: string) => {
@@ -72,64 +92,132 @@ const Planner = () => {
     [connectedAccounts]
   );
 
+  const fbPostTitle = useCallback(
+    (facebookId: string, pageId: string) => {
+      const fbAccount = connectedAccounts?.find(
+        (account) =>
+          isFacebookAccount(account) && account.data.data.id === facebookId
+      );
+
+      return (
+        'Facebook:' +
+          (
+            fbAccount as IConnectedAccount<IFacebookAccountData>
+          )?.data.pages.find((page) => page.id === pageId)?.name || pageId
+      );
+    },
+    [connectedAccounts]
+  );
+
   const data: AppointmentModel[] = useMemo(() => {
-    if (!rawData) {
+    if (!rawData && !rawFbData) {
       return [];
     }
-    return rawData.tweets.map((post) => {
-      return {
-        title: postTitle(post.data.twitterUserId),
-        startDate: moment(post.data.date).toDate(),
-        endDate: moment(post.data.date).add(1, 's').toDate(),
-        id: post._id,
-        text: post.data.message,
-        platform: post.data.platform,
-        twitterUserId: post.data.twitterUserId,
-      };
-    });
-  }, [rawData, postTitle]);
+    const twitterPosts =
+      rawData?.tweets.map((post) => {
+        return {
+          title: postTitle(post.data.twitterUserId),
+          startDate: moment(post.data.date).toDate(),
+          endDate: moment(post.data.date).add(1, 's').toDate(),
+          id: post._id,
+          text: post.data.message,
+          platform: post.data.platform,
+          twitterUserId: post.data.twitterUserId,
+        };
+      }) || [];
 
-  const addOrUpdatePost = useCallback(
-    (added?: { [key: string]: any }) => {
-      // @ts-ignore
-      const { startDate, twitterUserId, text } = added;
-      if (!appointmentData?.id) {
+    const facebookPosts =
+      rawFbData?.posts.map((post) => {
+        return {
+          title: fbPostTitle(post.data.facebookUserId, post.data.pageId),
+          startDate: moment(post.data.date).toDate(),
+          endDate: moment(post.data.date).add(1, 's').toDate(),
+          id: post._id,
+          text: post.data.message,
+          platform: post.data.platform,
+          facebookUserId: post.data.facebookUserId,
+          pageId: post.data.pageId,
+        };
+      }) || [];
+
+    return [...twitterPosts, ...facebookPosts];
+  }, [rawData, postTitle, rawFbData, fbPostTitle]);
+
+  const add = useCallback(
+    (data: { [key: string]: any }) => {
+      if (data.twitterUserId) {
         schedulePost({
-          scheduleAt: startDate || appointmentData?.startDate,
-          text,
-          twitterUserId,
+          scheduleAt: data.startDate || appointmentData?.startDate,
+          text: data.text,
+          twitterUserId: data.twitterUserId,
         });
-        return;
+      } else {
+        scheduleFbPost({
+          scheduleAt: data.startDate || appointmentData?.startDate,
+          text: data.text,
+          facebookUserId: data.facebookUserId,
+          pageId: data.pageId,
+        });
       }
-      updatePost({
-        id: String(appointmentData.id),
-        twitterUserId,
-        scheduleAt: startDate,
-        text,
-      });
     },
-    [appointmentData, schedulePost, updatePost]
+    [appointmentData, schedulePost, scheduleFbPost]
+  );
+
+  const update = useCallback(
+    (id: string, data: { [key: string]: any }) => {
+      if (appointmentData!.platform! === 'twitter') {
+        updatePost({
+          id,
+          twitterUserId: data.twitterUserId,
+          scheduleAt: data.startDate,
+          text: data.text,
+        });
+      } else {
+        updateFbPost({
+          id,
+          text: data.text,
+          scheduleAt: data.startDate,
+          facebookUserId: data.facebookUserId,
+          pageId: data.pageId,
+        });
+      }
+    },
+    [appointmentData, updatePost, updateFbPost]
+  );
+
+  const deleteScheduledPost = useCallback(
+    (id: string) => {
+      if (appointmentData!.platform! === 'twitter') {
+        deletePost({ id });
+      } else {
+        deleteFbPost({ id });
+      }
+    },
+    [appointmentData, deletePost, deleteFbPost]
   );
 
   const commitChanges = useCallback(
     (changes: ChangeSet) => {
-      const { added, changed, deleted } = changes;
-      if (added) {
-        addOrUpdatePost(added);
-        return;
-      }
-      if (changed) {
-        // add support to drag drop
-        return;
-      }
+      const { changed, deleted } = changes;
+
       if (deleted) {
-        deletePost({
-          id: String(deleted),
-          twitterUserId: appointmentData?.twitterUserId,
-        });
+        deleteScheduledPost(String(deleted));
+        return;
       }
+      if (!changed) {
+        return;
+      }
+
+      const id = Object.keys(changed)[0];
+
+      if (id === 'undefined') {
+        add(changed[id]);
+        return;
+      }
+      // add support for drag & drop
+      update(id, changed[id]);
     },
-    [appointmentData, addOrUpdatePost, deletePost]
+    [add, update, deleteScheduledPost]
   );
 
   const isValid = useCallback((appointment: any) => {
@@ -165,7 +253,10 @@ const Planner = () => {
       />
       <WeekView />
       <DayView />
-      <EditingState onCommitChanges={commitChanges} />
+      <EditingState
+        editingAppointment={appointmentData}
+        onCommitChanges={commitChanges}
+      />
       <IntegratedEditing />
 
       <Appointments

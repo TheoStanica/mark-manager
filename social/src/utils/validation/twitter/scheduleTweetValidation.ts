@@ -57,11 +57,6 @@ export const updateScheduldTweetValidation = [
 ];
 
 export const deleteScheduldTweetValidation = [
-  body('twitterUserId')
-    .notEmpty()
-    .bail()
-    .isNumeric()
-    .withMessage('Please provide a valid Twitter user ID'),
   body('id')
     .notEmpty()
     .bail()

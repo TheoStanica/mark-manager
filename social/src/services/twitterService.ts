@@ -250,18 +250,18 @@ export class TwitterService {
     userId: string,
     deleteScheduledTweetDto: DeleteScheduledTweetDto
   ) {
-    const { twitterUserId } = deleteScheduledTweetDto;
-    const twitterAdsApiService = await this.createTwitterAdsApiService(
-      userId,
-      twitterUserId
-    );
-    try {
-      return await twitterAdsApiService.deleteScheduledTweet(
-        deleteScheduledTweetDto
-      );
-    } catch (error) {
-      twitterErrorHandler(error, String(twitterUserId));
-    }
+    // const { twitterUserId } = deleteScheduledTweetDto;
+    // const twitterAdsApiService = await this.createTwitterAdsApiService(
+    //   userId,
+    //   twitterUserId
+    // );
+    // try {
+    //   return await twitterAdsApiService.deleteScheduledTweet(
+    //     deleteScheduledTweetDto
+    //   );
+    // } catch (error) {
+    //   twitterErrorHandler(error, String(twitterUserId));
+    // }
   }
 
   private async createTwitterApiService(userId: string, twitterUserId: string) {

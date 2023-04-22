@@ -69,14 +69,4 @@ export const deleteScheduldFacebookPostValidation = [
     .bail()
     .isString()
     .withMessage('Please provide a valid ID'),
-  body('facebookUserId')
-    .notEmpty()
-    .bail()
-    .isNumeric()
-    .withMessage('Please provide a valid user ID'),
-  body('pageId')
-    .notEmpty()
-    .bail()
-    .isString()
-    .withMessage('Please provide a page ID'),
 ];

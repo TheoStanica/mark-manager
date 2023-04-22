@@ -152,7 +152,6 @@ export class AgendaService {
       _id: new mongoose.Types.ObjectId(data.id),
       name: SCHEDULE_TWEET,
       'data.userId': userId,
-      'data.twitterUserId': data.twitterUserId,
     });
 
     if (!jobs[0]) {
@@ -170,8 +169,6 @@ export class AgendaService {
       _id: new mongoose.Types.ObjectId(data.id),
       name: SCHEDULE_FACEBOOK_POST,
       'data.userId': userId,
-      'data.facebookUserId': data.facebookUserId,
-      'data.pageId': data.pageId,
     });
 
     if (!jobs[0]) {

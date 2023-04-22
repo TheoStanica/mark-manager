@@ -13,5 +13,4 @@ export interface UpdateScheduledTweetDto {
 
 export interface DeleteScheduledTweetDto {
   id: string;
-  twitterUserId: string;
 }

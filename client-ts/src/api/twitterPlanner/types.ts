@@ -1,4 +1,4 @@
-export type PlannedPostTypes = 'scheduleTweet';
+export type PlannedPostTypes = 'scheduleTweet' | 'scheduleFacebookPost';
 
 export interface ITwitterPlannerPostsResponse {
   tweets: Array<IPlannedTwitterPost>;
@@ -37,5 +37,4 @@ export interface IUpdateScheduledTweetPostRequest {
 
 export interface IDeleteScheduledTweetPostRequest {
   id: string;
-  twitterUserId: string;
 }

@@ -15,6 +15,4 @@ export interface UpdateScheduledFacebookPostDto {
 
 export interface DeleteScheduledFacebookPostDto {
   id: string;
-  facebookUserId: string;
-  pageId: string;
 }
