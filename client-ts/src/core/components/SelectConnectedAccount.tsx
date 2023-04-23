@@ -15,7 +15,7 @@ import { isFacebookAccount, isTwitterAccount } from '../../api/social/types';
 interface Props {
   onSelect: (accounts: Array<Option>) => any;
   multiple?: boolean;
-  initialUsers?: string;
+  defaultValue?: DefaultOption;
   readOnly?: boolean;
 }
 
@@ -25,9 +25,38 @@ export interface Option {
   pageId?: string;
 }
 
+export interface IDefaultOption<T> {
+  data: T;
+}
+
+export interface IDefaultOptionTwitter {
+  twitterUserId: string;
+}
+
+export interface IDefaultOptionFacbook {
+  facebookUserId: string;
+  pageId: string;
+}
+
+export interface DefaultOption
+  extends IDefaultOption<IDefaultOptionTwitter | IDefaultOptionFacbook> {}
+
+export function isDefaultOptionFacebook(
+  option: DefaultOption
+): option is IDefaultOption<IDefaultOptionFacbook> {
+  return 'facebookUserId' in option.data;
+}
+
+export function isDefaultOptionTwitter(
+  option: DefaultOption
+): option is IDefaultOption<IDefaultOptionTwitter> {
+  return 'twitterUserId' in option.data;
+}
+
 const SelectConnectedAccount = ({
   multiple,
-  initialUsers,
+  defaultValue,
+  // initialUsers,
   readOnly,
   onSelect,
 }: Props) => {
@@ -77,6 +106,36 @@ const SelectConnectedAccount = ({
   //   return val;
   // }, [options, initialUsers]);
 
+  const _defaultValue: Option | undefined = useMemo(() => {
+    if (!defaultValue) {
+      return undefined;
+    }
+
+    if (isDefaultOptionFacebook(defaultValue)) {
+      const option = options.find((option) => {
+        if (isFacebookAccount(option.account)) {
+          return (
+            option.account.data.data.id === defaultValue.data.facebookUserId &&
+            option.pageId === defaultValue.data.pageId
+          );
+        }
+        return undefined;
+      });
+      return option;
+    } else if (isDefaultOptionTwitter(defaultValue)) {
+      const option = options.find((option) => {
+        if (isTwitterAccount(option.account)) {
+          return (
+            option.account.data.twitterUserId ===
+            defaultValue.data.twitterUserId
+          );
+        }
+        return undefined;
+      });
+      return option;
+    }
+  }, [defaultValue, options]);
+
   const onSelected = (option: Option | Array<Option> | null) => {
     if (!option) {
       return onSelect([]);
@@ -99,6 +158,7 @@ const SelectConnectedAccount = ({
       disabled={readOnly}
       multiple={multiple}
       options={options}
+      defaultValue={_defaultValue}
       // value={valueMem}
       renderInput={(params) => <TextField {...params} label="Social Account" />}
       renderOption={(props, option) => (

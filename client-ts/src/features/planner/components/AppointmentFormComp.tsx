@@ -1,9 +1,35 @@
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import moment from 'moment';
 import { isFacebookAccount, isTwitterAccount } from '../../../api/social/types';
-import SelectConnectedAccount from '../../../core/components/SelectConnectedAccount';
+import SelectConnectedAccount, {
+  DefaultOption,
+} from '../../../core/components/SelectConnectedAccount';
+import { useMemo } from 'react';
 
 const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
+  const defaultValue: DefaultOption | undefined = useMemo(() => {
+    const data = props.appointmentData;
+    if (!data) {
+      return undefined;
+    }
+    if (data.platform === 'twitter') {
+      return {
+        data: {
+          twitterUserId: data.twitterUserId,
+        },
+      };
+    } else if (data.platform === 'facebook') {
+      return {
+        data: {
+          facebookUserId: data.facebookUserId,
+          pageId: data.pageId,
+        },
+      };
+    }
+
+    return undefined;
+  }, [props.appointmentData]);
+
   return (
     <AppointmentForm.BasicLayout {...props} fullSize>
       <AppointmentForm.Label
@@ -13,7 +39,7 @@ const AppointmentFormComp = (props: AppointmentForm.BasicLayoutProps) => {
       />
       <SelectConnectedAccount
         readOnly={props.readOnly}
-        // initialUsers={props.appointmentData.twitterUserId}
+        defaultValue={defaultValue}
         onSelect={(acc) => {
           if (!acc[0]) {
             return;
