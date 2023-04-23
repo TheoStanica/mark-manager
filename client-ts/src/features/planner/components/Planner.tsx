@@ -123,6 +123,7 @@ const Planner = () => {
           text: post.data.message,
           platform: post.data.platform,
           twitterUserId: post.data.twitterUserId,
+          color: '#1DA1F2',
         };
       }) || [];
 
@@ -137,6 +138,7 @@ const Planner = () => {
           platform: post.data.platform,
           facebookUserId: post.data.facebookUserId,
           pageId: post.data.pageId,
+          color: '#4267B2',
         };
       }) || [];
 
@@ -262,6 +264,7 @@ const Planner = () => {
       <Appointments
         appointmentComponent={(props) => (
           <Appointments.Appointment
+            style={{ backgroundColor: props.data.color! }}
             {...props}
             // drag drop disabled for now
             draggable={false}

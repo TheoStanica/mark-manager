@@ -90,22 +90,6 @@ const SelectConnectedAccount = ({
     return [...accounts, ...pages];
   }, [data]);
 
-  // const valueMem = useMemo(() => {
-  //   let val;
-  //   if (!initialUsers) {
-  //     return null;
-  //   }
-  //   options.forEach((option) => {
-  //     if (isTwitterAccount(option.account)) {
-  //       if (option.account.data.twitterUserId === initialUsers) {
-  //         val = option;
-  //       }
-  //     }
-
-  //   });
-  //   return val;
-  // }, [options, initialUsers]);
-
   const _defaultValue: Option | undefined = useMemo(() => {
     if (!defaultValue) {
       return undefined;
@@ -159,7 +143,6 @@ const SelectConnectedAccount = ({
       multiple={multiple}
       options={options}
       defaultValue={_defaultValue}
-      // value={valueMem}
       renderInput={(params) => <TextField {...params} label="Social Account" />}
       renderOption={(props, option) => (
         <MenuItem {...props}>

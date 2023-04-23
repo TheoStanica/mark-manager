@@ -4,7 +4,7 @@ import Planner from '../components/Planner';
 
 const PlannerPage = () => {
   return (
-    <AppDrawer title="Dashboard">
+    <AppDrawer title="Planner">
       <Planner />
     </AppDrawer>
   );
