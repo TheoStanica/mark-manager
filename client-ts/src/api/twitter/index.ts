@@ -6,6 +6,7 @@ import {
   ISearchTweetsQueryRequest,
   ISearchTweetsResponse,
   ISearchTweetsResponseExtended,
+  ITweetRequest,
 } from './types';
 
 export const TWITTER_API_REDUCER_KEY = 'twitterApi';
@@ -168,6 +169,13 @@ export const twitterApi = createApi({
         }
       },
     }),
+    tweetMessage: builder.mutation<void, ITweetRequest>({
+      query: ({ status, twitterUserId, inReplyToStatusId }) => ({
+        url: '/statuses/update',
+        method: 'POST',
+        body: { status, twitterUserId, inReplyToStatusId },
+      }),
+    }),
   }),
 });
 
@@ -175,4 +183,5 @@ export const {
   useFetchTweetsQuery,
   useLikeTweetMutation,
   useRetweetTweetMutation,
+  useTweetMessageMutation,
 } = twitterApi;

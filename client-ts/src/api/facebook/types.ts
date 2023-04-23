@@ -74,3 +74,9 @@ export interface IFacebookPageFeedReqestExtended
   extends IFacebookPageFeedRequest {
   id: string;
 }
+
+export interface IPostMessageRequest {
+  facebookUserId: string;
+  pageId: string;
+  message: string;
+}

@@ -94,3 +94,9 @@ export interface IRetweetTweetMutation {
   streamId: string;
   twitterStreamData: ISearchTweetsRequest;
 }
+
+export interface ITweetRequest {
+  status: string;
+  twitterUserId: string;
+  inReplyToStatusId?: string;
+}

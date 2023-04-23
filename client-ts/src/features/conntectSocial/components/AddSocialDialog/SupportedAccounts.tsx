@@ -33,9 +33,9 @@ const accounts = [
 const SupportedAccounts = () => {
   return (
     <>
-      {accounts.map((account) => (
+      {accounts.map((account, _idx) => (
         <SocialBox
-          key={account.id}
+          key={_idx}
           onClick={account.onClick}
           name={account.name}
           icon={account.icon}

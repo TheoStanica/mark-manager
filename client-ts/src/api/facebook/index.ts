@@ -6,6 +6,7 @@ import {
   IFacebookAccountPagesPayload,
   IFacebookPageFeedReqestExtended,
   IFacebookPageFeedResponsePayload,
+  IPostMessageRequest,
 } from './types';
 
 export const FACEBOOK_REDUCER_KEY = 'facebookApi';
@@ -52,6 +53,14 @@ export const facebookApi = createApi({
       }),
     }),
 
+    postMessage: builder.mutation<void, IPostMessageRequest>({
+      query: ({ facebookUserId, message, pageId }) => ({
+        url: '/post',
+        method: 'POST',
+        body: { facebookUserId, message, pageId },
+      }),
+    }),
+
     fetchPosts: builder.query<
       IFacebookPageFeedResponsePayload,
       IFacebookPageFeedReqestExtended
@@ -94,4 +103,5 @@ export const {
   useFetchAccountPagesQuery,
   useAddFacebookAccountPageMutation,
   useFetchPostsQuery,
+  usePostMessageMutation,
 } = facebookApi;
