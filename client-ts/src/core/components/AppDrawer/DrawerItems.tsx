@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventIcon from '@mui/icons-material/Event';
 import PencilIcon from '@mui/icons-material/Edit';
+import AssistantIcon from '@mui/icons-material/AutoFixHigh';
 import PostNowDialog from '../PostNowDialog';
 import { useState } from 'react';
+import AssistantPostsDialog from '../Assistant/PostsDialog';
 
 const drawerItemsData = [
   { id: 0, name: 'Dashboard', route: '/dashboard', icon: <DashboardIcon /> },
@@ -14,9 +16,21 @@ const drawerItemsData = [
 const DrawerItems = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [openAssistant, setOpenAssistant] = useState(false);
 
   return (
     <>
+      <ListItem
+        button
+        onClick={() => {
+          setOpenAssistant(true);
+        }}
+      >
+        <ListItemIcon>
+          <AssistantIcon />
+        </ListItemIcon>
+        <ListItemText primary={'Mark Assistant'} />
+      </ListItem>
       <ListItem
         button
         onClick={() => {
@@ -40,6 +54,12 @@ const DrawerItems = () => {
         open={open}
         onClose={() => {
           setOpen(false);
+        }}
+      />
+      <AssistantPostsDialog
+        open={openAssistant}
+        onClose={() => {
+          setOpenAssistant(false);
         }}
       />
     </>

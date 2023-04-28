@@ -35,6 +35,9 @@ const start = async () => {
   if (!process.env.RAPIDAPI_KEY) {
     throw new Error('RAPIDAPI_KEY must be defined');
   }
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY must be defined');
+  }
 
   try {
     await natsWrapper.connect(

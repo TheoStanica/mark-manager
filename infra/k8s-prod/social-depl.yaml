@@ -53,6 +53,11 @@ spec:
                 secretKeyRef:
                   name: social-secrets
                   key: RAPIDAPI_KEY
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: social-secrets
+                  key: OPENAI_API_KEY
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID

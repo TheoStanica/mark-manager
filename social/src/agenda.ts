@@ -52,8 +52,7 @@ class AgendaWrapper {
       async (job: Job<IScheduleFacebookPostContract>) => {
         const fb = Container.get(FacebookApiService);
         const { data } = job.attrs;
-        console.log('posting..... someshit', job.attrs.data);
-        // fb.postPageFeed(data.pageId, data.accessToken, data.message);
+        fb.postPageFeed(data.pageId, data.accessToken, data.message);
       }
     );
   }
