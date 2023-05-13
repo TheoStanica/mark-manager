@@ -7,6 +7,7 @@ import {
 } from '../../../../../../../api/user/types';
 import { IFacebookPageFeedData } from '../../../../../../../api/facebook/types';
 import Footer from './Footer';
+import Content from './Content';
 
 interface Props {
   data: IFacebookPageFeedData;
@@ -31,7 +32,8 @@ const FacebookCard = ({ data, stream }: Props) => {
       title={title}
       avatarSrc={avatar}
       subheader={moment(new Date(data.created_time)).fromNow()}
-      content={<p>{data.message}</p>}
+      content={<Content message={data.message} />}
+      // content={<p>{data.message}</p>}
       footer={<Footer data={data} stream={stream} />}
     />
   );

@@ -49,3 +49,11 @@ build:
         manual:
           - src: '**/*.ts'
             dest: .
+    - image: theocosmin/ml
+      context: ml
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.py'
+            dest: .

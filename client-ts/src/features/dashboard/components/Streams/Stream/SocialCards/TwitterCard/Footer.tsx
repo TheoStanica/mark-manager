@@ -1,5 +1,5 @@
 import { Box, IconButton, Tooltip } from '@mui/material';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   ILikeTweetMutation,
   IRetweetTweetMutation,
@@ -7,6 +7,8 @@ import {
 } from '../../../../../../../api/twitter/types';
 import ReplayIcon from '@mui/icons-material/Replay';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import PositiveIcon from '@mui/icons-material/SentimentVerySatisfied';
+import NegativeIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import { Container } from '@mui/system';
 import { StyleSheet } from '../../../../../../../core/types/stylesheet';
 import {
@@ -17,6 +19,7 @@ import {
   useLikeTweetMutation,
   useRetweetTweetMutation,
 } from '../../../../../../../api/twitter';
+import { useGetSentimentMutation } from '../../../../../../../api/ml';
 
 interface Props {
   tweet: ITweet;
@@ -27,6 +30,7 @@ interface Props {
 const Footer = ({ tweet, isRetweet, stream }: Props) => {
   const [likeTweet] = useLikeTweetMutation();
   const [retweetTweet] = useRetweetTweetMutation();
+  const [getSentiment, { data }] = useGetSentimentMutation();
 
   const likes = useMemo(() => {
     if (isRetweet) {
@@ -82,6 +86,18 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
     retweetTweet(data);
   }, [tweet, stream, retweetTweet]);
 
+  const message = useMemo(() => {
+    if (isRetweet) {
+      return tweet.retweeted_status!.full_text;
+    }
+    return tweet.full_text;
+  }, [isRetweet, tweet]);
+  useEffect(() => {
+    if (message) {
+      getSentiment({ message });
+    }
+  }, [message, getSentiment]);
+
   return (
     <Container maxWidth={false} sx={styles().container}>
       <Box sx={styles().box}>
@@ -106,6 +122,20 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
         </Tooltip>
         {likes}
       </Box>
+      {data?.sentiment === 'Positive' && (
+        <Box sx={styles().box}>
+          <Tooltip title="Positive sentiment" arrow>
+            <PositiveIcon fontSize="small" htmlColor="#17bf63" />
+          </Tooltip>
+        </Box>
+      )}
+      {data?.sentiment === 'Negative' && (
+        <Box sx={styles().box}>
+          <Tooltip title="Negative sentiment" arrow>
+            <NegativeIcon fontSize="small" htmlColor="#e0245e" />
+          </Tooltip>
+        </Box>
+      )}
     </Container>
   );
 };

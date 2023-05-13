@@ -38,6 +38,13 @@ spec:
                 name: social-srv
                 port:
                   number: 3000
+          - path: /api/ml/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ml-srv
+                port:
+                  number: 3000
           - path: /?(.*)
             pathType: Prefix
             backend:
