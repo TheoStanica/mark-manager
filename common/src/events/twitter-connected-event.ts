@@ -9,5 +9,6 @@ export interface TwitterConnectedEvent {
     oauthAccessTokenSecret: string;
     twitterScreenName: string;
     twitterUserId: string;
+    photos?: Array<{ value: string }>;
   };
 }
