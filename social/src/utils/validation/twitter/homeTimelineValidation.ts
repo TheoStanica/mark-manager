@@ -3,10 +3,10 @@ import { query } from 'express-validator';
 export const homeTimelineValidation = [
   query('maxId')
     .optional()
-    .isNumeric()
+    .isString()
     .withMessage('maxId must be a numericvalue'),
   query('twitterUserId')
     .notEmpty()
-    .isNumeric()
+    .isString()
     .withMessage('Please provide a valid Twitter user ID'),
 ];

@@ -1,34 +1,64 @@
 import { Dialog } from '@mui/material';
 import React, { useCallback, useState } from 'react';
-import { ITweetMediaEntity } from '../../../../../../../api/twitter/types';
+import {
+  ISearchTweetsResponseExtended,
+  ITweet,
+} from '../../../../../../../api/twitter/types';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../../../../../core/redux/store';
+import {
+  IStreamPreference,
+  ITwitterStreamData,
+} from '../../../../../../../api/user/types';
 
 interface Props {
-  media?: Array<ITweetMediaEntity>;
+  stream: IStreamPreference<ITwitterStreamData>;
+  tweet?: ITweet;
 }
-const Photo = ({ media }: Props) => {
+const Photo = ({ stream, tweet }: Props) => {
   const [visible, setVisible] = useState(false);
+
+  const mediaObject = useSelector((state: AppState) => {
+    const _data = state.twitterApi.queries[stream.id]?.data as
+      | ISearchTweetsResponseExtended
+      | undefined;
+    if (!_data) {
+      return undefined;
+    }
+    if (
+      tweet &&
+      tweet?.attachments?.media_keys &&
+      tweet?.attachments?.media_keys.length > 0 &&
+      _data._realData.includes.media
+    ) {
+      return _data._realData.includes.media?.find(
+        (media) => media.media_key === tweet?.attachments?.media_keys[0]
+      );
+    }
+  });
 
   const onClose = useCallback(() => {
     setVisible(false);
   }, []);
-
-  if (!media?.length) {
+  if (!mediaObject) {
     return null;
   }
-
   return (
     <>
       <Dialog onClose={onClose} open={visible}>
-        <img style={dialogimg} src={media[0].media_url_https} alt="Tweet" />
+        <img style={dialogimg} src={mediaObject.url} alt="Tweet" />
       </Dialog>
-      <img
-        style={imgStyle}
-        src={`${media[0].media_url_https}:small`}
-        srcSet={`${media[0].media_url_https}:small ${media[0].sizes.small.w}w`}
-        loading="lazy"
-        alt="Tweet"
-        onClick={() => setVisible(true)}
-      />
+      {mediaObject.type === 'photo' && (
+        <img
+          style={imgStyle}
+          src={mediaObject.url}
+          srcSet={mediaObject.url}
+          loading="lazy"
+          alt="Tweet"
+          onClick={() => setVisible(true)}
+        />
+      )}
+      {/* {mediaObject.type === 'video' && <video src={mediaObject.url} />} */}
     </>
   );
 };

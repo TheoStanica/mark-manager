@@ -19,7 +19,12 @@ app = Flask(__name__)
 
 
 def decode_sentiment(score):
-    return "Positive" if score > 0.5 else "Negative"
+    if score < 0.4:
+        return "Negative"
+    elif score > 0.6:
+        return "Positive"
+    else:
+        return "Neutral"
 
 
 @app.route('/api/ml/sentiment', methods=['POST'])

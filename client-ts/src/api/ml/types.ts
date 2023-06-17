@@ -3,7 +3,7 @@ export interface ISentimentRequest {
 }
 
 export interface ISentimentResponse {
-  sentiment: 'Positive' | 'Negative';
+  sentiment: 'Positive' | 'Negative' | 'Neutral';
 }
 
 export interface ISummaryRequest {

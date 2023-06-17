@@ -1,5 +1,5 @@
 import { Box, IconButton, Tooltip } from '@mui/material';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   ILikeTweetMutation,
   IRetweetTweetMutation,
@@ -9,6 +9,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PositiveIcon from '@mui/icons-material/SentimentVerySatisfied';
 import NegativeIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import NeutralIcon from '@mui/icons-material/SentimentNeutral';
 import { Container } from '@mui/system';
 import { StyleSheet } from '../../../../../../../core/types/stylesheet';
 import {
@@ -23,44 +24,28 @@ import { useGetSentimentMutation } from '../../../../../../../api/ml';
 
 interface Props {
   tweet: ITweet;
-  isRetweet: boolean;
   stream: IStreamPreference<ITwitterStreamData>;
 }
 
-const Footer = ({ tweet, isRetweet, stream }: Props) => {
+const Footer = ({ tweet, stream }: Props) => {
   const [likeTweet] = useLikeTweetMutation();
   const [retweetTweet] = useRetweetTweetMutation();
   const [getSentiment, { data }] = useGetSentimentMutation();
 
+  const hasLiked = useRef(false);
+  const hasRetweeted = useRef(false);
+
   const likes = useMemo(() => {
-    if (isRetweet) {
-      return tweet.retweeted_status?.favorite_count;
-    }
-    return tweet.favorite_count;
-  }, [isRetweet, tweet]);
-
+    return tweet.public_metrics.like_count;
+  }, [tweet.public_metrics.like_count]);
   const retweets = useMemo(() => {
-    if (isRetweet) {
-      return tweet.retweeted_status?.retweet_count;
-    }
-    return tweet.retweet_count;
-  }, [isRetweet, tweet]);
-
-  const isRetweeted = useMemo(() => {
-    if (isRetweet) {
-      return tweet.retweeted_status?.retweeted;
-    }
-    return tweet.retweeted;
-  }, [isRetweet, tweet]);
-
-  const isFavorited = useMemo(() => {
-    if (isRetweet) {
-      return tweet.retweeted_status?.favorited;
-    }
-    return tweet.favorited;
-  }, [isRetweet, tweet]);
+    return tweet.public_metrics.retweet_count;
+  }, [tweet.public_metrics.retweet_count]);
 
   const onLike = useCallback(() => {
+    if (hasLiked.current) {
+      return;
+    }
     const data: ILikeTweetMutation = {
       streamId: stream.id,
       tweet: tweet,
@@ -71,9 +56,12 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
       },
     };
     likeTweet(data);
+    hasLiked.current = true;
   }, [tweet, stream, likeTweet]);
-
   const onRetweet = useCallback(() => {
+    if (hasRetweeted.current) {
+      return;
+    }
     const data: IRetweetTweetMutation = {
       streamId: stream.id,
       tweet: tweet,
@@ -84,20 +72,16 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
       },
     };
     retweetTweet(data);
+    hasRetweeted.current = true;
   }, [tweet, stream, retweetTweet]);
-
   const message = useMemo(() => {
-    if (isRetweet) {
-      return tweet.retweeted_status!.full_text;
-    }
-    return tweet.full_text;
-  }, [isRetweet, tweet]);
+    return tweet.text;
+  }, [tweet]);
   useEffect(() => {
     if (message) {
       getSentiment({ message });
     }
   }, [message, getSentiment]);
-
   return (
     <Container maxWidth={false} sx={styles().container}>
       <Box sx={styles().box}>
@@ -105,7 +89,7 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
           <IconButton size="small" onClick={onRetweet}>
             <ReplayIcon
               fontSize="small"
-              htmlColor={isRetweeted ? '#17bf63' : undefined}
+              htmlColor={hasRetweeted.current ? '#17bf63' : undefined}
             />
           </IconButton>
         </Tooltip>
@@ -116,7 +100,7 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
           <IconButton size="small" onClick={onLike}>
             <FavoriteIcon
               fontSize="small"
-              htmlColor={isFavorited ? '#e0245e' : undefined}
+              htmlColor={hasLiked.current ? '#e0245e' : undefined}
             />
           </IconButton>
         </Tooltip>
@@ -133,6 +117,13 @@ const Footer = ({ tweet, isRetweet, stream }: Props) => {
         <Box sx={styles().box}>
           <Tooltip title="Negative sentiment" arrow>
             <NegativeIcon fontSize="small" htmlColor="#e0245e" />
+          </Tooltip>
+        </Box>
+      )}
+      {data?.sentiment === 'Neutral' && (
+        <Box sx={styles().box}>
+          <Tooltip title="Neutral sentiment" arrow>
+            <NeutralIcon fontSize="small" htmlColor="#f5ce20" />
           </Tooltip>
         </Box>
       )}

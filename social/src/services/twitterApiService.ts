@@ -59,9 +59,9 @@ export class TwitterApiService {
   }
 
   async trends(woeid?: string) {
-    return ((await this.client.get('trends/place', {
+    return (await this.client.get('trends/place', {
       id: woeid ? woeid : '1',
-    })) as unknown) as TrendsPayload;
+    })) as unknown as TrendsPayload;
   }
 
   async getTrendsLocations(lat: number, long: number) {
@@ -80,12 +80,8 @@ export class TwitterApiService {
   }
 
   async replies(repliesDto: RepliesDto) {
-    const {
-      repliesToScreenName,
-      inReplyToStatusId,
-      sinceId,
-      maxId,
-    } = repliesDto;
+    const { repliesToScreenName, inReplyToStatusId, sinceId, maxId } =
+      repliesDto;
 
     let currentSinceId = sinceId;
     let currentMaxId = maxId;

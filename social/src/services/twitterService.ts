@@ -19,6 +19,8 @@ import { ScheduleTweetDto } from '../utils/dtos/twitter/scheduleTweetDto';
 import { UpdateScheduledTweetDto } from '../utils/dtos/twitter/updateScheduledTweetDto';
 import { DeleteScheduledTweetDto } from '../utils/dtos/twitter/deleteScheduledTweetDto';
 import { FetchScheduledTweetsDto } from '../utils/dtos/twitter/fetchScheduledTweetsDto';
+import { TwitterApiV2Service } from './twitterApiV2Service';
+import { TweetV2, UserV2 } from 'twitter-api-v2';
 
 @Service()
 export class TwitterService {
@@ -63,6 +65,21 @@ export class TwitterService {
     }
   }
 
+  async tweetv2(userId: string, tweetDto: TweetDto): Promise<void> {
+    const { status, twitterUserId, inReplyToStatusId } = tweetDto;
+    const twitterApiService = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      await twitterApiService.tweet(status);
+    } catch (error) {
+      console.log(error);
+      twitterErrorHandler(error, twitterUserId);
+    }
+  }
+
   async retweet(userId: string, retweetDto: RetweetDto) {
     const { tweetId, twitterUserId } = retweetDto;
     const twitterApiService = await this.createTwitterApiService(
@@ -71,6 +88,19 @@ export class TwitterService {
     );
     try {
       return await twitterApiService.retweet(tweetId);
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async retweetV2(userId: string, retweetDto: RetweetDto) {
+    const { tweetId, twitterUserId } = retweetDto;
+    const twitterApiService = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterApiService.retweet(retweetDto.twitterUserId, tweetId);
     } catch (error) {
       twitterErrorHandler(error, String(twitterUserId));
     }
@@ -89,6 +119,22 @@ export class TwitterService {
     }
   }
 
+  async unretweetV2(userId: string, retweetDto: RetweetDto) {
+    const { tweetId, twitterUserId } = retweetDto;
+    const twitterApiService = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterApiService.unretweet(
+        retweetDto.twitterUserId,
+        tweetId
+      );
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
   async like(userId: string, likeDto: LikeDto) {
     const { tweetId, twitterUserId } = likeDto;
     const twitterApiService = await this.createTwitterApiService(
@@ -97,6 +143,19 @@ export class TwitterService {
     );
     try {
       return await twitterApiService.like(tweetId);
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async likeV2(userId: string, likeDto: LikeDto) {
+    const { tweetId, twitterUserId } = likeDto;
+    const twitterApiV2Service = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterApiV2Service.like(likeDto.twitterUserId, tweetId);
     } catch (error) {
       twitterErrorHandler(error, String(twitterUserId));
     }
@@ -115,6 +174,19 @@ export class TwitterService {
     }
   }
 
+  async unlikeV2(userId: string, likeDto: LikeDto) {
+    const { tweetId, twitterUserId } = likeDto;
+    const twitterApiV2Service = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+    try {
+      return await twitterApiV2Service.unLike(likeDto.twitterUserId, tweetId);
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
   async search(userId: string, searchDto: SearchDto) {
     const { search, maxId, twitterUserId } = searchDto;
     const twitterApiService = await this.createTwitterApiService(
@@ -127,6 +199,35 @@ export class TwitterService {
       return await SentimentAnalysisService.injectSentimentIntoTweets(
         tweets.data.statuses
       );
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async searchV2(userId: string, searchDto: SearchDto) {
+    const { search, maxId, twitterUserId } = searchDto;
+    const twitterApiService = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      const result = await twitterApiService.search(search, maxId);
+      return result;
+      // const users = result.data.includes?.users || [];
+      // const tweets = result.data.data.map((tweet) => {
+      //   const _tweet = tweet as TweetV2 & { user?: UserV2 };
+      //   _tweet.user = users.find((user) => user.id === tweet.author_id);
+
+      //   return tweet;
+      // });
+      // return {
+      //   meta: result.data.meta,
+      //   data: {
+      //     tweets,
+      //     includes: result.data.includes,
+      //   },
+      // };
     } catch (error) {
       twitterErrorHandler(error, String(twitterUserId));
     }
@@ -177,6 +278,35 @@ export class TwitterService {
       return await SentimentAnalysisService.injectSentimentIntoTweets(
         tweets.data
       );
+    } catch (error) {
+      twitterErrorHandler(error, String(twitterUserId));
+    }
+  }
+
+  async homeTimelineV2(userId: string, homeTimelineDto: HomeTimelineDto) {
+    const { maxId, twitterUserId } = homeTimelineDto;
+    const twitterApiService = await this.createTwitterApiV2Service(
+      userId,
+      twitterUserId
+    );
+
+    try {
+      const result = await twitterApiService.homeTimeline(maxId);
+      return result;
+      // const users = result.data.includes?.users || [];
+      // const tweets = result.data.data.map((tweet) => {
+      //   const _tweet = tweet as TweetV2 & { user?: UserV2 };
+      //   _tweet.user = users.find((user) => user.id === tweet.author_id);
+
+      //   return tweet;
+      // });
+      // return {
+      //   meta: result.data.meta,
+      //   data: {
+      //     tweets,
+      //     includes: result.data.includes,
+      //   },
+      // };
     } catch (error) {
       twitterErrorHandler(error, String(twitterUserId));
     }
@@ -271,6 +401,18 @@ export class TwitterService {
         twitterUserId
       );
     return new TwitterApiService(oauthAccessToken, oauthAccessTokenSecret);
+  }
+
+  private async createTwitterApiV2Service(
+    userId: string,
+    twitterUserId: string
+  ) {
+    const { oauthAccessToken, oauthAccessTokenSecret } =
+      await this.userRepository.fetchTwitterAccountTokens(
+        userId,
+        twitterUserId
+      );
+    return new TwitterApiV2Service(oauthAccessToken, oauthAccessTokenSecret);
   }
 
   private async createTwitterAdsApiService(

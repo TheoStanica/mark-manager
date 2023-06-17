@@ -27,7 +27,7 @@ const TwitterSearchStream = ({ stream }: Props) => {
     if (!data) {
       return undefined;
     }
-    return data.metadata.maxId;
+    return data._realData.meta.next_token;
   });
 
   const searchParams: ISearchTweetsQueryRequest = useMemo(() => {
@@ -57,7 +57,7 @@ const TwitterSearchStream = ({ stream }: Props) => {
       loadMore={onLoadMore}
       hasMore={true}
       useWindow={false}
-      threshold={500}
+      threshold={100}
       loader={
         <div key={uuid()} style={loadinStyle}>
           <CircularProgress size={30} />
@@ -65,7 +65,7 @@ const TwitterSearchStream = ({ stream }: Props) => {
       }
     >
       <>
-        {data?.statuses.map((tweet) => (
+        {data?._realData.data.map((tweet) => (
           <TwitterCard key={tweet.id} data={tweet} stream={stream} />
         ))}
       </>

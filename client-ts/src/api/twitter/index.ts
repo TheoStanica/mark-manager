@@ -4,7 +4,6 @@ import {
   ILikeTweetMutation,
   IRetweetTweetMutation,
   ISearchTweetsQueryRequest,
-  ISearchTweetsResponse,
   ISearchTweetsResponseExtended,
   ITweetRequest,
 } from './types';
@@ -13,7 +12,7 @@ export const TWITTER_API_REDUCER_KEY = 'twitterApi';
 
 export const twitterApi = createApi({
   reducerPath: TWITTER_API_REDUCER_KEY,
-  baseQuery: axiosBaseQuery({ urlPrefix: 'social/twitter' }),
+  baseQuery: axiosBaseQuery({ urlPrefix: 'social/twitter/v2' }),
   tagTypes: ['Tweets'],
   endpoints: (builder) => ({
     fetchTweets: builder.query<
@@ -40,22 +39,30 @@ export const twitterApi = createApi({
         const { id } = queryArgs;
         return id;
       },
-      transformResponse: (response: ISearchTweetsResponse) => {
-        const data = {
-          statuses: response.statuses,
-          metadata: {
-            maxId: response.statuses[response.statuses.length - 1].id_str,
-          },
-        };
-        return data;
-      },
+
       merge: (currentCache, newItems) => {
-        // add a "hasMore" boolean
-        newItems.statuses?.shift();
+        const combinedUsers = new Set([
+          ...(currentCache._realData.includes.users || []),
+          ...(newItems._realData.includes.users || []),
+        ]);
+        const combinedIncludedTweets = new Set([
+          ...(currentCache._realData.includes.tweets || []),
+          ...(newItems._realData.includes.tweets || []),
+        ]);
+        const combinedIncludedMedia = new Set([
+          ...(currentCache._realData.includes.media || []),
+          ...(newItems._realData.includes.media || []),
+        ]);
+
         return {
-          statuses: [...currentCache.statuses, ...newItems.statuses],
-          metadata: {
-            maxId: newItems.metadata.maxId,
+          _realData: {
+            data: [...currentCache._realData.data, ...newItems._realData.data],
+            includes: {
+              users: Array.from(combinedUsers),
+              tweets: Array.from(combinedIncludedTweets),
+              media: Array.from(combinedIncludedMedia),
+            },
+            meta: newItems._realData.meta,
           },
         };
       },
@@ -63,17 +70,16 @@ export const twitterApi = createApi({
 
     likeTweet: builder.mutation<void, ILikeTweetMutation>({
       query: ({ tweet, twitterStreamData }) => {
-        const isRetweet = tweet.retweeted_status !== undefined;
-        const isFavorited = isRetweet
-          ? tweet.retweeted_status!.favorited
-          : tweet.favorited;
+        // cant yet determine if favorited or not using V2 API and the current routes
+        const isFavorited = false;
+
         const pathSuffix = isFavorited ? 'destroy' : 'create';
 
         return {
           url: `/favorites/${pathSuffix}`,
           method: 'POST',
           body: {
-            tweetId: tweet.id_str,
+            tweetId: tweet.id,
             twitterUserId: twitterStreamData.twitterUserId,
           },
         };
@@ -90,18 +96,9 @@ export const twitterApi = createApi({
               tweet: twitterStreamData,
             },
             (draft) => {
-              draft.statuses.map((status) => {
-                const isRetweet = status.retweeted_status !== undefined;
-                const isSameTweet = status.id_str === tweet.id_str;
-
-                if (isSameTweet) {
-                  const tweetToModify = isRetweet
-                    ? status.retweeted_status!
-                    : status;
-                  const wasFavorited = tweetToModify.favorited;
-
-                  tweetToModify.favorite_count += wasFavorited ? -1 : 1;
-                  tweetToModify.favorited = !wasFavorited;
+              draft._realData.data.map((status) => {
+                if (status.id === tweet.id) {
+                  status.public_metrics.like_count += 1;
                 }
                 return status;
               });
@@ -117,17 +114,14 @@ export const twitterApi = createApi({
     }),
     retweetTweet: builder.mutation<void, IRetweetTweetMutation>({
       query: ({ tweet, twitterStreamData }) => {
-        const isRetweet = tweet.retweeted_status !== undefined;
-        const isRetweeted = isRetweet
-          ? tweet.retweeted_status!.retweeted
-          : tweet.retweeted;
+        const isRetweeted = false;
         const pathSuffix = isRetweeted ? 'unretweet' : 'retweet';
 
         return {
           url: `/statuses/${pathSuffix}`,
           method: 'POST',
           body: {
-            tweetId: tweet.id_str,
+            tweetId: tweet.id,
             twitterUserId: twitterStreamData.twitterUserId,
           },
         };
@@ -144,18 +138,9 @@ export const twitterApi = createApi({
               tweet: twitterStreamData,
             },
             (draft) => {
-              draft.statuses.map((status) => {
-                const isRetweet = status.retweeted_status !== undefined;
-                const isSameTweet = status.id_str === tweet.id_str;
-
-                if (isSameTweet) {
-                  const tweetToModify = isRetweet
-                    ? status.retweeted_status!
-                    : status;
-                  const wasRetweeted = tweetToModify.retweeted;
-
-                  tweetToModify.retweet_count += wasRetweeted ? -1 : 1;
-                  tweetToModify.retweeted = !wasRetweeted;
+              draft._realData.data.map((status) => {
+                if (status.id === tweet.id) {
+                  status.public_metrics.retweet_count += 1;
                 }
                 return status;
               });
